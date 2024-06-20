@@ -1,0 +1,144 @@
+.DS_Store
+/web-app/.DS_Store
+/web-app/node_modules
+/web-app/dist
+
+# local env files
+.env.local
+/web-app/.env.local
+.env.*.local
+/web-app/.env.*.local
+
+# Log files
+/web-app/npm-debug.log*
+/web-app/yarn-debug.log*
+/web-app/yarn-error.log*
+/web-app/pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# .NET
+project.lock.json
+project.fragment.lock.json
+artifacts/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.json.lock
+project.assets.json
+project.nuget.cache
+project.nuget.props
+project.nuget.targets
+
+# Rider
+.idea/
+
+# Visual Studio Code Coverage Reports
+coverage/
+
+# Uncomment if you have tasks that create the publish folder
+# publish/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# Web
+web-app/node_modules/
+web-app/dist/
+web-app/.env.local
+web-app/.env.*.local
+web-app/.nuxt/
+web-app/.output/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Yarn
+.yarn-integrity
+
+# Uncomment if you have repo-wide yarn settings
+# .yarnrc
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Uncomment the following line if you have "parcel" installed globally
+# node_modules/
