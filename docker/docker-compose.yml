@@ -1,0 +1,13 @@
+version: '3'
+services:
+    e-memorandum-db:
+        container_name: e-memorandum-db
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=P@ssw0rd
+            - MSSQL_PID=Enterprise
+        volumes:
+            - ./db-data/:/var/opt/mssql
+        ports:
+            - "1433:1433"

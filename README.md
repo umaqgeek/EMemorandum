@@ -1,34 +1,42 @@
 # E-Memorandum Web App
 System to manage memorandum in UTeM.
 
-## 0. Pre-requisites
-- Vue JS version 5.
-- .NET Core version 6.
-- Node version 18.
-- NPM version 10.
+## 0. Pre-requisites tools
+- Vue JS version 5
+- .NET Core version 6
+- Node version 18
+- NPM version 10
+- MSSQL server version 2017
+- docker version 24
+- docker-compose version 1.29.2
 
-## 1. Installation for Production
+## 1. Running in Development
 
-### 1.1. Frontend
+### 1.1. Database (via Docker)
 ```
-$ cd web-app
-$ npm run build
-```
-
-### 1.2. Backend
-```
-$ dotnet build
+$ docker-compose -f docker/docker-compose.yml up -d
 ```
 
-## 2. Running in Development
-
-### 2.1. Frontend
+### 1.2. Frontend
 ```
 $ cd web-app
 $ npm run serve
 ```
 
-### 2.2. Backend
+### 1.3. Backend
 ```
 $ dotnet run
+```
+
+## 2. Installation for Production
+
+### 2.1. Frontend
+```
+$ cd web-app
+$ npm run build
+```
+
+### 2.2. Backend
+```
+$ dotnet build
 ```

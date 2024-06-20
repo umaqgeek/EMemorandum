@@ -15,6 +15,9 @@
 /web-app/yarn-error.log*
 /web-app/pnpm-debug.log*
 
+# docker
+/docker/db-data
+
 # Editor directories and files
 .idea
 .vscode
