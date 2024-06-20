@@ -20,7 +20,7 @@ $ docker-compose -f docker/docker-compose.yml up -d
 ### 1.2. Frontend
 ```
 $ cd web-app
-$ npm run serve
+$ npm run build
 ```
 
 ### 1.3. Backend
