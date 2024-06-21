@@ -16,6 +16,15 @@ System to manage memorandum in UTeM.
 ```
 $ docker-compose -f docker/docker-compose.yml up -d
 ```
+- You can connect to the database via 3rd party app like `DBeaver`, using database credentials from the `docker/docker-compose.yml` file.
+```
+driver: sqlserver
+host: 127.0.0.1
+database: master
+username: SA
+password: P@ssw0rd
+```
+- Import the database and its tables from under the `/Databases` folder.
 
 ### 1.2. Frontend
 ```
