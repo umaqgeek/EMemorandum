@@ -1,20 +1,29 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import AboutView from "../views/AboutView.vue";
-import HahaView from "../views/Haha.vue";
+import LoginView from "@/views/LoginView.vue";
+import DashboardView from "@/views/DashboardView.vue";
+import MemoListView from "@/views/MemoListView.vue";
+import MemoAddView from "@/views/MemoAddView.vue";
 
 const routes = [
     {
         path: "/",
-        component: HomeView,
+        component: LoginView,
     },
     {
-        path: "/about",
-        component: AboutView,
+        path: "/login",
+        component: LoginView,
     },
     {
-        path: "/haha-umar",
-        component: HahaView,
+        path: "/dashboard",
+        component: DashboardView,
+    },
+    {
+        path: "/memo-list",
+        component: MemoListView,
+    },
+    {
+        path: "/memo-add",
+        component: MemoAddView,
     },
 ];
 
