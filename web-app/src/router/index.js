@@ -4,23 +4,23 @@ import AboutView from "../views/AboutView.vue";
 import HahaView from "../views/Haha.vue";
 
 const routes = [
-  {
-    path: "/",
-    component: HomeView,
-  },
-  {
-    path: "/about",
-    component: AboutView,
-  },
-  {
-    path: "/haha-umar",
-    component: HahaView,
-  },
+    {
+        path: "/",
+        component: HomeView,
+    },
+    {
+        path: "/about",
+        component: AboutView,
+    },
+    {
+        path: "/haha-umar",
+        component: HahaView,
+    },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes,
+    history: createWebHistory(process.env.BASE_URL),
+    routes,
 });
 
 export default router;

@@ -1,8 +1,8 @@
 <template>
-  <NavbarComponent />
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+    <NavbarComponent />
+    <div class="about">
+        <h1>This is an about page</h1>
+    </div>
 </template>
 
 <script>
@@ -10,9 +10,9 @@
 import NavbarComponent from "@/components/Navbar.vue";
 
 export default {
-  name: "AboutView",
-  components: {
-    NavbarComponent,
-  },
+    name: "AboutView",
+    components: {
+        NavbarComponent,
+    },
 };
 </script>

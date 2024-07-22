@@ -1,9 +1,9 @@
 <template>
-  <h3>Saya Haha</h3>
+    <h3>Saya Haha</h3>
 </template>
 
 <script>
 export default {
-  name: "HahaView",
+    name: "HahaView",
 };
 </script>
