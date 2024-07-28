@@ -25333,6 +25333,7 @@ A VERTICAL event
   left: 0;
   right: 0;
   transition: 0.4s;
+  padding-left: 280px !important;
 }
 .nk-header-fixed + .nk-content {
   margin-top: 3.75rem;
@@ -25456,7 +25457,8 @@ A VERTICAL event
   top: 0;
   left: 0;
   width: 280px;
-  transform: translateX(-100%);
+  /*transform: translateX(-100%); */
+  transform: translateX(0%); 
   transition: 0.4s;
   background-color: #fff;
   z-index: 1026;
@@ -25467,6 +25469,7 @@ A VERTICAL event
 }
 .nk-sidebar + .nk-wrap {
   transition: 0.4s;
+  padding-left: 280px;
 }
 .nk-sidebar-brand {
   display: flex;
