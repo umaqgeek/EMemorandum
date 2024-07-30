@@ -49,3 +49,17 @@ $ npm run build
 ```
 $ dotnet build
 ```
+
+## 3. Database & Migration
+
+### 3.1. Add new migration script
+1. Create a new model like `./Models/User.cs`.
+2. Update the DB Context in `./Models/ApplicationDbContext.cs`.
+3. Run migration script. Eg.:
+```
+$ dotnet ef migrations add AddUserTable
+```
+4. Execute the new migration script:
+```
+$ dotnet ef database update
+```
