@@ -3,6 +3,8 @@ import LoginView from "@/views/LoginView.vue";
 import DashboardView from "@/views/DashboardView.vue";
 import MemoListView from "@/views/MemoListView.vue";
 import MemoAddView from "@/views/MemoAddView.vue";
+import MemoAddMemberView from "@/views/MemoAddMemberView.vue";
+import MemoEditView from "@/views/MemoEditView.vue";
 
 const routes = [
     {
@@ -24,6 +26,14 @@ const routes = [
     {
         path: "/memo-add",
         component: MemoAddView,
+    },
+    {
+        path: "/memo-add-Member",
+        component: MemoAddMemberView,
+    },
+    {
+        path: "/memo-edit",
+        component: MemoEditView,
     },
 ];
 

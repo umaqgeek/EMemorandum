@@ -1,10 +1,4 @@
 <template>
-    <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/haha-umar">Haha Umar</router-link>
-    </nav>
-
     <div class="nk-sidebar nk-sidebar-fixed is-theme" id="sidebar">
         <div class="nk-sidebar-element nk-sidebar-head">
             <div class="nk-sidebar-brand">
@@ -57,15 +51,12 @@
                             <h6 class="overline-title">Applications</h6>
                         </li>
                         <li class="nk-menu-item">
-                            <a
-                                href="./html/memo/memo-list.html"
-                                class="nk-menu-link"
-                            >
-                                <span class="nk-menu-icon"
+                            <router-link to="/memo-list" class="nk-menu-link"
+                                ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-chat-circle"></em
                                 ></span>
                                 <span class="nk-menu-text">Memorandum</span>
-                            </a>
+                            </router-link>
                         </li>
                     </ul>
                     <!-- .nk-menu -->
