@@ -23,7 +23,7 @@ public class PUUJenisMemoController : ControllerBase
     /// </summary>
     /// <returns>A list of PUU Jenis Memos.</returns>
     [HttpGet]
-    public ActionResult<IEnumerable<PUU_JenisMemo>> GetPUUJenisMemoes()
+    public ActionResult<IEnumerable<PUU_JenisMemo>> GetPUUJenisMemos()
     {
         return _context.PUU_JenisMemos.ToList();
     }
