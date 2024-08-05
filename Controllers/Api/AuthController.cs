@@ -34,7 +34,7 @@ namespace EMemorandum.Controllers.Api
             // TODO: Need to match with UTeM's SSO.
             if (login.Email != "testuser@gmail.com" || login.Password != "password")
             {
-                return Unauthorized();
+                return Unauthorized(new { message = "Invalid username or password." });
             }
 
             // TODO: Fetch user's info from UTeM's SSO.

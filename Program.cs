@@ -24,6 +24,17 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
 });
 
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder
+            .WithOrigins("http://localhost:8080") // TODO: Other frontend origins will be added here
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
+
 // Configure the DbContext with the connection string
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -84,6 +95,9 @@ app.UseSpaStaticFiles();
 
 app.UseRouting();
 app.UseAuthorization();
+
+// Enable CORS
+app.UseCors("AllowSpecificOrigin");
 
 // Ensure that API endpoints are mapped before the SPA middleware
 app.MapControllers();
