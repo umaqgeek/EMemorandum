@@ -34,7 +34,7 @@ $ npm run build
 
 ### 1.3. Backend
 ```
-$ dotnet run
+$ dotnet watch run
 ```
 
 ## 2. Installation for Production
@@ -45,9 +45,14 @@ $ cd web-app
 $ npm run build
 ```
 
-### 2.2. Backend
+### 2.2. Backend (build)
 ```
 $ dotnet build
+```
+
+### 2.3. Backend (publish)
+```
+$ dotnet publish -c Release -o ./publish
 ```
 
 ## 3. Database & Migration
@@ -62,4 +67,9 @@ $ dotnet ef migrations add AddUserTable
 4. Execute the new migration script:
 ```
 $ dotnet ef database update
+```
+
+### 3.2. Export all tables and its data into one SQL file
+```
+$ dotnet ef migrations script -o e_memorandum_db.sql
 ```

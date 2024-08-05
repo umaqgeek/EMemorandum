@@ -37,6 +37,8 @@ obj/
 *.suo
 *.userosscache
 *.sln.docstates
+wwwroot/
+publish/
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
