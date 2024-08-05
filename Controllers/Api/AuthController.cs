@@ -37,22 +37,6 @@ namespace EMemorandum.Controllers.Api
                 return Unauthorized();
             }
 
-            // return Ok(_secretKey);
-
-            // var tokenHandler = new JwtSecurityTokenHandler();
-            // var key = Encoding.ASCII.GetBytes(_secretKey);
-            // var tokenDescriptor = new SecurityTokenDescriptor
-            // {
-            //     Subject = new ClaimsIdentity(new Claim[]
-            //     {
-            //         new Claim(ClaimTypes.Name, login.Username)
-            //     }),
-            //     Expires = DateTime.UtcNow.AddHours(1),
-            //     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            // };
-            // var token = tokenHandler.CreateToken(tokenDescriptor);
-            // var tokenString = tokenHandler.WriteToken(token);
-
             // TODO: Fetch user's info from UTeM's SSO.
             var userEmail = login.Email;
             var userName = "test user";

@@ -19,16 +19,20 @@ public class MOUStatusController : ControllerBase
     }
 
     /// <summary>
-    /// Authenticates a user with the UTeM's SSO and return a unique resource token.
+    /// List all MOU Statuses
     /// </summary>
-    /// <param name="login">The login model containing the email and password.</param>
-    /// <returns>A unique resource token if authentication is successful.</returns>
+    /// <returns>A list of MOU Statuses.</returns>
     [HttpGet]
     public ActionResult<IEnumerable<MOU_Status>> GetMOUStatuses()
     {
         return _context.MOU_Statuses.ToList();
     }
 
+    /// <summary>
+    /// Show a MOU Status
+    /// </summary>
+    /// <param name="id">The id of a MOU Status.</param>
+    /// <returns>An object of a MOU Status.</returns>
     [HttpGet("{id}")]
     public ActionResult<MOU_Status> GetMOUStatus(int id)
     {
@@ -42,6 +46,12 @@ public class MOUStatusController : ControllerBase
         return entity;
     }
 
+    /// <summary>
+    /// Update a MOU Status
+    /// </summary>
+    /// <param name="id">The id of a MOU Status.</param>
+    /// <param name="entity">The new data for MOU Status.</param>
+    /// <returns>A new object of a MOU Status.</returns>
     [HttpPut("{id}")]
     public ActionResult<MOU_Status> UpdateMOUStatus(int id, MOU_Status entity)
     {
@@ -69,6 +79,11 @@ public class MOUStatusController : ControllerBase
         return Ok(_entity);
     }
 
+    /// <summary>
+    /// Save a MOU Status
+    /// </summary>
+    /// <param name="entity">The new data for MOU Status.</param>
+    /// <returns>A new object of a MOU Status.</returns>
     [HttpPost]
     public ActionResult<MOU_Status> PostMOUStatus(MOU_Status entity)
     {
@@ -78,6 +93,11 @@ public class MOUStatusController : ControllerBase
         return CreatedAtAction(nameof(GetMOUStatus), new { id = entity.Id }, entity);
     }
 
+    /// <summary>
+    /// Delete a MOU Status
+    /// </summary>
+    /// <param name="id">The id of a MOU Status.</param>
+    /// <returns>A status after deleting a MOU Status.</returns>
     [HttpDelete("{id}")]
     public ActionResult<MOU_Status> DeleteMOUStatus(int id)
     {
