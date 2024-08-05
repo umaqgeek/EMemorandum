@@ -37,6 +37,10 @@ $ npm run build
 $ dotnet watch run
 ```
 
+### 1.4. To access Swagger API
+1. Execute backend step `1.3.` above.
+2. Open the local swagger URL at http://localhost:5000/swagger/index.html .
+
 ## 2. Installation for Production
 
 ### 2.1. Frontend
