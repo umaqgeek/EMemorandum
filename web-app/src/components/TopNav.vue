@@ -289,11 +289,13 @@
                                 >
                                     <ul class="link-list">
                                         <li>
-                                            <a href="#"
+                                            <router-link to="/"
                                                 ><em
                                                     class="icon ni ni-signout"
                                                 ></em>
-                                                <span>Log Out</span></a
+                                                <span
+                                                    >Log Out</span
+                                                ></router-link
                                             >
                                         </li>
                                     </ul>
