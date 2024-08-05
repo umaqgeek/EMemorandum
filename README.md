@@ -34,8 +34,12 @@ $ npm run build
 
 ### 1.3. Backend
 ```
-$ dotnet run
+$ dotnet watch run
 ```
+
+### 1.4. To access Swagger API
+1. Execute backend step `1.3.` above.
+2. Open the local swagger URL at http://localhost:5000/swagger/index.html .
 
 ## 2. Installation for Production
 
@@ -45,7 +49,31 @@ $ cd web-app
 $ npm run build
 ```
 
-### 2.2. Backend
+### 2.2. Backend (build)
 ```
 $ dotnet build
+```
+
+### 2.3. Backend (publish)
+```
+$ dotnet publish -c Release -o ./publish
+```
+
+## 3. Database & Migration
+
+### 3.1. Add new migration script
+1. Create a new model like `./Models/User.cs`.
+2. Update the DB Context in `./Models/ApplicationDbContext.cs`.
+3. Run migration script. Eg.:
+```
+$ dotnet ef migrations add AddUserTable
+```
+4. Execute the new migration script:
+```
+$ dotnet ef database update
+```
+
+### 3.2. Export all tables and its data into one SQL file
+```
+$ dotnet ef migrations script -o e_memorandum_db.sql
 ```

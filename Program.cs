@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using EMemorandum.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +21,28 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // In production, the Vue files will be served from this directory
 builder.Services.AddSpaStaticFiles(configuration =>
 {
-    configuration.RootPath = "web-app/dist";
+    configuration.RootPath = "wwwroot";
+});
+
+// Configure JWT authentication
+var secretKey = builder.Configuration.GetValue<string>("Jwt:SecretKey");
+var key = Encoding.ASCII.GetBytes(secretKey);
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
 });
 
 var app = builder.Build();
@@ -27,7 +51,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")); // Add this line
     app.UseDeveloperExceptionPage();
 }
 
@@ -43,7 +67,7 @@ app.MapControllers();
 
 app.UseSpa(spa =>
 {
-    spa.Options.SourcePath = "web-app";
+    spa.Options.SourcePath = "wwwroot";
 
     // if (app.Environment.IsDevelopment())
     // {

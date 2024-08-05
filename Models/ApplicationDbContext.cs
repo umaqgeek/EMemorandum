@@ -11,20 +11,8 @@ public class ApplicationDbContext : DbContext
 
     // Define your DbSets (tables)
     public DbSet<User> Users { get; set; }
-    public DbSet<Product> Products { get; set; }
-}
-
-public class User
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string Address { get; set; }
-}
-
-public class Product
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public int Quantity { get; set; }
+    public DbSet<MOU_Status> MOU_Statuses { get; set; }
+    public DbSet<PUU_ScopeMemo> PUU_ScopeMemos { get; set; }
+    public DbSet<PUU_JenisMemo> PUU_JenisMemos { get; set; }
+    public DbSet<PUU_KategoriMemo> PUU_KategoriMemos { get; set; }
 }

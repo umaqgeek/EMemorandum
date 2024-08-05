@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EMemorandum.Models;
 
-namespace EMemorandum.Controllers;
+namespace EMemorandum.Controllers.Api;
 
 [ApiController]
 [Route("api/[controller]")]
