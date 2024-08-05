@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,14 +20,5 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.10.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
-
-  <Target Name="BuildFrontend" AfterTargets="Build">
-    <Exec Command="npm install --prefix $(ProjectDir)web-app" />
-    <Exec Command="npm run build --prefix $(ProjectDir)web-app" />
-    <ItemGroup>
-      <None Include="web-app/dist/**" />
-    </ItemGroup>
-    <Copy SourceFiles="@(None)" DestinationFolder="$(ProjectDir)wwwroot\%(RecursiveDir)" SkipUnchangedFiles="true" />
-  </Target>
 
 </Project>

@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System;
+using System.Linq;
 using EMemorandum.Models;
 
 namespace EMemorandum.Controllers.Api
@@ -22,6 +23,11 @@ namespace EMemorandum.Controllers.Api
             _context = context;
         }
 
+        /// <summary>
+        /// Authenticates a user with the UTeM's SSO and return a unique resource token.
+        /// </summary>
+        /// <param name="login">The login model containing the email and password.</param>
+        /// <returns>A unique resource token if authentication is successful.</returns>
         [HttpPost("login")]
         public IActionResult Login([FromBody] Login login)
         {
@@ -72,11 +78,16 @@ namespace EMemorandum.Controllers.Api
             return Ok(new { Token = tokenString });
         }
 
+        /// <summary>
+        /// Logs out a user and removes them from the system.
+        /// </summary>
+        /// <param name="login">The login model containing the email and token.</param>
+        /// <returns>A message indicating the result of the logout operation.</returns>
         [HttpPost("logout")]
-        public IActionResult Logout([FromBody] Login login)
+        public IActionResult Logout([FromBody] Logout logout)
         {
             // Handle logout logic.
-            var user = _context.Users.SingleOrDefault(u => u.Email == login.Email && u.Token == login.Token); // match user's email and their existing token.
+            var user = _context.Users.SingleOrDefault(u => u.Email == logout.Email && u.Token == logout.Token); // match user's email and their existing token.
             if (user != null)
             {
                 _context.Users.Remove(user);

@@ -1,7 +1,7 @@
 namespace EMemorandum.Models;
 
-public class Login
+public class Logout
 {
     public string Email { get; set; }
-    public string Password { get; set; }
+    public string Token { get; set; }
 }

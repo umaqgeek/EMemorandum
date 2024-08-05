@@ -17,12 +17,14 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public ActionResult<IEnumerable<User>> GetUsers()
     {
         return _context.Users.ToList();
     }
 
     [HttpGet("{id}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public ActionResult<User> GetUser(int id)
     {
         var entity = _context.Users.Find(id);
@@ -36,6 +38,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public ActionResult<User> PostUser(User entity)
     {
         _context.Users.Add(entity);
