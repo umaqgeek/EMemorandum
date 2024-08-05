@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using EMemorandum.Authorization;
 using EMemorandum.Models;
 using System.Reflection;
 using System.IO;
@@ -52,13 +55,26 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+// Register the custom authorization handler as scoped
+builder.Services.AddScoped<IAuthorizationHandler, TokenHandlerAuth>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+// Configure Authorization with custom policy
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("TokenPolicy", policy =>
+    {
+        policy.Requirements.Add(new TokenRequirement());
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")); // Add this line
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
     app.UseDeveloperExceptionPage();
 }
 
