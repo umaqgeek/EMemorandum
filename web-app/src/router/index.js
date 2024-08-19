@@ -5,6 +5,7 @@ import MemoListView from "@/views/MemoListView.vue";
 import MemoAddView from "@/views/MemoAddView.vue";
 import MemoAddMemberView from "@/views/MemoAddMemberView.vue";
 import MemoEditView from "@/views/MemoEditView.vue";
+import MemoDetailsView from "@/views/MemoDetailsView.vue";
 
 const routes = [
     {
@@ -34,6 +35,10 @@ const routes = [
     {
         path: "/memo-edit",
         component: MemoEditView,
+    },
+    {
+        path: "/memo-detail",
+        component: MemoDetailsView,
     },
 ];
 

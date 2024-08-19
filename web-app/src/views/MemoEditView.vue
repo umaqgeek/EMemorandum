@@ -22,7 +22,7 @@
                                         >
                                             <div class="nk-block-head-content">
                                                 <h2 class="nk-block-title">
-                                                    Add New Memorandum
+                                                    Edit Memorandum
                                                 </h2>
                                             </div>
                                             <!-- .nk-block-head-content -->
@@ -437,12 +437,13 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">
-                                                            <button
+                                                            <router-link
+                                                                to="/memo-list"
                                                                 class="btn btn-primary"
                                                                 type="submit"
                                                             >
                                                                 Save
-                                                            </button>
+                                                            </router-link>
                                                         </div>
                                                     </div>
                                                 </form>

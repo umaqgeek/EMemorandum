@@ -487,10 +487,17 @@
                                                         </div>
                                                         <div class="col-lg-12">
                                                             <router-link
+                                                                to="/memo-list"
+                                                                class="btn btn-secondary"
+                                                            >
+                                                                Save
+                                                            </router-link>
+                                                            &nbsp;
+                                                            <router-link
                                                                 to="/memo-add-member"
                                                                 class="btn btn-primary"
                                                             >
-                                                                Save
+                                                                Next
                                                             </router-link>
                                                         </div>
                                                     </div>

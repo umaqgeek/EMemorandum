@@ -143,8 +143,8 @@
                                                                     ></em
                                                                 ></span>
                                                                 <span
-                                                                    >Add
-                                                                    New</span
+                                                                    >Add New
+                                                                    Members</span
                                                                 >
                                                             </router-link>
                                                         </li>

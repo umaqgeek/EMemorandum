@@ -53,9 +53,17 @@
                         <li class="nk-menu-item">
                             <router-link to="/memo-list" class="nk-menu-link"
                                 ><span class="nk-menu-icon"
-                                    ><em class="icon ni ni-chat-circle"></em
+                                    ><em class="icon ni ni-note-add"></em
                                 ></span>
-                                <span class="nk-menu-text">Memorandum</span>
+                                <span class="nk-menu-text">Create</span>
+                            </router-link>
+                        </li>
+                        <li class="nk-menu-item">
+                            <router-link to="/memo-list" class="nk-menu-link"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-check-round-cut"></em
+                                ></span>
+                                <span class="nk-menu-text">Approval</span>
                             </router-link>
                         </li>
                     </ul>

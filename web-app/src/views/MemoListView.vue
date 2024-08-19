@@ -187,15 +187,16 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-edit.html"
-                                                                                ><em
+                                                                            <router-link
+                                                                                to="/memo-edit"
+                                                                            >
+                                                                                <em
                                                                                     class="icon ni ni-edit"
                                                                                 ></em
                                                                                 ><span
                                                                                     >Edit</span
-                                                                                ></a
-                                                                            >
+                                                                                >
+                                                                            </router-link>
                                                                         </li>
                                                                         <li>
                                                                             <a
@@ -209,15 +210,15 @@
                                                                             >
                                                                         </li>
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-details.html"
+                                                                            <router-link
+                                                                                to="/memo-detail"
                                                                                 ><em
                                                                                     class="icon ni ni-eye"
                                                                                 ></em
                                                                                 ><span
                                                                                     >View
                                                                                     Details</span
-                                                                                ></a
+                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
@@ -295,15 +296,16 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-edit.html"
-                                                                                ><em
+                                                                            <router-link
+                                                                                to="/memo-edit"
+                                                                            >
+                                                                                <em
                                                                                     class="icon ni ni-edit"
                                                                                 ></em
                                                                                 ><span
                                                                                     >Edit</span
-                                                                                ></a
-                                                                            >
+                                                                                >
+                                                                            </router-link>
                                                                         </li>
                                                                         <li>
                                                                             <a
@@ -317,15 +319,15 @@
                                                                             >
                                                                         </li>
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-details.html"
+                                                                            <router-link
+                                                                                to="/memo-detail"
                                                                                 ><em
                                                                                     class="icon ni ni-eye"
                                                                                 ></em
                                                                                 ><span
                                                                                     >View
                                                                                     Details</span
-                                                                                ></a
+                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
@@ -403,15 +405,16 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-edit.html"
-                                                                                ><em
+                                                                            <router-link
+                                                                                to="/memo-edit"
+                                                                            >
+                                                                                <em
                                                                                     class="icon ni ni-edit"
                                                                                 ></em
                                                                                 ><span
                                                                                     >Edit</span
-                                                                                ></a
-                                                                            >
+                                                                                >
+                                                                            </router-link>
                                                                         </li>
                                                                         <li>
                                                                             <a
@@ -511,15 +514,16 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-edit.html"
-                                                                                ><em
+                                                                            <router-link
+                                                                                to="/memo-edit"
+                                                                            >
+                                                                                <em
                                                                                     class="icon ni ni-edit"
                                                                                 ></em
                                                                                 ><span
                                                                                     >Edit</span
-                                                                                ></a
-                                                                            >
+                                                                                >
+                                                                            </router-link>
                                                                         </li>
                                                                         <li>
                                                                             <a
@@ -533,15 +537,15 @@
                                                                             >
                                                                         </li>
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-details.html"
+                                                                            <router-link
+                                                                                to="/memo-detail"
                                                                                 ><em
                                                                                     class="icon ni ni-eye"
                                                                                 ></em
                                                                                 ><span
                                                                                     >View
                                                                                     Details</span
-                                                                                ></a
+                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
@@ -619,15 +623,16 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-edit.html"
-                                                                                ><em
+                                                                            <router-link
+                                                                                to="/memo-edit"
+                                                                            >
+                                                                                <em
                                                                                     class="icon ni ni-edit"
                                                                                 ></em
                                                                                 ><span
                                                                                     >Edit</span
-                                                                                ></a
-                                                                            >
+                                                                                >
+                                                                            </router-link>
                                                                         </li>
                                                                         <li>
                                                                             <a
@@ -641,15 +646,15 @@
                                                                             >
                                                                         </li>
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-details.html"
+                                                                            <router-link
+                                                                                to="/memo-detail"
                                                                                 ><em
                                                                                     class="icon ni ni-eye"
                                                                                 ></em
                                                                                 ><span
                                                                                     >View
                                                                                     Details</span
-                                                                                ></a
+                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
