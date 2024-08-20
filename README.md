@@ -62,7 +62,7 @@ $ dotnet publish -c Release -o ./publish
 ## 3. Database & Migration
 
 ### 3.1. Add new migration script
-1. Create a new model like `./Models/User.cs`.
+1. Create a new model. Eg.: `./Models/User.cs`.
 2. Update the DB Context in `./Models/ApplicationDbContext.cs`.
 3. Run migration script. Eg.:
 ```
