@@ -5,12 +5,12 @@
 -- DROP TABLE DbEMO.dbo.EMO_Pejabat;
 
 CREATE TABLE DbEMO.dbo.EMO_Pejabat (
-	KodPejPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	KodPejPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	Pejabat nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	KodPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	NamaPBU nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	StatusPTJ bit NULL,
-	id bigint IDENTITY(0,1) NOT NULL
+	CONSTRAINT EMO_Pejabat_PK PRIMARY KEY (KodPBU)
 );
 
 -- DbEMO.dbo.EMO_Pengguna definition
@@ -52,7 +52,6 @@ CREATE TABLE DbEMO.dbo.EMO_Pengguna (
 	CLM_Answer2 nvarchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CLM_hint_tkhrequest datetime NULL,
 	CLM_hint_IDRequest nvarchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	id bigint IDENTITY(0,1) NOT NULL,
 	CONSTRAINT PK_EMO_Pengguna PRIMARY KEY (CLM_loginID)
 );
 
@@ -208,7 +207,8 @@ CREATE TABLE DbEMO.dbo.MOU_AuditLog (
 	Nama_Table nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Sub_Menu nvarchar(30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Medan varchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	Info_Lama varchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	Info_Lama varchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT MOU_AuditLog_PK PRIMARY KEY (ID)
 );
 
 -- DbEMO.dbo.MOU_Status definition
@@ -218,8 +218,9 @@ CREATE TABLE DbEMO.dbo.MOU_AuditLog (
 -- DROP TABLE DbEMO.dbo.MOU_Status;
 
 CREATE TABLE DbEMO.dbo.MOU_Status (
-	Kod varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	Status varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	Kod varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Status varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT MOU_Status_PK PRIMARY KEY (Kod)
 );
 
 -- DbEMO.dbo.PUU_JenisMemo definition
@@ -233,7 +234,8 @@ CREATE TABLE DbEMO.dbo.PUU_JenisMemo (
 	Kod int NOT NULL,
 	Butiran varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	KodPejabat nvarchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	Pejabat nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	Pejabat nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT PUU_JenisMemo_PK PRIMARY KEY (ID)
 );
 
 -- DbEMO.dbo.PUU_KategoriMemo definition
@@ -245,7 +247,8 @@ CREATE TABLE DbEMO.dbo.PUU_JenisMemo (
 CREATE TABLE DbEMO.dbo.PUU_KategoriMemo (
 	ID bigint NOT NULL,
 	Kod int NULL,
-	Butiran varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	Butiran varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT PUU_KategoriMemo_PK PRIMARY KEY (ID)
 );
 
 -- DbEMO.dbo.PUU_ScopeMemo definition
@@ -257,7 +260,8 @@ CREATE TABLE DbEMO.dbo.PUU_KategoriMemo (
 CREATE TABLE DbEMO.dbo.PUU_ScopeMemo (
 	ID int NOT NULL,
 	Kod int NOT NULL,
-	Butiran varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+	Butiran varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	CONSTRAINT PUU_ScopeMemo_PK PRIMARY KEY (ID)
 );
 
 -- DbEMO.dbo.PUU_SubPTj definition
@@ -270,5 +274,6 @@ CREATE TABLE DbEMO.dbo.PUU_SubPTj (
 	ID bigint NOT NULL,
 	KodPTJ varchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	KodSubPTJ varchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	Nama varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	Nama varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT PUU_SubPTj_PK PRIMARY KEY (ID)
 );
