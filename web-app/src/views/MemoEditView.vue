@@ -22,7 +22,7 @@
                                         >
                                             <div class="nk-block-head-content">
                                                 <h2 class="nk-block-title">
-                                                    Add New Memorandum
+                                                    Edit Memorandum
                                                 </h2>
                                             </div>
                                             <!-- .nk-block-head-content -->
@@ -73,63 +73,14 @@
                                 </div>
                                 <!-- .nk-block-head -->
                                 <div class="nk-block">
-                                    <div class="card">
-                                        <div
-                                            class="nk-todo"
-                                            data-todo-collapse="xl"
-                                            id="todoWrap"
-                                        >
-                                            <div
-                                                class="nk-todo-aside"
-                                                data-simplebar
-                                                id="todoAside"
-                                                data-overlay="true"
-                                                data-break="xl"
-                                            >
-                                                <div
-                                                    class="nk-todo-aside-header"
-                                                ></div>
-                                                <ul class="nk-todo-menu pb-3">
-                                                    <li class="active">
-                                                        <router-link
-                                                            to="/memo-add"
-                                                            class="nk-todo-menu-item"
-                                                        >
-                                                            <em
-                                                                class="icon ni ni-inbox"
-                                                            ></em>
-                                                            <span
-                                                                >Project
-                                                                Details</span
-                                                            >
-                                                        </router-link>
-                                                    </li>
-                                                    <li>
-                                                        <router-link
-                                                            to="/memo-add-member"
-                                                            class="nk-todo-menu-item"
-                                                        >
-                                                            <em
-                                                                class="icon ni ni-star"
-                                                            ></em>
-                                                            <span>Members</span>
-                                                        </router-link>
-                                                    </li>
-                                                    <li>
-                                                        <a
-                                                            href="#"
-                                                            class="nk-todo-menu-item"
-                                                        >
-                                                            <em
-                                                                class="icon ni ni-check-circle-cut"
-                                                            ></em>
-                                                            <span>KPI</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <!-- .nk-todo-aside -->
-                                            <div class="nk-todo-body card-body">
+                                    <div class="card card-gutter-md">
+                                        <div class="card-body">
+                                            <div class="bio-block">
+                                                <h4
+                                                    class="bio-block-title mb-4"
+                                                >
+                                                    Memorandum
+                                                </h4>
                                                 <form action="#">
                                                     <div class="row g-3">
                                                         <div class="col-lg-12">
@@ -488,28 +439,21 @@
                                                         <div class="col-lg-12">
                                                             <router-link
                                                                 to="/memo-list"
-                                                                class="btn btn-secondary"
+                                                                class="btn btn-primary"
+                                                                type="submit"
                                                             >
                                                                 Save
-                                                            </router-link>
-                                                            &nbsp;
-                                                            <router-link
-                                                                to="/memo-add-member"
-                                                                class="btn btn-primary"
-                                                            >
-                                                                Next
                                                             </router-link>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
-                                            <!-- .nk-todo-body -->
+                                            <!-- .bio-block -->
                                         </div>
-                                        <!-- .nk-todo -->
+                                        <!-- .card-body -->
                                     </div>
                                     <!-- .card -->
                                 </div>
-                                <!-- .nk-block -->
                                 <!-- .nk-block -->
                             </div>
                         </div>
@@ -765,7 +709,7 @@ import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 
 export default {
-    name: "MemoAddView",
+    name: "MemoEditView",
     components: {
         NavbarComponent,
         TopNavComponent,

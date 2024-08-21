@@ -50,7 +50,7 @@
                                                 <label
                                                     for="username"
                                                     class="form-label"
-                                                    >Email or Username</label
+                                                    >Email</label
                                                 >
                                                 <div class="form-control-wrap">
                                                     <input
@@ -58,6 +58,7 @@
                                                         class="form-control"
                                                         id="username"
                                                         placeholder="Enter username"
+                                                        v-model="email"
                                                     />
                                                 </div>
                                             </div>
@@ -72,10 +73,11 @@
                                                 >
                                                 <div class="form-control-wrap">
                                                     <input
-                                                        type="text"
+                                                        type="password"
                                                         class="form-control"
                                                         id="password"
                                                         placeholder="Enter password"
+                                                        v-model="password"
                                                     />
                                                 </div>
                                             </div>
@@ -110,12 +112,20 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="d-grid">
-                                                <router-link
-                                                    to="./dashboard"
+                                                <div
+                                                    v-on:click="login"
                                                     class="btn btn-primary"
-                                                    type="submit"
-                                                    >Login to account
-                                                </router-link>
+                                                >
+                                                    Login to account
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div
+                                                v-if="errorMessage !== ''"
+                                                class="alert alert-danger"
+                                            >
+                                                {{ errorMessage }}
                                             </div>
                                         </div>
                                     </div>
@@ -144,3 +154,34 @@
     </div>
     <!-- .nk-app-root -->
 </template>
+
+<script>
+export default {
+    name: "LoginView",
+    data() {
+        return {
+            email: "",
+            password: "",
+        };
+    },
+    computed: {
+        loading() {
+            return this.$store.getters.getLoading;
+        },
+        user() {
+            return this.$store.getters.getUser;
+        },
+        errorMessage() {
+            return this.$store.getters.getErrorMessage;
+        },
+    },
+    methods: {
+        login() {
+            this.$store.dispatch("loginAction", {
+                email: this.email,
+                password: this.password,
+            });
+        },
+    },
+};
+</script>
