@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import LoginView from "@/views/LoginView.vue";
 import DashboardView from "@/views/DashboardView.vue";
 import MemoListView from "@/views/MemoListView.vue";
 import MemoAddView from "@/views/MemoAddView.vue";
@@ -7,14 +6,6 @@ import MemoAddView from "@/views/MemoAddView.vue";
 const routes = [
     {
         path: "/",
-        component: LoginView,
-    },
-    {
-        path: "/login",
-        component: LoginView,
-    },
-    {
-        path: "/dashboard",
         component: DashboardView,
     },
     {

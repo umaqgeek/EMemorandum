@@ -1,58 +1,30 @@
--- DbEMO.dbo.EMO_Pejabat definition
+-- Check if the database exists
+IF NOT EXISTS (
+    SELECT name 
+    FROM sys.databases 
+    WHERE name = N'DbEMO'
+)
+BEGIN
+    -- Create a new database if it does not exist
+    CREATE DATABASE DbEMO;
+END
 
--- Drop table
+-- Optionally, you can set the default database for the `sa` user or another user
+USE DbEMO;
 
--- DROP TABLE DbEMO.dbo.EMO_Pejabat;
+-- DbEMO.dbo.EMO_Pejabat table definition
 
+-- Drop table if it exists (optional)
+-- DROP TABLE IF EXISTS DbEMO.dbo.EMO_Pejabat;
+
+-- Create the table
 CREATE TABLE DbEMO.dbo.EMO_Pejabat (
-	KodPejPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	Pejabat nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	KodPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	NamaPBU nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	StatusPTJ bit NULL,
-	CONSTRAINT EMO_Pejabat_PK PRIMARY KEY (KodPBU)
-);
-
--- DbEMO.dbo.EMO_Pengguna definition
-
--- Drop table
-
--- DROP TABLE DbEMO.dbo.EMO_Pengguna;
-
-CREATE TABLE DbEMO.dbo.EMO_Pengguna (
-	CLM_loginID nvarchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	CLM_loginPWD nvarchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_PwdSysgen nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_Tahap nvarchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_StatusPG nvarchar(12) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_UNama nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_TrkDaftar datetime NULL,
-	CLM_UEmail nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_UAlamat1 nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_UAlamat2 nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_UPoskod nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_UBandar nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_UNegeri nvarchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_KP nvarchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_NoTel nvarchar(15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_USessionID nvarchar(30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_PengubahPwd nvarchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_TrkUbahPwd datetime NULL,
-	CLM_web_tkhrequest datetime NULL,
-	CLM_web_requestid bigint NULL,
-	CLM_web_req_status nvarchar(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_web_jobid bigint NULL,
-	CLM_LastLogin datetime NULL,
-	CLM_Attempt smallint NULL,
-	CLM_KodGRA char(1) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_Bhs varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	ROC_IDSem varchar(15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	ROC_Kategori varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_Answer1 nvarchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_Answer2 nvarchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CLM_hint_tkhrequest datetime NULL,
-	CLM_hint_IDRequest nvarchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT PK_EMO_Pengguna PRIMARY KEY (CLM_loginID)
+    KodPejPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    Pejabat nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+    KodPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+    NamaPBU nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+    StatusPTJ bit NULL,
+    CONSTRAINT EMO_Pejabat_PK PRIMARY KEY (KodPBU)
 );
 
 -- DbEMO.dbo.EMO_Staf definition

@@ -14,6 +14,16 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// The EnvironmentName property contains the value of the ASPNETCORE_ENVIRONMENT environment variable
+Console.WriteLine($"Current Environment: {builder.Environment.EnvironmentName}");
+
+// Load the appsettings.json and environment-specific appsettings
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("AppSettingsEnv/appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"AppSettingsEnv/appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -82,7 +92,7 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Local")
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));

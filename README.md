@@ -36,6 +36,10 @@ $ npm run build
 ```
 $ dotnet watch run
 ```
+You can pass value of environment using this variable `--environment`. The value can be either `Local` (Default), `Development`, `Staging`, or `Production` to mimic those environments.
+```
+$ dotnet watch run --environment "Local"
+```
 
 ### 1.4. To access Swagger API
 1. Execute backend step `1.3.` above.
@@ -43,19 +47,35 @@ $ dotnet watch run
 
 ## 2. Installation for Production
 
-### 2.1. Frontend
+### 2.1. Setup global variable for Environment
+Possible values: `Development`, `Staging`, or `Production`.
+
+#### 2.1.1. On Windows
+Open Command Prompt or PowerShell and set the environment variable:
+```
+$ setx ASPNETCORE_ENVIRONMENT "Development"
+```
+
+#### 2.1.2. On macOS/Linux
+In your shell, export the environment variable:
+```
+$ export ASPNETCORE_ENVIRONMENT=Development
+```
+
+### 2.2. Frontend
 ```
 $ cd web-app
 $ npm run build
 ```
 
-### 2.2. Backend (build)
+### 2.3. Backend (build)
 ```
 $ dotnet build
 ```
 
-### 2.3. Backend (publish)
+### 2.4. Backend (publish)
 ```
+$ rm -rf publish
 $ dotnet publish -c Release -o ./publish
 ```
 

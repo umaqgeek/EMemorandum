@@ -9,10 +9,6 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    // Define your DbSets (tables)
-    public DbSet<User> Users { get; set; }
+    public DbSet<EMO_Staf> EMO_Staf { get; set; }
     public DbSet<MOU_Status> MOU_Statuses { get; set; }
-    public DbSet<PUU_ScopeMemo> PUU_ScopeMemos { get; set; }
-    public DbSet<PUU_JenisMemo> PUU_JenisMemos { get; set; }
-    public DbSet<PUU_KategoriMemo> PUU_KategoriMemos { get; set; }
 }

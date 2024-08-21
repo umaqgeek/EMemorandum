@@ -31,7 +31,7 @@ namespace EMemorandum.Authorization
                     var token = authHeader.Substring("Bearer ".Length).Trim();
 
                     // Check if the token exists in the database
-                    var user = await _context.Users.FirstOrDefaultAsync(ut => ut.Token == token);
+                    var user = await _context.EMO_Staf.FirstOrDefaultAsync(ut => ut.NoStaf == token);
                     if (user != null)
                     {
                         context.Succeed(requirement);

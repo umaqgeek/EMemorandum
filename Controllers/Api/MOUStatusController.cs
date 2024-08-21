@@ -23,6 +23,7 @@ public class MOUStatusController : ControllerBase
     /// </summary>
     /// <returns>A list of MOU Statuses.</returns>
     [HttpGet]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public ActionResult<IEnumerable<MOU_Status>> GetMOUStatuses()
     {
         return _context.MOU_Statuses.ToList();
@@ -34,6 +35,7 @@ public class MOUStatusController : ControllerBase
     /// <param name="id">The id of a MOU Status.</param>
     /// <returns>An object of a MOU Status.</returns>
     [HttpGet("{id}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public ActionResult<MOU_Status> GetMOUStatus(int id)
     {
         var entity = _context.MOU_Statuses.Find(id);
@@ -53,6 +55,7 @@ public class MOUStatusController : ControllerBase
     /// <param name="entity">The new data for MOU Status.</param>
     /// <returns>A new object of a MOU Status.</returns>
     [HttpPut("{id}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public ActionResult<MOU_Status> UpdateMOUStatus(int id, MOU_Status entity)
     {
         var _entity = _context.MOU_Statuses.Find(id);
@@ -85,6 +88,7 @@ public class MOUStatusController : ControllerBase
     /// <param name="entity">The new data for MOU Status.</param>
     /// <returns>A new object of a MOU Status.</returns>
     [HttpPost]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public ActionResult<MOU_Status> PostMOUStatus(MOU_Status entity)
     {
         _context.MOU_Statuses.Add(entity);
@@ -99,6 +103,7 @@ public class MOUStatusController : ControllerBase
     /// <param name="id">The id of a MOU Status.</param>
     /// <returns>A status after deleting a MOU Status.</returns>
     [HttpDelete("{id}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public ActionResult<MOU_Status> DeleteMOUStatus(int id)
     {
         var entity = _context.MOU_Statuses.Find(id);
