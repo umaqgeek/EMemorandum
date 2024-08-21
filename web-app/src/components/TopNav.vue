@@ -284,22 +284,6 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <div
-                                    class="dropdown-content dropdown-content-x-lg py-3"
-                                >
-                                    <ul class="link-list">
-                                        <li>
-                                            <router-link to="/"
-                                                ><em
-                                                    class="icon ni ni-signout"
-                                                ></em>
-                                                <span
-                                                    >Log Out</span
-                                                ></router-link
-                                            >
-                                        </li>
-                                    </ul>
-                                </div>
                             </div>
                         </li>
                     </ul>
