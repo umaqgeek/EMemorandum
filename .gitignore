@@ -4,10 +4,10 @@
 /web-app/dist
 
 # local env files
-.env.local
-/web-app/.env.local
-.env.*.local
-/web-app/.env.*.local
+# .env.local
+# /web-app/.env.local
+# .env.*.local
+# /web-app/.env.*.local
 
 # Log files
 /web-app/npm-debug.log*
@@ -113,8 +113,8 @@ $RECYCLE.BIN/
 # Web
 web-app/node_modules/
 web-app/dist/
-web-app/.env.local
-web-app/.env.*.local
+# web-app/.env.local
+# web-app/.env.*.local
 web-app/.nuxt/
 web-app/.output/
 
@@ -135,11 +135,11 @@ yarn-error.log*
 .npm
 
 # dotenv environment variables file
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# .env
+# .env.local
+# .env.development.local
+# .env.test.local
+# .env.production.local
 
 # Parcel-bundler cache (https://parceljs.org/)
 .cache

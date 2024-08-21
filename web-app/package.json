@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build:local": "cross-env NODE_ENV=local vue-cli-service build --mode local",
+    "build:development": "cross-env NODE_ENV=development vue-cli-service build --mode development",
+    "build:staging": "cross-env NODE_ENV=staging vue-cli-service build --mode staging",
+    "build:production": "cross-env NODE_ENV=production vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -23,6 +26,7 @@
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",

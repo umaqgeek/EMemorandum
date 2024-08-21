@@ -22,8 +22,6 @@
   </ItemGroup>
 
   <Target Name="BuildFrontend" AfterTargets="Build">
-    <Exec Command="npm install --prefix $(ProjectDir)web-app" />
-    <Exec Command="npm run build --prefix $(ProjectDir)web-app" />
     <ItemGroup>
       <None Include="web-app/dist/**" />
     </ItemGroup>

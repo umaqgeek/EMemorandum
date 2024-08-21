@@ -29,7 +29,7 @@ password: P@ssw0rd
 ### 1.2. Frontend
 ```
 $ cd web-app
-$ npm run build
+$ npm run build:local
 ```
 
 ### 1.3. Backend
@@ -65,15 +65,26 @@ $ export ASPNETCORE_ENVIRONMENT=Development
 ### 2.2. Frontend
 ```
 $ cd web-app
-$ npm run build
+```
+Build the app based on environment:
+- `Local`
+```
+$ npm run build:local
+```
+- `Development`
+```
+$ npm run build:development
+```
+- `Staging`
+```
+$ npm run build:staging
+```
+- `Production`
+```
+$ npm run build:production
 ```
 
-### 2.3. Backend (build)
-```
-$ dotnet build
-```
-
-### 2.4. Backend (publish)
+### 2.3. Backend (build & publish)
 ```
 $ rm -rf publish
 $ dotnet publish -c Release -o ./publish

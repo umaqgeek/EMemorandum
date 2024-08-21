@@ -92,11 +92,14 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Local")
+if (builder.Environment.EnvironmentName == "Local")
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
     app.UseDeveloperExceptionPage();
+} else {
+    // Configure the base path
+    app.UsePathBase("/emo");
 }
 
 app.UseHttpsRedirection();
