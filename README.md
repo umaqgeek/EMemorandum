@@ -48,18 +48,18 @@ $ dotnet watch run --environment "Local"
 ## 2. Installation for Production
 
 ### 2.1. Setup global variable for Environment
-Possible values: `Development`, `Staging`, or `Production`.
+Possible values: `Local`, `Development`, `Staging`, or `Production`.
 
 #### 2.1.1. On Windows
 Open Command Prompt or PowerShell and set the environment variable:
 ```
-$ setx ASPNETCORE_ENVIRONMENT "Development"
+$ setx ASPNETCORE_ENVIRONMENT "Local"
 ```
 
 #### 2.1.2. On macOS/Linux
 In your shell, export the environment variable:
 ```
-$ export ASPNETCORE_ENVIRONMENT=Development
+$ export ASPNETCORE_ENVIRONMENT=Local
 ```
 
 ### 2.2. Frontend

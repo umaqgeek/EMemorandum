@@ -14,4 +14,5 @@ export const getBearerToken = () => {
 export const resetBearerToken = () => {
     const emoToken = window.prompt("Enter the Staff / Login ID", "00001");
     localStorage.setItem(EMO_TOKEN, emoToken);
+    window.location.reload();
 };

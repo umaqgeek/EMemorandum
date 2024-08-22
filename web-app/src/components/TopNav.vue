@@ -284,6 +284,20 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <div
+                                    class="dropdown-content dropdown-content-x-lg py-3"
+                                >
+                                    <ul class="link-list">
+                                        <li>
+                                            <a href="#" v-on:click="logout">
+                                                <em
+                                                    class="icon ni ni-signout"
+                                                ></em>
+                                                <span>Log Out</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </li>
                     </ul>
@@ -297,7 +311,14 @@
 </template>
 
 <script>
+import { resetBearerToken } from "@/utils/mocks";
+
 export default {
     name: "TopNavComponent",
+    methods: {
+        logout() {
+            resetBearerToken();
+        },
+    },
 };
 </script>
