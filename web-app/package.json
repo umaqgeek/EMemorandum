@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "cross-env NODE_ENV=local vue-cli-service serve --mode local",
     "build:local": "cross-env NODE_ENV=local vue-cli-service build --mode local",
     "build:development": "cross-env NODE_ENV=development vue-cli-service build --mode development",
     "build:staging": "cross-env NODE_ENV=staging vue-cli-service build --mode staging",

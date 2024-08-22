@@ -1065,7 +1065,7 @@
                 </ul>
             </div>
         </div>
-        <div v-if="loading" class="loading">Loading ...</div>
+        <ValidateMeComponent />
     </div>
     <!-- .nk-app-root -->
 </template>
@@ -1077,48 +1077,14 @@ import "../assets/js/bundle.js";
 // import "../assets/js/data-tables/data-tables.js";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
-import axios from "axios";
-import { API_URL } from "@/utils/constants";
-import { BEARER_TOKEN } from "@/utils/mocks";
+import ValidateMeComponent from "@/components/ValidateMe.vue";
 
 export default {
     name: "MemoListView",
-    data() {
-        return {
-            loading: false,
-        };
-    },
-    mounted() {
-        this.validateMe();
-    },
     components: {
         NavbarComponent,
         TopNavComponent,
-    },
-    methods: {
-        validateMe() {
-            this.loading = true;
-            axios
-                .post(
-                    `${API_URL}/auth/validate-me`,
-                    {},
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${BEARER_TOKEN}`,
-                        },
-                    }
-                )
-                .then((response) => {
-                    console.log(response.data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
+        ValidateMeComponent,
     },
 };
 </script>

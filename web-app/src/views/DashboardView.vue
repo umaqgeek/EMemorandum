@@ -265,7 +265,7 @@
                 </ul>
             </div>
         </div>
-        <div v-if="loading" class="loading">Loading ...</div>
+        <ValidateMeComponent />
     </div>
     <!-- .nk-app-root -->
 </template>
@@ -275,50 +275,16 @@
 import "../assets/js/bundle.js";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
+import ValidateMeComponent from "@/components/ValidateMe.vue";
 // import "../assets/js/scripts.js";
 // import "../assets/js/charts/project-manage-chart.js";
-import axios from "axios";
-import { API_URL } from "@/utils/constants";
-import { BEARER_TOKEN } from "@/utils/mocks";
 
 export default {
     name: "DashboardView",
-    data() {
-        return {
-            loading: false,
-        };
-    },
-    mounted() {
-        this.validateMe();
-    },
     components: {
         NavbarComponent,
         TopNavComponent,
-    },
-    methods: {
-        validateMe() {
-            this.loading = true;
-            axios
-                .post(
-                    `${API_URL}/auth/validate-me`,
-                    {},
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${BEARER_TOKEN}`,
-                        },
-                    }
-                )
-                .then((response) => {
-                    console.log(response.data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
+        ValidateMeComponent,
     },
 };
 </script>
