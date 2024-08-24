@@ -130,10 +130,12 @@ There is a github workflow process has been defined in this file [build-and-publ
   - Eg.: `git tag prod-1.3.2`
 
 ### 4.2. Manual build
+Below are the scripts to be used to build the Frontend (VueJS) and Backend (.NET Core) application into one folder named `publish`. Deploy the build inside that folder into different environment; `development`, `staging`, and `production`.
 
 #### 4.2.1. Windows
 
 ##### 4.2.1.1. Development
+To build in Windows OS for development environment. It will be deployed in the server with this URL [devmis.utem.edu.my/emo](https://devmis.utem.edu.my/emo/)
 ```
 $ cd web-app && \
     npm install && \
@@ -145,6 +147,7 @@ $ rm -rf publish && \
 ```
 
 ##### 4.2.1.2. Staging
+To build in Windows OS for staging environment. It will be deployed in the server with this URL :TBD
 ```
 $ cd web-app && \
     npm install && \
@@ -156,6 +159,7 @@ $ rm -rf publish && \
 ```
 
 ##### 4.2.1.3. Production
+To build in Windows OS for production environment. It will be deployed in the server with this URL :TBD
 ```
 $ cd web-app && \
     npm install && \
@@ -169,6 +173,7 @@ $ rm -rf publish && \
 #### 4.2.2. Linux / MacOS
 
 ##### 4.2.2.1. Development
+To build in Linux OS or MacOS for development environment. It will be deployed in the server with this URL [devmis.utem.edu.my/emo](https://devmis.utem.edu.my/emo/)
 ```
 $ cd web-app && \
     npm install && \
@@ -180,6 +185,7 @@ $ rm -rf publish && \
 ```
 
 ##### 4.2.2.2. Staging
+To build in Linux OS or MacOS for staging environment. It will be deployed in the server with this URL :TBD
 ```
 $ cd web-app && \
     npm install && \
@@ -191,6 +197,7 @@ $ rm -rf publish && \
 ```
 
 ##### 4.2.2.3. Production
+To build in Linux OS or MacOS for production environment. It will be deployed in the server with this URL :TBD
 ```
 $ cd web-app && \
     npm install && \
