@@ -42,15 +42,19 @@ jobs:
           rm -rf publish
           dotnet publish -c Release -o ./publish
 
+      - name: Get the tag name
+        id: tag_name
+        run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
       - name: Zip the publish folder
         run: |
-          zip -r publish-dev.zip ./publish
+          zip -r "publish-dev-${{ env.TAG_NAME }}.zip" ./publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: publish-zip-development
-          path: publish-dev.zip
+          name: "publish-zip-development-${{ env.TAG_NAME }}"
+          path: "publish-dev-${{ env.TAG_NAME }}.zip"
 
   build-staging:
     if: startsWith(github.ref, 'refs/tags/stag-')
@@ -86,15 +90,19 @@ jobs:
           rm -rf publish
           dotnet publish -c Release -o ./publish
 
+      - name: Get the tag name
+        id: tag_name
+        run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
       - name: Zip the publish folder
         run: |
-          zip -r publish-stag.zip ./publish
+          zip -r "publish-stag-${{ env.TAG_NAME }}.zip" ./publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: publish-zip-staging
-          path: publish-stag.zip
+          name: "publish-zip-staging-${{ env.TAG_NAME }}"
+          path: "publish-stag-${{ env.TAG_NAME }}.zip"
 
   build-production:
     if: startsWith(github.ref, 'refs/tags/prod-')
@@ -130,12 +138,16 @@ jobs:
           rm -rf publish
           dotnet publish -c Release -o ./publish
 
+      - name: Get the tag name
+        id: tag_name
+        run: echo "TAG_NAME=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
       - name: Zip the publish folder
         run: |
-          zip -r publish-prod.zip ./publish
+          zip -r "publish-prod-${{ env.TAG_NAME }}.zip" ./publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: publish-zip-production
-          path: publish-prod.zip
+          name: "publish-zip-production-${{ env.TAG_NAME }}"
+          path: "publish-prod-${{ env.TAG_NAME }}.zip"
