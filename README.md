@@ -10,7 +10,7 @@ System to manage memorandum in UTeM.
 - docker version 24
 - docker-compose version 1.29.2
 
-## 1. Running in Development
+## 1. Running in Local
 
 ### 1.1. Database (via Docker)
 ```
@@ -34,10 +34,6 @@ $ npm run build:local
 
 ### 1.3. Backend
 ```
-$ dotnet watch run
-```
-You can pass value of environment using this variable `--environment`. The value can be either `Local` (Default), `Development`, `Staging`, or `Production` to mimic those environments.
-```
 $ dotnet watch run --environment "Local"
 ```
 
@@ -45,42 +41,63 @@ $ dotnet watch run --environment "Local"
 1. Execute backend step `1.3.` above.
 2. Open the local swagger URL at http://localhost:5000/swagger/index.html .
 
-## 2. Installation for Production
+## 2. Build & Deployment for other environments
 
 ### 2.1. Setup global variable for Environment
-Possible values: `Local`, `Development`, `Staging`, or `Production`.
 
 #### 2.1.1. On Windows
 Open Command Prompt or PowerShell and set the environment variable:
+
+##### 2.1.1.1. Development
 ```
-$ setx ASPNETCORE_ENVIRONMENT "Local"
+$ setx ASPNETCORE_ENVIRONMENT "Development"
+```
+
+##### 2.1.1.2. Staging
+```
+$ setx ASPNETCORE_ENVIRONMENT "Staging"
+```
+
+##### 2.1.1.3. Production
+```
+$ setx ASPNETCORE_ENVIRONMENT "Production"
 ```
 
 #### 2.1.2. On macOS/Linux
 In your shell, export the environment variable:
+
+##### 2.1.2.1. Development
 ```
-$ export ASPNETCORE_ENVIRONMENT=Local
+$ export ASPNETCORE_ENVIRONMENT=Development
+```
+
+##### 2.1.2.2. Staging
+```
+$ export ASPNETCORE_ENVIRONMENT=Staging
+```
+
+##### 2.1.2.3. Production
+```
+$ export ASPNETCORE_ENVIRONMENT=Production
 ```
 
 ### 2.2. Frontend
+
+#### 2.2.1. Development
 ```
 $ cd web-app
-```
-Build the app based on environment:
-- `Local`
-```
-$ npm run build:local
-```
-- `Development`
-```
 $ npm run build:development
 ```
-- `Staging`
+
+#### 2.2.2. Staging
 ```
+$ cd web-app
 $ npm run build:staging
 ```
-- `Production`
+
+#### 2.2.3. Production
 ```
+$ cd web-app
 $ npm run build:production
 ```
 
