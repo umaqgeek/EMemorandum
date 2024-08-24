@@ -29,7 +29,7 @@ password: P@ssw0rd
 ### 1.2. Frontend
 ```
 $ cd web-app
-$ npm run build:local
+$ npm run serve
 ```
 
 ### 1.3. Backend
