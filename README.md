@@ -108,3 +108,95 @@ $ dotnet ef database update
 ```
 $ dotnet ef migrations script -o e_memorandum_db.sql
 ```
+
+## 4. Deployment & Release
+
+### 4.1. Auto build with GitHub Actions
+There is a github workflow process has been defined in this file [build-and-publish.yml](/.github/workflows/build-and-publish.yml). It will be triggered by tags with these prefix:
+- `dev-*`
+  - For development environment.
+  - The zip artefact file from this process can be downloaded from the github actions page.
+  - It will be deployed in the server with this URL [devmis.utem.edu.my/emo](https://devmis.utem.edu.my/emo/)
+  - Eg.: `git tag dev-1.3.2`
+- `stag-*`
+  - For staging environment.
+  - The zip artefact file from this process can be downloaded from the github actions page.
+  - It will be deployed in the server with this URL :TBD
+  - Eg.: `git tag stag-1.3.2`
+- `prod-*`
+  - For production environment.
+  - The zip artefact file from this process can be downloaded from the github actions page.
+  - It will be deployed in the server with this URL :TBD.
+  - Eg.: `git tag prod-1.3.2`
+
+### 4.2. Manual build
+
+#### 4.2.1. Windows
+
+##### 4.2.1.1. Development
+```
+$ cd web-app && \
+    npm install && \
+    npm run build:development && \
+    cd ..
+$ setx ASPNETCORE_ENVIRONMENT "Development"
+$ rm -rf publish && \
+    dotnet publish -c Release -o ./publish
+```
+
+##### 4.2.1.2. Staging
+```
+$ cd web-app && \
+    npm install && \
+    npm run build:staging && \
+    cd ..
+$ setx ASPNETCORE_ENVIRONMENT "Staging"
+$ rm -rf publish && \
+    dotnet publish -c Release -o ./publish
+```
+
+##### 4.2.1.3. Production
+```
+$ cd web-app && \
+    npm install && \
+    npm run build:production && \
+    cd ..
+$ setx ASPNETCORE_ENVIRONMENT "Production"
+$ rm -rf publish && \
+    dotnet publish -c Release -o ./publish
+```
+
+#### 4.2.2. Linux / MacOS
+
+##### 4.2.2.1. Development
+```
+$ cd web-app && \
+    npm install && \
+    npm run build:development && \
+    cd ..
+$ export ASPNETCORE_ENVIRONMENT=Development
+$ rm -rf publish && \
+    dotnet publish -c Release -o ./publish
+```
+
+##### 4.2.2.2. Staging
+```
+$ cd web-app && \
+    npm install && \
+    npm run build:staging && \
+    cd ..
+$ export ASPNETCORE_ENVIRONMENT=Staging
+$ rm -rf publish && \
+    dotnet publish -c Release -o ./publish
+```
+
+##### 4.2.2.3. Production
+```
+$ cd web-app && \
+    npm install && \
+    npm run build:production && \
+    cd ..
+$ export ASPNETCORE_ENVIRONMENT=Production
+$ rm -rf publish && \
+    dotnet publish -c Release -o ./publish
+```
