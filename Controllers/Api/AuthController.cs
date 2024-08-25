@@ -33,5 +33,27 @@ namespace EMemorandum.Controllers.Api
         {
             return Ok(new { message = "Authorized" });
         }
+
+        [HttpGet("staff-profile/{noStaf}")]
+        public ActionResult<EMO_Staf> GetStaffProfile(string noStaf)
+        {
+            var _entity = _context.EMO_Staf
+                .Where(s => s.NoStaf == noStaf)
+                .Select(s => new
+                {
+                    s.Nama,
+                    s.Email,
+                    s.NoTelBimbit,
+                    s.Gelaran
+                })
+                .FirstOrDefault();;
+
+            if (_entity == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_entity);
+        }
     }
 }
