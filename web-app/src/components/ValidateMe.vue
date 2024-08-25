@@ -4,48 +4,21 @@
 
 <script>
 import LoadingComponent from "@/components/Loading.vue";
-import axios from "axios";
-import { API_URL } from "@/utils/constants";
-import { getBearerToken, resetBearerToken } from "@/utils/mocks";
+import { useValidateMe } from "@/hooks/useAPI";
 
 export default {
     name: "ValidateMeComponent",
     components: {
         LoadingComponent,
     },
-    data() {
+    setup() {
+        const { data, error, loading, refetch } = useValidateMe();
         return {
-            loading: false,
+            data,
+            error,
+            loading,
+            refetch,
         };
-    },
-    mounted() {
-        this.validateMe();
-    },
-    methods: {
-        validateMe() {
-            this.loading = true;
-            axios
-                .post(
-                    `${API_URL}/auth/validate-me`,
-                    {},
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${getBearerToken()}`,
-                        },
-                    }
-                )
-                .then((response) => {
-                    console.log(response.data);
-                })
-                .catch((error) => {
-                    console.log(error);
-                    resetBearerToken();
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
     },
 };
 </script>
