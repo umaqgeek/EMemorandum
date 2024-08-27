@@ -46,5 +46,47 @@ namespace EMemorandum.Controllers.Api
 
             return Ok(_entity);
         }
+
+        [HttpPost("assign-role/{noStaf}")]
+        public ActionResult AssignStaffRoles(string noStaf, [FromBody] AssignRolesRequest request)
+        {
+            // Retrieve the staff entity including its roles
+            var _entity = _context.EMO_Staf
+                .Where(s => s.NoStaf == noStaf)
+                .Include(s => s.Roles)
+                .FirstOrDefault();
+
+            // Check if the staff exists
+            if (_entity == null)
+            {
+                return NotFound();
+            }
+
+            // Clear existing roles if necessary (optional)
+            _entity.Roles.Clear();
+
+            // // Assign new roles to the staff
+            foreach (var role in request.Roles)
+            {
+                var staffRole = new EMO_Roles
+                {
+                    NoStaf = noStaf,
+                    Role = role
+                };
+
+                _entity.Roles.Add(staffRole);
+            }
+
+            // Save changes to the database
+            _context.SaveChanges();
+
+            return Ok(_entity);
+        }
     }
 }
+
+public class AssignRolesRequest
+{
+    public List<string> Roles { get; set; }
+}
+
