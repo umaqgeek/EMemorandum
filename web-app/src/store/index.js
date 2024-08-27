@@ -27,7 +27,7 @@ export default createStore({
                 .then((response) => {
                     state.user = response.data;
                     state.errorMessage = "";
-                    localStorage.setItem("token", response.data.Token); // Save the token for subsequent requests
+                    sessionStorage.setItem("token", response.data.Token); // Save the token for subsequent requests
                     router.push("/dashboard"); // Redirect to the dashboard page
                 })
                 .catch((error) => {
