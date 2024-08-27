@@ -81,27 +81,45 @@ $ export ASPNETCORE_ENVIRONMENT=Staging
 $ export ASPNETCORE_ENVIRONMENT=Production
 ```
 
-### 2.2. Frontend
+### 2.2. Manual Update of Internal Variables
 
-#### 2.2.1. Development
+#### 2.2.1 Manual update Database connection
+If you need to update the .NET's environment variables like connection to the database for each environments, you can observe the `appsettings.*.json` files under the folder [AppSettingsEnv](/AppSettingsEnv). The default `appsettings` file is [appsettings.json](/AppSettingsEnv/appsettings.json).
+
+- Local: [appsettings.Local.json](/AppSettingsEnv/appsettings.Local.json)
+- Development: [appsettings.Development.json](/AppSettingsEnv/appsettings.Development.json)
+- Staging: [appsettings.Staging.json](/AppSettingsEnv/appsettings.Staging.json)
+- Production: [appsettings.Local.json](/AppSettingsEnv/appsettings.Production.json)
+
+#### 2.2.2 Manual update API connection
+If you need to update the VueJS environment variables like connection from the Frontend to the Backend application for each environments, you can observe the `.env.*` files under the folder [web-app](/web-app/). The default `.env` file is [.env](/web-app/.env.local).
+
+- Local: [.env.local](/web-app/.env.local)
+- Development: [.env.development](/web-app/.env.development)
+- Staging: [.env.staging](/web-app/.env.staging)
+- Production: [.env.production](/web-app/.env.production)
+
+### 2.3. Frontend
+
+#### 2.3.1. Development
 ```
 $ cd web-app
 $ npm run build:development
 ```
 
-#### 2.2.2. Staging
+#### 2.3.2. Staging
 ```
 $ cd web-app
 $ npm run build:staging
 ```
 
-#### 2.2.3. Production
+#### 2.3.3. Production
 ```
 $ cd web-app
 $ npm run build:production
 ```
 
-### 2.3. Backend (build & publish)
+### 2.4. Backend (build & publish)
 ```
 $ rm -rf publish
 $ dotnet publish -c Release -o ./publish
