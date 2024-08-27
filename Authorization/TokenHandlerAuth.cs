@@ -21,13 +21,14 @@ namespace EMemorandum.Authorization
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, TokenRequirement requirement)
         {
             var httpContext = _httpContextAccessor.HttpContext;
+            var Bearer = "Bearer ";
 
             if (httpContext != null)
             {
                 var authHeader = httpContext.Request.Headers["Authorization"].FirstOrDefault();
-                if (authHeader != null && authHeader.StartsWith("Bearer "))
+                if (authHeader != null && authHeader.StartsWith(Bearer))
                 {
-                    var token = authHeader.Substring("Bearer ".Length).Trim();
+                    var token = authHeader.Substring(Bearer.Length).Trim();
 
                     // Check if the token exists in the database
                     var user = await _context.EMO_Staf.FirstOrDefaultAsync(s => s.NoStaf == token);

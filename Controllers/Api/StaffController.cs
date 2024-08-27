@@ -36,6 +36,7 @@ namespace EMemorandum.Controllers.Api
         {
             var _entity = _context.EMO_Staf
                 .Where(s => s.NoStaf == noStaf)
+                .Include(s => s.Roles)
                 .FirstOrDefault();
 
             if (_entity == null)
