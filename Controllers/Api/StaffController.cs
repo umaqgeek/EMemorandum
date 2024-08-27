@@ -14,23 +14,23 @@ namespace EMemorandum.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "TokenPolicy")]
-    public class AuthController : ControllerBase
+    [Authorize(Policy = "AdminPolicy")]
+    public class StaffController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public AuthController(IConfiguration configuration, ApplicationDbContext context)
+        public StaffController(IConfiguration configuration, ApplicationDbContext context)
         {
             _context = context;
         }
 
-        [HttpPost("validate-me")]
-        public ActionResult ValidateMe()
+        [HttpGet]
+        public ActionResult<IEnumerable<EMO_Staf>> GetAllStaff()
         {
-            return Ok(new { message = "Authorized" });
+            return _context.EMO_Staf.ToList();
         }
 
-        [HttpGet("staff-profile/{noStaf}")]
+        [HttpGet("{noStaf}")]
         public ActionResult<EMO_Staf> GetStaffProfile(string noStaf)
         {
             var _entity = _context.EMO_Staf
@@ -42,7 +42,7 @@ namespace EMemorandum.Controllers.Api
                     s.NoTelBimbit,
                     s.Gelaran
                 })
-                .FirstOrDefault();
+                .FirstOrDefault();;
 
             if (_entity == null)
             {

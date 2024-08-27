@@ -14,13 +14,11 @@ namespace EMemorandum.Controllers.Api
     [ApiController]
     public class TestController : ControllerBase
     {
-        private readonly string _secretKey;
         private readonly ApplicationDbContext _context;
         private readonly string _test;
 
         public TestController(IConfiguration configuration, ApplicationDbContext context)
         {
-            _secretKey = configuration.GetValue<string>("Jwt:SecretKey");
             _context = context;
             _test = configuration.GetValue<string>("test:haha");
         }

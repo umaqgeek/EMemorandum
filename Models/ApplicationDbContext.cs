@@ -10,5 +10,6 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<EMO_Staf> EMO_Staf { get; set; }
+    public DbSet<EMO_Roles> EMO_Roles { get; set; }
     public DbSet<MOU_Status> MOU_Statuses { get; set; }
 }
