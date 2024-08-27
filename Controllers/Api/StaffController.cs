@@ -35,14 +35,7 @@ namespace EMemorandum.Controllers.Api
         {
             var _entity = _context.EMO_Staf
                 .Where(s => s.NoStaf == noStaf)
-                .Select(s => new
-                {
-                    s.Nama,
-                    s.Email,
-                    s.NoTelBimbit,
-                    s.Gelaran
-                })
-                .FirstOrDefault();;
+                .FirstOrDefault();
 
             if (_entity == null)
             {
