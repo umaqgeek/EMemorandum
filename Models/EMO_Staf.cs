@@ -19,4 +19,7 @@ public class EMO_Staf
     public string? Gelaran { get; set; }
     public string? MS01_Jantina { get; set; }
     public string? Warganegara { get; set; }
+
+    // Navigation property for the roles
+    public ICollection<EMO_Roles> Roles { get; set; }
 }
