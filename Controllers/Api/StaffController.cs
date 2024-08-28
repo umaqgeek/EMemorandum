@@ -28,7 +28,19 @@ namespace EMemorandum.Controllers.Api
         [HttpGet]
         public ActionResult<IEnumerable<EMO_Staf>> GetAllStaff()
         {
-            return _context.EMO_Staf.ToList();
+            // Fetch the token from the Authorization header
+            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+            if (authHeader == null || !authHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized("Token is missing or invalid.");
+            }
+
+            var staffId = authHeader.Substring("Bearer ".Length).Trim();
+
+            return _context.EMO_Staf
+                .Where(s => s.NoStaf != staffId)
+                .Include(s => s.Roles)
+                .ToList();
         }
 
         [HttpGet("{noStaf}")]
