@@ -51,6 +51,17 @@ namespace EMemorandum.Controllers.Api
             return Ok(memorandums);
         }
 
+        [HttpGet("select-data")]
+        public ActionResult<IEnumerable<object>> GetSelectData()
+        {
+            return Ok(new {
+                JenisMemo = _context.PUU_JenisMemo.ToList(),
+                KategoriMemo = _context.PUU_KategoriMemo.ToList(),
+                ScopeMemo = _context.PUU_ScopeMemo.ToList(),
+                SubPTJ = _context.PUU_SubPTj.ToList(),
+            });
+        }
+
         [HttpGet("{noMemo}")]
         public ActionResult<MOU01_Memorandum> GetMemorandum(string noMemo)
         {
