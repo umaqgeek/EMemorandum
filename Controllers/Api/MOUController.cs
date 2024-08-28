@@ -59,8 +59,17 @@ namespace EMemorandum.Controllers.Api
                 KategoriMemo = _context.PUU_KategoriMemo.ToList(),
                 ScopeMemo = _context.PUU_ScopeMemo.ToList(),
                 SubPTJ = _context.PUU_SubPTj.ToList(),
+                // TODO: List all staff for memo's members
             });
         }
+
+        // TODO: Add memorandum and its members and its KPIs (All)
+        // TODO: Update memorandum (PIC, Admin)
+        // TODO: Delete memorandum (PIC, Admin)
+        // TODO: Add members to a memorandum (PIC, Admin)
+        // TODO: Add KPIs to a memorandum (PIC, Admin)
+        // TODO: Review and comment a memorandum (PUU)
+        // TODO: Approve or reject a memorandum (PTJ)
 
         [HttpGet("{noMemo}")]
         public ActionResult<MOU01_Memorandum> GetMemorandum(string noMemo)
