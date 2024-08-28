@@ -22,4 +22,7 @@ public class EMO_Staf
 
     // Navigation property for the roles
     public ICollection<EMO_Roles> Roles { get; set; }
+
+    // Navigation property for the memorandums
+    public ICollection<MOU01_Memorandum> Memorandums { get; set; }
 }

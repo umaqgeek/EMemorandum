@@ -90,17 +90,22 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("AdminPolicy", policy =>
     {
-        policy.Requirements.Add(new TokenRequirement("Admin"));
+        policy.Requirements.Add(new TokenRequirement(new[] { "Admin" }));
     });
 
     options.AddPolicy("PUUPolicy", policy =>
     {
-        policy.Requirements.Add(new TokenRequirement("PUU"));
+        policy.Requirements.Add(new TokenRequirement(new[] { "PUU" }));
     });
 
     options.AddPolicy("PTJPolicy", policy =>
     {
-        policy.Requirements.Add(new TokenRequirement("PTJ"));
+        policy.Requirements.Add(new TokenRequirement(new[] { "PTJ" }));
+    });
+
+    options.AddPolicy("AdminOrPUUPolicy", policy =>
+    {
+        policy.Requirements.Add(new TokenRequirement(new[] { "Admin", "PUU" }));
     });
 });
 

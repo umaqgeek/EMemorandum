@@ -30,11 +30,9 @@ namespace EMemorandum.Controllers.Api
         {
             // Fetch the token from the Authorization header
             var authHeader = Request.Headers["Authorization"].FirstOrDefault();
-            if (authHeader == null || !authHeader.StartsWith("Bearer "))
-            {
+            if (authHeader == null || !authHeader.StartsWith("Bearer ")) {
                 return Unauthorized("Token is missing or invalid.");
             }
-
             var staffId = authHeader.Substring("Bearer ".Length).Trim();
 
             return _context.EMO_Staf

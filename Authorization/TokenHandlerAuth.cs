@@ -35,12 +35,37 @@ namespace EMemorandum.Authorization
 
                     if (user != null)
                     {
-                        var roles = await _context.EMO_Roles
-                            .Where(r => r.NoStaf == token && r.Role == requirement.RequiredRole)
-                            .FirstOrDefaultAsync();
+                        List<EMO_Roles> roles = null;
+
+                        if (requirement.RequiredRoles != null && requirement.RequiredRoles.Any())
+                        {
+                            roles = await _context.EMO_Roles
+                                .Where(r => r.NoStaf == token && requirement.RequiredRoles.Contains(r.Role))
+                                .ToListAsync();
+                        }
+
+                        // Log the roles
+                        if (roles != null)
+                        {
+                            Console.WriteLine("Roles:");
+                            foreach (var role in roles)
+                            {
+                                Console.WriteLine($"- {role.Role}");
+                            }
+                        }
+
+                        // Log required roles
+                        if (requirement.RequiredRoles != null)
+                        {
+                            Console.WriteLine("Required Roles:");
+                            foreach (var requiredRole in requirement.RequiredRoles)
+                            {
+                                Console.WriteLine($"- {requiredRole}");
+                            }
+                        }
 
                         // Role check
-                        if (string.IsNullOrEmpty(requirement.RequiredRole) || roles != null)
+                        if (requirement.RequiredRoles == null || !requirement.RequiredRoles.Any() || (roles != null && roles.Any()))
                         {
                             context.Succeed(requirement);
                             return;
