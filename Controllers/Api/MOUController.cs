@@ -29,31 +29,32 @@ namespace EMemorandum.Controllers.Api
         [Authorize(Policy = "AdminOrPUUPolicy")]
         public ActionResult<IEnumerable<object>> GetAllMemorandums()
         {
-            // Fetch the token from the Authorization header
-            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
-            if (authHeader == null || !authHeader.StartsWith("Bearer "))
-            {
-                return Unauthorized("Token is missing or invalid.");
-            }
-            var staffId = authHeader.Substring("Bearer ".Length).Trim();
+            var staffId = GetStaffID();
 
             var memorandums = _context.MOU01_Memorandum
                 .Select(_entity => GetTransformedMOU(_entity, staffId))
                 .ToList();
-            
+
+            return Ok(memorandums);
+        }
+
+        [HttpGet("mine")]
+        public ActionResult<IEnumerable<object>> GetAllMemorandumsForAStaff()
+        {
+            var staffId = GetStaffID();
+
+            var memorandums = _context.MOU01_Memorandum
+                .Where(m => m.MS01_NoStaf == staffId)
+                .Select(_entity => GetTransformedMOU(_entity, staffId))
+                .ToList();
+
             return Ok(memorandums);
         }
 
         [HttpGet("{noMemo}")]
         public ActionResult<MOU01_Memorandum> GetMemorandum(string noMemo)
         {
-            // Fetch the token from the Authorization header
-            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
-            if (authHeader == null || !authHeader.StartsWith("Bearer "))
-            {
-                return Unauthorized("Token is missing or invalid.");
-            }
-            var staffId = authHeader.Substring("Bearer ".Length).Trim();
+            var staffId = GetStaffID();
 
             var _entity = _context.MOU01_Memorandum
                 .Where(m => m.NoMemo == noMemo)
@@ -74,6 +75,17 @@ namespace EMemorandum.Controllers.Api
                 return input;
             }
             return input.Replace("-", "/");
+        }
+
+        private string GetStaffID()
+        {
+            // Fetch the token from the Authorization header
+            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+            if (authHeader != null && authHeader.StartsWith("Bearer "))
+            {
+                return authHeader.Substring("Bearer ".Length).Trim();
+            }
+            return null;
         }
 
         private static object GetTransformedMOU(MOU01_Memorandum _entity, string staffId)
