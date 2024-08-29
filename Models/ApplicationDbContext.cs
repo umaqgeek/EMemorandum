@@ -64,4 +64,24 @@ public class ApplicationDbContext : DbContext
 
         base.OnModelCreating(modelBuilder);
     }
+
+    public string GenerateNextNoMemo(string prefix, int tahun, string kodPTJ)
+    {
+        // SQL Equivalent:
+        // SELECT MAX(CAST(NoSiri AS INT)) AS MaxNoSiri
+        // FROM YourTable
+        // WHERE Tahun = 2024 AND KodPTJ = '100100';
+        var maxNoSiri = MOU01_Memorandum
+            .Where(m => m.Tahun == tahun && m.KodPTJ == kodPTJ)
+            .AsEnumerable() // Switches to in-memory processing
+            .Select(m => int.TryParse(m.NoSiri, out int num) ? num : 0)
+            .DefaultIfEmpty(0) // Handle the case where there are no matches
+            .Max(); // Get the maximum running number
+        // Increment the number to get the next running number
+        int nextNumber = maxNoSiri + 1;
+        // Format the running number to be zero-padded to 3 digits
+        string nextNumberString = nextNumber.ToString("D3");
+        // Combine the prefix with the new running number
+        return $"{prefix}{nextNumberString}";
+    }
 }
