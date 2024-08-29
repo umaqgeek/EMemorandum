@@ -27,20 +27,6 @@ CREATE TABLE DbEMO.dbo.EMO_Pejabat (
 	CONSTRAINT EMO_Pejabat_PK PRIMARY KEY (KodPBU)
 );
 
--- DbEMO.dbo.EMO_Roles definition
-
--- Drop table
-
--- DROP TABLE DbEMO.dbo.EMO_Roles;
-
-CREATE TABLE DbEMO.dbo.EMO_Roles (
-	id bigint IDENTITY(0,1) NOT NULL,
-	NoStaf nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[Role] nvarchar(10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT EMO_Roles_PK PRIMARY KEY (id),
-	CONSTRAINT EMO_Roles_FK FOREIGN KEY (NoStaf) REFERENCES DbEMO.dbo.EMO_Staf(NoStaf) ON DELETE CASCADE
-);
-
 -- DbEMO.dbo.EMO_Staf definition
 
 -- Drop table
@@ -76,6 +62,20 @@ CREATE TABLE DbEMO.dbo.EMO_Staf (
 	MS02_TkhKuatkuasa smalldatetime NULL,
 	MS02_TkhLantikKUTKM smalldatetime NULL,
 	CONSTRAINT PK_EMO_Staf PRIMARY KEY (NoStaf)
+);
+
+-- DbEMO.dbo.EMO_Roles definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.EMO_Roles;
+
+CREATE TABLE DbEMO.dbo.EMO_Roles (
+	id bigint IDENTITY(0,1) NOT NULL,
+	NoStaf nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[Role] nvarchar(10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT EMO_Roles_PK PRIMARY KEY (id),
+	CONSTRAINT EMO_Roles_FK FOREIGN KEY (NoStaf) REFERENCES DbEMO.dbo.EMO_Staf(NoStaf) ON DELETE CASCADE
 );
 
 -- DbEMO.dbo.MOU01_Memorandum definition
