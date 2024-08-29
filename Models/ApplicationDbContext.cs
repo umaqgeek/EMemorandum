@@ -11,7 +11,7 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<EMO_Staf> EMO_Staf { get; set; }
     public DbSet<EMO_Roles> EMO_Roles { get; set; }
-    public DbSet<MOU_Status> MOU_Statuses { get; set; }
+    public DbSet<MOU_Status> MOU_Status { get; set; }
     public DbSet<PUU_JenisMemo> PUU_JenisMemo { get; set; }
     public DbSet<PUU_KategoriMemo> PUU_KategoriMemo { get; set; }
     public DbSet<PUU_ScopeMemo> PUU_ScopeMemo { get; set; }
@@ -55,6 +55,12 @@ public class ApplicationDbContext : DbContext
             .WithMany(p => p.Memorandums)
             .HasForeignKey(c => c.MS01_NoStaf)
             .HasPrincipalKey(p => p.NoStaf);
+
+        modelBuilder.Entity<MOU01_Memorandum>()
+            .HasOne(c => c.MOU_Status)
+            .WithMany(p => p.Memorandums)
+            .HasForeignKey(c => c.Status)
+            .HasPrincipalKey(p => p.Kod);
 
         base.OnModelCreating(modelBuilder);
     }
