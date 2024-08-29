@@ -12,19 +12,33 @@ END
 -- Optionally, you can set the default database for the `sa` user or another user
 USE DbEMO;
 
--- DbEMO.dbo.EMO_Pejabat table definition
+-- DbEMO.dbo.EMO_Pejabat definition
 
--- Drop table if it exists (optional)
--- DROP TABLE IF EXISTS DbEMO.dbo.EMO_Pejabat;
+-- Drop table
 
--- Create the table
+-- DROP TABLE DbEMO.dbo.EMO_Pejabat;
+
 CREATE TABLE DbEMO.dbo.EMO_Pejabat (
-    KodPejPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-    Pejabat nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-    KodPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-    NamaPBU nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-    StatusPTJ bit NULL,
-    CONSTRAINT EMO_Pejabat_PK PRIMARY KEY (KodPBU)
+	KodPejPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Pejabat nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	KodPBU nvarchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	NamaPBU nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	StatusPTJ bit NULL,
+	CONSTRAINT EMO_Pejabat_PK PRIMARY KEY (KodPBU)
+);
+
+-- DbEMO.dbo.EMO_Roles definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.EMO_Roles;
+
+CREATE TABLE DbEMO.dbo.EMO_Roles (
+	id bigint IDENTITY(0,1) NOT NULL,
+	NoStaf nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[Role] nvarchar(10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT EMO_Roles_PK PRIMARY KEY (id),
+	CONSTRAINT EMO_Roles_FK FOREIGN KEY (NoStaf) REFERENCES DbEMO.dbo.EMO_Staf(NoStaf) ON DELETE CASCADE
 );
 
 -- DbEMO.dbo.EMO_Staf definition
@@ -248,18 +262,4 @@ CREATE TABLE DbEMO.dbo.PUU_SubPTj (
 	KodSubPTJ varchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Nama varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CONSTRAINT PUU_SubPTj_PK PRIMARY KEY (ID)
-);
-
--- DbEMO.dbo.EMO_Roles definition
-
--- Drop table
-
--- DROP TABLE DbEMO.dbo.EMO_Roles;
-
-CREATE TABLE DbEMO.dbo.EMO_Roles (
-	id bigint IDENTITY(0,1) NOT NULL,
-	NoStaf nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	[Role] nvarchar(10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT EMO_Roles_PK PRIMARY KEY (id),
-	CONSTRAINT EMO_Roles_FK FOREIGN KEY (NoStaf) REFERENCES DbEMO.dbo.EMO_Staf(NoStaf) ON DELETE CASCADE
 );
