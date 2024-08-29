@@ -75,7 +75,7 @@ namespace EMemorandum.Controllers.Api
             // Clear existing roles if necessary (optional)
             _entity.Roles.Clear();
 
-            // // Assign new roles to the staff
+            // Assign new roles to the staff
             foreach (var role in request.Roles)
             {
                 var staffRole = new EMO_Roles

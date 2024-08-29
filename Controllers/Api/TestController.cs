@@ -37,13 +37,11 @@ namespace EMemorandum.Controllers.Api
         // [HttpPost("login")]
         // public IActionResult Login([FromBody] Login login)
         // {
-        //     // TODO: Need to match with UTeM's SSO.
         //     if (login.Email != "testuser@gmail.com" || login.Password != "password")
         //     {
         //         return Unauthorized(new { message = "Invalid username or password." });
         //     }
 
-        //     // TODO: Fetch user's info from UTeM's SSO.
         //     var userEmail = login.Email;
         //     var userName = "test user";
         //     var tokenString = "a321shaha123dasd23234dsdw4wsdsd";

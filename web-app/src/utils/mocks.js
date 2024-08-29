@@ -1,6 +1,5 @@
 import { EMO_TOKEN } from "./constants";
 
-// TODO: token 00001 is NoStaf that will get from session variable later.
 export const getBearerToken = () => {
     if (sessionStorage.getItem(EMO_TOKEN)) {
         return sessionStorage.getItem(EMO_TOKEN);

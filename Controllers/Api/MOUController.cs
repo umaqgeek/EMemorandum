@@ -25,7 +25,7 @@ namespace EMemorandum.Controllers.Api
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         [Authorize(Policy = "AdminOrPUUPolicy")]
         public ActionResult<IEnumerable<object>> GetAllMemorandums()
         {
@@ -71,7 +71,7 @@ namespace EMemorandum.Controllers.Api
         // TODO: Review and comment a memorandum (PUU)
         // TODO: Approve or reject a memorandum (PTJ)
 
-        [HttpGet("{noMemo}")]
+        [HttpGet("get/{noMemo}")]
         public ActionResult<MOU01_Memorandum> GetMemorandum(string noMemo)
         {
             var staffId = GetStaffID();

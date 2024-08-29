@@ -34,6 +34,7 @@ public class MOU01_Memorandum
     [ForeignKey("EMO_Staf")]
     public string MS01_NoStaf { get; set; }
 
+    [ForeignKey("MOU_Status")]
     public string Status { get; set; }
     public decimal Nilai { get; set; }
 
@@ -51,4 +52,7 @@ public class MOU01_Memorandum
 
     [JsonIgnore]  // This will prevent the PUU_SubPTj reference from being serialized
     public PUU_SubPTj PUU_SubPTj { get; set; }  // Navigation property back to PUU_SubPTj
+
+    [JsonIgnore]  // This will prevent the MOU_Status reference from being serialized
+    public MOU_Status MOU_Status { get; set; }  // Navigation property back to MOU_Status
 }
