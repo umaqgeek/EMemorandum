@@ -67,28 +67,37 @@ public class MOUController : ControllerBase
     }
 
     [HttpPost("generate-no")]
-    public ActionResult<string> GenerateNo([FromBody] MemorandumGenNo entity)
+    public ActionResult<object> GenerateNo([FromBody] MemorandumGenNo entity)
+    {
+        var genNo = getGeneratedNo(entity);
+        if (genNo != null && genNo.GetType().GetProperty("error") != null) {
+            return NotFound(genNo);
+        }
+        return Ok(genNo);
+    }
+
+    private object getGeneratedNo(MemorandumGenNo entity)
     {
         // Sample:
-        // MoA(P).1.2.2024.100100.001
+        // MoA(P).1.2.2024.101010.001
         // kategori.kodkategori.kodjenis.currentyear.kodptj.runningnumber
         var kategori = _context.PUU_KategoriMemo
             .Where(k => k.Kod == entity.KodKategori)
             .FirstOrDefault();
         if (kategori == null) {
-            return NotFound(new { error = "KodKategori not found!" });
+            return (new { error = "KodKategori not found!" });
         }
         var jenis = _context.PUU_JenisMemo
             .Where(j => j.Kod == entity.KodJenis)
             .FirstOrDefault();
         if (jenis == null) {
-            return NotFound(new { error = "KodJenis not found!" });
+            return (new { error = "KodJenis not found!" });
         }
         var ptj = _context.PUU_SubPTj
             .Where(j => j.KodPTJ == entity.KodPTJ)
             .FirstOrDefault();
         if (ptj == null) {
-            return NotFound(new { error = "KodPTJ not found!" });
+            return (new { error = "KodPTJ not found!" });
         }
         var currentYear = DateTime.Now.Year;
         var prefix = kategori.Butiran + _delimeter +
@@ -96,11 +105,25 @@ public class MOUController : ControllerBase
             jenis.Kod + _delimeter +
             currentYear + _delimeter +
             entity.KodPTJ + _delimeter;
-        var genNo = _context.GenerateNextNoMemo(prefix, currentYear, entity.KodPTJ);
-        return Ok(new { NoMemo = genNo });
+        return (new { noMemo = _context.GenerateNextNoMemo(prefix, currentYear, entity.KodPTJ) });
     }
 
     // TODO: Add memorandum and its members and its KPIs (All)
+    [HttpPost]
+    public ActionResult<string> Store([FromBody] MOU01_Memorandum entity)
+    {
+        var genNo = getGeneratedNo(new MemorandumGenNo
+        {
+            KodJenis = entity.KodJenis,
+            KodKategori = entity.KodKategori,
+            KodPTJ = entity.KodPTJ,
+        });
+        if (genNo != null && genNo.GetType().GetProperty("error") != null) {
+            return NotFound(genNo);
+        }
+        return Ok(genNo);
+    }
+
     // TODO: Update memorandum (PIC, Admin)
     // TODO: Delete memorandum (PIC, Admin)
     // TODO: Add members to a memorandum (PIC, Admin)
