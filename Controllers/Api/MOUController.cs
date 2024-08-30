@@ -76,38 +76,6 @@ public class MOUController : ControllerBase
         return Ok(genNo);
     }
 
-    private object getGeneratedNo(MemorandumGenNo entity)
-    {
-        // Sample:
-        // MoA(P).1.2.2024.101010.001
-        // kategori.kodkategori.kodjenis.currentyear.kodptj.runningnumber
-        var kategori = _context.PUU_KategoriMemo
-            .Where(k => k.Kod == entity.KodKategori)
-            .FirstOrDefault();
-        if (kategori == null) {
-            return (new { error = "KodKategori not found!" });
-        }
-        var jenis = _context.PUU_JenisMemo
-            .Where(j => j.Kod == entity.KodJenis)
-            .FirstOrDefault();
-        if (jenis == null) {
-            return (new { error = "KodJenis not found!" });
-        }
-        var ptj = _context.PUU_SubPTj
-            .Where(j => j.KodPTJ == entity.KodPTJ)
-            .FirstOrDefault();
-        if (ptj == null) {
-            return (new { error = "KodPTJ not found!" });
-        }
-        var currentYear = DateTime.Now.Year;
-        var prefix = kategori.Butiran + _delimeter +
-            kategori.Kod + _delimeter +
-            jenis.Kod + _delimeter +
-            currentYear + _delimeter +
-            entity.KodPTJ + _delimeter;
-        return (new { noMemo = _context.GenerateNextNoMemo(prefix, currentYear, entity.KodPTJ) });
-    }
-
     // TODO: Add memorandum and its members and its KPIs (All)
     [HttpPost]
     public ActionResult<string> Store([FromBody] MOU01_Memorandum entity)
@@ -146,6 +114,38 @@ public class MOUController : ControllerBase
         }
 
         return Ok(GetTransformedMOU(_entity, staffId));
+    }
+
+    private object getGeneratedNo(MemorandumGenNo entity)
+    {
+        // Sample:
+        // MoA(P).1.2.2024.101010.001
+        // kategori.kodkategori.kodjenis.currentyear.kodptj.runningnumber
+        var kategori = _context.PUU_KategoriMemo
+            .Where(k => k.Kod == entity.KodKategori)
+            .FirstOrDefault();
+        if (kategori == null) {
+            return (new { error = "KodKategori not found!" });
+        }
+        var jenis = _context.PUU_JenisMemo
+            .Where(j => j.Kod == entity.KodJenis)
+            .FirstOrDefault();
+        if (jenis == null) {
+            return (new { error = "KodJenis not found!" });
+        }
+        var ptj = _context.PUU_SubPTj
+            .Where(j => j.KodPTJ == entity.KodPTJ)
+            .FirstOrDefault();
+        if (ptj == null) {
+            return (new { error = "KodPTJ not found!" });
+        }
+        var currentYear = DateTime.Now.Year;
+        var prefix = kategori.Butiran + _delimeter +
+            kategori.Kod + _delimeter +
+            jenis.Kod + _delimeter +
+            currentYear + _delimeter +
+            entity.KodPTJ + _delimeter;
+        return (new { noMemo = _context.GenerateNextNoMemo(prefix, currentYear, entity.KodPTJ) });
     }
 
     private static string TransformToCode(string input)
