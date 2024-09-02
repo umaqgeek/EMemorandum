@@ -2,11 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EMemorandum.Models;
 
-public class MOU_Status
+public class PUU_KategoriMemo
 {
     [Key]
-    public string? Kod { get; set; }
-    public string? Status { get; set; }
+    public long? ID { get; set; }
+    public int? Kod { get; set; }
+    public string? Butiran { get; set; }
 
     // Navigation property for the memorandums
     public ICollection<MOU01_Memorandum>? Memorandums { get; set; }

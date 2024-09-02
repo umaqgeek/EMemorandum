@@ -232,6 +232,7 @@
                             <div class="dropdown-menu dropdown-menu-md">
                                 <div
                                     class="dropdown-content dropdown-content-x-lg py-3 border-bottom border-light"
+                                    v-show="!loading && !error"
                                 >
                                     <div class="media-group">
                                         <div
@@ -245,14 +246,28 @@
                                         </div>
                                         <div class="media-text">
                                             <div class="lead-text">
-                                                Wesley Burland
+                                                {{ getGelaran }}
+                                                {{ data?.nama }}
                                             </div>
-                                            <span class="sub-text"
-                                                >Owner & Founder</span
+                                            <span class="sub-text">{{
+                                                data?.email
+                                            }}</span>
+                                            <div
+                                                class="alert alert-danger mt-2"
+                                                v-if="!isActivated"
                                             >
+                                                Inactive
+                                            </div>
+                                            <div
+                                                class="alert alert-success mt-2"
+                                                v-if="isActivated"
+                                            >
+                                                Active
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <LoadingComponent :loading="loading || error" />
                                 <div
                                     class="dropdown-content dropdown-content-x-lg py-3 border-bottom border-light"
                                 >
@@ -311,10 +326,34 @@
 </template>
 
 <script>
+import LoadingComponent from "@/components/Loading.vue";
 import { resetBearerToken } from "@/utils/mocks";
+import { useStaffProfile } from "@/hooks/useAPI";
 
 export default {
     name: "TopNavComponent",
+    components: {
+        LoadingComponent,
+    },
+    setup() {
+        const { data, error, loading, refetch } = useStaffProfile();
+        return {
+            data,
+            error,
+            loading,
+            refetch,
+        };
+    },
+    computed: {
+        getGelaran() {
+            return this.data?.gelaran?.toLowerCase()?.includes("tiada")
+                ? ""
+                : this.data?.gelaran;
+        },
+        isActivated() {
+            return this.data?.roles?.length > 0;
+        },
+    },
     methods: {
         logout() {
             resetBearerToken();

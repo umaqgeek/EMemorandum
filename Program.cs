@@ -85,7 +85,32 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("TokenPolicy", policy =>
     {
-        policy.Requirements.Add(new TokenRequirement());
+        policy.Requirements.Add(new TokenRequirement(null)); // No role required for this policy
+    });
+
+    options.AddPolicy("StaffPolicy", policy =>
+    {
+        policy.Requirements.Add(new TokenRequirement(new[] { "Staff" }));
+    });
+
+    options.AddPolicy("AdminPolicy", policy =>
+    {
+        policy.Requirements.Add(new TokenRequirement(new[] { "Admin" }));
+    });
+
+    options.AddPolicy("PUUPolicy", policy =>
+    {
+        policy.Requirements.Add(new TokenRequirement(new[] { "PUU" }));
+    });
+
+    options.AddPolicy("PTJPolicy", policy =>
+    {
+        policy.Requirements.Add(new TokenRequirement(new[] { "PTJ" }));
+    });
+
+    options.AddPolicy("AdminOrPUUPolicy", policy =>
+    {
+        policy.Requirements.Add(new TokenRequirement(new[] { "Admin", "PUU" }));
     });
 });
 

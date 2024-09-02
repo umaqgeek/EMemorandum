@@ -14,13 +14,11 @@ namespace EMemorandum.Controllers.Api
     [ApiController]
     public class TestController : ControllerBase
     {
-        private readonly string _secretKey;
         private readonly ApplicationDbContext _context;
         private readonly string _test;
 
         public TestController(IConfiguration configuration, ApplicationDbContext context)
         {
-            _secretKey = configuration.GetValue<string>("Jwt:SecretKey");
             _context = context;
             _test = configuration.GetValue<string>("test:haha");
         }
@@ -39,13 +37,11 @@ namespace EMemorandum.Controllers.Api
         // [HttpPost("login")]
         // public IActionResult Login([FromBody] Login login)
         // {
-        //     // TODO: Need to match with UTeM's SSO.
         //     if (login.Email != "testuser@gmail.com" || login.Password != "password")
         //     {
         //         return Unauthorized(new { message = "Invalid username or password." });
         //     }
 
-        //     // TODO: Fetch user's info from UTeM's SSO.
         //     var userEmail = login.Email;
         //     var userName = "test user";
         //     var tokenString = "a321shaha123dasd23234dsdw4wsdsd";
