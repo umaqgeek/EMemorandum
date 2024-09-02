@@ -43,7 +43,7 @@ export function useApi(requestConfig) {
 export function useStaffProfile() {
     return useApi({
         method: "get",
-        url: `${API_URL}/auth/staff-profile/${getBearerToken()}`,
+        url: `${API_URL}/auth/staff-profile`,
     });
 }
 

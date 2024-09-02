@@ -252,6 +252,18 @@
                                             <span class="sub-text">{{
                                                 data?.email
                                             }}</span>
+                                            <div
+                                                class="alert alert-danger mt-2"
+                                                v-if="!isActivated"
+                                            >
+                                                Inactive
+                                            </div>
+                                            <div
+                                                class="alert alert-success mt-2"
+                                                v-if="isActivated"
+                                            >
+                                                Active
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -337,6 +349,9 @@ export default {
             return this.data?.gelaran?.toLowerCase()?.includes("tiada")
                 ? ""
                 : this.data?.gelaran;
+        },
+        isActivated() {
+            return this.data?.roles?.length > 0;
         },
     },
     methods: {

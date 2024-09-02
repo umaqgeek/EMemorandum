@@ -27,7 +27,7 @@ namespace EMemorandum.Controllers.Api
         [HttpGet]
         public ActionResult<IEnumerable<string>> GetAllRoles()
         {
-            var roles = new List<string> { "Admin", "PUU", "PTJ" };
+            var roles = new List<string> { "Admin", "PUU", "PTJ", "Staff" };
             return Ok(roles);
         }
     }

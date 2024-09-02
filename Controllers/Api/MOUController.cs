@@ -15,7 +15,7 @@ namespace EMemorandum.Controllers.Api;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Policy = "TokenPolicy")]
+[Authorize(Policy = "StaffPolicy")]
 public class MOUController : ControllerBase
 {
     private readonly ApplicationDbContext _context;

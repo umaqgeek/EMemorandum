@@ -88,6 +88,11 @@ builder.Services.AddAuthorization(options =>
         policy.Requirements.Add(new TokenRequirement(null)); // No role required for this policy
     });
 
+    options.AddPolicy("StaffPolicy", policy =>
+    {
+        policy.Requirements.Add(new TokenRequirement(new[] { "Staff" }));
+    });
+
     options.AddPolicy("AdminPolicy", policy =>
     {
         policy.Requirements.Add(new TokenRequirement(new[] { "Admin" }));
