@@ -21,7 +21,7 @@ import ApprovalDetailsView from "@/views/ApprovalDetailsView.vue";
 // import adminApprovalDetailsView from "@/views/ApprovalDetailsView.vue";
 // PUU
 // import PUULoginView from "@/views/PUU/LoginView.vue";
-// import PUUDashboardView from "@/views/PUU/DashboardView.vue";
+import PUUDashboardView from "@/views/DashboardViewPUU.vue";
 // import PUUMemoListView from "@/views/PUU/MemoListView.vue";
 // import PUUMemoAddView from "@/views/PUU/MemoAddView.vue";
 // import PUUMemoAddMemberView from "@/views/PUU/MemoAddMemberView.vue";
@@ -31,7 +31,7 @@ import ApprovalDetailsView from "@/views/ApprovalDetailsView.vue";
 // import PUUApprovalDetailsView from "@/views/PUU/ApprovalDetailsView.vue";
 // PTJ
 // import PTJLoginView from "@/views/PTJ/LoginView.vue";
-// import PTJDashboardView from "@/views/PTJ/DashboardView.vue";
+import PTJDashboardView from "@/views/DashboardViewPTJ.vue";
 // import PTJMemoListView from "@/views/PTJ/MemoListView.vue";
 // import PTJMemoAddView from "@/views/PTJ/MemoAddView.vue";
 // import PTJMemoAddMemberView from "@/views/PTJ/MemoAddMemberView.vue";
@@ -131,10 +131,10 @@ const routes = [
     //     path: "/login",
     //     component: PUULoginView,
     // },
-    // {
-    //     path: "/dashboard",
-    //     component: PUUDashboardView,
-    // },
+    {
+        path: "/PUU/dashboard",
+        component: PUUDashboardView,
+    },
     // {
     //     path: "/memo-list",
     //     component: PUUMemoListView,
@@ -168,10 +168,10 @@ const routes = [
     //     path: "/PTJ/login",
     //     component: PTJLoginView,
     // },
-    // {
-    //     path: "/PTJ/dashboard",
-    //     component: PTJDashboardView,
-    // },
+    {
+        path: "/PTJ/dashboard",
+        component: PTJDashboardView,
+    },
     // {
     //     path: "/PTJ/memo-list",
     //     component: PTJMemoListView,

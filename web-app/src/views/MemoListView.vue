@@ -47,7 +47,7 @@
                                 <!-- .nk-block-head -->
                                 <div class="nk-block">
                                     <div class="card">
-                                        <table
+                                        <DataTable
                                             class="datatable-init table"
                                             data-nk-container="table-responsive"
                                         >
@@ -665,7 +665,7 @@
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                        </table>
+                                        </DataTable>
                                     </div>
                                     <!-- .card -->
                                 </div>
