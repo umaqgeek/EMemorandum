@@ -21,10 +21,13 @@
                                     >
                                         <div class="nk-block-head-content">
                                             <h2 class="nk-block-title">
-                                                Lists of Memorandum
+                                                List of Memo to be Approve
                                             </h2>
                                         </div>
-                                        <div class="nk-block-head-content">
+                                        <div
+                                            class="nk-block-head-content"
+                                            style="display: none"
+                                        >
                                             <ul class="d-flex">
                                                 <li>
                                                     <router-link
@@ -122,7 +125,11 @@
                                                 <tr>
                                                     <td class="tb-col">1</td>
                                                     <td class="tb-col">
-                                                        MoA(TP),13.2.2023.010000.007
+                                                        <router-link
+                                                            to="/approval-detail"
+                                                        >
+                                                            MoA(TP),13.2.2023.010000.007
+                                                        </router-link>
                                                     </td>
                                                     <td class="tb-col">
                                                         Kerahsiaan
@@ -231,7 +238,11 @@
                                                 <tr>
                                                     <td class="tb-col">2</td>
                                                     <td class="tb-col">
-                                                        MoA(TP),13.2.2023.010000.007
+                                                        <router-link
+                                                            to="/approval-detail"
+                                                        >
+                                                            MoA(TP),13.2.2023.010000.007
+                                                        </router-link>
                                                     </td>
                                                     <td class="tb-col">
                                                         Kerahsiaan
@@ -340,7 +351,11 @@
                                                 <tr>
                                                     <td class="tb-col">3</td>
                                                     <td class="tb-col">
-                                                        MoA(TP),13.2.2023.010000.007
+                                                        <router-link
+                                                            to="/approval-detail"
+                                                        >
+                                                            MoA(TP),13.2.2023.010000.007
+                                                        </router-link>
                                                     </td>
                                                     <td class="tb-col">
                                                         Kerahsiaan
@@ -449,7 +464,11 @@
                                                 <tr>
                                                     <td class="tb-col">4</td>
                                                     <td class="tb-col">
-                                                        MoA(TP),13.2.2023.010000.007
+                                                        <router-link
+                                                            to="/approval-detail"
+                                                        >
+                                                            MoA(TP),13.2.2023.010000.007
+                                                        </router-link>
                                                     </td>
                                                     <td class="tb-col">
                                                         Kerahsiaan
@@ -558,7 +577,11 @@
                                                 <tr>
                                                     <td class="tb-col">5</td>
                                                     <td class="tb-col">
-                                                        MoA(TP),13.2.2023.010000.007
+                                                        <router-link
+                                                            to="/approval-detail"
+                                                        >
+                                                            MoA(TP),13.2.2023.010000.007
+                                                        </router-link>
                                                     </td>
                                                     <td class="tb-col">
                                                         Kerahsiaan
@@ -1065,7 +1088,6 @@
                 </ul>
             </div>
         </div>
-        <ValidateMeComponent />
     </div>
     <!-- .nk-app-root -->
 </template>
@@ -1075,6 +1097,7 @@
 import "../assets/js/bundle.js";
 // import "../assets/js/scripts.js";
 // import "../assets/js/data-tables/data-tables.js";
+
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 

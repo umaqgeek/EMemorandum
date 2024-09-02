@@ -167,7 +167,7 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
-                                                                        class="js-select"
+                                                                        class="form-select"
                                                                         id="country"
                                                                         data-search="true"
                                                                         data-sort="false"
@@ -216,7 +216,7 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
-                                                                        class="js-select"
+                                                                        class="form-select"
                                                                         id="country"
                                                                         data-search="true"
                                                                         data-sort="false"
@@ -265,7 +265,7 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
-                                                                        class="js-select"
+                                                                        class="form-select"
                                                                         id="country"
                                                                         data-search="true"
                                                                         data-sort="false"
@@ -357,7 +357,7 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
-                                                                        class="js-select"
+                                                                        class="form-select"
                                                                         id="country"
                                                                         data-search="true"
                                                                         data-sort="false"
@@ -405,7 +405,7 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
-                                                                        class="js-select"
+                                                                        class="form-select"
                                                                         id="country"
                                                                         data-search="true"
                                                                         data-sort="false"

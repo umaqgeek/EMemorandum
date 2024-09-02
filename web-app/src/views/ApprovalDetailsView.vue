@@ -69,26 +69,25 @@
                                             <ul class="d-flex gap g-2">
                                                 <li class="d-none d-md-block">
                                                     <router-link
-                                                        to="/memo-edit"
-                                                        class="btn btn-soft btn-primary"
-                                                    >
-                                                        <em
-                                                            class="icon ni ni-edit"
-                                                        ></em
-                                                        ><span
-                                                            >Edit
-                                                            Memorandum</span
-                                                        >
+                                                        to="/approval-list"
+                                                        class="btn btn-soft btn-danger"
+                                                        ><span>Reject</span>
                                                     </router-link>
                                                 </li>
-                                                <li class="d-md-none">
+                                                <li class="d-none d-md-block">
+                                                    <router-link
+                                                        to="/approval-list"
+                                                        class="btn btn-soft btn-primary"
+                                                    >
+                                                        <span>Approve</span>
+                                                    </router-link>
+                                                </li>
+                                                <li class="d-none">
                                                     <a
                                                         href="./html/user-manage/user-edit.html"
                                                         class="btn btn-soft btn-primary btn-icon"
-                                                        ><em
-                                                            class="icon ni ni-edit"
-                                                        ></em
-                                                    ></a>
+                                                    >
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -124,7 +123,7 @@
                                                                         class="list-group-item"
                                                                     >
                                                                         <span
-                                                                            class="title fw-medium w-100 d-inline-block"
+                                                                            class="title fw-medium w-40 d-inline-block"
                                                                             >No.
                                                                             Memorandum:</span
                                                                         >
@@ -137,37 +136,9 @@
                                                                         class="list-group-item"
                                                                     >
                                                                         <span
-                                                                            class="title fw-medium w-100 d-inline-block"
-                                                                            >Category
-                                                                            of
+                                                                            class="title fw-medium w-40 d-inline-block"
+                                                                            >Skop
                                                                             Memorandum:</span
-                                                                        >
-                                                                        <span
-                                                                            class="text"
-                                                                            >Kerahsiaan</span
-                                                                        >
-                                                                    </li>
-                                                                    <li
-                                                                        class="list-group-item"
-                                                                    >
-                                                                        <span
-                                                                            class="title fw-medium w-100 d-inline-block"
-                                                                            >Type
-                                                                            of
-                                                                            Memorandum:</span
-                                                                        >
-                                                                        <span
-                                                                            class="text"
-                                                                            >Kerahsiaan</span
-                                                                        >
-                                                                    </li>
-                                                                    <li
-                                                                        class="list-group-item"
-                                                                    >
-                                                                        <span
-                                                                            class="title fw-medium w-100 d-inline-block"
-                                                                            >Memorandum
-                                                                            Scope:</span
                                                                         >
                                                                         <span
                                                                             class="text"
@@ -238,7 +209,7 @@
                                                         <!-- .card-body -->
                                                     </div>
                                                     <div
-                                                        class="card-content col-sep w-100"
+                                                        class="card-content col-sep"
                                                     >
                                                         <div class="card-body">
                                                             <div
@@ -250,6 +221,66 @@
                                                                     Project
                                                                     Title
                                                                 </h4>
+                                                                <p>
+                                                                    Mauris
+                                                                    varius
+                                                                    tellus vitae
+                                                                    tristique
+                                                                    sagittis.
+                                                                    Sed aliquet,
+                                                                    est nec
+                                                                    auctor
+                                                                    aliquet,
+                                                                    orci ex
+                                                                    vestibulum
+                                                                    ex, non
+                                                                    pharetra
+                                                                    lacus erat
+                                                                    ac nulla.
+                                                                </p>
+                                                                <p>
+                                                                    Sed
+                                                                    vulputate,
+                                                                    ligula eget
+                                                                    mollis
+                                                                    auctor,
+                                                                    lectus elit
+                                                                    feugiat
+                                                                    urna, eget
+                                                                    euismod
+                                                                    turpis
+                                                                    lectus sed
+                                                                    ex. Orci
+                                                                    varius
+                                                                    natoque
+                                                                    penatibus et
+                                                                    magnis dis
+                                                                    parturient
+                                                                    montes,
+                                                                    nascetur
+                                                                    ridiculus
+                                                                    mus. Nunc ut
+                                                                    velit
+                                                                    finibus,
+                                                                    scelerisque
+                                                                    sapien
+                                                                    vitae,
+                                                                    pharetra
+                                                                    est. Nunc
+                                                                    accumsan
+                                                                    ligula
+                                                                    vehicula
+                                                                    scelerisque
+                                                                    vulputate.
+                                                                    Lorem ipsum
+                                                                    dolor sit,
+                                                                    amet
+                                                                    consectetur
+                                                                    adipisicing
+                                                                    elit.
+                                                                    Deleniti,
+                                                                    dolore?
+                                                                </p>
                                                             </div>
                                                             <!-- .bio-block -->
                                                         </div>
@@ -277,6 +308,235 @@
                                                                                 class="nk-schedule-symbol active"
                                                                             ></div>
                                                                             <div
+                                                                                class="nk-schedule-content"
+                                                                            >
+                                                                                <span
+                                                                                    class="smaller"
+                                                                                    >2:12
+                                                                                    PM</span
+                                                                                >
+                                                                                <div
+                                                                                    class="h6"
+                                                                                >
+                                                                                    Added
+                                                                                    3
+                                                                                    New
+                                                                                    Images
+                                                                                </div>
+                                                                                <ul
+                                                                                    class="d-flex flex-wrap gap g-2 py-2"
+                                                                                >
+                                                                                    <li>
+                                                                                        <div
+                                                                                            class="media media-xxl"
+                                                                                        >
+                                                                                            <img
+                                                                                                src="../assets/images/product/a.jpg"
+                                                                                                alt=""
+                                                                                                class="img-thumbnail"
+                                                                                            />
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <div
+                                                                                            class="media media-xxl"
+                                                                                        >
+                                                                                            <img
+                                                                                                src="../assets/images/product/b.jpg"
+                                                                                                alt=""
+                                                                                                class="img-thumbnail"
+                                                                                            />
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <div
+                                                                                            class="media media-xxl"
+                                                                                        >
+                                                                                            <img
+                                                                                                src="../assets/images/product/c.jpg"
+                                                                                                alt=""
+                                                                                                class="img-thumbnail"
+                                                                                            />
+                                                                                        </div>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li
+                                                                        class="nk-schedule-item"
+                                                                    >
+                                                                        <div
+                                                                            class="nk-schedule-item-inner"
+                                                                        >
+                                                                            <div
+                                                                                class="nk-schedule-symbol active"
+                                                                            ></div>
+                                                                            <div
+                                                                                class="nk-schedule-content"
+                                                                            >
+                                                                                <span
+                                                                                    class="smaller"
+                                                                                    >4:23
+                                                                                    PM</span
+                                                                                >
+                                                                                <div
+                                                                                    class="h6"
+                                                                                >
+                                                                                    Invitation
+                                                                                    for
+                                                                                    creative
+                                                                                    designs
+                                                                                    pattern
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li
+                                                                        class="nk-schedule-item"
+                                                                    >
+                                                                        <div
+                                                                            class="nk-schedule-item-inner"
+                                                                        >
+                                                                            <div
+                                                                                class="nk-schedule-symbol active"
+                                                                            ></div>
+                                                                            <div
+                                                                                class="nk-schedule-content nk-schedule-content-no-border"
+                                                                            >
+                                                                                <span
+                                                                                    class="smaller"
+                                                                                    >10:30
+                                                                                    PM</span
+                                                                                >
+                                                                                <div
+                                                                                    class="h6"
+                                                                                >
+                                                                                    Task
+                                                                                    report
+                                                                                    -
+                                                                                    uploaded
+                                                                                    weekly
+                                                                                    reports
+                                                                                </div>
+                                                                                <div
+                                                                                    class="list-group-dotted mt-3"
+                                                                                >
+                                                                                    <div
+                                                                                        class="list-group-wrap"
+                                                                                    >
+                                                                                        <div
+                                                                                            class="p-3"
+                                                                                        >
+                                                                                            <div
+                                                                                                class="media-group"
+                                                                                            >
+                                                                                                <div
+                                                                                                    class="media rounded-0"
+                                                                                                >
+                                                                                                    <img
+                                                                                                        src="../assets/images/icon/file-type-pdf.svg"
+                                                                                                        alt=""
+                                                                                                    />
+                                                                                                </div>
+                                                                                                <div
+                                                                                                    class="media-text ms-1"
+                                                                                                >
+                                                                                                    <a
+                                                                                                        href="#"
+                                                                                                        class="title"
+                                                                                                        >Modern
+                                                                                                        Designs
+                                                                                                        Pattern</a
+                                                                                                    >
+                                                                                                    <span
+                                                                                                        class="text smaller"
+                                                                                                        >1.6.mb</span
+                                                                                                    >
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- .media-group -->
+                                                                                        </div>
+                                                                                        <div
+                                                                                            class="p-3"
+                                                                                        >
+                                                                                            <div
+                                                                                                class="media-group"
+                                                                                            >
+                                                                                                <div
+                                                                                                    class="media rounded-0"
+                                                                                                >
+                                                                                                    <img
+                                                                                                        src="../assets/images/icon/file-type-doc.svg"
+                                                                                                        alt=""
+                                                                                                    />
+                                                                                                </div>
+                                                                                                <div
+                                                                                                    class="media-text ms-1"
+                                                                                                >
+                                                                                                    <a
+                                                                                                        href="#"
+                                                                                                        class="title"
+                                                                                                        >cPanel
+                                                                                                        Upload
+                                                                                                        Guidelines</a
+                                                                                                    >
+                                                                                                    <span
+                                                                                                        class="text smaller"
+                                                                                                        >18kb</span
+                                                                                                    >
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- .media-group -->
+                                                                                        </div>
+                                                                                        <div
+                                                                                            class="p-3"
+                                                                                        >
+                                                                                            <div
+                                                                                                class="media-group"
+                                                                                            >
+                                                                                                <div
+                                                                                                    class="media rounded-0"
+                                                                                                >
+                                                                                                    <img
+                                                                                                        src="../assets/images/icon/file-type-code.svg"
+                                                                                                        alt=""
+                                                                                                    />
+                                                                                                </div>
+                                                                                                <div
+                                                                                                    class="media-text ms-1"
+                                                                                                >
+                                                                                                    <a
+                                                                                                        href="#"
+                                                                                                        class="title"
+                                                                                                        >Weekly
+                                                                                                        Finance
+                                                                                                        Reports</a
+                                                                                                    >
+                                                                                                    <span
+                                                                                                        class="text smaller"
+                                                                                                        >10mb</span
+                                                                                                    >
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- .media-group -->
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- .list-group-dotted -->
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li
+                                                                        class="nk-schedule-item"
+                                                                    >
+                                                                        <div
+                                                                            class="nk-schedule-item-inner"
+                                                                        >
+                                                                            <div
+                                                                                class="nk-schedule-symbol active"
+                                                                            ></div>
+                                                                            <div
                                                                                 class="nk-schedule-content nk-schedule-content-no-border flex-grow-1"
                                                                             >
                                                                                 <span
@@ -287,8 +547,11 @@
                                                                                 <div
                                                                                     class="h6"
                                                                                 >
-                                                                                    Document
-                                                                                    uploaded
+                                                                                    You
+                                                                                    have
+                                                                                    upload
+                                                                                    new
+                                                                                    memorandum
                                                                                 </div>
                                                                                 <div
                                                                                     class="alert alert-info mt-2"
@@ -338,97 +601,6 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <!-- .alert -->
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li
-                                                                        class="nk-schedule-item"
-                                                                    >
-                                                                        <div
-                                                                            class="nk-schedule-item-inner"
-                                                                        >
-                                                                            <div
-                                                                                class="nk-schedule-symbol active"
-                                                                            ></div>
-                                                                            <div
-                                                                                class="nk-schedule-content"
-                                                                            >
-                                                                                <span
-                                                                                    class="smaller"
-                                                                                    >4:23
-                                                                                    PM</span
-                                                                                >
-                                                                                <div
-                                                                                    class="h6"
-                                                                                >
-                                                                                    <a
-                                                                                        href=""
-                                                                                        >User</a
-                                                                                    >
-                                                                                    making
-                                                                                    revisions
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li
-                                                                        class="nk-schedule-item"
-                                                                    >
-                                                                        <div
-                                                                            class="nk-schedule-item-inner"
-                                                                        >
-                                                                            <div
-                                                                                class="nk-schedule-symbol active"
-                                                                            ></div>
-                                                                            <div
-                                                                                class="nk-schedule-content nk-schedule-content-no-border"
-                                                                            >
-                                                                                <div
-                                                                                    class="list-group-dotted mt-3"
-                                                                                >
-                                                                                    <div
-                                                                                        class="list-group-wrap"
-                                                                                    >
-                                                                                        <div
-                                                                                            class="p-3"
-                                                                                        >
-                                                                                            <span
-                                                                                                class="smaller"
-                                                                                                >10:30
-                                                                                                PM</span
-                                                                                            >
-                                                                                            <div
-                                                                                                class="media-group"
-                                                                                            >
-                                                                                                <div
-                                                                                                    class="media media-sm media-middle media-circle text-bg-success"
-                                                                                                >
-                                                                                                    <em
-                                                                                                        class="icon ni ni-check"
-                                                                                                    ></em>
-                                                                                                </div>
-                                                                                                <div
-                                                                                                    class="media-text ms-1"
-                                                                                                >
-                                                                                                    <div
-                                                                                                        class="h6"
-                                                                                                    >
-                                                                                                        <a
-                                                                                                            href="#"
-                                                                                                            >PTJ
-                                                                                                            User</a
-                                                                                                        >
-                                                                                                        has
-                                                                                                        approved
-                                                                                                        memorandum
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <!-- .media-group -->
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <!-- .list-group-dotted -->
                                                                             </div>
                                                                         </div>
                                                                     </li>

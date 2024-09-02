@@ -265,7 +265,6 @@
                 </ul>
             </div>
         </div>
-        <ValidateMeComponent />
     </div>
     <!-- .nk-app-root -->
 </template>
@@ -275,7 +274,6 @@
 import "../assets/js/bundle.js";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
-import ValidateMeComponent from "@/components/ValidateMe.vue";
 // import "../assets/js/scripts.js";
 // import "../assets/js/charts/project-manage-chart.js";
 
@@ -284,7 +282,6 @@ export default {
     components: {
         NavbarComponent,
         TopNavComponent,
-        ValidateMeComponent,
     },
 };
 </script>

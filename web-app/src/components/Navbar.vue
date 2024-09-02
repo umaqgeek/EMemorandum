@@ -59,12 +59,66 @@
                             </router-link>
                         </li>
                         <li class="nk-menu-item">
-                            <router-link to="/memo-list" class="nk-menu-link"
+                            <router-link
+                                to="/approval-list"
+                                class="nk-menu-link"
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-check-round-cut"></em
                                 ></span>
                                 <span class="nk-menu-text">Approval</span>
                             </router-link>
+                        </li>
+                        <li class="nk-menu-item has-sub">
+                            <router-link
+                                to="/approval-list"
+                                class="nk-menu-link"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-setting"></em
+                                ></span>
+                                <span class="nk-menu-text">Settings</span>
+                            </router-link>
+                            <ul class="nk-menu-sub">
+                                <li class="nk-menu-item">
+                                    <a
+                                        href="./html/apps/kanban/kanban-basic.html"
+                                        class="nk-menu-link"
+                                    >
+                                        <span class="nk-menu-text"
+                                            >List of Staff</span
+                                        >
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a
+                                        href="./html/apps/kanban/kanban-custom-board.html"
+                                        class="nk-menu-link"
+                                    >
+                                        <span class="nk-menu-text"
+                                            >Types of Memorandum</span
+                                        >
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a
+                                        href="./html/apps/kanban/kanban-custom-board.html"
+                                        class="nk-menu-link"
+                                    >
+                                        <span class="nk-menu-text"
+                                            >Category of Memorandum</span
+                                        >
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a
+                                        href="./html/apps/kanban/kanban-custom-board.html"
+                                        class="nk-menu-link"
+                                    >
+                                        <span class="nk-menu-text"
+                                            >Scope of Memorandum</span
+                                        >
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                     <!-- .nk-menu -->
