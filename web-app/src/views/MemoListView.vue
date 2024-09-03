@@ -48,6 +48,7 @@
                                 <div class="nk-block">
                                     <div class="card">
                                         <DataTable
+                                            :data="data"
                                             class="datatable-init table"
                                             data-nk-container="table-responsive"
                                         >
@@ -1077,6 +1078,10 @@ import "../assets/js/bundle.js";
 // import "../assets/js/data-tables/data-tables.js";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
+import DataTable from "datatables.net-vue3";
+import DataTablesCore from "datatables.net";
+
+DataTable.use(DataTablesCore);
 
 export default {
     name: "MemoListView",

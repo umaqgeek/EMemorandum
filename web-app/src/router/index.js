@@ -10,7 +10,8 @@ import MemoDetailsView from "@/views/MemoDetailsView.vue";
 import ApprovalListView from "@/views/ApprovalListView.vue";
 import ApprovalDetailsView from "@/views/ApprovalDetailsView.vue";
 // admin
-// import adminLoginView from "@/views/LoginView.vue";
+import UserListView from "@/views/UserList.vue";
+import UserEditView from "@/views/UserEdit.vue";
 // import adminDashboardView from "@/views/DashboardView.vue";
 // import adminMemoListView from "@/views/MemoListView.vue";
 // import adminMemoAddView from "@/views/MemoAddView.vue";
@@ -74,10 +75,14 @@ const routes = [
         component: ApprovalDetailsView,
     },
     // // admin
-    // {
-    //     path: "/",
-    //     component: adminLoginView,
-    // },
+    {
+        path: "/user-list",
+        component: UserListView,
+    },
+    {
+        path: "/user-edit",
+        component: UserEditView,
+    },
     // {
     //     path: "/login",
     //     component: adminLoginView,

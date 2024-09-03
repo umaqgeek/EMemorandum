@@ -79,14 +79,14 @@
                             </router-link>
                             <ul class="nk-menu-sub">
                                 <li class="nk-menu-item">
-                                    <a
-                                        href="./html/apps/kanban/kanban-basic.html"
+                                    <router-link
+                                        to="/user-list"
                                         class="nk-menu-link"
                                     >
                                         <span class="nk-menu-text"
-                                            >List of Staff</span
+                                            >User Management</span
                                         >
-                                    </a>
+                                    </router-link>
                                 </li>
                                 <li class="nk-menu-item">
                                     <a
