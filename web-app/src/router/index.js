@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 // all
-import LoginView from "@/views/LoginView.vue";
+// import LoginView from "@/views/LoginView.vue";
 import DashboardView from "@/views/DashboardView.vue";
 import MemoListView from "@/views/MemoListView.vue";
 import MemoAddView from "@/views/MemoAddView.vue";
@@ -43,14 +43,6 @@ import PTJDashboardView from "@/views/DashboardViewPTJ.vue";
 const routes = [
     {
         path: "/",
-        component: LoginView,
-    },
-    {
-        path: "/login",
-        component: LoginView,
-    },
-    {
-        path: "/dashboard",
         component: DashboardView,
     },
     {
