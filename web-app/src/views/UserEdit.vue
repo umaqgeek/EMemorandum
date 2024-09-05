@@ -37,36 +37,11 @@
                                                         class="mt-3 mt-md-0 ms-md-3"
                                                     >
                                                         <h3 class="title mb-1">
-                                                            Wesley Burland
+                                                            Khalid Ibrahim
                                                         </h3>
                                                         <span class="small"
-                                                            >Owner &
-                                                            Founder</span
+                                                            >IT Support</span
                                                         >
-                                                        <ul
-                                                            class="nk-list-option pt-1"
-                                                        >
-                                                            <li>
-                                                                <em
-                                                                    class="icon ni ni-map-pin"
-                                                                ></em
-                                                                ><span
-                                                                    class="small"
-                                                                    >California,
-                                                                    United
-                                                                    States</span
-                                                                >
-                                                            </li>
-                                                            <li>
-                                                                <em
-                                                                    class="icon ni ni-building"
-                                                                ></em
-                                                                ><span
-                                                                    class="small"
-                                                                    >Softnio</span
-                                                                >
-                                                            </li>
-                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
@@ -76,26 +51,7 @@
                                                     <li
                                                         class="d-none d-md-block"
                                                     >
-                                                        <a
-                                                            href="./html/user-manage/user-profile.html"
-                                                            class="btn btn-soft btn-primary"
-                                                            ><em
-                                                                class="icon ni ni-user"
-                                                            ></em
-                                                            ><span
-                                                                >View
-                                                                Profile</span
-                                                            ></a
-                                                        >
-                                                    </li>
-                                                    <li class="d-md-none">
-                                                        <a
-                                                            href="./html/user-manage/user-profile.html"
-                                                            class="btn btn-soft btn-primary btn-icon"
-                                                            ><em
-                                                                class="icon ni ni-user"
-                                                            ></em
-                                                        ></a>
+                                                        <!-- CTA button  -->
                                                     </li>
                                                 </ul>
                                             </div>
@@ -131,10 +87,11 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
-                                                                        type="text"
                                                                         class="form-control"
-                                                                        id="firstname"
-                                                                        placeholder="First name"
+                                                                        type="text"
+                                                                        value="Khalid"
+                                                                        aria-label="readonly input"
+                                                                        readonly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -153,31 +110,11 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
-                                                                        type="text"
                                                                         class="form-control"
-                                                                        id="lastname"
-                                                                        placeholder="Last name"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <div
-                                                                class="form-group"
-                                                            >
-                                                                <label
-                                                                    for="username"
-                                                                    class="form-label"
-                                                                    >Username</label
-                                                                >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <input
                                                                         type="text"
-                                                                        class="form-control"
-                                                                        id="username"
-                                                                        placeholder="Username"
+                                                                        value="Ibrahim"
+                                                                        aria-label="readonly input"
+                                                                        readonly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -196,10 +133,11 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
-                                                                        type="text"
                                                                         class="form-control"
-                                                                        id="email"
-                                                                        placeholder="Email address"
+                                                                        type="text"
+                                                                        value="khalid@utem.edu.my"
+                                                                        aria-label="readonly input"
+                                                                        readonly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -211,77 +149,35 @@
                                                                 <label
                                                                     for="company"
                                                                     class="form-label"
-                                                                    >Company</label
+                                                                    >username</label
                                                                 >
                                                                 <div
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
-                                                                        type="text"
                                                                         class="form-control"
-                                                                        id="company"
-                                                                        placeholder="Company name"
+                                                                        type="text"
+                                                                        value="-"
+                                                                        aria-label="readonly input"
+                                                                        readonly
                                                                     />
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6">
                                                             <div
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="address"
                                                                     class="form-label"
-                                                                    >Address</label
-                                                                >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <input
-                                                                        type="text"
-                                                                        class="form-control"
-                                                                        id="address"
-                                                                        placeholder="e.g. California, United States"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4">
-                                                            <div
-                                                                class="form-group"
-                                                            >
-                                                                <label
-                                                                    for="city"
-                                                                    class="form-label"
-                                                                    >City</label
-                                                                >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <input
-                                                                        type="text"
-                                                                        class="form-control"
-                                                                        id="city"
-                                                                        placeholder="City"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4">
-                                                            <div
-                                                                class="form-group"
-                                                            >
-                                                                <label
-                                                                    for="country"
-                                                                    class="form-label"
-                                                                    >Country</label
+                                                                    >Roles</label
                                                                 >
                                                                 <div
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
                                                                         class="js-select"
-                                                                        id="country"
+                                                                        multiple
                                                                         data-search="true"
                                                                         data-sort="false"
                                                                     >
@@ -289,85 +185,63 @@
                                                                             value=""
                                                                         >
                                                                             Select
-                                                                            a
-                                                                            country
+                                                                            Roles
                                                                         </option>
                                                                         <option
                                                                             value="1"
                                                                         >
-                                                                            Germany
+                                                                            PayPal
                                                                         </option>
                                                                         <option
                                                                             value="2"
                                                                         >
-                                                                            Canada
+                                                                            Bank
+                                                                            Transfer
                                                                         </option>
                                                                         <option
                                                                             value="3"
                                                                         >
-                                                                            Usa
+                                                                            Skrill
                                                                         </option>
                                                                         <option
                                                                             value="4"
                                                                         >
-                                                                            Aus
+                                                                            Moneygram
                                                                         </option>
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-4">
-                                                            <div
-                                                                class="form-group"
+                                                        <div class="col-lg-6">
+                                                            <label
+                                                                for="email"
+                                                                class="form-label"
+                                                                >Status</label
                                                             >
+                                                            <div
+                                                                class="form-check form-switch"
+                                                            >
+                                                                <input
+                                                                    class="form-check-input"
+                                                                    type="checkbox"
+                                                                    value=""
+                                                                    id="flexSwitchDefault"
+                                                                />
                                                                 <label
-                                                                    for="postalcode"
-                                                                    class="form-label"
-                                                                    >Postal
-                                                                    Code</label
+                                                                    class="form-check-label"
+                                                                    for="flexSwitchDefault"
                                                                 >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <input
-                                                                        type="text"
-                                                                        class="form-control"
-                                                                        id="postalcode"
-                                                                        placeholder="Zip code"
-                                                                    />
-                                                                </div>
+                                                                    Inactive/Active
+                                                                </label>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">
-                                                            <div
-                                                                class="form-group"
-                                                            >
-                                                                <label
-                                                                    for="aboutme"
-                                                                    class="form-label"
-                                                                    >About
-                                                                    Me</label
-                                                                >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <textarea
-                                                                        class="form-control"
-                                                                        id="aboutme"
-                                                                        rows="3"
-                                                                    >
-On the other hand, we denounce with righteous indignation</textarea
-                                                                    >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <button
+                                                            <router-link
+                                                                to="/user-list"
                                                                 class="btn btn-primary"
-                                                                type="submit"
                                                             >
                                                                 Update Profile
-                                                            </button>
+                                                            </router-link>
                                                         </div>
                                                     </div>
                                                 </form>

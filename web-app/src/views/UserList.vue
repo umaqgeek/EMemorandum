@@ -89,11 +89,11 @@
                                                             <div
                                                                 class="media-text"
                                                             >
-                                                                <a
-                                                                    href="./html/user-manage/user-profile.html"
+                                                                <router-link
+                                                                    to="/user-edit"
                                                                     class="title"
                                                                     >Khalid
-                                                                    Khan</a
+                                                                    Khan</router-link
                                                                 >
                                                                 <span
                                                                     class="small text"
