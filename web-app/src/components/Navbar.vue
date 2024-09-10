@@ -4,7 +4,7 @@
             <div class="nk-sidebar-brand">
                 <a href="./html/index.html" class="logo-link">
                     <div class="logo-wrap">
-                        <img
+                        <!-- <img
                             class="logo-img logo-light"
                             src="../assets/images/LogoUTeM.webp"
                             srcset="../assets/images/LogoUTeM.webp 2x"
@@ -21,7 +21,7 @@
                             src="../assets/images/LogoUTeM.webp"
                             srcset="../assets/images/LogoUTeM.webp 2x"
                             alt=""
-                        />
+                        /> -->
                     </div>
                 </a>
                 <div class="nk-compact-toggle me-n1">
@@ -84,39 +84,19 @@
                                         class="nk-menu-link"
                                     >
                                         <span class="nk-menu-text"
-                                            >User Management</span
+                                            >Manage User</span
                                         >
                                     </router-link>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a
-                                        href="./html/apps/kanban/kanban-custom-board.html"
+                                    <router-link
+                                        to="/code-list"
                                         class="nk-menu-link"
                                     >
                                         <span class="nk-menu-text"
-                                            >Types of Memorandum</span
+                                            >Manage Code</span
                                         >
-                                    </a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a
-                                        href="./html/apps/kanban/kanban-custom-board.html"
-                                        class="nk-menu-link"
-                                    >
-                                        <span class="nk-menu-text"
-                                            >Category of Memorandum</span
-                                        >
-                                    </a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a
-                                        href="./html/apps/kanban/kanban-custom-board.html"
-                                        class="nk-menu-link"
-                                    >
-                                        <span class="nk-menu-text"
-                                            >Scope of Memorandum</span
-                                        >
-                                    </a>
+                                    </router-link>
                                 </li>
                             </ul>
                         </li>

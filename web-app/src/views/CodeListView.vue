@@ -21,13 +21,23 @@
                                     >
                                         <div class="nk-block-head-content">
                                             <h2 class="nk-block-title">
-                                                Manage User
+                                                Manage Code
                                             </h2>
                                         </div>
                                         <div class="nk-block-head-content">
                                             <ul class="d-flex">
                                                 <li>
-                                                    <!-- CTA Button -->
+                                                    <router-link
+                                                        to="/memo-add"
+                                                        class="btn btn-primary d-none d-md-inline-flex"
+                                                        ><span
+                                                            class="nk-menu-icon"
+                                                            ><em
+                                                                class="icon ni ni-plus"
+                                                            ></em
+                                                        ></span>
+                                                        <span>Add New</span>
+                                                    </router-link>
                                                 </li>
                                             </ul>
                                         </div>
@@ -38,6 +48,7 @@
                                 <div class="nk-block">
                                     <div class="card">
                                         <table
+                                            :data="data"
                                             class="datatable-init table"
                                             data-nk-container="table-responsive"
                                         >
@@ -46,19 +57,13 @@
                                                     <th class="tb-col">
                                                         <span
                                                             class="overline-title"
-                                                            >Users</span
+                                                            >No.</span
                                                         >
                                                     </th>
                                                     <th class="tb-col">
                                                         <span
                                                             class="overline-title"
-                                                            >Roles</span
-                                                        >
-                                                    </th>
-                                                    <th class="tb-col">
-                                                        <span
-                                                            class="overline-title"
-                                                            >Status</span
+                                                            >Name</span
                                                         >
                                                     </th>
                                                     <th
@@ -74,42 +79,9 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
+                                                    <td class="tb-col">1</td>
                                                     <td class="tb-col">
-                                                        <div
-                                                            class="media-group"
-                                                        >
-                                                            <div
-                                                                class="media media-md media-middle media-circle"
-                                                            >
-                                                                <img
-                                                                    src="../assets/images/avatar/a.jpg"
-                                                                    alt="user"
-                                                                />
-                                                            </div>
-                                                            <div
-                                                                class="media-text"
-                                                            >
-                                                                <router-link
-                                                                    to="/user-edit"
-                                                                    class="title"
-                                                                    >Khalid
-                                                                    Khan</router-link
-                                                                >
-                                                                <span
-                                                                    class="small text"
-                                                                    >khalid@utem.edu.my</span
-                                                                >
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="tb-col">
-                                                        Administrator
-                                                    </td>
-                                                    <td class="tb-col">
-                                                        <span
-                                                            class="badge text-bg-success-soft"
-                                                            >Active</span
-                                                        >
+                                                        Type of Memorandum
                                                     </td>
                                                     <td
                                                         class="tb-col tb-col-end"
@@ -134,19 +106,20 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/user-manage/user-edit.html"
-                                                                                ><em
+                                                                            <router-link
+                                                                                to="/memo-edit"
+                                                                            >
+                                                                                <em
                                                                                     class="icon ni ni-edit"
                                                                                 ></em
                                                                                 ><span
                                                                                     >Edit</span
-                                                                                ></a
-                                                                            >
+                                                                                >
+                                                                            </router-link>
                                                                         </li>
                                                                         <li>
                                                                             <a
-                                                                                href="./html/user-manage/user-edit.html"
+                                                                                href="./html/memo/memo-edit.html"
                                                                                 ><em
                                                                                     class="icon ni ni-trash"
                                                                                 ></em
@@ -156,15 +129,15 @@
                                                                             >
                                                                         </li>
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/user-manage/user-profile.html"
+                                                                            <router-link
+                                                                                to="/memo-detail"
                                                                                 ><em
                                                                                     class="icon ni ni-eye"
                                                                                 ></em
                                                                                 ><span
                                                                                     >View
                                                                                     Details</span
-                                                                                ></a
+                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
@@ -175,40 +148,9 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="tb-col">1</td>
                                                     <td class="tb-col">
-                                                        <div
-                                                            class="media-group"
-                                                        >
-                                                            <div
-                                                                class="media media-md media-middle media-circle"
-                                                            >
-                                                                <img
-                                                                    src="../assets/images/avatar/a.jpg"
-                                                                    alt="user"
-                                                                />
-                                                            </div>
-                                                            <div
-                                                                class="media-text"
-                                                            >
-                                                                <a
-                                                                    href="./html/user-manage/user-profile.html"
-                                                                    class="title"
-                                                                    >Malizah
-                                                                    Ibrahim</a
-                                                                >
-                                                                <span
-                                                                    class="small text"
-                                                                    >malizah@utem.edu.my</span
-                                                                >
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="tb-col">PTJ</td>
-                                                    <td class="tb-col">
-                                                        <span
-                                                            class="badge text-bg-success-soft"
-                                                            >Active</span
-                                                        >
+                                                        Category of Memorandum
                                                     </td>
                                                     <td
                                                         class="tb-col tb-col-end"
@@ -233,19 +175,20 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/user-manage/user-edit.html"
-                                                                                ><em
+                                                                            <router-link
+                                                                                to="/memo-edit"
+                                                                            >
+                                                                                <em
                                                                                     class="icon ni ni-edit"
                                                                                 ></em
                                                                                 ><span
                                                                                     >Edit</span
-                                                                                ></a
-                                                                            >
+                                                                                >
+                                                                            </router-link>
                                                                         </li>
                                                                         <li>
                                                                             <a
-                                                                                href="./html/user-manage/user-edit.html"
+                                                                                href="./html/memo/memo-edit.html"
                                                                                 ><em
                                                                                     class="icon ni ni-trash"
                                                                                 ></em
@@ -255,15 +198,15 @@
                                                                             >
                                                                         </li>
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/user-manage/user-profile.html"
+                                                                            <router-link
+                                                                                to="/memo-detail"
                                                                                 ><em
                                                                                     class="icon ni ni-eye"
                                                                                 ></em
                                                                                 ><span
                                                                                     >View
                                                                                     Details</span
-                                                                                ></a
+                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
@@ -274,41 +217,9 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <td class="tb-col">1</td>
                                                     <td class="tb-col">
-                                                        <div
-                                                            class="media-group"
-                                                        >
-                                                            <div
-                                                                class="media media-md media-middle media-circle"
-                                                            >
-                                                                <img
-                                                                    src="../assets/images/avatar/a.jpg"
-                                                                    alt="user"
-                                                                />
-                                                            </div>
-                                                            <div
-                                                                class="media-text"
-                                                            >
-                                                                <a
-                                                                    href="./html/user-manage/user-profile.html"
-                                                                    class="title"
-                                                                    >Muhammad
-                                                                    Saiful Bin
-                                                                    Hamid</a
-                                                                >
-                                                                <span
-                                                                    class="small text"
-                                                                    >saiful@utem.edu.my</span
-                                                                >
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="tb-col">PUU</td>
-                                                    <td class="tb-col">
-                                                        <span
-                                                            class="badge text-bg-warning-soft"
-                                                            >Inactive</span
-                                                        >
+                                                        Category of Memorandum
                                                     </td>
                                                     <td
                                                         class="tb-col tb-col-end"
@@ -333,19 +244,20 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/user-manage/user-edit.html"
-                                                                                ><em
+                                                                            <router-link
+                                                                                to="/memo-edit"
+                                                                            >
+                                                                                <em
                                                                                     class="icon ni ni-edit"
                                                                                 ></em
                                                                                 ><span
                                                                                     >Edit</span
-                                                                                ></a
-                                                                            >
+                                                                                >
+                                                                            </router-link>
                                                                         </li>
                                                                         <li>
                                                                             <a
-                                                                                href="./html/user-manage/user-edit.html"
+                                                                                href="./html/memo/memo-edit.html"
                                                                                 ><em
                                                                                     class="icon ni ni-trash"
                                                                                 ></em
@@ -355,15 +267,15 @@
                                                                             >
                                                                         </li>
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/user-manage/user-profile.html"
+                                                                            <router-link
+                                                                                to="/memo-detail"
                                                                                 ><em
                                                                                     class="icon ni ni-eye"
                                                                                 ></em
                                                                                 ><span
                                                                                     >View
                                                                                     Details</span
-                                                                                ></a
+                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
@@ -766,7 +678,7 @@
                             <div class="nk-schedule-content">
                                 <span class="smaller">2:45 PM</span>
                                 <div class="h6">
-                                    Project status updated successfully.
+                                    Project status updated successfully
                                 </div>
                             </div>
                         </div>
@@ -792,7 +704,7 @@ import DataTablesCore from "datatables.net";
 DataTable.use(DataTablesCore);
 
 export default {
-    name: "UserListView",
+    name: "CodeListView",
     components: {
         NavbarComponent,
         TopNavComponent,

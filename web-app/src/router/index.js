@@ -12,6 +12,7 @@ import ApprovalDetailsView from "@/views/ApprovalDetailsView.vue";
 // admin
 import UserListView from "@/views/UserList.vue";
 import UserEditView from "@/views/UserEdit.vue";
+import CodeListView from "@/views/CodeListView.vue";
 // import adminDashboardView from "@/views/DashboardView.vue";
 // import adminMemoListView from "@/views/MemoListView.vue";
 // import adminMemoAddView from "@/views/MemoAddView.vue";
@@ -82,6 +83,10 @@ const routes = [
     {
         path: "/user-edit",
         component: UserEditView,
+    },
+    {
+        path: "/code-list",
+        component: CodeListView,
     },
     // {
     //     path: "/login",
