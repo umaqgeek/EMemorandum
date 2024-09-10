@@ -474,14 +474,81 @@
                                                                     PIC</label
                                                                 >
                                                                 <div
-                                                                    class="form-control-wrap"
+                                                                    class="input-group"
                                                                 >
                                                                     <input
                                                                         type="text"
                                                                         class="form-control"
-                                                                        id="address"
-                                                                        placeholder="Search.."
+                                                                        placeholder="Select PIC"
+                                                                        aria-label="Recipient's username"
+                                                                        aria-describedby="button-addon2"
                                                                     />
+                                                                    <button
+                                                                        class="btn btn-outline-primary"
+                                                                        type="button"
+                                                                        id="button-addon2"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#exampleModal"
+                                                                    >
+                                                                        Serach
+                                                                        Members
+                                                                    </button>
+                                                                </div>
+                                                                <div
+                                                                    class="modal fade"
+                                                                    id="exampleModal"
+                                                                    tabindex="-1"
+                                                                    aria-labelledby="exampleModalLabel"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <div
+                                                                        class="modal-dialog modal-lg"
+                                                                    >
+                                                                        <div
+                                                                            class="modal-content"
+                                                                        >
+                                                                            <div
+                                                                                class="modal-header"
+                                                                            >
+                                                                                <h5
+                                                                                    class="modal-title"
+                                                                                    id="exampleModalLabel"
+                                                                                >
+                                                                                    Responsible
+                                                                                    PIC
+                                                                                </h5>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    class="btn-close"
+                                                                                    data-bs-dismiss="modal"
+                                                                                    aria-label="Close"
+                                                                                ></button>
+                                                                            </div>
+                                                                            <div
+                                                                                class="modal-body"
+                                                                            >
+                                                                                <TableUserMgtComponent />
+                                                                            </div>
+                                                                            <div
+                                                                                class="modal-footer"
+                                                                            >
+                                                                                <button
+                                                                                    type="button"
+                                                                                    class="btn btn-sm btn-secondary"
+                                                                                    data-bs-dismiss="modal"
+                                                                                >
+                                                                                    Close
+                                                                                </button>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    class="btn btn-sm btn-primary"
+                                                                                >
+                                                                                    Save
+                                                                                    changes
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -763,12 +830,14 @@ import "../assets/js/bundle.js";
 
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
+import TableUserMgtComponent from "@/components/TableUser.vue";
 
 export default {
     name: "MemoAddView",
     components: {
         NavbarComponent,
         TopNavComponent,
+        TableUserMgtComponent,
     },
 };
 </script>

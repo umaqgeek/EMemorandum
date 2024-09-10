@@ -148,7 +148,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="tb-col">1</td>
+                                                    <td class="tb-col">2</td>
                                                     <td class="tb-col">
                                                         Category of Memorandum
                                                     </td>
@@ -217,9 +217,78 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="tb-col">1</td>
+                                                    <td class="tb-col">3</td>
                                                     <td class="tb-col">
-                                                        Category of Memorandum
+                                                        Scope of Memorandum
+                                                    </td>
+                                                    <td
+                                                        class="tb-col tb-col-end"
+                                                    >
+                                                        <div class="dropdown">
+                                                            <a
+                                                                href="#"
+                                                                class="btn btn-sm btn-icon btn-zoom me-n1"
+                                                                data-bs-toggle="dropdown"
+                                                            >
+                                                                <em
+                                                                    class="icon ni ni-more-v"
+                                                                ></em>
+                                                            </a>
+                                                            <div
+                                                                class="dropdown-menu dropdown-menu-sm dropdown-menu-end"
+                                                            >
+                                                                <div
+                                                                    class="dropdown-content py-1"
+                                                                >
+                                                                    <ul
+                                                                        class="link-list link-list-hover-bg-primary link-list-md"
+                                                                    >
+                                                                        <li>
+                                                                            <router-link
+                                                                                to="/memo-edit"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-edit"
+                                                                                ></em
+                                                                                ><span
+                                                                                    >Edit</span
+                                                                                >
+                                                                            </router-link>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a
+                                                                                href="./html/memo/memo-edit.html"
+                                                                                ><em
+                                                                                    class="icon ni ni-trash"
+                                                                                ></em
+                                                                                ><span
+                                                                                    >Delete</span
+                                                                                ></a
+                                                                            >
+                                                                        </li>
+                                                                        <li>
+                                                                            <router-link
+                                                                                to="/memo-detail"
+                                                                                ><em
+                                                                                    class="icon ni ni-eye"
+                                                                                ></em
+                                                                                ><span
+                                                                                    >View
+                                                                                    Details</span
+                                                                                ></router-link
+                                                                            >
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- dropdown -->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="tb-col">4</td>
+                                                    <td class="tb-col">
+                                                        List of PTJ
                                                     </td>
                                                     <td
                                                         class="tb-col tb-col-end"

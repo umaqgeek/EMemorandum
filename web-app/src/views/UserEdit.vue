@@ -169,9 +169,102 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
+                                                                    for="email"
+                                                                    class="form-label"
+                                                                    >Tel
+                                                                    Number</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        class="form-control"
+                                                                        type="text"
+                                                                        value="+60123456789"
+                                                                        aria-label="readonly input"
+                                                                        readonly
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="company"
+                                                                    class="form-label"
+                                                                    >Alamat</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        class="form-control"
+                                                                        type="text"
+                                                                        value="-"
+                                                                        aria-label="readonly input"
+                                                                        readonly
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
                                                                     class="form-label"
                                                                     >Roles</label
                                                                 >
+                                                                <div
+                                                                    class="form-check"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        value=""
+                                                                        id="flexCheckDefault"
+                                                                    />
+                                                                    <label
+                                                                        class="form-check-label"
+                                                                        for="flexCheckDefault"
+                                                                    >
+                                                                        PUU
+                                                                    </label>
+                                                                </div>
+                                                                <div
+                                                                    class="form-check"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        value=""
+                                                                        id="flexCheckDefault"
+                                                                    />
+                                                                    <label
+                                                                        class="form-check-label"
+                                                                        for="flexCheckDefault"
+                                                                    >
+                                                                        PTJ
+                                                                    </label>
+                                                                </div>
+                                                                <div
+                                                                    class="form-check"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        value=""
+                                                                        id="flexCheckDefault"
+                                                                    />
+                                                                    <label
+                                                                        class="form-check-label"
+                                                                        for="flexCheckDefault"
+                                                                    >
+                                                                        Administrator
+                                                                    </label>
+                                                                </div>
                                                                 <div
                                                                     class="form-control-wrap"
                                                                 >
@@ -190,23 +283,17 @@
                                                                         <option
                                                                             value="1"
                                                                         >
-                                                                            PayPal
+                                                                            PTJ
                                                                         </option>
                                                                         <option
                                                                             value="2"
                                                                         >
-                                                                            Bank
-                                                                            Transfer
+                                                                            PUU
                                                                         </option>
                                                                         <option
                                                                             value="3"
                                                                         >
-                                                                            Skrill
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Moneygram
+                                                                            Administrator
                                                                         </option>
                                                                     </select>
                                                                 </div>
