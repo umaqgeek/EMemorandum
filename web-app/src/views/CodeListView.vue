@@ -27,17 +27,21 @@
                                         <div class="nk-block-head-content">
                                             <ul class="d-flex">
                                                 <li>
-                                                    <router-link
+                                                    <button
                                                         to="/memo-add"
                                                         class="btn btn-primary d-none d-md-inline-flex"
-                                                        ><span
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#addCode"
+                                                    >
+                                                        <span
                                                             class="nk-menu-icon"
                                                             ><em
                                                                 class="icon ni ni-plus"
                                                             ></em
                                                         ></span>
                                                         <span>Add New</span>
-                                                    </router-link>
+                                                    </button>
+                                                    <AddCodeComponent />
                                                 </li>
                                             </ul>
                                         </div>
@@ -47,6 +51,22 @@
                                 <!-- .nk-block-head -->
                                 <div class="nk-block">
                                     <div class="card">
+                                        <div class="row p-3">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <div
+                                                        class="form-control-wrap"
+                                                    >
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            id="exampleFormControlInputText1"
+                                                            placeholder="Search.."
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <table
                                             :data="data"
                                             class="datatable-init table"
@@ -106,8 +126,9 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <router-link
-                                                                                to="/memo-edit"
+                                                                            <a
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#editCode"
                                                                             >
                                                                                 <em
                                                                                     class="icon ni ni-edit"
@@ -115,7 +136,7 @@
                                                                                 ><span
                                                                                     >Edit</span
                                                                                 >
-                                                                            </router-link>
+                                                                            </a>
                                                                         </li>
                                                                         <li>
                                                                             <a
@@ -126,18 +147,6 @@
                                                                                 ><span
                                                                                     >Delete</span
                                                                                 ></a
-                                                                            >
-                                                                        </li>
-                                                                        <li>
-                                                                            <router-link
-                                                                                to="/memo-detail"
-                                                                                ><em
-                                                                                    class="icon ni ni-eye"
-                                                                                ></em
-                                                                                ><span
-                                                                                    >View
-                                                                                    Details</span
-                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
@@ -175,8 +184,9 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <router-link
-                                                                                to="/memo-edit"
+                                                                            <a
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#editCode"
                                                                             >
                                                                                 <em
                                                                                     class="icon ni ni-edit"
@@ -184,7 +194,7 @@
                                                                                 ><span
                                                                                     >Edit</span
                                                                                 >
-                                                                            </router-link>
+                                                                            </a>
                                                                         </li>
                                                                         <li>
                                                                             <a
@@ -195,18 +205,6 @@
                                                                                 ><span
                                                                                     >Delete</span
                                                                                 ></a
-                                                                            >
-                                                                        </li>
-                                                                        <li>
-                                                                            <router-link
-                                                                                to="/memo-detail"
-                                                                                ><em
-                                                                                    class="icon ni ni-eye"
-                                                                                ></em
-                                                                                ><span
-                                                                                    >View
-                                                                                    Details</span
-                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
@@ -244,8 +242,9 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <router-link
-                                                                                to="/memo-edit"
+                                                                            <a
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#editCode"
                                                                             >
                                                                                 <em
                                                                                     class="icon ni ni-edit"
@@ -253,7 +252,7 @@
                                                                                 ><span
                                                                                     >Edit</span
                                                                                 >
-                                                                            </router-link>
+                                                                            </a>
                                                                         </li>
                                                                         <li>
                                                                             <a
@@ -264,18 +263,6 @@
                                                                                 ><span
                                                                                     >Delete</span
                                                                                 ></a
-                                                                            >
-                                                                        </li>
-                                                                        <li>
-                                                                            <router-link
-                                                                                to="/memo-detail"
-                                                                                ><em
-                                                                                    class="icon ni ni-eye"
-                                                                                ></em
-                                                                                ><span
-                                                                                    >View
-                                                                                    Details</span
-                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
@@ -313,8 +300,9 @@
                                                                         class="link-list link-list-hover-bg-primary link-list-md"
                                                                     >
                                                                         <li>
-                                                                            <router-link
-                                                                                to="/memo-edit"
+                                                                            <a
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#editCode"
                                                                             >
                                                                                 <em
                                                                                     class="icon ni ni-edit"
@@ -322,7 +310,7 @@
                                                                                 ><span
                                                                                     >Edit</span
                                                                                 >
-                                                                            </router-link>
+                                                                            </a>
                                                                         </li>
                                                                         <li>
                                                                             <a
@@ -333,18 +321,6 @@
                                                                                 ><span
                                                                                     >Delete</span
                                                                                 ></a
-                                                                            >
-                                                                        </li>
-                                                                        <li>
-                                                                            <router-link
-                                                                                to="/memo-detail"
-                                                                                ><em
-                                                                                    class="icon ni ni-eye"
-                                                                                ></em
-                                                                                ><span
-                                                                                    >View
-                                                                                    Details</span
-                                                                                ></router-link
                                                                             >
                                                                         </li>
                                                                     </ul>
@@ -383,378 +359,8 @@
             <!-- .nk-wrap -->
         </div>
         <!-- .nk-main -->
-        <!-- Modal -->
-        <div
-            class="modal fade"
-            id="addUserModal"
-            tabindex="-1"
-            aria-labelledby="addUserModalLabel"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="addUserModalLabel">
-                            Add User
-                        </h4>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <!-- .modal-header -->
-                    <div class="modal-body">
-                        <form action="#">
-                            <div class="row g-3">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label
-                                            for="firstname"
-                                            class="form-label"
-                                            >First Name</label
-                                        >
-                                        <div class="form-control-wrap">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                placeholder="First name"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="lastname" class="form-label"
-                                            >Last Name</label
-                                        >
-                                        <div class="form-control-wrap">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                placeholder="Last name"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="email" class="form-label"
-                                            >Email Address</label
-                                        >
-                                        <div class="form-control-wrap">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                placeholder="Email address"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="status" class="form-label"
-                                            >Status</label
-                                        >
-                                        <div class="form-control-wrap">
-                                            <select
-                                                class="js-select"
-                                                data-search="true"
-                                                data-sort="false"
-                                            >
-                                                <option value="">
-                                                    Select a status
-                                                </option>
-                                                <option value="1">
-                                                    Pending
-                                                </option>
-                                                <option value="2">
-                                                    Active
-                                                </option>
-                                                <option value="3">
-                                                    Inactive
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label for="role" class="form-label"
-                                            >Role</label
-                                        >
-                                        <div class="form-control-wrap">
-                                            <select
-                                                class="js-select"
-                                                data-search="true"
-                                                data-sort="false"
-                                            >
-                                                <option value="">
-                                                    Select a role
-                                                </option>
-                                                <option value="1">
-                                                    Administrator
-                                                </option>
-                                                <option value="2">
-                                                    Developer
-                                                </option>
-                                                <option value="3">
-                                                    Analyst
-                                                </option>
-                                                <option value="4">
-                                                    Support
-                                                </option>
-                                                <option value="5">Trial</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="d-flex gap g-2">
-                                        <div class="gap-col">
-                                            <button
-                                                class="btn btn-primary"
-                                                type="submit"
-                                            >
-                                                Add User
-                                            </button>
-                                        </div>
-                                        <div class="gap-col">
-                                            <button
-                                                type="button"
-                                                class="btn border-0"
-                                                data-bs-dismiss="modal"
-                                            >
-                                                Discard
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- .modal-body -->
-                </div>
-            </div>
-        </div>
-        <!-- .modal -->
-        <div
-            class="offcanvas offcanvas-end offcanvas-size-lg"
-            id="notificationOffcanvas"
-        >
-            <div class="offcanvas-header border-bottom border-light">
-                <h5 class="offcanvas-title" id="offcanvasTopLabel">
-                    Recent Notification
-                </h5>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                ></button>
-            </div>
-            <div class="offcanvas-body" data-simplebar>
-                <ul class="nk-schedule">
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">2:12 PM</span>
-                                <div class="h6">Added 3 New Images</div>
-                                <ul class="d-flex flex-wrap gap g-2 py-2">
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/a.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/b.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/c.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">4:23 PM</span>
-                                <div class="h6">
-                                    Invitation for creative designs pattern
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div
-                                class="nk-schedule-content nk-schedule-content-no-border"
-                            >
-                                <span class="smaller">10:30 PM</span>
-                                <div class="h6">
-                                    Task report - uploaded weekly reports
-                                </div>
-                                <div class="list-group-dotted mt-3">
-                                    <div class="list-group-wrap">
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-pdf.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Modern Designs
-                                                        Pattern</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >1.6.mb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-doc.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Cpanel Upload
-                                                        Guidelines</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >18kb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-code.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Weekly Finance
-                                                        Reports</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >10mb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- .list-group-dotted -->
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">3:23 PM</span>
-                                <div class="h6">
-                                    Assigned you to new database design project
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div
-                                class="nk-schedule-content nk-schedule-content-no-border flex-grow-1"
-                            >
-                                <span class="smaller">5:05 PM</span>
-                                <div class="h6">
-                                    You have received a new order
-                                </div>
-                                <div class="alert alert-info mt-2" role="alert">
-                                    <div class="d-flex">
-                                        <em
-                                            class="icon icon-lg ni ni-file-code opacity-75"
-                                        ></em>
-                                        <div
-                                            class="ms-2 d-flex flex-wrap flex-grow-1 justify-content-between"
-                                        >
-                                            <div>
-                                                <h6 class="alert-heading mb-0">
-                                                    Business Template - UI/UX
-                                                    design
-                                                </h6>
-                                                <span class="smaller"
-                                                    >Shared information with
-                                                    your team to understand and
-                                                    contribute to your
-                                                    project.</span
-                                                >
-                                            </div>
-                                            <div class="d-block mt-1">
-                                                <a
-                                                    href="#"
-                                                    class="btn btn-md btn-info"
-                                                    ><em
-                                                        class="icon ni ni-download"
-                                                    ></em
-                                                    ><span>Download</span></a
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- .alert -->
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">2:45 PM</span>
-                                <div class="h6">
-                                    Project status updated successfully
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
+        <EditCodeComponent />
         <ValidateMeComponent />
     </div>
     <!-- .nk-app-root -->
@@ -767,6 +373,8 @@ import "../assets/js/bundle.js";
 // import "../assets/js/data-tables/data-tables.js";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
+import AddCodeComponent from "@/components/AddCodeModal.vue";
+import EditCodeComponent from "@/components/EditCodeModal.vue";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 
@@ -777,6 +385,8 @@ export default {
     components: {
         NavbarComponent,
         TopNavComponent,
+        AddCodeComponent,
+        EditCodeComponent,
     },
 };
 </script>

@@ -68,7 +68,7 @@
                                                             >
                                                         </router-link>
                                                     </li>
-                                                    <li class="active">
+                                                    <li>
                                                         <router-link
                                                             to="/memo-add-member"
                                                             class="nk-todo-menu-item"
@@ -79,16 +79,16 @@
                                                             <span>Members</span>
                                                         </router-link>
                                                     </li>
-                                                    <li>
-                                                        <router-link
-                                                            to="/memo-add-kpi"
+                                                    <li class="active">
+                                                        <a
+                                                            href="#"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
                                                                 class="icon ni ni-list"
                                                             ></em>
                                                             <span>KPI</span>
-                                                        </router-link>
+                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -97,14 +97,14 @@
                                                 <div class="nk-todo-head">
                                                     <ul class="d-flex">
                                                         <li class="title">
-                                                            Select Users
+                                                            KPI
                                                         </li>
                                                     </ul>
                                                 </div>
                                                 <div
                                                     class="nk-todo-list card-body"
                                                 >
-                                                    <TableUserMgtComponent />
+                                                    <TableKPIComponent />
                                                 </div>
                                             </div>
                                             <!-- .nk-todo-body -->
@@ -150,14 +150,14 @@ import "../assets/js/bundle.js";
 
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
-import TableUserMgtComponent from "@/components/TableUser.vue";
+import TableKPIComponent from "@/components/TableKPI.vue";
 
 export default {
-    name: "MemoAddMemberView",
+    name: "MemoAddKPIView",
     components: {
         NavbarComponent,
         TopNavComponent,
-        TableUserMgtComponent,
+        TableKPIComponent,
     },
 };
 </script>

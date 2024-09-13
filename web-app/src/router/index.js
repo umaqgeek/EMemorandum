@@ -5,6 +5,7 @@ import DashboardView from "@/views/DashboardView.vue";
 import MemoListView from "@/views/MemoListView.vue";
 import MemoAddView from "@/views/MemoAddView.vue";
 import MemoAddMemberView from "@/views/MemoAddMemberView.vue";
+import MemoAddKPIView from "@/views/MemoAddKPIView.vue";
 import MemoEditView from "@/views/MemoEditView.vue";
 import MemoDetailsView from "@/views/MemoDetailsView.vue";
 import ApprovalListView from "@/views/ApprovalListView.vue";
@@ -87,6 +88,10 @@ const routes = [
     {
         path: "/code-list",
         component: CodeListView,
+    },
+    {
+        path: "/memo-add-kpi",
+        component: MemoAddKPIView,
     },
     // {
     //     path: "/login",

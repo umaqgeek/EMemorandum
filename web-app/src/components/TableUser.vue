@@ -1,5 +1,19 @@
 <template>
     <div class="card">
+        <div class="row p-3">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <div class="form-control-wrap">
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="exampleFormControlInputText1"
+                            placeholder="Search.."
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
         <table
             class="datatable-init table"
             data-nk-container="table-responsive"

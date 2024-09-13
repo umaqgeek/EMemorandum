@@ -27,7 +27,9 @@
                                             </div>
                                             <!-- .nk-block-head-content -->
                                             <div class="nk-block-head-content">
-                                                <ul class="d-flex gap g-2">
+                                                <ul
+                                                    class="d-flex gap g-2 d-none"
+                                                >
                                                     <li
                                                         class="d-none d-md-block"
                                                     >
@@ -96,7 +98,7 @@
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
-                                                                class="icon ni ni-inbox"
+                                                                class="icon ni ni-info"
                                                             ></em>
                                                             <span
                                                                 >Project
@@ -110,21 +112,21 @@
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
-                                                                class="icon ni ni-star"
+                                                                class="icon ni ni-users"
                                                             ></em>
                                                             <span>Members</span>
                                                         </router-link>
                                                     </li>
                                                     <li>
-                                                        <a
-                                                            href="#"
+                                                        <router-link
+                                                            to="/memo-add-kpi"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
-                                                                class="icon ni ni-check-circle-cut"
+                                                                class="icon ni ni-list"
                                                             ></em>
                                                             <span>KPI</span>
-                                                        </a>
+                                                        </router-link>
                                                     </li>
                                                 </ul>
                                             </div>
