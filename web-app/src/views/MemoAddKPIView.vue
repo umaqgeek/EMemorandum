@@ -105,6 +105,14 @@
                                                     class="nk-todo-list card-body"
                                                 >
                                                     <TableKPIComponent />
+                                                    <div class="col-lg-12 mt-3">
+                                                        <router-link
+                                                            to="/memo-list"
+                                                            class="btn btn-primary"
+                                                        >
+                                                            Save
+                                                        </router-link>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <!-- .nk-todo-body -->

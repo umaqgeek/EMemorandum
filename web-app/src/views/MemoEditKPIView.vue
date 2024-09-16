@@ -22,7 +22,7 @@
                                         >
                                             <div class="nk-block-head-content">
                                                 <h2 class="nk-block-title">
-                                                    Add New Memorandum
+                                                    Edit Memorandum
                                                 </h2>
                                             </div>
                                             <!-- .nk-block-head-content -->
@@ -56,7 +56,7 @@
                                                 <ul class="nk-todo-menu pb-3">
                                                     <li>
                                                         <router-link
-                                                            to="/memo-add"
+                                                            to="/memo-edit"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
@@ -68,9 +68,9 @@
                                                             >
                                                         </router-link>
                                                     </li>
-                                                    <li class="active">
+                                                    <li>
                                                         <router-link
-                                                            to="/memo-add-member"
+                                                            to="/memo-edit-member"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
@@ -79,16 +79,16 @@
                                                             <span>Members</span>
                                                         </router-link>
                                                     </li>
-                                                    <li>
-                                                        <router-link
-                                                            to="/memo-add-kpi"
+                                                    <li class="active">
+                                                        <a
+                                                            href="#"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
                                                                 class="icon ni ni-list"
                                                             ></em>
                                                             <span>KPI</span>
-                                                        </router-link>
+                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -97,27 +97,20 @@
                                                 <div class="nk-todo-head">
                                                     <ul class="d-flex">
                                                         <li class="title">
-                                                            Select Users
+                                                            KPI
                                                         </li>
                                                     </ul>
                                                 </div>
                                                 <div
                                                     class="nk-todo-list card-body"
                                                 >
-                                                    <TableUserMgtComponent />
+                                                    <TableKPIComponent />
                                                     <div class="col-lg-12 mt-3">
                                                         <router-link
                                                             to="/memo-list"
-                                                            class="btn btn-secondary"
-                                                        >
-                                                            Save
-                                                        </router-link>
-                                                        &nbsp;
-                                                        <router-link
-                                                            to="/memo-add-kpi"
                                                             class="btn btn-primary"
                                                         >
-                                                            Next
+                                                            Save
                                                         </router-link>
                                                     </div>
                                                 </div>
@@ -165,14 +158,14 @@ import "../assets/js/bundle.js";
 
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
-import TableUserMgtComponent from "@/components/TableUser.vue";
+import TableKPIComponent from "@/components/TableKPI.vue";
 
 export default {
-    name: "MemoAddMemberView",
+    name: "MemoEditKPIView",
     components: {
         NavbarComponent,
         TopNavComponent,
-        TableUserMgtComponent,
+        TableKPIComponent,
     },
 };
 </script>

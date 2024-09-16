@@ -17,7 +17,7 @@
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
                                 <div class="row g-gs">
-                                    <div class="col-xxl-7">
+                                    <div class="col-xxl-12">
                                         <div class="row g-gs">
                                             <div class="col-md-3">
                                                 <div class="card h-100">
@@ -210,7 +210,7 @@
                                         </div>
                                         <!-- .row -->
                                     </div>
-                                    <div class="col-md-12 col-xxl-4">
+                                    <div class="col-md-8 col-xxl-8">
                                         <div class="card h-100">
                                             <div class="card-body">
                                                 <div class="card-title-group">
@@ -457,6 +457,191 @@
                                         </div>
                                         <!-- .card -->
                                     </div>
+                                    <div class="col-sm-4 col-xxl-4">
+                                        <div class="card h-100 overflow-hidden">
+                                            <div class="col-sep">
+                                                <div class="card-body">
+                                                    <div
+                                                        class="card-title-group align-items-start"
+                                                    >
+                                                        <div class="card-title">
+                                                            <h4
+                                                                class="title mb-0"
+                                                            >
+                                                                Quick Links
+                                                            </h4>
+                                                            <span class="small"
+                                                                >Most used
+                                                                resources</span
+                                                            >
+                                                        </div>
+                                                        <div class="card-tools">
+                                                            <div
+                                                                class="dropdown"
+                                                            >
+                                                                <a
+                                                                    href="#"
+                                                                    class="btn btn-sm btn-icon btn-zoom me-n1"
+                                                                    data-bs-toggle="dropdown"
+                                                                >
+                                                                    <em
+                                                                        class="icon ni ni-more-v"
+                                                                    ></em>
+                                                                </a>
+                                                                <ul
+                                                                    class="dropdown-menu dropdown-menu-end"
+                                                                >
+                                                                    <li>
+                                                                        <div
+                                                                            class="dropdown-header pt-2 pb-0"
+                                                                        >
+                                                                            <h6
+                                                                                class="mb-0"
+                                                                            >
+                                                                                Quick
+                                                                                Actions
+                                                                            </h6>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <hr
+                                                                            class="dropdown-divider"
+                                                                        />
+                                                                    </li>
+                                                                    <li>
+                                                                        <a
+                                                                            href="#"
+                                                                            class="dropdown-item"
+                                                                            >Create
+                                                                            Invoice</a
+                                                                        >
+                                                                    </li>
+                                                                    <li>
+                                                                        <a
+                                                                            href="#"
+                                                                            class="dropdown-item"
+                                                                            >Create
+                                                                            Payment</a
+                                                                        >
+                                                                    </li>
+                                                                    <li>
+                                                                        <a
+                                                                            href="#"
+                                                                            class="dropdown-item"
+                                                                            >Generate
+                                                                            Bill</a
+                                                                        >
+                                                                    </li>
+                                                                    <li>
+                                                                        <a
+                                                                            href="#"
+                                                                            class="dropdown-item"
+                                                                            >Settings</a
+                                                                        >
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <!-- dropdown -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- .card-title-group -->
+                                                </div>
+                                                <!-- .card-body -->
+                                                <ul
+                                                    class="list-group list-group-flush"
+                                                >
+                                                    <li
+                                                        class="list-group-item py-3 d-flex justify-content-between align-items-center"
+                                                    >
+                                                        <div
+                                                            class="d-flex align-items-center"
+                                                        >
+                                                            <span
+                                                                class="nk-menu-icon"
+                                                            >
+                                                                <em
+                                                                    class="icon icon-lg ni ni-note-add"
+                                                                ></em>
+                                                            </span>
+                                                            <router-link
+                                                                to="/memo-add"
+                                                                class="h6"
+                                                                >Create
+                                                                Memorandum</router-link
+                                                            >
+                                                        </div>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item py-3 d-flex justify-content-between align-items-center"
+                                                    >
+                                                        <div
+                                                            class="d-flex align-items-center"
+                                                        >
+                                                            <span
+                                                                class="nk-menu-icon"
+                                                            >
+                                                                <em
+                                                                    class="icon icon-lg ni ni-check-round-cut"
+                                                                ></em>
+                                                            </span>
+
+                                                            <router-link
+                                                                to="/approval-list"
+                                                                class="h6"
+                                                                >Reviews
+                                                                Memorandum</router-link
+                                                            >
+                                                        </div>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item py-3 d-flex justify-content-between align-items-center"
+                                                    >
+                                                        <div
+                                                            class="d-flex align-items-center"
+                                                        >
+                                                            <span
+                                                                class="nk-menu-icon"
+                                                            >
+                                                                <em
+                                                                    class="icon icon-lg ni ni-users"
+                                                                ></em>
+                                                            </span>
+                                                            <router-link
+                                                                to="/user-list"
+                                                                class="h6"
+                                                                >Manage
+                                                                User</router-link
+                                                            >
+                                                        </div>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item py-3 d-flex justify-content-between align-items-center"
+                                                    >
+                                                        <div
+                                                            class="d-flex align-items-center"
+                                                        >
+                                                            <span
+                                                                class="nk-menu-icon"
+                                                            >
+                                                                <em
+                                                                    class="icon icon-lg ni ni-layers"
+                                                                ></em>
+                                                            </span>
+
+                                                            <router-link
+                                                                to="/code-list"
+                                                                class="h6"
+                                                                >Manage
+                                                                Code</router-link
+                                                            >
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- .card -->
+                                    </div>
+                                    <!-- .col -->
                                 </div>
                                 <!-- .row -->
                             </div>

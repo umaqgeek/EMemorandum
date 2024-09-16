@@ -22,7 +22,7 @@
                                         >
                                             <div class="nk-block-head-content">
                                                 <h2 class="nk-block-title">
-                                                    Add New Memorandum
+                                                    Edit Memorandum
                                                 </h2>
                                             </div>
                                             <!-- .nk-block-head-content -->
@@ -56,7 +56,7 @@
                                                 <ul class="nk-todo-menu pb-3">
                                                     <li>
                                                         <router-link
-                                                            to="/memo-add"
+                                                            to="/memo-edit"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
@@ -70,7 +70,7 @@
                                                     </li>
                                                     <li class="active">
                                                         <router-link
-                                                            to="/memo-add-member"
+                                                            to="/memo-edit-member"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
@@ -81,7 +81,7 @@
                                                     </li>
                                                     <li>
                                                         <router-link
-                                                            to="/memo-add-kpi"
+                                                            to="/memo-edit-kpi"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
@@ -114,7 +114,7 @@
                                                         </router-link>
                                                         &nbsp;
                                                         <router-link
-                                                            to="/memo-add-kpi"
+                                                            to="/memo-edit-kpi"
                                                             class="btn btn-primary"
                                                         >
                                                             Next
@@ -168,7 +168,7 @@ import TopNavComponent from "@/components/TopNav.vue";
 import TableUserMgtComponent from "@/components/TableUser.vue";
 
 export default {
-    name: "MemoAddMemberView",
+    name: "MemoEditMemberView",
     components: {
         NavbarComponent,
         TopNavComponent,

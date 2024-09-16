@@ -27,7 +27,9 @@
                                             </div>
                                             <!-- .nk-block-head-content -->
                                             <div class="nk-block-head-content">
-                                                <ul class="d-flex gap g-2">
+                                                <ul
+                                                    class="d-flex gap g-2 d-none"
+                                                >
                                                     <li
                                                         class="d-none d-md-block"
                                                     >
@@ -73,14 +75,63 @@
                                 </div>
                                 <!-- .nk-block-head -->
                                 <div class="nk-block">
-                                    <div class="card card-gutter-md">
-                                        <div class="card-body">
-                                            <div class="bio-block">
-                                                <h4
-                                                    class="bio-block-title mb-4"
-                                                >
-                                                    Memorandum
-                                                </h4>
+                                    <div class="card">
+                                        <div
+                                            class="nk-todo"
+                                            data-todo-collapse="xl"
+                                            id="todoWrap"
+                                        >
+                                            <div
+                                                class="nk-todo-aside"
+                                                data-simplebar
+                                                id="todoAside"
+                                                data-overlay="true"
+                                                data-break="xl"
+                                            >
+                                                <div
+                                                    class="nk-todo-aside-header"
+                                                ></div>
+                                                <ul class="nk-todo-menu pb-3">
+                                                    <li class="active">
+                                                        <router-link
+                                                            to="/memo-edit"
+                                                            class="nk-todo-menu-item"
+                                                        >
+                                                            <em
+                                                                class="icon ni ni-info"
+                                                            ></em>
+                                                            <span
+                                                                >Project
+                                                                Details</span
+                                                            >
+                                                        </router-link>
+                                                    </li>
+                                                    <li>
+                                                        <router-link
+                                                            to="/memo-edit-member"
+                                                            class="nk-todo-menu-item"
+                                                        >
+                                                            <em
+                                                                class="icon ni ni-users"
+                                                            ></em>
+                                                            <span>Members</span>
+                                                        </router-link>
+                                                    </li>
+                                                    <li>
+                                                        <router-link
+                                                            to="/memo-edit-kpi"
+                                                            class="nk-todo-menu-item"
+                                                        >
+                                                            <em
+                                                                class="icon ni ni-list"
+                                                            ></em>
+                                                            <span>KPI</span>
+                                                        </router-link>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <!-- .nk-todo-aside -->
+                                            <div class="nk-todo-body card-body">
                                                 <form action="#">
                                                     <div class="row g-3">
                                                         <div class="col-lg-12">
@@ -100,7 +151,9 @@
                                                                         class="form-control"
                                                                         id="aboutme"
                                                                         rows="3"
-                                                                    ></textarea>
+                                                                    >
+Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</textarea
+                                                                    >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -118,7 +171,7 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
-                                                                        class="js-select"
+                                                                        class="form-select"
                                                                         id="country"
                                                                         data-search="true"
                                                                         data-sort="false"
@@ -130,9 +183,14 @@
                                                                             Options
                                                                         </option>
                                                                         <option
+                                                                            selected
                                                                             value="1"
                                                                         >
-                                                                            Germany
+                                                                            Energy
+                                                                            Efficiency
+                                                                            and
+                                                                            IoT
+                                                                            Technology
                                                                         </option>
                                                                         <option
                                                                             value="2"
@@ -167,7 +225,7 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
-                                                                        class="js-select"
+                                                                        class="form-select"
                                                                         id="country"
                                                                         data-search="true"
                                                                         data-sort="false"
@@ -179,9 +237,12 @@
                                                                             Options
                                                                         </option>
                                                                         <option
+                                                                            selected
                                                                             value="1"
                                                                         >
-                                                                            Germany
+                                                                            Development
+                                                                            and
+                                                                            Implementation
                                                                         </option>
                                                                         <option
                                                                             value="2"
@@ -216,7 +277,7 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
-                                                                        class="js-select"
+                                                                        class="form-select"
                                                                         id="country"
                                                                         data-search="true"
                                                                         data-sort="false"
@@ -228,9 +289,16 @@
                                                                             Options
                                                                         </option>
                                                                         <option
+                                                                            selected
                                                                             value="1"
                                                                         >
-                                                                            Germany
+                                                                            Install
+                                                                            IoT
+                                                                            energy
+                                                                            meters
+                                                                            in
+                                                                            UTeM
+                                                                            buildings
                                                                         </option>
                                                                         <option
                                                                             value="2"
@@ -256,7 +324,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="firstname"
+                                                                    for="datePicker1"
                                                                     class="form-label"
                                                                     >Start
                                                                     Date</label
@@ -265,10 +333,15 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
+                                                                        placeholder="dd/mm/yyyy"
                                                                         type="text"
-                                                                        class="form-control"
-                                                                        id="firstname"
-                                                                        placeholder="First name"
+                                                                        class="form-control js-datepicker"
+                                                                        data-title="Text"
+                                                                        data-today-btn="true"
+                                                                        data-clear-btn="true"
+                                                                        autocomplete="off"
+                                                                        id="datePicker1"
+                                                                        value="12/03/2024"
                                                                     />
                                                                 </div>
                                                             </div>
@@ -278,7 +351,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="lastname"
+                                                                    for="datePicker1"
                                                                     class="form-label"
                                                                     >End
                                                                     Date</label
@@ -287,10 +360,15 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
+                                                                        placeholder="dd/mm/yyyy"
                                                                         type="text"
-                                                                        class="form-control"
-                                                                        id="lastname"
-                                                                        placeholder="Last name"
+                                                                        class="form-control js-datepicker"
+                                                                        data-title="Text"
+                                                                        data-today-btn="true"
+                                                                        data-clear-btn="true"
+                                                                        autocomplete="off"
+                                                                        id="datePicker1"
+                                                                        value="23/04/2024"
                                                                     />
                                                                 </div>
                                                             </div>
@@ -308,7 +386,7 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
-                                                                        class="js-select"
+                                                                        class="form-select"
                                                                         id="country"
                                                                         data-search="true"
                                                                         data-sort="false"
@@ -356,7 +434,7 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <select
-                                                                        class="js-select"
+                                                                        class="form-select"
                                                                         id="country"
                                                                         data-search="true"
                                                                         data-sort="false"
@@ -409,7 +487,8 @@
                                                                         type="text"
                                                                         class="form-control"
                                                                         id="address"
-                                                                        placeholder="MoA...."
+                                                                        placeholder=""
+                                                                        value="UTeM-EN-1024"
                                                                     />
                                                                 </div>
                                                             </div>
@@ -425,35 +504,109 @@
                                                                     PIC</label
                                                                 >
                                                                 <div
-                                                                    class="form-control-wrap"
+                                                                    class="input-group"
                                                                 >
                                                                     <input
                                                                         type="text"
                                                                         class="form-control"
-                                                                        id="address"
-                                                                        placeholder="Search.."
+                                                                        aria-label="Recipient's username"
+                                                                        aria-describedby="button-addon2"
+                                                                        value="Dr. Ahmad Zulkifli"
                                                                     />
+                                                                    <button
+                                                                        class="btn btn-outline-primary"
+                                                                        type="button"
+                                                                        id="button-addon2"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#exampleModal"
+                                                                    >
+                                                                        Serach
+                                                                        Members
+                                                                    </button>
+                                                                </div>
+                                                                <div
+                                                                    class="modal fade"
+                                                                    id="exampleModal"
+                                                                    tabindex="-1"
+                                                                    aria-labelledby="exampleModalLabel"
+                                                                    aria-hidden="true"
+                                                                >
+                                                                    <div
+                                                                        class="modal-dialog modal-lg"
+                                                                    >
+                                                                        <div
+                                                                            class="modal-content"
+                                                                        >
+                                                                            <div
+                                                                                class="modal-header"
+                                                                            >
+                                                                                <h5
+                                                                                    class="modal-title"
+                                                                                    id="exampleModalLabel"
+                                                                                >
+                                                                                    Responsible
+                                                                                    PIC
+                                                                                </h5>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    class="btn-close"
+                                                                                    data-bs-dismiss="modal"
+                                                                                    aria-label="Close"
+                                                                                ></button>
+                                                                            </div>
+                                                                            <div
+                                                                                class="modal-body"
+                                                                            >
+                                                                                <TableUserMgtComponent />
+                                                                            </div>
+                                                                            <div
+                                                                                class="modal-footer"
+                                                                            >
+                                                                                <button
+                                                                                    type="button"
+                                                                                    class="btn btn-sm btn-secondary"
+                                                                                    data-bs-dismiss="modal"
+                                                                                >
+                                                                                    Close
+                                                                                </button>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    class="btn btn-sm btn-primary"
+                                                                                >
+                                                                                    Save
+                                                                                    changes
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">
                                                             <router-link
                                                                 to="/memo-list"
-                                                                class="btn btn-primary"
-                                                                type="submit"
+                                                                class="btn btn-secondary"
                                                             >
                                                                 Save
+                                                            </router-link>
+                                                            &nbsp;
+                                                            <router-link
+                                                                to="/memo-edit-member"
+                                                                class="btn btn-primary"
+                                                            >
+                                                                Next
                                                             </router-link>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
-                                            <!-- .bio-block -->
+                                            <!-- .nk-todo-body -->
                                         </div>
-                                        <!-- .card-body -->
+                                        <!-- .nk-todo -->
                                     </div>
                                     <!-- .card -->
                                 </div>
+                                <!-- .nk-block -->
                                 <!-- .nk-block -->
                             </div>
                         </div>
@@ -478,223 +631,6 @@
             <!-- .nk-wrap -->
         </div>
         <!-- .nk-main -->
-
-        <div
-            class="offcanvas offcanvas-end offcanvas-size-lg"
-            id="notificationOffcanvas"
-        >
-            <div class="offcanvas-header border-bottom border-light">
-                <h5 class="offcanvas-title" id="offcanvasTopLabel">
-                    Recent Notification
-                </h5>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                ></button>
-            </div>
-            <div class="offcanvas-body" data-simplebar>
-                <ul class="nk-schedule">
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">2:12 PM</span>
-                                <div class="h6">Added 3 New Images</div>
-                                <ul class="d-flex flex-wrap gap g-2 py-2">
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/a.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/b.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/c.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">4:23 PM</span>
-                                <div class="h6">
-                                    Invitation for creative designs pattern
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div
-                                class="nk-schedule-content nk-schedule-content-no-border"
-                            >
-                                <span class="smaller">10:30 PM</span>
-                                <div class="h6">
-                                    Task report - uploaded weekly reports
-                                </div>
-                                <div class="list-group-dotted mt-3">
-                                    <div class="list-group-wrap">
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-pdf.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Modern Designs
-                                                        Pattern</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >1.6.mb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-doc.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Cpanel Upload
-                                                        Guidelines</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >18kb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-code.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Weekly Finance
-                                                        Reports</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >10mb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- .list-group-dotted -->
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">3:23 PM</span>
-                                <div class="h6">
-                                    Assigned you to new database design project
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div
-                                class="nk-schedule-content nk-schedule-content-no-border flex-grow-1"
-                            >
-                                <span class="smaller">5:05 PM</span>
-                                <div class="h6">
-                                    You have received a new order
-                                </div>
-                                <div class="alert alert-info mt-2" role="alert">
-                                    <div class="d-flex">
-                                        <em
-                                            class="icon icon-lg ni ni-file-code opacity-75"
-                                        ></em>
-                                        <div
-                                            class="ms-2 d-flex flex-wrap flex-grow-1 justify-content-between"
-                                        >
-                                            <div>
-                                                <h6 class="alert-heading mb-0">
-                                                    Business Template - UI/UX
-                                                    design
-                                                </h6>
-                                                <span class="smaller"
-                                                    >Shared information with
-                                                    your team to understand and
-                                                    contribute to your
-                                                    project.</span
-                                                >
-                                            </div>
-                                            <div class="d-block mt-1">
-                                                <a
-                                                    href="#"
-                                                    class="btn btn-md btn-info"
-                                                    ><em
-                                                        class="icon ni ni-download"
-                                                    ></em
-                                                    ><span>Download</span></a
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- .alert -->
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">2:45 PM</span>
-                                <div class="h6">
-                                    Project status updated successfully
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
     <!-- .nk-app-root -->
 </template>
@@ -707,12 +643,14 @@ import "../assets/js/bundle.js";
 
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
+import TableUserMgtComponent from "@/components/TableUser.vue";
 
 export default {
     name: "MemoEditView",
     components: {
         NavbarComponent,
         TopNavComponent,
+        TableUserMgtComponent,
     },
 };
 </script>

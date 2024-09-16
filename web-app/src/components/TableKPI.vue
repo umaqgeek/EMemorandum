@@ -11,8 +11,7 @@
                     <th class="tb-col">Description</th>
                     <th class="tb-col">Notes</th>
                     <th class="tb-col">Amount</th>
-                    <th class="tb-col">Start Date</th>
-                    <th class="tb-col">End Date</th>
+                    <th class="tb-col">Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,14 +23,14 @@
                                 type="text"
                                 class="form-control"
                                 id="exampleFormControlInputText1"
-                                placeholder="Input text placeholder"
+                                placeholder=""
                             />
                         </div>
                     </td>
                     <td class="tb-col">
                         <div class="form-control-wrap">
                             <textarea
-                                placeholder="Textarea Placeholder"
+                                placeholder=""
                                 class="form-control"
                                 id="exampleFormControlTextarea8"
                                 rows="3"
@@ -41,7 +40,7 @@
                     <td class="tb-col">
                         <div class="form-control-wrap">
                             <textarea
-                                placeholder="Textarea Placeholder"
+                                placeholder=""
                                 class="form-control"
                                 id="exampleFormControlTextarea8"
                                 rows="3"
@@ -54,34 +53,30 @@
                                 type="text"
                                 class="form-control"
                                 id="exampleFormControlInputText1"
-                                placeholder="Input text placeholder"
+                                placeholder=""
                             />
                         </div>
                     </td>
                     <td class="tb-col">
-                        <div class="form-control-wrap">
-                            <div class="form-control-icon end">
-                                <em class="icon ni ni-eye"></em>
+                        <div class="form-group">
+                            <div
+                                class="input-group js-datepicker"
+                                data-range="init"
+                            >
+                                <input
+                                    placeholder="dd/mm/yyyy"
+                                    type="text"
+                                    class="form-control"
+                                    name="start"
+                                />
+                                <span class="input-group-text">to</span>
+                                <input
+                                    placeholder="dd/mm/yyyy"
+                                    type="text"
+                                    class="form-control"
+                                    name="end"
+                                />
                             </div>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="exampleFormControlInputText4"
-                                placeholder="Input text placeholder"
-                            />
-                        </div>
-                    </td>
-                    <td class="tb-col">
-                        <div class="form-control-wrap">
-                            <div class="form-control-icon end">
-                                <em class="icon ni ni-eye"></em>
-                            </div>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="exampleFormControlInputText4"
-                                placeholder="Input text placeholder"
-                            />
                         </div>
                     </td>
                 </tr>
@@ -93,14 +88,14 @@
                                 type="text"
                                 class="form-control"
                                 id="exampleFormControlInputText1"
-                                placeholder="Input text placeholder"
+                                placeholder=""
                             />
                         </div>
                     </td>
                     <td class="tb-col">
                         <div class="form-control-wrap">
                             <textarea
-                                placeholder="Textarea Placeholder"
+                                placeholder=""
                                 class="form-control"
                                 id="exampleFormControlTextarea8"
                                 rows="3"
@@ -110,7 +105,7 @@
                     <td class="tb-col">
                         <div class="form-control-wrap">
                             <textarea
-                                placeholder="Textarea Placeholder"
+                                placeholder=""
                                 class="form-control"
                                 id="exampleFormControlTextarea8"
                                 rows="3"
@@ -123,34 +118,30 @@
                                 type="text"
                                 class="form-control"
                                 id="exampleFormControlInputText1"
-                                placeholder="Input text placeholder"
+                                placeholder=""
                             />
                         </div>
                     </td>
                     <td class="tb-col">
-                        <div class="form-control-wrap">
-                            <div class="form-control-icon end">
-                                <em class="icon ni ni-eye"></em>
+                        <div class="form-group">
+                            <div
+                                class="input-group js-datepicker"
+                                data-range="init"
+                            >
+                                <input
+                                    placeholder="dd/mm/yyyy"
+                                    type="text"
+                                    class="form-control"
+                                    name="start"
+                                />
+                                <span class="input-group-text">to</span>
+                                <input
+                                    placeholder="dd/mm/yyyy"
+                                    type="text"
+                                    class="form-control"
+                                    name="end"
+                                />
                             </div>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="exampleFormControlInputText4"
-                                placeholder="Input text placeholder"
-                            />
-                        </div>
-                    </td>
-                    <td class="tb-col">
-                        <div class="form-control-wrap">
-                            <div class="form-control-icon end">
-                                <em class="icon ni ni-eye"></em>
-                            </div>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="exampleFormControlInputText4"
-                                placeholder="Input text placeholder"
-                            />
                         </div>
                     </td>
                 </tr>
