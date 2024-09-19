@@ -55,7 +55,9 @@
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-note-add"></em
                                 ></span>
-                                <span class="nk-menu-text">Create</span>
+                                <span class="nk-menu-text"
+                                    >Manage Memorandum</span
+                                >
                             </router-link>
                         </li>
                         <li class="nk-menu-item">
@@ -108,12 +110,34 @@
             <!-- .nk-sidebar-content -->
         </div>
         <!-- .nk-sidebar-element -->
+        <LoadingComponent :loading="loading || error" />
     </div>
     <!-- .nki-sidebar -->
 </template>
 
 <script>
+import LoadingComponent from "@/components/Loading.vue";
+import { useStaffProfile } from "@/hooks/useAPI";
+
 export default {
     name: "NavbarComponent",
+    components: {
+        LoadingComponent,
+    },
+    setup() {
+        const { data, error, loading, refetch } = useStaffProfile();
+        return {
+            data,
+            error,
+            loading,
+            refetch,
+        };
+    },
+    computed: {
+        isActivated() {
+            return this.data?.roles?.length > 0;
+        },
+    },
+    methods: {},
 };
 </script>

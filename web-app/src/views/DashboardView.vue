@@ -649,20 +649,7 @@
                     </div>
                 </div>
                 <!-- .nk-content -->
-                <!-- include Footer -->
-                <div class="nk-footer">
-                    <div class="container-fluid">
-                        <div class="nk-footer-wrap">
-                            <div class="nk-footer-copyright">
-                                &copy; 2024 UTeM.
-                            </div>
-                            <div class="nk-footer-links">
-                                <ul class="nav nav-sm"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- .nk-footer -->
+                <FooterComponent />
             </div>
             <!-- .nk-wrap -->
         </div>
@@ -676,6 +663,7 @@
 import "../assets/js/bundle.js";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
+import FooterComponent from "@/components/Footer.vue";
 // import "../assets/js/scripts.js";
 // import "../assets/js/charts/project-manage-chart.js";
 
@@ -684,6 +672,7 @@ export default {
     components: {
         NavbarComponent,
         TopNavComponent,
+        FooterComponent,
     },
 };
 </script>

@@ -44,6 +44,7 @@ public class AuthController : ControllerBase
                 s.Email,
                 s.NoTelBimbit,
                 s.Gelaran,
+                s.JGiliran,
                 s.Roles,
             })
             .FirstOrDefault();

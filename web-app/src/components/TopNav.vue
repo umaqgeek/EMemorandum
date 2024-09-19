@@ -54,6 +54,9 @@
                                             <span class="sub-text">{{
                                                 data?.email
                                             }}</span>
+                                            <div class="lead-text">
+                                                ({{ data?.jGiliran }})
+                                            </div>
                                             <div
                                                 class="alert alert-danger mt-2"
                                                 v-if="!isActivated"
@@ -70,36 +73,6 @@
                                     </div>
                                 </div>
                                 <LoadingComponent :loading="loading || error" />
-                                <div
-                                    class="dropdown-content dropdown-content-x-lg py-3 border-bottom border-light"
-                                >
-                                    <ul class="link-list">
-                                        <li>
-                                            <router-link to="/PUU/dashboard">
-                                                <em
-                                                    class="icon ni ni-user-alt"
-                                                ></em>
-                                                <span>PUU</span>
-                                            </router-link>
-                                        </li>
-                                        <li>
-                                            <router-link to="/PTJ/dashboard">
-                                                <em
-                                                    class="icon ni ni-user-alt"
-                                                ></em>
-                                                <span>PTJ</span>
-                                            </router-link>
-                                        </li>
-                                        <li>
-                                            <router-link to="/">
-                                                <em
-                                                    class="icon ni ni-user-alt"
-                                                ></em>
-                                                <span>Admin</span>
-                                            </router-link>
-                                        </li>
-                                    </ul>
-                                </div>
                                 <div
                                     class="dropdown-content dropdown-content-x-lg py-3"
                                 >
