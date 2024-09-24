@@ -50,7 +50,7 @@
                         <li class="nk-menu-heading">
                             <h6 class="overline-title">Applications</h6>
                         </li>
-                        <li class="nk-menu-item">
+                        <!-- <li class="nk-menu-item">
                             <router-link to="/memo-list" class="nk-menu-link"
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-note-add"></em
@@ -69,38 +69,22 @@
                                 ></span>
                                 <span class="nk-menu-text">Approval</span>
                             </router-link>
-                        </li>
-                        <li class="nk-menu-item has-sub">
-                            <router-link
-                                to="/approval-list"
-                                class="nk-menu-link"
+                        </li> -->
+                        <li class="nk-menu-item">
+                            <router-link to="/user-list" class="nk-menu-link"
                                 ><span class="nk-menu-icon"
-                                    ><em class="icon ni ni-setting"></em
+                                    ><em class="icon ni ni-users"></em
                                 ></span>
-                                <span class="nk-menu-text">Settings</span>
+                                <span class="nk-menu-text">Manage User</span>
                             </router-link>
-                            <ul class="nk-menu-sub">
-                                <li class="nk-menu-item">
-                                    <router-link
-                                        to="/user-list"
-                                        class="nk-menu-link"
-                                    >
-                                        <span class="nk-menu-text"
-                                            >Manage User</span
-                                        >
-                                    </router-link>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <router-link
-                                        to="/code-list"
-                                        class="nk-menu-link"
-                                    >
-                                        <span class="nk-menu-text"
-                                            >Manage Code</span
-                                        >
-                                    </router-link>
-                                </li>
-                            </ul>
+                        </li>
+                        <li class="nk-menu-item">
+                            <router-link to="/code-list" class="nk-menu-link"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-layers"></em
+                                ></span>
+                                <span class="nk-menu-text">Manage Code</span>
+                            </router-link>
                         </li>
                     </ul>
                     <!-- .nk-menu -->
