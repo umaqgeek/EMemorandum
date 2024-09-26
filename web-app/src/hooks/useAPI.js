@@ -56,3 +56,10 @@ export function useValidateMe() {
         },
     });
 }
+
+export function useGetAllStaff() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/staff`,
+    });
+}

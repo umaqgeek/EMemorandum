@@ -15,7 +15,7 @@
                                 <div class="d-sm-none">
                                     <div class="media media-md media-circle">
                                         <img
-                                            src="../assets/images/avatar/a.jpg"
+                                            src="/assets/images/avatar/a.jpg"
                                             alt=""
                                             class="img-thumbnail"
                                         />
@@ -24,7 +24,7 @@
                                 <div class="d-none d-sm-block">
                                     <div class="media media-circle">
                                         <img
-                                            src="../assets/images/avatar/a.jpg"
+                                            src="/assets/images/avatar/a.jpg"
                                             alt=""
                                             class="img-thumbnail"
                                         />
@@ -41,7 +41,7 @@
                                             class="media media-xl media-middle media-circle"
                                         >
                                             <img
-                                                src="../assets/images/avatar/a.jpg"
+                                                src="/assets/images/avatar/a.jpg"
                                                 alt=""
                                                 class="img-thumbnail"
                                             />
@@ -49,13 +49,13 @@
                                         <div class="media-text">
                                             <div class="lead-text">
                                                 {{ getGelaran }}
-                                                {{ data?.nama }}
+                                                {{ staffprofile?.nama }}
                                             </div>
                                             <span class="sub-text">{{
-                                                data?.email
+                                                staffprofile?.email
                                             }}</span>
                                             <div class="lead-text">
-                                                ({{ data?.jGiliran }})
+                                                ({{ staffprofile?.jGiliran }})
                                             </div>
                                             <div
                                                 class="alert alert-danger mt-2"
@@ -72,7 +72,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <LoadingComponent :loading="loading || error" />
                                 <div
                                     class="dropdown-content dropdown-content-x-lg py-3"
                                 >
@@ -100,32 +99,21 @@
 </template>
 
 <script>
-import LoadingComponent from "@/components/Loading.vue";
 import { resetBearerToken } from "@/utils/mocks";
-import { useStaffProfile } from "@/hooks/useAPI";
 
 export default {
     name: "TopNavComponent",
-    components: {
-        LoadingComponent,
-    },
-    setup() {
-        const { data, error, loading, refetch } = useStaffProfile();
-        return {
-            data,
-            error,
-            loading,
-            refetch,
-        };
+    props: {
+        staffprofile: Object,
     },
     computed: {
         getGelaran() {
-            return this.data?.gelaran?.toLowerCase()?.includes("tiada")
+            return this.staffprofile?.gelaran?.toLowerCase()?.includes("tiada")
                 ? ""
-                : this.data?.gelaran;
+                : this.staffprofile?.gelaran;
         },
         isActivated() {
-            return this.data?.roles?.length > 0;
+            return this.staffprofile?.roles?.length > 0;
         },
     },
     methods: {

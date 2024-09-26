@@ -159,10 +159,6 @@
 
 <!-- JavaScript -->
 <script>
-import "../assets/js/bundle.js";
-// import "../assets/js/scripts.js";
-// import "../assets/js/data-tables/data-tables.js";
-
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import TableUserMgtComponent from "@/components/TableUser.vue";

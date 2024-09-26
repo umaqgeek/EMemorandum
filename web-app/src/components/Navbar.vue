@@ -2,9 +2,9 @@
     <div class="nk-sidebar nk-sidebar-fixed is-theme" id="sidebar">
         <div class="nk-sidebar-element nk-sidebar-head">
             <div class="nk-sidebar-brand">
-                <a href="./html/index.html" class="logo-link">
+                <a href="/" class="logo-link">
                     <div class="logo-wrap">
-                        <!-- <img
+                        <img
                             class="logo-img logo-light"
                             src="../assets/images/LogoUTeM.webp"
                             srcset="../assets/images/LogoUTeM.webp 2x"
@@ -21,7 +21,7 @@
                             src="../assets/images/LogoUTeM.webp"
                             srcset="../assets/images/LogoUTeM.webp 2x"
                             alt=""
-                        /> -->
+                        />
                     </div>
                 </a>
                 <div class="nk-compact-toggle me-n1">
@@ -50,41 +50,62 @@
                         <li class="nk-menu-heading">
                             <h6 class="overline-title">Applications</h6>
                         </li>
-                        <!-- <li class="nk-menu-item">
-                            <router-link to="/memo-list" class="nk-menu-link"
+                        <li class="nk-menu-item">
+                            <a href="/" class="nk-menu-link"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-home"></em
+                                ></span>
+                                <span class="nk-menu-text">Dashboard</span>
+                            </a>
+                        </li>
+                        <li
+                            class="nk-menu-item"
+                            v-if="roles.find((r) => r.role === 'Admin')"
+                        >
+                            <a href="/user-list" class="nk-menu-link"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-users"></em
+                                ></span>
+                                <span class="nk-menu-text">Manage User</span>
+                            </a>
+                        </li>
+                        <li
+                            class="nk-menu-item"
+                            v-if="roles.find((r) => r.role === 'Admin')"
+                        >
+                            <a href="/code-list" class="nk-menu-link"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-layers"></em
+                                ></span>
+                                <span class="nk-menu-text">Manage Code</span>
+                            </a>
+                        </li>
+                        <li
+                            class="nk-menu-item"
+                            v-if="
+                                roles.find((r) => r.role === 'PUU') ||
+                                roles.find((r) => r.role === 'PTJ')
+                            "
+                        >
+                            <a href="/memo-list" class="nk-menu-link"
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-note-add"></em
                                 ></span>
                                 <span class="nk-menu-text"
                                     >Manage Memorandum</span
                                 >
-                            </router-link>
+                            </a>
                         </li>
-                        <li class="nk-menu-item">
-                            <router-link
-                                to="/approval-list"
-                                class="nk-menu-link"
+                        <li
+                            class="nk-menu-item"
+                            v-if="roles.find((r) => r.role === 'PTJ')"
+                        >
+                            <a href="/approval-list" class="nk-menu-link"
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-check-round-cut"></em
                                 ></span>
                                 <span class="nk-menu-text">Approval</span>
-                            </router-link>
-                        </li> -->
-                        <li class="nk-menu-item">
-                            <router-link to="/user-list" class="nk-menu-link"
-                                ><span class="nk-menu-icon"
-                                    ><em class="icon ni ni-users"></em
-                                ></span>
-                                <span class="nk-menu-text">Manage User</span>
-                            </router-link>
-                        </li>
-                        <li class="nk-menu-item">
-                            <router-link to="/code-list" class="nk-menu-link"
-                                ><span class="nk-menu-icon"
-                                    ><em class="icon ni ni-layers"></em
-                                ></span>
-                                <span class="nk-menu-text">Manage Code</span>
-                            </router-link>
+                            </a>
                         </li>
                     </ul>
                     <!-- .nk-menu -->
@@ -94,32 +115,21 @@
             <!-- .nk-sidebar-content -->
         </div>
         <!-- .nk-sidebar-element -->
-        <LoadingComponent :loading="loading || error" />
     </div>
     <!-- .nki-sidebar -->
 </template>
 
 <script>
-import LoadingComponent from "@/components/Loading.vue";
-import { useStaffProfile } from "@/hooks/useAPI";
-
 export default {
     name: "NavbarComponent",
-    components: {
-        LoadingComponent,
-    },
-    setup() {
-        const { data, error, loading, refetch } = useStaffProfile();
-        return {
-            data,
-            error,
-            loading,
-            refetch,
-        };
+    props: {
+        staffprofile: Object,
     },
     computed: {
-        isActivated() {
-            return this.data?.roles?.length > 0;
+        roles() {
+            return this.staffprofile?.roles?.length > 0
+                ? this.staffprofile?.roles
+                : [];
         },
     },
     methods: {},

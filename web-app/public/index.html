@@ -5,12 +5,17 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="./favicon.ico">
     <title>E-Memorandum (UTeM)</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
   </head>
-  <body>
+  <body class="nk-body" data-sidebar-collapse="lg" data-navbar-collapse="lg">
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./assets/js/bundle.js"></script>
+    <script src="./assets/js/scripts.js"></script>
+    <script src="./assets/js/data-tables/data-tables.js"></script>
   </body>
 </html>
