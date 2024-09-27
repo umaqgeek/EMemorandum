@@ -8,7 +8,14 @@
                 <nav class="nk-header-menu nk-navbar">
                     <ul class="nk-nav"></ul>
                 </nav>
-                <div class="nk-header-tools">
+                <div class="nk-header-tools header-top-right">
+                    <div
+                        class="header-top-right-name"
+                        v-if="!errorStaffProfile"
+                    >
+                        <div>{{ getGelaran }} {{ staffprofile?.nama }}</div>
+                        <h6>Roles: [ {{ rolesStr }} ]</h6>
+                    </div>
                     <ul class="nk-quick-nav ms-2">
                         <li class="dropdown" v-if="!errorStaffProfile">
                             <a href="#" data-bs-toggle="dropdown">
@@ -128,6 +135,9 @@ export default {
         isActivated() {
             return this.staffprofile?.roles?.length > 0;
         },
+        rolesStr() {
+            return this.staffprofile?.roles?.map((r) => r.role).join(", ");
+        },
     },
     methods: {
         logout() {
@@ -136,3 +146,14 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.header-top-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-top-right-name {
+    text-align: right;
+}
+</style>
