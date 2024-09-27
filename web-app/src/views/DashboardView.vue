@@ -26,7 +26,7 @@
                                             )
                                         "
                                     >
-                                        <a href="/user-list">
+                                        <a :href="`${publicPath}user-list`">
                                             <div class="card">
                                                 <div
                                                     class="card-body dashboard-card"
@@ -50,7 +50,7 @@
                                             )
                                         "
                                     >
-                                        <a href="/code-list">
+                                        <a :href="`${publicPath}code-list`">
                                             <div class="card">
                                                 <div
                                                     class="card-body dashboard-card"
@@ -75,7 +75,7 @@
                                             roles.find((r) => r.role === 'PTJ')
                                         "
                                     >
-                                        <a href="/memo-list">
+                                        <a :href="`${publicPath}memo-list`">
                                             <div class="card">
                                                 <div
                                                     class="card-body dashboard-card"
@@ -97,7 +97,7 @@
                                             roles.find((r) => r.role === 'PTJ')
                                         "
                                     >
-                                        <a href="/approval-list">
+                                        <a :href="`${publicPath}approval-list`">
                                             <div class="card">
                                                 <div
                                                     class="card-body dashboard-card"
@@ -134,6 +134,11 @@ import { useStaffProfile } from "@/hooks/useAPI";
 
 export default {
     name: "DashboardView",
+    data() {
+        return {
+            publicPath: process.env.VUE_APP_PUBLIC_PATH,
+        };
+    },
     components: {
         LoadingComponent,
         NavbarComponent,
