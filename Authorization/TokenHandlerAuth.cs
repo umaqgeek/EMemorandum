@@ -35,6 +35,8 @@ namespace EMemorandum.Authorization
 
                     if (user != null)
                     {
+                        httpContext.Session.SetString("ssusrid", token);
+
                         List<EMO_Roles> roles = null;
 
                         if (requirement.RequiredRoles != null && requirement.RequiredRoles.Any())

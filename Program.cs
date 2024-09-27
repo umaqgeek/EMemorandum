@@ -25,6 +25,18 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 // Add services to the container.
+builder.Services.AddControllersWithViews();
+
+// Add session services
+builder.Services.AddDistributedMemoryCache(); // Required for session state
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout
+    options.Cookie.HttpOnly = true; // Ensures the session cookie is only accessible via HTTP
+    options.Cookie.IsEssential = true; // Necessary if you use GDPR features
+});
+
+// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -114,6 +126,8 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -126,6 +140,9 @@ if (builder.Environment.EnvironmentName == "Local")
     // Configure the base path
     app.UsePathBase("/emo");
 }
+
+// Use session in the application
+app.UseSession();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

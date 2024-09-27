@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { resetBearerToken } from "@/utils/mocks";
+import { resetBearerToken } from "@/utils/tokenManagement";
 
 export default {
     name: "TopNavComponent",

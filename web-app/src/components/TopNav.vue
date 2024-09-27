@@ -10,7 +10,7 @@
                 </nav>
                 <div class="nk-header-tools">
                     <ul class="nk-quick-nav ms-2">
-                        <li class="dropdown">
+                        <li class="dropdown" v-if="!errorStaffProfile">
                             <a href="#" data-bs-toggle="dropdown">
                                 <div class="d-sm-none">
                                     <div class="media media-md media-circle">
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { resetBearerToken } from "@/utils/mocks";
+import { resetBearerToken, setBearerToken } from "@/utils/tokenManagement";
 
 export default {
     name: "TopNavComponent",
@@ -109,6 +109,15 @@ export default {
     },
     props: {
         staffprofile: Object,
+        errorStaffProfile: String,
+    },
+    mounted() {
+        const newSsusrid =
+            this.$route.query.UsrLogin || this.$route.query.ssusrid;
+        if (newSsusrid) {
+            setBearerToken(newSsusrid);
+            location.href = process.env.VUE_APP_PUBLIC_PATH;
+        }
     },
     computed: {
         getGelaran() {

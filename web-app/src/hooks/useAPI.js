@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import axios from "axios";
 import { API_URL } from "@/utils/constants";
-import { getBearerToken, resetBearerToken } from "@/utils/mocks";
+import { getBearerToken, resetBearerToken } from "@/utils/tokenManagement";
 
 export function useApi(requestConfig) {
     const data = ref(null);
