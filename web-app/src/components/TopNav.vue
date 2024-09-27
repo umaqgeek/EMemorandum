@@ -15,7 +15,7 @@
                                 <div class="d-sm-none">
                                     <div class="media media-md media-circle">
                                         <img
-                                            src="/assets/images/avatar/a.jpg"
+                                            src="../assets/images/avatar/a.jpg"
                                             alt=""
                                             class="img-thumbnail"
                                         />
@@ -24,7 +24,7 @@
                                 <div class="d-none d-sm-block">
                                     <div class="media media-circle">
                                         <img
-                                            src="/assets/images/avatar/a.jpg"
+                                            src="../assets/images/avatar/a.jpg"
                                             alt=""
                                             class="img-thumbnail"
                                         />
@@ -34,14 +34,13 @@
                             <div class="dropdown-menu dropdown-menu-md">
                                 <div
                                     class="dropdown-content dropdown-content-x-lg py-3 border-bottom border-light"
-                                    v-show="!loading && !error"
                                 >
                                     <div class="media-group">
                                         <div
                                             class="media media-xl media-middle media-circle"
                                         >
                                             <img
-                                                src="/assets/images/avatar/a.jpg"
+                                                src="../assets/images/avatar/a.jpg"
                                                 alt=""
                                                 class="img-thumbnail"
                                             />
@@ -103,6 +102,11 @@ import { resetBearerToken } from "@/utils/mocks";
 
 export default {
     name: "TopNavComponent",
+    data() {
+        return {
+            publicPath: process.env.VUE_APP_PUBLIC_PATH,
+        };
+    },
     props: {
         staffprofile: Object,
     },

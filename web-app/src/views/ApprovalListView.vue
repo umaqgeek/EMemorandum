@@ -915,7 +915,7 @@
                                     <li>
                                         <div class="media media-xxl">
                                             <img
-                                                src="/assets/images/product/a.jpg"
+                                                src="../assets/images/product/a.jpg"
                                                 alt=""
                                                 class="img-thumbnail"
                                             />
@@ -924,7 +924,7 @@
                                     <li>
                                         <div class="media media-xxl">
                                             <img
-                                                src="/assets/images/product/b.jpg"
+                                                src="../assets/images/product/b.jpg"
                                                 alt=""
                                                 class="img-thumbnail"
                                             />
@@ -933,7 +933,7 @@
                                     <li>
                                         <div class="media media-xxl">
                                             <img
-                                                src="/assets/images/product/c.jpg"
+                                                src="../assets/images/product/c.jpg"
                                                 alt=""
                                                 class="img-thumbnail"
                                             />
@@ -970,7 +970,7 @@
                                             <div class="media-group">
                                                 <div class="media rounded-0">
                                                     <img
-                                                        src="/assets/images/icon/file-type-pdf.svg"
+                                                        src="../assets/images/icon/file-type-pdf.svg"
                                                         alt=""
                                                     />
                                                 </div>
@@ -990,7 +990,7 @@
                                             <div class="media-group">
                                                 <div class="media rounded-0">
                                                     <img
-                                                        src="/assets/images/icon/file-type-doc.svg"
+                                                        src="../assets/images/icon/file-type-doc.svg"
                                                         alt=""
                                                     />
                                                 </div>
@@ -1010,7 +1010,7 @@
                                             <div class="media-group">
                                                 <div class="media rounded-0">
                                                     <img
-                                                        src="/assets/images/icon/file-type-code.svg"
+                                                        src="../assets/images/icon/file-type-code.svg"
                                                         alt=""
                                                     />
                                                 </div>

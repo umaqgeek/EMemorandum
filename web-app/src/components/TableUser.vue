@@ -28,7 +28,7 @@
                                 class="media media-md media-middle media-circle"
                             >
                                 <img
-                                    src="/assets/images/avatar/a.jpg"
+                                    src="../assets/images/avatar/a.jpg"
                                     alt="user"
                                 />
                             </div>
