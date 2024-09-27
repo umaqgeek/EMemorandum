@@ -87,27 +87,11 @@
                                     >
                                         <li>
                                             <a
-                                                href="./html/user-manage/user-edit.html"
+                                                :href="`${publicPath}user-edit?s=${user.noStaf}`"
                                                 ><em
                                                     class="icon ni ni-edit"
                                                 ></em
-                                                ><span>Edit</span></a
-                                            >
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="./html/user-manage/user-edit.html"
-                                                ><em
-                                                    class="icon ni ni-trash"
-                                                ></em
-                                                ><span>Delete</span></a
-                                            >
-                                        </li>
-                                        <li>
-                                            <a
-                                                href="./html/user-manage/user-profile.html"
-                                                ><em class="icon ni ni-eye"></em
-                                                ><span>View Details</span></a
+                                                ><span>Update User</span></a
                                             >
                                         </li>
                                     </ul>
@@ -127,6 +111,11 @@ export default {
     name: "TableUserMgtComponent",
     props: {
         users: String,
+    },
+    data() {
+        return {
+            publicPath: process.env.VUE_APP_PUBLIC_PATH,
+        };
     },
 };
 </script>
