@@ -1,11 +1,17 @@
 <template>
     <div class="nk-app-root">
         <div class="nk-main">
-            <NavbarComponent :staffprofile="data" />
+            <NavbarComponent :staffprofile="dataStaffprofile" />
             <div class="nk-wrap">
-                <TopNavComponent :staffprofile="data" />
-                <LoadingComponent :loading="loading || error" />
-                <div class="nk-content">
+                <TopNavComponent
+                    :staffprofile="dataStaffprofile"
+                    :errorStaffProfile="errorStaffProfile"
+                />
+                <LoadingComponent :loading="loading" />
+                <div class="nk-content" v-if="errorStaffProfile">
+                    <InfoNotLoggedInVue />
+                </div>
+                <div class="nk-content" v-if="!errorStaffProfile">
                     <div class="container-fluid">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
@@ -130,6 +136,7 @@ import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
+import InfoNotLoggedInVue from "@/components/InfoNotLoggedIn.vue";
 import { useStaffProfile } from "@/hooks/useAPI";
 
 export default {
@@ -144,19 +151,27 @@ export default {
         NavbarComponent,
         TopNavComponent,
         FooterComponent,
+        InfoNotLoggedInVue,
     },
     setup() {
-        const { data, error, loading, refetch } = useStaffProfile();
+        const {
+            data: dataStaffprofile,
+            error: errorStaffProfile,
+            loading: loadingStaffProfile,
+            refetch,
+        } = useStaffProfile();
         return {
-            data,
-            error,
-            loading,
+            dataStaffprofile,
+            errorStaffProfile,
+            loading: loadingStaffProfile,
             refetch,
         };
     },
     computed: {
         roles() {
-            return this.data?.roles?.length > 0 ? this.data?.roles : [];
+            return this.dataStaffprofile?.roles?.length > 0
+                ? this.dataStaffprofile?.roles
+                : [];
         },
     },
     methods: {},

@@ -48,7 +48,7 @@
                 <div class="nk-sidebar-menu" data-simplebar>
                     <ul class="nk-menu">
                         <li class="nk-menu-heading">
-                            <h6 class="overline-title">Applications</h6>
+                            <h6 class="overline-title">E-Memorandum (UTeM)</h6>
                         </li>
                         <li class="nk-menu-item">
                             <a :href="`${publicPath}`" class="nk-menu-link"
