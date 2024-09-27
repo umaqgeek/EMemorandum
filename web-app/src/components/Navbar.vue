@@ -2,7 +2,7 @@
     <div class="nk-sidebar nk-sidebar-fixed is-theme" id="sidebar">
         <div class="nk-sidebar-element nk-sidebar-head">
             <div class="nk-sidebar-brand">
-                <a href="/" class="logo-link">
+                <a :href="`${publicPath}`" class="logo-link">
                     <div class="logo-wrap">
                         <img
                             class="logo-img logo-light"
@@ -51,7 +51,7 @@
                             <h6 class="overline-title">Applications</h6>
                         </li>
                         <li class="nk-menu-item">
-                            <a href="/" class="nk-menu-link"
+                            <a :href="`${publicPath}`" class="nk-menu-link"
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-home"></em
                                 ></span>
@@ -62,7 +62,9 @@
                             class="nk-menu-item"
                             v-if="roles.find((r) => r.role === 'Admin')"
                         >
-                            <a href="/user-list" class="nk-menu-link"
+                            <a
+                                :href="`${publicPath}user-list`"
+                                class="nk-menu-link"
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-users"></em
                                 ></span>
@@ -73,7 +75,9 @@
                             class="nk-menu-item"
                             v-if="roles.find((r) => r.role === 'Admin')"
                         >
-                            <a href="/code-list" class="nk-menu-link"
+                            <a
+                                :href="`${publicPath}code-list`"
+                                class="nk-menu-link"
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-layers"></em
                                 ></span>
@@ -87,7 +91,9 @@
                                 roles.find((r) => r.role === 'PTJ')
                             "
                         >
-                            <a href="/memo-list" class="nk-menu-link"
+                            <a
+                                :href="`${publicPath}memo-list`"
+                                class="nk-menu-link"
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-note-add"></em
                                 ></span>
@@ -100,7 +106,9 @@
                             class="nk-menu-item"
                             v-if="roles.find((r) => r.role === 'PTJ')"
                         >
-                            <a href="/approval-list" class="nk-menu-link"
+                            <a
+                                :href="`${publicPath}approval-list`"
+                                class="nk-menu-link"
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-check-round-cut"></em
                                 ></span>
@@ -122,6 +130,11 @@
 <script>
 export default {
     name: "NavbarComponent",
+    data() {
+        return {
+            publicPath: process.env.VUE_APP_PUBLIC_PATH,
+        };
+    },
     props: {
         staffprofile: Object,
     },
