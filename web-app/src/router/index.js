@@ -26,7 +26,7 @@ import CodeListView from "@/views/CodeListView.vue";
 // import adminApprovalDetailsView from "@/views/ApprovalDetailsView.vue";
 // PUU
 // import PUULoginView from "@/views/PUU/LoginView.vue";
-import PUUDashboardView from "@/views/DashboardViewPUU.vue";
+// import PUUDashboardView from "@/views/DashboardViewPUU.vue";
 // import PUUMemoListView from "@/views/PUU/MemoListView.vue";
 // import PUUMemoAddView from "@/views/PUU/MemoAddView.vue";
 // import PUUMemoAddMemberView from "@/views/PUU/MemoAddMemberView.vue";
@@ -36,7 +36,7 @@ import PUUDashboardView from "@/views/DashboardViewPUU.vue";
 // import PUUApprovalDetailsView from "@/views/PUU/ApprovalDetailsView.vue";
 // PTJ
 // import PTJLoginView from "@/views/PTJ/LoginView.vue";
-import PTJDashboardView from "@/views/DashboardViewPTJ.vue";
+// import PTJDashboardView from "@/views/DashboardViewPTJ.vue";
 // import PTJMemoListView from "@/views/PTJ/MemoListView.vue";
 // import PTJMemoAddView from "@/views/PTJ/MemoAddView.vue";
 // import PTJMemoAddMemberView from "@/views/PTJ/MemoAddMemberView.vue";
@@ -44,6 +44,8 @@ import PTJDashboardView from "@/views/DashboardViewPTJ.vue";
 // import PTJMemoDetailsView from "@/views/PTJ/MemoDetailsView.vue";
 // import PTJApprovalListView from "@/views/PTJ/ApprovalListView.vue";
 // import PTJApprovalDetailsView from "@/views/PTJ/ApprovalDetailsView.vue";
+// Not Found placeholder view page
+import NotFoundView from "@/views/NotFoundView.vue";
 
 const routes = [
     {
@@ -149,10 +151,10 @@ const routes = [
     //     path: "/login",
     //     component: PUULoginView,
     // },
-    {
-        path: "/PUU/dashboard",
-        component: PUUDashboardView,
-    },
+    // {
+    //     path: "/PUU/dashboard",
+    //     component: PUUDashboardView,
+    // },
     // {
     //     path: "/memo-list",
     //     component: PUUMemoListView,
@@ -186,10 +188,10 @@ const routes = [
     //     path: "/PTJ/login",
     //     component: PTJLoginView,
     // },
-    {
-        path: "/PTJ/dashboard",
-        component: PTJDashboardView,
-    },
+    // {
+    //     path: "/PTJ/dashboard",
+    //     component: PTJDashboardView,
+    // },
     // {
     //     path: "/PTJ/memo-list",
     //     component: PTJMemoListView,
@@ -218,6 +220,13 @@ const routes = [
     //     path: "/PTJ/approval-detail",
     //     component: PTJApprovalDetailsView,
     // },
+    // Catch-all route for undefined routes
+    {
+        path: "/:pathMatch(.*)*",
+        component: NotFoundView, // Your custom 404 page component
+        // redirect to a root view page
+        redirect: process.env.VUE_APP_PUBLIC_PATH,
+    },
 ];
 
 const router = createRouter({
