@@ -70,3 +70,13 @@ export function useGetOneStaff(noStaf) {
         url: `${API_URL}/staff/${noStaf}`,
     });
 }
+
+export function useAssignStaffRoles(noStaf, roles = []) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/staff/assign-role/${noStaf}`,
+        data: JSON.stringify({
+            roles,
+        }),
+    });
+}

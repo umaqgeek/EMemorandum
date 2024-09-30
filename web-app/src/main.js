@@ -7,6 +7,8 @@ import {
     faFile,
     faCheckToSlot,
 } from "@fortawesome/free-solid-svg-icons";
+import VueToast from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 import App from "./App.vue";
 import router from "./router";
@@ -22,5 +24,6 @@ library.add(faCheckToSlot);
 createApp(App)
     .use(store)
     .use(router)
+    .use(VueToast)
     .component("font-awesome-icon", FontAwesomeIcon)
     .mount("#app");

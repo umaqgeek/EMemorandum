@@ -8,7 +8,9 @@
                     :errorStaffProfile="errorStaffProfile"
                 />
                 <LoadingComponent
-                    :loading="loadingStaffProfile || loadingOneStaff"
+                    :loading="
+                        loadingStaffProfile || loadingOneStaff || loadingUpdate
+                    "
                 />
                 <div class="nk-content" v-if="errorStaffProfile">
                     <InfoNotLoggedInVue />
@@ -217,9 +219,6 @@
                                                                     v-model="
                                                                         isActive
                                                                     "
-                                                                    @change="
-                                                                        handleChangeStatus
-                                                                    "
                                                                     id="flexSwitchDefault"
                                                                 />
                                                                 <label
@@ -243,7 +242,9 @@
                                                                     <input
                                                                         class="form-check-input"
                                                                         type="checkbox"
-                                                                        value=""
+                                                                        v-model="
+                                                                            isEachRoles.PUU
+                                                                        "
                                                                         id="flexCheckPUU"
                                                                     />
                                                                     <label
@@ -259,7 +260,9 @@
                                                                     <input
                                                                         class="form-check-input"
                                                                         type="checkbox"
-                                                                        value=""
+                                                                        v-model="
+                                                                            isEachRoles.PTJ
+                                                                        "
                                                                         id="flexCheckPTJ"
                                                                     />
                                                                     <label
@@ -275,7 +278,9 @@
                                                                     <input
                                                                         class="form-check-input"
                                                                         type="checkbox"
-                                                                        value=""
+                                                                        v-model="
+                                                                            isEachRoles.Admin
+                                                                        "
                                                                         id="flexCheckAdmin"
                                                                     />
                                                                     <label
@@ -289,7 +294,10 @@
                                                         </div>
                                                         <div class="col-lg-12">
                                                             <a
-                                                                href="/user-list"
+                                                                href="#"
+                                                                v-on:click="
+                                                                    updateRoles
+                                                                "
                                                                 class="btn btn-primary"
                                                             >
                                                                 Update Profile
@@ -304,259 +312,43 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                            <!-- .bio-block -->
                                         </div>
-                                        <!-- .card-body -->
                                     </div>
-                                    <!-- .card -->
                                 </div>
-                                <!-- .nk-block -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- .nk-content -->
-                <!-- include Footer -->
                 <FooterComponent />
-                <!-- .nk-footer -->
-            </div>
-            <!-- .nk-wrap -->
-        </div>
-        <!-- .nk-main -->
-
-        <div
-            class="offcanvas offcanvas-end offcanvas-size-lg"
-            id="notificationOffcanvas"
-        >
-            <div class="offcanvas-header border-bottom border-light">
-                <h5 class="offcanvas-title" id="offcanvasTopLabel">
-                    Recent Notification
-                </h5>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                ></button>
-            </div>
-            <div class="offcanvas-body" data-simplebar>
-                <ul class="nk-schedule">
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">2:12 PM</span>
-                                <div class="h6">Added 3 New Images</div>
-                                <ul class="d-flex flex-wrap gap g-2 py-2">
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/a.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/b.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/c.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">4:23 PM</span>
-                                <div class="h6">
-                                    Invitation for creative designs pattern
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div
-                                class="nk-schedule-content nk-schedule-content-no-border"
-                            >
-                                <span class="smaller">10:30 PM</span>
-                                <div class="h6">
-                                    Task report - uploaded weekly reports
-                                </div>
-                                <div class="list-group-dotted mt-3">
-                                    <div class="list-group-wrap">
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-pdf.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Modern Designs
-                                                        Pattern</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >1.6.mb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-doc.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Cpanel Upload
-                                                        Guidelines</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >18kb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-code.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Weekly Finance
-                                                        Reports</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >10mb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- .list-group-dotted -->
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">3:23 PM</span>
-                                <div class="h6">
-                                    Assigned you to new database design project
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div
-                                class="nk-schedule-content nk-schedule-content-no-border flex-grow-1"
-                            >
-                                <span class="smaller">5:05 PM</span>
-                                <div class="h6">
-                                    You have received a new order
-                                </div>
-                                <div class="alert alert-info mt-2" role="alert">
-                                    <div class="d-flex">
-                                        <em
-                                            class="icon icon-lg ni ni-file-code opacity-75"
-                                        ></em>
-                                        <div
-                                            class="ms-2 d-flex flex-wrap flex-grow-1 justify-content-between"
-                                        >
-                                            <div>
-                                                <h6 class="alert-heading mb-0">
-                                                    Business Template - UI/UX
-                                                    design
-                                                </h6>
-                                                <span class="smaller"
-                                                    >Shared information with
-                                                    your team to understand and
-                                                    contribute to your
-                                                    project.</span
-                                                >
-                                            </div>
-                                            <div class="d-block mt-1">
-                                                <a
-                                                    href="#"
-                                                    class="btn btn-md btn-info"
-                                                    ><em
-                                                        class="icon ni ni-download"
-                                                    ></em
-                                                    ><span>Download</span></a
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- .alert -->
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">2:45 PM</span>
-                                <div class="h6">
-                                    Project status updated successfully
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
             </div>
         </div>
         <ValidateMeComponent />
     </div>
-    <!-- .nk-app-root -->
 </template>
 
 <!-- JavaScript -->
 <script>
+import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
+
 import ValidateMeComponent from "@/components/ValidateMe.vue";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
-import { useStaffProfile, useGetOneStaff } from "@/hooks/useAPI";
+import {
+    useStaffProfile,
+    useGetOneStaff,
+    useAssignStaffRoles,
+} from "@/hooks/useAPI";
 
 export default {
     name: "MemoAddView",
+    data() {
+        return {
+            loadingUpdate: false,
+        };
+    },
     components: {
         ValidateMeComponent,
         NavbarComponent,
@@ -583,6 +375,41 @@ export default {
         const roles =
             dataOneStaff?.roles?.length > 0 ? dataOneStaff?.roles : [];
 
+        const isActive = ref(false); // Define reactive state for the checkbox
+        const isEachRoles = ref({
+            Admin: false,
+            PUU: false,
+            PTJ: false,
+        });
+        watch(
+            () => dataOneStaff.value, // Watch the `dataOneStaff` reactive property
+            (dataOneStaffUpdated) => {
+                if (
+                    dataOneStaffUpdated &&
+                    dataOneStaffUpdated?.roles?.length > 0
+                ) {
+                    isActive.value = dataOneStaffUpdated?.roles?.length > 0; // Set `isActive` based on API data
+                    isEachRoles.value = {
+                        Admin: dataOneStaffUpdated?.roles?.find(
+                            (r) => r.role === "Admin"
+                        )
+                            ? true
+                            : false,
+                        PUU: dataOneStaffUpdated?.roles?.find(
+                            (r) => r.role === "PUU"
+                        )
+                            ? true
+                            : false,
+                        PTJ: dataOneStaffUpdated?.roles?.find(
+                            (r) => r.role === "PTJ"
+                        )
+                            ? true
+                            : false,
+                    };
+                }
+            }
+        );
+
         return {
             dataStaffProfile,
             dataOneStaff,
@@ -594,19 +421,15 @@ export default {
             refetchOneStaff,
             noStaf,
             roles,
+            isActive,
+            isEachRoles,
         };
     },
     computed: {
-        isActive() {
-            return this.dataOneStaff?.roles?.length > 0;
-        },
         getGelaran() {
             return this.dataOneStaff?.gelaran?.toLowerCase()?.includes("tiada")
                 ? ""
                 : this.dataOneStaff?.gelaran;
-        },
-        isActivated() {
-            return this.dataOneStaff?.roles?.length > 0;
         },
         rolesStr() {
             return this.dataOneStaff?.roles?.length > 0
@@ -624,6 +447,43 @@ export default {
         },
         nPejabat() {
             return this.dataOneStaff?.nPejabat;
+        },
+    },
+    methods: {
+        updateRoles() {
+            this.loadingUpdate = true;
+            let newRoles = [];
+            if (this.isEachRoles.Admin) {
+                newRoles.push("Admin");
+            }
+            if (this.isEachRoles.PUU) {
+                newRoles.push("PUU");
+            }
+            if (this.isEachRoles.PTJ) {
+                newRoles.push("PTJ");
+            }
+            if (this.isActive) {
+                newRoles.push("Staff");
+            } else {
+                newRoles = [];
+            }
+            const { loading } = useAssignStaffRoles(this.noStaf, newRoles);
+            this.loadingUpdate = loading.value;
+
+            var self = this;
+            watch(
+                () => loading.value, // Watch the `data` reactive property
+                (newLoading) => {
+                    self.loadingUpdate = newLoading;
+                    if (newLoading == false) {
+                        this.$toast.open({
+                            message: "Staff profile updated.",
+                            type: "success",
+                            position: "top-right",
+                        });
+                    }
+                }
+            );
         },
     },
 };
