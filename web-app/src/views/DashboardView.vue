@@ -52,6 +52,30 @@
                                         class="col-md-3"
                                         v-if="
                                             roles.find(
+                                                (r) => r.role === 'Staff'
+                                            )
+                                        "
+                                    >
+                                        <a :href="`${publicPath}memo-list`">
+                                            <div class="card">
+                                                <div
+                                                    class="card-body dashboard-card"
+                                                >
+                                                    <h4 class="mb-3">
+                                                        Manage Memorandum
+                                                    </h4>
+                                                    <font-awesome-icon
+                                                        icon="fa-solid fa-file"
+                                                        size="2x"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div
+                                        class="col-md-3"
+                                        v-if="
+                                            roles.find(
                                                 (r) => r.role === 'Admin'
                                             )
                                         "
@@ -66,31 +90,6 @@
                                                     </h4>
                                                     <font-awesome-icon
                                                         icon="fa-solid fa-gear"
-                                                        size="2x"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div
-                                        class="col-md-3"
-                                        v-if="
-                                            roles.find(
-                                                (r) => r.role === 'PUU'
-                                            ) ||
-                                            roles.find((r) => r.role === 'PTJ')
-                                        "
-                                    >
-                                        <a :href="`${publicPath}memo-list`">
-                                            <div class="card">
-                                                <div
-                                                    class="card-body dashboard-card"
-                                                >
-                                                    <h4 class="mb-3">
-                                                        Manage Memorandum
-                                                    </h4>
-                                                    <font-awesome-icon
-                                                        icon="fa-solid fa-file"
                                                         size="2x"
                                                     />
                                                 </div>

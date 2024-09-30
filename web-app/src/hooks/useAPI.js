@@ -80,3 +80,17 @@ export function useAssignStaffRoles(noStaf, roles = []) {
         }),
     });
 }
+
+export function useGetAllMOU() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/mou/all`,
+    });
+}
+
+export function useGetMyMOU() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/mou/mine`,
+    });
+}

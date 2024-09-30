@@ -45,7 +45,9 @@
                                     }}
                                     {{ user.nama }}</a
                                 >
-                                <span class="small text">{{ user.email }}</span>
+                                <span class="small text"
+                                    >{{ user.noStaf }} | {{ user.email }}</span
+                                >
                             </div>
                         </div>
                     </td>

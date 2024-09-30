@@ -46,9 +46,10 @@
                                                                 dataOneStaff?.nama
                                                             }}
                                                         </h3>
-                                                        <span class="small">{{
-                                                            rolesStr
-                                                        }}</span>
+                                                        <span class="small"
+                                                            >{{ noStaf }} |
+                                                            {{ rolesStr }}</span
+                                                        >
                                                     </div>
                                                 </div>
                                             </div>

@@ -73,23 +73,7 @@
                         </li>
                         <li
                             class="nk-menu-item"
-                            v-if="roles.find((r) => r.role === 'Admin')"
-                        >
-                            <a
-                                :href="`${publicPath}code-list`"
-                                class="nk-menu-link"
-                                ><span class="nk-menu-icon"
-                                    ><em class="icon ni ni-layers"></em
-                                ></span>
-                                <span class="nk-menu-text">Manage Code</span>
-                            </a>
-                        </li>
-                        <li
-                            class="nk-menu-item"
-                            v-if="
-                                roles.find((r) => r.role === 'PUU') ||
-                                roles.find((r) => r.role === 'PTJ')
-                            "
+                            v-if="roles.find((r) => r.role === 'Staff')"
                         >
                             <a
                                 :href="`${publicPath}memo-list`"
@@ -100,6 +84,19 @@
                                 <span class="nk-menu-text"
                                     >Manage Memorandum</span
                                 >
+                            </a>
+                        </li>
+                        <li
+                            class="nk-menu-item"
+                            v-if="roles.find((r) => r.role === 'Admin')"
+                        >
+                            <a
+                                :href="`${publicPath}code-list`"
+                                class="nk-menu-link"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-layers"></em
+                                ></span>
+                                <span class="nk-menu-text">Manage Code</span>
                             </a>
                         </li>
                         <li
