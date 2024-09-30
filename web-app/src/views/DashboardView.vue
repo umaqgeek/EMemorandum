@@ -52,9 +52,8 @@
                                         class="col-md-3"
                                         v-if="
                                             roles.find(
-                                                (r) => r.role === 'PUU'
-                                            ) ||
-                                            roles.find((r) => r.role === 'PTJ')
+                                                (r) => r.role === 'Staff'
+                                            )
                                         "
                                     >
                                         <a :href="`${publicPath}memo-list`">
