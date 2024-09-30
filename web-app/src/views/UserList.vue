@@ -3,9 +3,15 @@
         <div class="nk-main">
             <NavbarComponent :staffprofile="dataStaffProfile" />
             <div class="nk-wrap">
-                <TopNavComponent :staffprofile="dataStaffProfile" />
-                <LoadingComponent :loading="loading || error" />
-                <div class="nk-content">
+                <TopNavComponent
+                    :staffprofile="dataStaffProfile"
+                    :errorStaffProfile="errorStaffProfile"
+                />
+                <LoadingComponent :loading="loading" />
+                <div class="nk-content" v-if="errorStaffProfile">
+                    <InfoNotLoggedInVue />
+                </div>
+                <div class="nk-content" v-if="!errorStaffProfile">
                     <div class="container">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
@@ -69,8 +75,8 @@ export default {
         return {
             dataAllStaff,
             dataStaffProfile,
-            error: errorAllStaff && errorStaffProfile,
-            loading: loadingAllStaff && loadingStaffProfile,
+            error: errorAllStaff || errorStaffProfile,
+            loading: loadingAllStaff || loadingStaffProfile,
             refetchAllStaff,
             refetchStaffProfile,
         };

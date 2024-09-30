@@ -63,3 +63,10 @@ export function useGetAllStaff() {
         url: `${API_URL}/staff`,
     });
 }
+
+export function useGetOneStaff(noStaf) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/staff/${noStaf}`,
+    });
+}
