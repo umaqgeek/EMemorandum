@@ -14,7 +14,7 @@
                         v-if="!errorStaffProfile"
                     >
                         <div>{{ getGelaran }} {{ staffprofile?.nama }}</div>
-                        <h6>Roles: [ {{ rolesStr }} ]</h6>
+                        <h6>{{ rolesStr }}</h6>
                     </div>
                     <ul class="nk-quick-nav ms-2">
                         <li class="dropdown" v-if="!errorStaffProfile">
@@ -105,6 +105,8 @@
 </template>
 
 <script>
+import { onMounted } from "vue";
+
 import { resetBearerToken, setBearerToken } from "@/utils/tokenManagement";
 
 export default {
@@ -118,13 +120,19 @@ export default {
         staffprofile: Object,
         errorStaffProfile: String,
     },
-    mounted() {
-        const newSsusrid =
-            this.$route.query.UsrLogin || this.$route.query.ssusrid;
-        if (newSsusrid) {
-            setBearerToken(newSsusrid);
-            location.href = process.env.VUE_APP_PUBLIC_PATH;
-        }
+    setup() {
+        onMounted(() => {
+            const params = new URLSearchParams(window.location.search);
+            const newSsusrid =
+                params.get("UsrLogin") ||
+                params.get("usrLogin") ||
+                params.get("ssusrid");
+
+            if (newSsusrid) {
+                setBearerToken(newSsusrid);
+                location.href = process.env.VUE_APP_PUBLIC_PATH;
+            }
+        });
     },
     computed: {
         getGelaran() {
@@ -136,7 +144,7 @@ export default {
             return this.staffprofile?.roles?.length > 0;
         },
         rolesStr() {
-            return this.staffprofile?.roles?.map((r) => r.role).join(", ");
+            return this.staffprofile?.roles?.map((r) => r.role).join(" | ");
         },
     },
     methods: {

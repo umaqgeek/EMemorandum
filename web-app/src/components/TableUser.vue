@@ -33,7 +33,9 @@
                                 />
                             </div>
                             <div class="media-text">
-                                <router-link to="/user-edit" class="title"
+                                <a
+                                    :href="`${publicPath}user-edit?s=${user.noStaf}`"
+                                    class="title"
                                     >{{
                                         user.gelaran
                                             ?.toLowerCase()
@@ -41,7 +43,7 @@
                                             ? ""
                                             : user.gelaran
                                     }}
-                                    {{ user.nama }}</router-link
+                                    {{ user.nama }}</a
                                 >
                                 <span class="small text">{{ user.email }}</span>
                             </div>

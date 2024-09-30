@@ -1,10 +1,10 @@
 <template>
     <div class="nk-app-root">
         <div class="nk-main">
-            <NavbarComponent :staffprofile="dataStaffprofile" />
+            <NavbarComponent :staffprofile="dataStaffProfile" />
             <div class="nk-wrap">
                 <TopNavComponent
-                    :staffprofile="dataStaffprofile"
+                    :staffprofile="dataStaffProfile"
                     :errorStaffProfile="errorStaffProfile"
                 />
                 <LoadingComponent :loading="loading" />
@@ -155,13 +155,13 @@ export default {
     },
     setup() {
         const {
-            data: dataStaffprofile,
+            data: dataStaffProfile,
             error: errorStaffProfile,
             loading: loadingStaffProfile,
             refetch,
         } = useStaffProfile();
         return {
-            dataStaffprofile,
+            dataStaffProfile,
             errorStaffProfile,
             loading: loadingStaffProfile,
             refetch,
@@ -169,8 +169,8 @@ export default {
     },
     computed: {
         roles() {
-            return this.dataStaffprofile?.roles?.length > 0
-                ? this.dataStaffprofile?.roles
+            return this.dataStaffProfile?.roles?.length > 0
+                ? this.dataStaffProfile?.roles
                 : [];
         },
     },
