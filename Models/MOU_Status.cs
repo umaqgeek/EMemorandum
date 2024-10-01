@@ -10,4 +10,7 @@ public class MOU_Status
 
     // Navigation property for the memorandums
     public ICollection<MOU01_Memorandum>? Memorandums { get; set; }
+
+    // Navigation property for the statuses
+    public ICollection<MOU02_Status>? Statuses { get; set; }
 }

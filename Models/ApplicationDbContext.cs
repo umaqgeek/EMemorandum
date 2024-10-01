@@ -62,6 +62,21 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(c => c.Status)
             .HasPrincipalKey(p => p.Kod);
 
+        modelBuilder.Entity<MOU02_Status>()
+            .HasOne(m => m.MOU01_Memorandum)
+            .WithMany(s => s.MOU02_Statuses)
+            .HasForeignKey(m => m.NoMemo);
+
+        modelBuilder.Entity<MOU01_Memorandum>()
+            .HasOne(m => m.MOU_Status)
+            .WithMany(s => s.Memorandums)
+            .HasForeignKey(m => m.Status);
+
+        modelBuilder.Entity<MOU02_Status>()
+            .HasOne(m => m.MOU_Status)
+            .WithMany(s => s.Statuses)
+            .HasForeignKey(m => m.Status);
+
         base.OnModelCreating(modelBuilder);
     }
 

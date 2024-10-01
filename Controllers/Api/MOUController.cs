@@ -34,6 +34,14 @@ public class MOUController : ControllerBase
         var staffId = GetStaffID();
 
         var memorandums = _context.MOU01_Memorandum
+            .Include(_entity => _entity.MOU02_Statuses)
+                .ThenInclude(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.PUU_ScopeMemo)
+            .Include(_entity => _entity.PUU_SubPTj)
+            .Include(_entity => _entity.PUU_JenisMemo)
+            .Include(_entity => _entity.PUU_KategoriMemo)
+            .Include(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU_Status)
             .Select(_entity => GetTransformedMOU(_entity, staffId))
             .ToList();
 
@@ -47,6 +55,14 @@ public class MOUController : ControllerBase
 
         var memorandums = _context.MOU01_Memorandum
             .Where(m => m.MS01_NoStaf == staffId)
+            .Include(_entity => _entity.MOU02_Statuses)
+                .ThenInclude(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.PUU_ScopeMemo)
+            .Include(_entity => _entity.PUU_SubPTj)
+            .Include(_entity => _entity.PUU_JenisMemo)
+            .Include(_entity => _entity.PUU_KategoriMemo)
+            .Include(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU_Status)
             .Select(_entity => GetTransformedMOU(_entity, staffId))
             .ToList();
 
@@ -106,6 +122,14 @@ public class MOUController : ControllerBase
 
         var _entity = _context.MOU01_Memorandum
             .Where(m => m.NoMemo == noMemo)
+            .Include(_entity => _entity.MOU02_Statuses)
+                .ThenInclude(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.PUU_ScopeMemo)
+            .Include(_entity => _entity.PUU_SubPTj)
+            .Include(_entity => _entity.PUU_JenisMemo)
+            .Include(_entity => _entity.PUU_KategoriMemo)
+            .Include(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU_Status)
             .FirstOrDefault();
 
         if (_entity == null)
@@ -176,16 +200,43 @@ public class MOUController : ControllerBase
             NoSiri = _entity.NoSiri,
             Tahun = _entity.Tahun,
             KodPTJ = _entity.KodPTJ,
+            PTJNama = _entity.PUU_SubPTj.Nama,
             KodScope = _entity.KodScope,
+            ScopeButiran = _entity.PUU_ScopeMemo.Butiran,
             KodJenis = _entity.KodJenis,
+            Jenis = _entity.PUU_JenisMemo.Butiran,
             KodKategori = _entity.KodKategori,
+            Kategori = _entity.PUU_KategoriMemo.Butiran,
             KodPTJSub = _entity.KodPTJSub,
             TarikhMula = _entity.TarikhMula,
+            TarikhMulaDate = GetDisplayDate(_entity.TarikhMula),
             TarikhTamat = _entity.TarikhTamat,
+            TarikhTamatDate = GetDisplayDate(_entity.TarikhTamat),
             TajukProjek = _entity.TajukProjek,
             IsPIC = _entity.MS01_NoStaf == staffId,
+            PIC = _entity.EMO_Staf.Nama,
+            noStafPIC = _entity.EMO_Staf.NoStaf,
             Nilai = _entity.Nilai,
+            Status = new {
+                _entity.MOU_Status.Kod,
+                _entity.MOU_Status.Status,
+            },
+            Statuses = _entity.MOU02_Statuses.Select(mou02 => new {
+                Status_ID = mou02.Status_ID,
+                NoMemo = mou02.NoMemo,
+                Tarikh = mou02.Tarikh,
+                StatusInner = new {
+                    mou02.MOU_Status.Kod,
+                    mou02.MOU_Status.Status
+                },
+            }).ToList(),
         });
+    }
+
+    private static string GetDisplayDate(DateTime? nullableDateTime)
+    {
+        DateTime dateTime = nullableDateTime ?? DateTime.MinValue;
+        return dateTime.ToString("dd/MM/yyyy");
     }
 }
 

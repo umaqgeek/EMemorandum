@@ -123,17 +123,17 @@
                                                 <tr
                                                     v-for="(
                                                         mou, mouIndex
-                                                    ) in mouData"
+                                                    ) in mouData?.value"
                                                     v-bind:key="mouIndex"
                                                 >
                                                     <td class="tb-col">
                                                         {{ mouIndex + 1 }}.
                                                     </td>
                                                     <td class="tb-col">
-                                                        {{ mou.noMemo }}
+                                                        {{ mou?.noMemo }}
                                                     </td>
                                                     <td class="tb-col">
-                                                        {{ mou.kodScope }}
+                                                        {{ mou?.scopeButiran }}
                                                     </td>
                                                     <td class="tb-col">
                                                         <div
@@ -145,7 +145,9 @@
                                                                 <a
                                                                     href="#"
                                                                     class="title"
-                                                                    >N/A</a
+                                                                    >{{
+                                                                        mou?.pic
+                                                                    }}</a
                                                                 >
                                                             </div>
                                                         </div>
@@ -153,23 +155,32 @@
                                                     <td
                                                         class="tb-col tb-col-xxl"
                                                     >
-                                                        25/04/2024
+                                                        {{
+                                                            mou?.tarikhMulaDate
+                                                        }}
                                                     </td>
                                                     <td
                                                         class="tb-col tb-col-xxl"
                                                     >
-                                                        25/04/2026
+                                                        {{
+                                                            mou?.tarikhTamatDate
+                                                        }}
                                                     </td>
                                                     <td
                                                         class="tb-col tb-col-xxl"
                                                     >
-                                                        0.00
+                                                        {{
+                                                            mou?.nilai?.toFixed(
+                                                                2
+                                                            )
+                                                        }}
                                                     </td>
                                                     <td class="tb-col">
-                                                        <span
-                                                            class="badge text-bg-warning-soft"
-                                                            >Pending</span
-                                                        >
+                                                        <ChipStatusComponent
+                                                            :status="
+                                                                mou?.status
+                                                            "
+                                                        />
                                                     </td>
                                                     <td
                                                         class="tb-col tb-col-end"
@@ -261,6 +272,7 @@ import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
+import ChipStatusComponent from "@/components/ChipStatus.vue";
 import { useStaffProfile, useGetAllMOU, useGetMyMOU } from "@/hooks/useAPI";
 
 export default {
@@ -271,6 +283,7 @@ export default {
         TopNavComponent,
         FooterComponent,
         LoadingComponent,
+        ChipStatusComponent,
     },
     setup() {
         const {
@@ -309,9 +322,9 @@ export default {
                             loading: loadingAllMOU,
                             refetch: refetchAllMOU,
                         } = useGetAllMOU();
-                        mouData.value = dataAllMOU.value;
-                        mouError.value = errorAllMOU.value;
-                        mouLoading.value = loadingAllMOU.value;
+                        mouData.value = dataAllMOU;
+                        mouError.value = errorAllMOU;
+                        mouLoading.value = loadingAllMOU;
                         refetchMOU = refetchAllMOU;
                     } else {
                         const {
@@ -320,14 +333,12 @@ export default {
                             loading: loadingMyMOU,
                             refetch: refetchMyMOU,
                         } = useGetMyMOU();
-                        mouData.value = dataMyMOU.value;
-                        mouError.value = errorMyMOU.value;
-                        mouLoading.value = loadingMyMOU.value;
+                        mouData.value = dataMyMOU;
+                        mouError.value = errorMyMOU;
+                        mouLoading.value = loadingMyMOU;
                         refetchMOU = refetchMyMOU;
                     }
                 }
-
-                console.log("aaa", mouData.value);
             },
             { immediate: true } // Run the watcher immediately on component mount
         );
