@@ -27,8 +27,8 @@
                                         <div class="nk-block-head-content">
                                             <ul class="d-flex">
                                                 <li>
-                                                    <router-link
-                                                        to="/memo-add"
+                                                    <a
+                                                        :href="`${publicPath}memo-add`"
                                                         class="btn btn-primary d-none d-md-inline-flex"
                                                         ><span
                                                             class="nk-menu-icon"
@@ -37,7 +37,7 @@
                                                             ></em
                                                         ></span>
                                                         <span>Add New</span>
-                                                    </router-link>
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -217,17 +217,6 @@
                                                                             </router-link>
                                                                         </li>
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-edit.html"
-                                                                                ><em
-                                                                                    class="icon ni ni-trash"
-                                                                                ></em
-                                                                                ><span
-                                                                                    >Delete</span
-                                                                                ></a
-                                                                            >
-                                                                        </li>
-                                                                        <li>
                                                                             <router-link
                                                                                 to="/memo-detail"
                                                                                 ><em
@@ -277,6 +266,11 @@ import { useStaffProfile, useGetAllMOU, useGetMyMOU } from "@/hooks/useAPI";
 
 export default {
     name: "MemoListView",
+    data() {
+        return {
+            publicPath: process.env.VUE_APP_PUBLIC_PATH,
+        };
+    },
     components: {
         ValidateMeComponent,
         NavbarComponent,
