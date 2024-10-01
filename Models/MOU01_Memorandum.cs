@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-
 namespace EMemorandum.Models;
 
 public class MOU01_Memorandum
@@ -55,4 +54,7 @@ public class MOU01_Memorandum
 
     [JsonIgnore]  // This will prevent the MOU_Status reference from being serialized
     public MOU_Status? MOU_Status { get; set; }  // Navigation property back to MOU_Status
+
+    // Navigation property for the statuses
+    public ICollection<MOU02_Status>? MOU02_Statuses { get; set; }
 }
