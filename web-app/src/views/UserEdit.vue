@@ -1,7 +1,10 @@
 <template>
     <div class="nk-app-root">
         <div class="nk-main">
-            <NavbarComponent :staffprofile="dataStaffProfile" />
+            <NavbarComponent
+                :staffprofile="dataStaffProfile"
+                :activeLabel="`user-list`"
+            />
             <div class="nk-wrap">
                 <TopNavComponent
                     :staffprofile="dataStaffProfile"
@@ -77,135 +80,65 @@
                                                 <h4
                                                     class="bio-block-title mb-4"
                                                 >
-                                                    Edit Profile
+                                                    Staff Profile
                                                 </h4>
                                                 <form action="#">
                                                     <div class="row g-3">
-                                                        <div class="col-lg-12">
-                                                            <div
-                                                                class="form-group"
+                                                        <div class="col-lg-5">
+                                                            <label
+                                                                for="firstname"
+                                                                class="form-label"
+                                                                >Full
+                                                                Name</label
                                                             >
-                                                                <label
-                                                                    for="firstname"
-                                                                    class="form-label"
-                                                                    >Full
-                                                                    Name</label
-                                                                >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <input
-                                                                        class="form-control"
-                                                                        type="text"
-                                                                        :value="
-                                                                            nama
-                                                                        "
-                                                                        aria-label="readonly input"
-                                                                        readonly
-                                                                    />
-                                                                </div>
+                                                            <div>
+                                                                {{ nama }}
+                                                            </div>
+                                                            <hr />
+                                                            <label
+                                                                for="email"
+                                                                class="form-label"
+                                                                >Email
+                                                                address</label
+                                                            >
+                                                            <div>
+                                                                {{ email }}
+                                                            </div>
+                                                            <hr />
+                                                            <label
+                                                                for="company"
+                                                                class="form-label"
+                                                                >Staff
+                                                                No.</label
+                                                            >
+                                                            <div>
+                                                                {{ noStaf }}
+                                                            </div>
+                                                            <hr />
+                                                            <label
+                                                                for="email"
+                                                                class="form-label"
+                                                                >Phone
+                                                                No.</label
+                                                            >
+                                                            <div>
+                                                                {{
+                                                                    noTelBimbit
+                                                                }}
+                                                            </div>
+                                                            <hr />
+                                                            <label
+                                                                for="company"
+                                                                class="form-label"
+                                                                >Office</label
+                                                            >
+                                                            <div>
+                                                                {{ nPejabat }}
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6">
-                                                            <div
-                                                                class="form-group"
-                                                            >
-                                                                <label
-                                                                    for="email"
-                                                                    class="form-label"
-                                                                    >Email
-                                                                    address</label
-                                                                >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <input
-                                                                        class="form-control"
-                                                                        type="text"
-                                                                        :value="
-                                                                            email
-                                                                        "
-                                                                        aria-label="readonly input"
-                                                                        readonly
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div
-                                                                class="form-group"
-                                                            >
-                                                                <label
-                                                                    for="company"
-                                                                    class="form-label"
-                                                                    >Staff
-                                                                    No.</label
-                                                                >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <input
-                                                                        class="form-control"
-                                                                        type="text"
-                                                                        :value="
-                                                                            noStaf
-                                                                        "
-                                                                        aria-label="readonly input"
-                                                                        readonly
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div
-                                                                class="form-group"
-                                                            >
-                                                                <label
-                                                                    for="email"
-                                                                    class="form-label"
-                                                                    >Phone
-                                                                    No.</label
-                                                                >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <input
-                                                                        class="form-control"
-                                                                        type="text"
-                                                                        :value="
-                                                                            noTelBimbit
-                                                                        "
-                                                                        aria-label="readonly input"
-                                                                        readonly
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6">
-                                                            <div
-                                                                class="form-group"
-                                                            >
-                                                                <label
-                                                                    for="company"
-                                                                    class="form-label"
-                                                                    >Office</label
-                                                                >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <input
-                                                                        class="form-control"
-                                                                        type="text"
-                                                                        :value="
-                                                                            nPejabat
-                                                                        "
-                                                                        aria-label="readonly input"
-                                                                        readonly
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
+                                                        <div
+                                                            class="col-lg-6 offset-1"
+                                                        >
                                                             <label
                                                                 for="email"
                                                                 class="form-label"
@@ -292,17 +225,18 @@
                                                                     </label>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <a
-                                                                href="#"
-                                                                v-on:click="
-                                                                    updateRoles
-                                                                "
-                                                                class="btn btn-primary"
-                                                            >
-                                                                Update Profile
-                                                            </a>
+                                                            <div class="mt-5">
+                                                                <a
+                                                                    href="#"
+                                                                    v-on:click="
+                                                                        updateRoles
+                                                                    "
+                                                                    class="btn btn-primary"
+                                                                >
+                                                                    Update
+                                                                    Profile
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div

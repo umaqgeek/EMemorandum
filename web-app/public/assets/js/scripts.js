@@ -302,13 +302,13 @@ NioApp.CurrentLink = function(selector, parent, submenu, base, active, intoView)
     if (fileName.match(selfLink)) {
       let parents = NioApp.getParents(item,`.${base}`, parent);
       parents.forEach(parentElemets =>{
-        parentElemets.classList.add(...active);
+        // parentElemets.classList.add(...active);
         let subItem = parentElemets.querySelector(`.${submenu}`);
         subItem !== null && (subItem.style.display = "block")
       })
       intoView && item.scrollIntoView({ block: "end"})
     } else {
-      item.parentElement.classList.remove(...active);
+      // item.parentElement.classList.remove(...active);
     }
   })
 }

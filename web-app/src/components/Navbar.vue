@@ -50,7 +50,14 @@
                         <li class="nk-menu-heading">
                             <h6 class="overline-title">E-Memorandum (UTeM)</h6>
                         </li>
-                        <li class="nk-menu-item">
+                        <li
+                            :class="[
+                                'nk-menu-item',
+                                {
+                                    active: activeLabel === 'dashboard',
+                                },
+                            ]"
+                        >
                             <a :href="`${publicPath}`" class="nk-menu-link"
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-home"></em
@@ -59,7 +66,10 @@
                             </a>
                         </li>
                         <li
-                            class="nk-menu-item"
+                            :class="[
+                                'nk-menu-item',
+                                { active: activeLabel === 'user-list' },
+                            ]"
                             v-if="roles.find((r) => r.role === 'Admin')"
                         >
                             <a
@@ -72,7 +82,10 @@
                             </a>
                         </li>
                         <li
-                            class="nk-menu-item"
+                            :class="[
+                                'nk-menu-item',
+                                { active: activeLabel === 'memo-list' },
+                            ]"
                             v-if="roles.find((r) => r.role === 'Staff')"
                         >
                             <a
@@ -87,7 +100,10 @@
                             </a>
                         </li>
                         <li
-                            class="nk-menu-item"
+                            :class="[
+                                'nk-menu-item',
+                                { active: activeLabel === 'code-list' },
+                            ]"
                             v-if="roles.find((r) => r.role === 'Admin')"
                         >
                             <a
@@ -100,7 +116,10 @@
                             </a>
                         </li>
                         <li
-                            class="nk-menu-item"
+                            :class="[
+                                'nk-menu-item',
+                                { active: activeLabel === 'approval-list' },
+                            ]"
                             v-if="roles.find((r) => r.role === 'PTJ')"
                         >
                             <a
@@ -113,15 +132,10 @@
                             </a>
                         </li>
                     </ul>
-                    <!-- .nk-menu -->
                 </div>
-                <!-- .nk-sidebar-menu -->
             </div>
-            <!-- .nk-sidebar-content -->
         </div>
-        <!-- .nk-sidebar-element -->
     </div>
-    <!-- .nki-sidebar -->
 </template>
 
 <script>
@@ -134,6 +148,7 @@ export default {
     },
     props: {
         staffprofile: Object,
+        activeLabel: String,
     },
     computed: {
         roles() {

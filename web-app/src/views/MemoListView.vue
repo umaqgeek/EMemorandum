@@ -1,13 +1,16 @@
 <template>
     <div class="nk-app-root">
         <div class="nk-main">
-            <NavbarComponent :staffprofile="dataStaffProfile" />
+            <NavbarComponent
+                :staffprofile="dataStaffProfile"
+                :activeLabel="`memo-list`"
+            />
             <div class="nk-wrap">
                 <TopNavComponent
                     :staffprofile="dataStaffProfile"
                     :errorStaffProfile="errorStaffProfile"
                 />
-                <LoadingComponent :loading="loading" />
+                <LoadingComponent :loading="loadingStaffProfile" />
                 <div class="nk-content" v-if="errorStaffProfile">
                     <InfoNotLoggedInVue />
                 </div>
@@ -27,8 +30,8 @@
                                         <div class="nk-block-head-content">
                                             <ul class="d-flex">
                                                 <li>
-                                                    <router-link
-                                                        to="/memo-add"
+                                                    <a
+                                                        :href="`${publicPath}memo-add`"
                                                         class="btn btn-primary d-none d-md-inline-flex"
                                                         ><span
                                                             class="nk-menu-icon"
@@ -37,7 +40,7 @@
                                                             ></em
                                                         ></span>
                                                         <span>Add New</span>
-                                                    </router-link>
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -217,17 +220,6 @@
                                                                             </router-link>
                                                                         </li>
                                                                         <li>
-                                                                            <a
-                                                                                href="./html/memo/memo-edit.html"
-                                                                                ><em
-                                                                                    class="icon ni ni-trash"
-                                                                                ></em
-                                                                                ><span
-                                                                                    >Delete</span
-                                                                                ></a
-                                                                            >
-                                                                        </li>
-                                                                        <li>
                                                                             <router-link
                                                                                 to="/memo-detail"
                                                                                 ><em
@@ -277,6 +269,11 @@ import { useStaffProfile, useGetAllMOU, useGetMyMOU } from "@/hooks/useAPI";
 
 export default {
     name: "MemoListView",
+    data() {
+        return {
+            publicPath: process.env.VUE_APP_PUBLIC_PATH,
+        };
+    },
     components: {
         ValidateMeComponent,
         NavbarComponent,
@@ -290,13 +287,11 @@ export default {
             data: dataStaffProfile,
             error: errorStaffProfile,
             loading: loadingStaffProfile,
-            refetch: refetchStaffProfile,
         } = useStaffProfile();
 
         const mouData = ref(null);
         const mouError = ref(null);
         const mouLoading = ref(false);
-        let refetchMOU = null;
         watch(
             () => dataStaffProfile.value,
             (newDataStaffProfile) => {
@@ -304,7 +299,6 @@ export default {
                     newDataStaffProfile &&
                     newDataStaffProfile?.roles?.length > 0
                 ) {
-                    console.log("aaa", "masuk cni kan?");
                     const isAdmin = newDataStaffProfile?.roles?.find(
                         (r) => r.role === "Admin"
                     )
@@ -320,23 +314,19 @@ export default {
                             data: dataAllMOU,
                             error: errorAllMOU,
                             loading: loadingAllMOU,
-                            refetch: refetchAllMOU,
                         } = useGetAllMOU();
                         mouData.value = dataAllMOU;
                         mouError.value = errorAllMOU;
                         mouLoading.value = loadingAllMOU;
-                        refetchMOU = refetchAllMOU;
                     } else {
                         const {
                             data: dataMyMOU,
                             error: errorMyMOU,
                             loading: loadingMyMOU,
-                            refetch: refetchMyMOU,
                         } = useGetMyMOU();
                         mouData.value = dataMyMOU;
                         mouError.value = errorMyMOU;
                         mouLoading.value = loadingMyMOU;
-                        refetchMOU = refetchMyMOU;
                     }
                 }
             },
@@ -345,13 +335,11 @@ export default {
 
         return {
             dataStaffProfile,
-            error: errorStaffProfile,
-            loading: loadingStaffProfile,
-            refetchStaffProfile,
+            errorStaffProfile,
+            loadingStaffProfile,
             mouData,
             mouError,
             mouLoading,
-            refetchMOU,
         };
     },
     computed: {},

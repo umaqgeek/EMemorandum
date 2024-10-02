@@ -94,3 +94,10 @@ export function useGetMyMOU() {
         url: `${API_URL}/mou/mine`,
     });
 }
+
+export function useGetMOUSelectData() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/mou/select-data`,
+    });
+}
