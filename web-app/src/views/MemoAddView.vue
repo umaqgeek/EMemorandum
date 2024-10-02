@@ -1,17 +1,22 @@
 <template>
-    <!-- Root @s -->
     <div class="nk-app-root">
-        <!-- main @s -->
         <div class="nk-main">
-            <NavbarComponent />
-            <!-- .nki-sidebar -->
-            <!-- sidebar @e -->
-            <!-- wrap @s -->
+            <NavbarComponent
+                :staffprofile="dataStaffProfile"
+                :activeLabel="`memo-list`"
+            />
             <div class="nk-wrap">
-                <TopNavComponent />
-                <!-- header -->
-                <!-- content @s -->
-                <div class="nk-content">
+                <TopNavComponent
+                    :staffprofile="dataStaffProfile"
+                    :errorStaffProfile="errorStaffProfile"
+                />
+                <LoadingComponent
+                    :loading="loadingStaffProfile || loadingMouSelectData"
+                />
+                <div class="nk-content" v-if="errorStaffProfile">
+                    <InfoNotLoggedInVue />
+                </div>
+                <div class="nk-content" v-if="!errorStaffProfile">
                     <div class="container">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
@@ -24,48 +29,6 @@
                                                 <h2 class="nk-block-title">
                                                     Add New Memorandum
                                                 </h2>
-                                            </div>
-                                            <!-- .nk-block-head-content -->
-                                            <div class="nk-block-head-content">
-                                                <ul
-                                                    class="d-flex gap g-2 d-none"
-                                                >
-                                                    <li
-                                                        class="d-none d-md-block"
-                                                    >
-                                                        <a
-                                                            href="./html/user-manage/user-profile.html"
-                                                            class="btn btn-soft btn-primary"
-                                                            ><em
-                                                                class="icon ni ni-user"
-                                                            ></em
-                                                            ><span
-                                                                >Members</span
-                                                            ></a
-                                                        >
-                                                    </li>
-                                                    <li
-                                                        class="d-none d-md-block"
-                                                    >
-                                                        <a
-                                                            href="./html/user-manage/user-profile.html"
-                                                            class="btn btn-soft btn-primary"
-                                                            ><em
-                                                                class="icon ni ni-user"
-                                                            ></em
-                                                            ><span>KPI</span></a
-                                                        >
-                                                    </li>
-                                                    <li class="d-md-none">
-                                                        <a
-                                                            href="./html/user-manage/user-profile.html"
-                                                            class="btn btn-soft btn-primary btn-icon"
-                                                            ><em
-                                                                class="icon ni ni-user"
-                                                            ></em
-                                                        ></a>
-                                                    </li>
-                                                </ul>
                                             </div>
                                             <!-- .nk-block-head-content -->
                                         </div>
@@ -92,9 +55,18 @@
                                                     class="nk-todo-aside-header"
                                                 ></div>
                                                 <ul class="nk-todo-menu pb-3">
-                                                    <li class="active">
-                                                        <router-link
-                                                            to="/memo-add"
+                                                    <li
+                                                        :class="[
+                                                            {
+                                                                active:
+                                                                    menuNo ===
+                                                                    1,
+                                                            },
+                                                        ]"
+                                                        @click="() => onMenu(1)"
+                                                    >
+                                                        <a
+                                                            href="#"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
@@ -104,36 +76,62 @@
                                                                 >Project
                                                                 Details</span
                                                             >
-                                                        </router-link>
+                                                        </a>
                                                     </li>
-                                                    <li>
-                                                        <router-link
-                                                            to="/memo-add-member"
+                                                    <li
+                                                        :class="[
+                                                            {
+                                                                active:
+                                                                    menuNo ===
+                                                                    2,
+                                                            },
+                                                        ]"
+                                                        @click="() => onMenu(2)"
+                                                    >
+                                                        <a
+                                                            href="#"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
                                                                 class="icon ni ni-users"
                                                             ></em>
                                                             <span>Members</span>
-                                                        </router-link>
+                                                        </a>
                                                     </li>
-                                                    <li>
-                                                        <router-link
-                                                            to="/memo-add-kpi"
+                                                    <li
+                                                        :class="[
+                                                            {
+                                                                active:
+                                                                    menuNo ===
+                                                                    3,
+                                                            },
+                                                        ]"
+                                                        @click="() => onMenu(3)"
+                                                    >
+                                                        <a
+                                                            href="#"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
                                                                 class="icon ni ni-list"
                                                             ></em>
                                                             <span>KPI</span>
-                                                        </router-link>
+                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>
                                             <!-- .nk-todo-aside -->
                                             <div class="nk-todo-body card-body">
                                                 <form action="#">
-                                                    <div class="row g-3">
+                                                    <div
+                                                        class="row g-3"
+                                                        :style="{
+                                                            display:
+                                                                menuNo === 1
+                                                                    ? 'flex'
+                                                                    : 'none',
+                                                        }"
+                                                    >
                                                         <div class="col-lg-12">
                                                             <div
                                                                 class="form-group"
@@ -147,11 +145,14 @@
                                                                 <div
                                                                     class="form-control-wrap"
                                                                 >
-                                                                    <textarea
+                                                                    <input
+                                                                        type="text"
                                                                         class="form-control"
-                                                                        id="aboutme"
-                                                                        rows="3"
-                                                                    ></textarea>
+                                                                        placeholder="Eg.: Memorandum Persefahaman X dan K"
+                                                                        v-model="
+                                                                            TajukProjek
+                                                                        "
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -160,7 +161,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="city"
+                                                                    for="KodKategori"
                                                                     class="form-label"
                                                                     >Category of
                                                                     Memorandum</label
@@ -170,35 +171,25 @@
                                                                 >
                                                                     <select
                                                                         class="form-select"
-                                                                        id="country"
+                                                                        id="KodKategori"
                                                                         data-search="true"
                                                                         data-sort="false"
+                                                                        v-model="
+                                                                            KodKategori
+                                                                        "
                                                                     >
                                                                         <option
-                                                                            value=""
+                                                                            v-for="cat in categories"
+                                                                            v-bind:key="
+                                                                                cat.kod
+                                                                            "
+                                                                            :value="
+                                                                                cat.kod
+                                                                            "
                                                                         >
-                                                                            Select
-                                                                            Options
-                                                                        </option>
-                                                                        <option
-                                                                            value="1"
-                                                                        >
-                                                                            Germany
-                                                                        </option>
-                                                                        <option
-                                                                            value="2"
-                                                                        >
-                                                                            Canada
-                                                                        </option>
-                                                                        <option
-                                                                            value="3"
-                                                                        >
-                                                                            Usa
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Aus
+                                                                            {{
+                                                                                cat.butiran
+                                                                            }}
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -209,7 +200,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="country"
+                                                                    for="KodJenis"
                                                                     class="form-label"
                                                                     >Type of
                                                                     Memorandum</label
@@ -219,35 +210,25 @@
                                                                 >
                                                                     <select
                                                                         class="form-select"
-                                                                        id="country"
+                                                                        id="KodJenis"
                                                                         data-search="true"
                                                                         data-sort="false"
+                                                                        v-model="
+                                                                            KodJenis
+                                                                        "
                                                                     >
                                                                         <option
-                                                                            value=""
+                                                                            v-for="t in types"
+                                                                            v-bind:key="
+                                                                                t.kod
+                                                                            "
+                                                                            :value="
+                                                                                t.kod
+                                                                            "
                                                                         >
-                                                                            Select
-                                                                            Options
-                                                                        </option>
-                                                                        <option
-                                                                            value="1"
-                                                                        >
-                                                                            Germany
-                                                                        </option>
-                                                                        <option
-                                                                            value="2"
-                                                                        >
-                                                                            Canada
-                                                                        </option>
-                                                                        <option
-                                                                            value="3"
-                                                                        >
-                                                                            Usa
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Aus
+                                                                            {{
+                                                                                t.butiran
+                                                                            }}
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -258,7 +239,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="postalcode"
+                                                                    for="KodScope"
                                                                     class="form-label"
                                                                     >Memorandum
                                                                     Scope</label
@@ -268,35 +249,25 @@
                                                                 >
                                                                     <select
                                                                         class="form-select"
-                                                                        id="country"
+                                                                        id="KodScope"
                                                                         data-search="true"
                                                                         data-sort="false"
+                                                                        v-model="
+                                                                            KodScope
+                                                                        "
                                                                     >
                                                                         <option
-                                                                            value=""
+                                                                            v-for="s in scopes"
+                                                                            v-bind:key="
+                                                                                s.kod
+                                                                            "
+                                                                            :value="
+                                                                                s.kod
+                                                                            "
                                                                         >
-                                                                            Select
-                                                                            Options
-                                                                        </option>
-                                                                        <option
-                                                                            value="1"
-                                                                        >
-                                                                            Germany
-                                                                        </option>
-                                                                        <option
-                                                                            value="2"
-                                                                        >
-                                                                            Canada
-                                                                        </option>
-                                                                        <option
-                                                                            value="3"
-                                                                        >
-                                                                            Usa
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Aus
+                                                                            {{
+                                                                                s.butiran
+                                                                            }}
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -307,7 +278,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="firstname"
+                                                                    for="TarikhMula"
                                                                     class="form-label"
                                                                     >Start
                                                                     Date</label
@@ -316,10 +287,13 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
-                                                                        type="text"
+                                                                        type="date"
                                                                         class="form-control"
-                                                                        id="firstname"
+                                                                        id="TarikhMula"
                                                                         placeholder="First name"
+                                                                        v-model="
+                                                                            TarikhMula
+                                                                        "
                                                                     />
                                                                 </div>
                                                             </div>
@@ -329,7 +303,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="lastname"
+                                                                    for="TarikhTamat"
                                                                     class="form-label"
                                                                     >End
                                                                     Date</label
@@ -338,10 +312,13 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
-                                                                        type="text"
+                                                                        type="date"
                                                                         class="form-control"
-                                                                        id="lastname"
+                                                                        id="TarikhTamat"
                                                                         placeholder="Last name"
+                                                                        v-model="
+                                                                            TarikhTamat
+                                                                        "
                                                                     />
                                                                 </div>
                                                             </div>
@@ -351,7 +328,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="email"
+                                                                    for="KodPTJ"
                                                                     class="form-label"
                                                                     >PTJ</label
                                                                 >
@@ -360,35 +337,20 @@
                                                                 >
                                                                     <select
                                                                         class="form-select"
-                                                                        id="country"
+                                                                        id="KodPTJ"
                                                                         data-search="true"
                                                                         data-sort="false"
+                                                                        v-model="
+                                                                            KodPTJ
+                                                                        "
                                                                     >
                                                                         <option
                                                                             value=""
                                                                         >
+                                                                            -
                                                                             Select
-                                                                            Options
-                                                                        </option>
-                                                                        <option
-                                                                            value="1"
-                                                                        >
-                                                                            Germany
-                                                                        </option>
-                                                                        <option
-                                                                            value="2"
-                                                                        >
-                                                                            Canada
-                                                                        </option>
-                                                                        <option
-                                                                            value="3"
-                                                                        >
-                                                                            Usa
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Aus
+                                                                            PTJ
+                                                                            -
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -399,7 +361,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="company"
+                                                                    for="KodPTJSub"
                                                                     class="form-label"
                                                                     >PBU</label
                                                                 >
@@ -408,35 +370,20 @@
                                                                 >
                                                                     <select
                                                                         class="form-select"
-                                                                        id="country"
+                                                                        id="KodPTJSub"
                                                                         data-search="true"
                                                                         data-sort="false"
+                                                                        v-model="
+                                                                            KodPTJSub
+                                                                        "
                                                                     >
                                                                         <option
                                                                             value=""
                                                                         >
+                                                                            -
                                                                             Select
-                                                                            Options
-                                                                        </option>
-                                                                        <option
-                                                                            value="1"
-                                                                        >
-                                                                            Germany
-                                                                        </option>
-                                                                        <option
-                                                                            value="2"
-                                                                        >
-                                                                            Canada
-                                                                        </option>
-                                                                        <option
-                                                                            value="3"
-                                                                        >
-                                                                            Usa
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Aus
+                                                                            PBU
+                                                                            -
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -447,7 +394,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="address"
+                                                                    for="NoMemo"
                                                                     class="form-label"
                                                                     >Memorandum
                                                                     Registration
@@ -459,8 +406,11 @@
                                                                     <input
                                                                         type="text"
                                                                         class="form-control"
-                                                                        id="address"
-                                                                        placeholder="MoA...."
+                                                                        id="NoMemo"
+                                                                        placeholder="Eg.: MoA(P).1.2.2024.101010.001"
+                                                                        v-model="
+                                                                            NoMemo
+                                                                        "
                                                                     />
                                                                 </div>
                                                             </div>
@@ -470,7 +420,7 @@
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="address"
+                                                                    for="MS01_NoStaf"
                                                                     class="form-label"
                                                                     >Responsible
                                                                     PIC</label
@@ -481,9 +431,12 @@
                                                                     <input
                                                                         type="text"
                                                                         class="form-control"
-                                                                        placeholder="Select PIC"
+                                                                        placeholder="Search PIC in here ..."
                                                                         aria-label="Recipient's username"
                                                                         aria-describedby="button-addon2"
+                                                                        v-model="
+                                                                            MS01_NoStaf
+                                                                        "
                                                                     />
                                                                     <button
                                                                         class="btn btn-outline-primary"
@@ -554,288 +507,163 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
+
+                                                    <div
+                                                        class="row g-3"
+                                                        :style="{
+                                                            display:
+                                                                menuNo === 2
+                                                                    ? 'flex'
+                                                                    : 'none',
+                                                        }"
+                                                    >
+                                                        <TableUserMgtComponent />
+                                                    </div>
+
+                                                    <div
+                                                        class="row g-3"
+                                                        :style="{
+                                                            display:
+                                                                menuNo === 3
+                                                                    ? 'flex'
+                                                                    : 'none',
+                                                        }"
+                                                    >
+                                                        <TableKPIComponent />
+                                                    </div>
+
+                                                    <div class="row mt-3 g-3">
                                                         <div class="col-lg-12">
-                                                            <router-link
-                                                                to="/memo-list"
+                                                            <a
+                                                                href="#/memo-list"
                                                                 class="btn btn-secondary"
                                                             >
                                                                 Save
-                                                            </router-link>
+                                                            </a>
                                                             &nbsp;
-                                                            <router-link
-                                                                to="/memo-add-member"
+                                                            <a
+                                                                href="#/memo-add-member"
                                                                 class="btn btn-primary"
                                                             >
                                                                 Next
-                                                            </router-link>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
-                                            <!-- .nk-todo-body -->
                                         </div>
-                                        <!-- .nk-todo -->
                                     </div>
-                                    <!-- .card -->
                                 </div>
-                                <!-- .nk-block -->
-                                <!-- .nk-block -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- .nk-content -->
-                <!-- include Footer -->
-                <div class="nk-footer">
-                    <div class="container-fluid">
-                        <div class="nk-footer-wrap">
-                            <div class="nk-footer-copyright">
-                                &copy; 2024 UTeM.
-                            </div>
-                            <div class="nk-footer-links">
-                                <ul class="nav nav-sm"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- .nk-footer -->
-            </div>
-            <!-- .nk-wrap -->
-        </div>
-        <!-- .nk-main -->
-
-        <div
-            class="offcanvas offcanvas-end offcanvas-size-lg"
-            id="notificationOffcanvas"
-        >
-            <div class="offcanvas-header border-bottom border-light">
-                <h5 class="offcanvas-title" id="offcanvasTopLabel">
-                    Recent Notification
-                </h5>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                ></button>
-            </div>
-            <div class="offcanvas-body" data-simplebar>
-                <ul class="nk-schedule">
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">2:12 PM</span>
-                                <div class="h6">Added 3 New Images</div>
-                                <ul class="d-flex flex-wrap gap g-2 py-2">
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/a.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/b.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/c.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">4:23 PM</span>
-                                <div class="h6">
-                                    Invitation for creative designs pattern
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div
-                                class="nk-schedule-content nk-schedule-content-no-border"
-                            >
-                                <span class="smaller">10:30 PM</span>
-                                <div class="h6">
-                                    Task report - uploaded weekly reports
-                                </div>
-                                <div class="list-group-dotted mt-3">
-                                    <div class="list-group-wrap">
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-pdf.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Modern Designs
-                                                        Pattern</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >1.6.mb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-doc.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Cpanel Upload
-                                                        Guidelines</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >18kb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-code.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Weekly Finance
-                                                        Reports</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >10mb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- .list-group-dotted -->
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">3:23 PM</span>
-                                <div class="h6">
-                                    Assigned you to new database design project
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div
-                                class="nk-schedule-content nk-schedule-content-no-border flex-grow-1"
-                            >
-                                <span class="smaller">5:05 PM</span>
-                                <div class="h6">
-                                    You have received a new order
-                                </div>
-                                <div class="alert alert-info mt-2" role="alert">
-                                    <div class="d-flex">
-                                        <em
-                                            class="icon icon-lg ni ni-file-code opacity-75"
-                                        ></em>
-                                        <div
-                                            class="ms-2 d-flex flex-wrap flex-grow-1 justify-content-between"
-                                        >
-                                            <div>
-                                                <h6 class="alert-heading mb-0">
-                                                    Business Template - UI/UX
-                                                    design
-                                                </h6>
-                                                <span class="smaller"
-                                                    >Shared information with
-                                                    your team to understand and
-                                                    contribute to your
-                                                    project.</span
-                                                >
-                                            </div>
-                                            <div class="d-block mt-1">
-                                                <a
-                                                    href="#"
-                                                    class="btn btn-md btn-info"
-                                                    ><em
-                                                        class="icon ni ni-download"
-                                                    ></em
-                                                    ><span>Download</span></a
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- .alert -->
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">2:45 PM</span>
-                                <div class="h6">
-                                    Project status updated successfully
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                <FooterComponent />
             </div>
         </div>
+        <ValidateMeComponent />
     </div>
-    <!-- .nk-app-root -->
 </template>
 
 <!-- JavaScript -->
 <script>
+import { watch, ref } from "vue";
+
+import ValidateMeComponent from "@/components/ValidateMe.vue";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
+import FooterComponent from "@/components/Footer.vue";
+import LoadingComponent from "@/components/Loading.vue";
 import TableUserMgtComponent from "@/components/TableUser.vue";
+import TableKPIComponent from "@/components/TableKPI.vue";
+import { useStaffProfile, useGetMOUSelectData } from "@/hooks/useAPI";
 
 export default {
     name: "MemoAddView",
+    data() {
+        return {
+            menuNo: 1,
+            PTJs: [],
+            PBUs: [],
+            form: {
+                form1: {
+                    TajukProjek: "",
+                    KodKategori: "",
+                    KodJenis: "",
+                    KodScope: "",
+                    TarikhMula: "",
+                    TarikhTamat: "",
+                    KodPTJ: "",
+                    KodPTJSub: "",
+                    NoMemo: "",
+                    NoSiri: 0,
+                    Tahun: 2024,
+                    NamaDok: "",
+                    Path: "",
+                    Nilai: "0",
+                    MS01_NoStaf: "",
+                },
+                form2: {
+                    members: [],
+                },
+                form3: {
+                    kpis: [],
+                },
+            },
+        };
+    },
     components: {
+        ValidateMeComponent,
         NavbarComponent,
         TopNavComponent,
+        FooterComponent,
+        LoadingComponent,
         TableUserMgtComponent,
+        TableKPIComponent,
+    },
+    setup() {
+        const {
+            data: dataStaffProfile,
+            error: errorStaffProfile,
+            loading: loadingStaffProfile,
+        } = useStaffProfile();
+
+        const {
+            data: dataMouSelectData,
+            error: errorMouSelectData,
+            loading: loadingMouSelectData,
+        } = useGetMOUSelectData();
+
+        const categories = ref([]);
+        const types = ref([]);
+        const scopes = ref([]);
+        watch(
+            () => dataMouSelectData.value,
+            (dataMouSelectDataUpdated) => {
+                categories.value = dataMouSelectDataUpdated?.kategoriMemo || [];
+                types.value = dataMouSelectDataUpdated?.jenisMemo || [];
+                scopes.value = dataMouSelectDataUpdated?.scopeMemo || [];
+            }
+        );
+
+        return {
+            dataStaffProfile,
+            errorStaffProfile,
+            loadingStaffProfile,
+            dataMouSelectData,
+            errorMouSelectData,
+            loadingMouSelectData,
+            categories,
+            types,
+            scopes,
+        };
+    },
+    computed: {},
+    methods: {
+        onMenu(mNo) {
+            this.menuNo = mNo;
+        },
     },
 };
 </script>

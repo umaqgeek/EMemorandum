@@ -1,13 +1,16 @@
 <template>
     <div class="nk-app-root">
         <div class="nk-main">
-            <NavbarComponent :staffprofile="dataStaffProfile" />
+            <NavbarComponent
+                :staffprofile="dataStaffProfile"
+                :activeLabel="`memo-list`"
+            />
             <div class="nk-wrap">
                 <TopNavComponent
                     :staffprofile="dataStaffProfile"
                     :errorStaffProfile="errorStaffProfile"
                 />
-                <LoadingComponent :loading="loading" />
+                <LoadingComponent :loading="loadingStaffProfile" />
                 <div class="nk-content" v-if="errorStaffProfile">
                     <InfoNotLoggedInVue />
                 </div>
@@ -284,13 +287,11 @@ export default {
             data: dataStaffProfile,
             error: errorStaffProfile,
             loading: loadingStaffProfile,
-            refetch: refetchStaffProfile,
         } = useStaffProfile();
 
         const mouData = ref(null);
         const mouError = ref(null);
         const mouLoading = ref(false);
-        let refetchMOU = null;
         watch(
             () => dataStaffProfile.value,
             (newDataStaffProfile) => {
@@ -298,7 +299,6 @@ export default {
                     newDataStaffProfile &&
                     newDataStaffProfile?.roles?.length > 0
                 ) {
-                    console.log("aaa", "masuk cni kan?");
                     const isAdmin = newDataStaffProfile?.roles?.find(
                         (r) => r.role === "Admin"
                     )
@@ -314,23 +314,19 @@ export default {
                             data: dataAllMOU,
                             error: errorAllMOU,
                             loading: loadingAllMOU,
-                            refetch: refetchAllMOU,
                         } = useGetAllMOU();
                         mouData.value = dataAllMOU;
                         mouError.value = errorAllMOU;
                         mouLoading.value = loadingAllMOU;
-                        refetchMOU = refetchAllMOU;
                     } else {
                         const {
                             data: dataMyMOU,
                             error: errorMyMOU,
                             loading: loadingMyMOU,
-                            refetch: refetchMyMOU,
                         } = useGetMyMOU();
                         mouData.value = dataMyMOU;
                         mouError.value = errorMyMOU;
                         mouLoading.value = loadingMyMOU;
-                        refetchMOU = refetchMyMOU;
                     }
                 }
             },
@@ -339,13 +335,11 @@ export default {
 
         return {
             dataStaffProfile,
-            error: errorStaffProfile,
-            loading: loadingStaffProfile,
-            refetchStaffProfile,
+            errorStaffProfile,
+            loadingStaffProfile,
             mouData,
             mouError,
             mouLoading,
-            refetchMOU,
         };
     },
     computed: {},

@@ -1,7 +1,10 @@
 <template>
     <div class="nk-app-root">
         <div class="nk-main">
-            <NavbarComponent :staffprofile="dataStaffProfile" />
+            <NavbarComponent
+                :staffprofile="dataStaffProfile"
+                :activeLabel="`user-list`"
+            />
             <div class="nk-wrap">
                 <TopNavComponent
                     :staffprofile="dataStaffProfile"

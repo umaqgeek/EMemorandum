@@ -53,6 +53,35 @@ const routes = [
         component: DashboardView,
     },
     {
+        path: "/user-list",
+        component: UserListView,
+    },
+    {
+        path: "/user-edit",
+        component: UserEditView,
+    },
+    {
+        path: "/memo-list",
+        component: MemoListView,
+    },
+    {
+        path: "/memo-add",
+        component: MemoAddView,
+    },
+    {
+        path: "/:pathMatch(.*)*",
+        component: NotFoundView, // Your custom 404 page component
+        // redirect to a root view page
+        redirect: process.env.VUE_APP_PUBLIC_PATH,
+    },
+];
+
+const routesOld = [
+    {
+        path: "/",
+        component: DashboardView,
+    },
+    {
         path: "/memo-list",
         component: MemoListView,
     },
@@ -228,6 +257,7 @@ const routes = [
         redirect: process.env.VUE_APP_PUBLIC_PATH,
     },
 ];
+console.log("routesOld", routesOld);
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
