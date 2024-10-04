@@ -101,3 +101,11 @@ export function useGetMOUSelectData() {
         url: `${API_URL}/mou/select-data`,
     });
 }
+
+export function useMouGenerateNoMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/mou/generate-no`,
+        data: JSON.stringify(payload),
+    });
+}
