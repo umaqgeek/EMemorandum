@@ -520,7 +520,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#exampleModal"
                                                                     >
-                                                                        Serach
+                                                                        Search
                                                                         Members
                                                                     </button>
                                                                 </div>

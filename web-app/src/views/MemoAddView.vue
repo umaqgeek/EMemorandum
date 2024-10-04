@@ -150,7 +150,9 @@
                                                                         class="form-control"
                                                                         placeholder="Eg.: Memorandum Persefahaman X dan K"
                                                                         v-model="
-                                                                            TajukProjek
+                                                                            form
+                                                                                .form1
+                                                                                .TajukProjek
                                                                         "
                                                                     />
                                                                 </div>
@@ -178,6 +180,14 @@
                                                                             KodKategori
                                                                         "
                                                                     >
+                                                                        <option
+                                                                            value=""
+                                                                        >
+                                                                            -
+                                                                            Select
+                                                                            Category
+                                                                            -
+                                                                        </option>
                                                                         <option
                                                                             v-for="cat in categories"
                                                                             v-bind:key="
@@ -218,6 +228,14 @@
                                                                         "
                                                                     >
                                                                         <option
+                                                                            value=""
+                                                                        >
+                                                                            -
+                                                                            Select
+                                                                            Type
+                                                                            -
+                                                                        </option>
+                                                                        <option
                                                                             v-for="t in types"
                                                                             v-bind:key="
                                                                                 t.kod
@@ -253,9 +271,19 @@
                                                                         data-search="true"
                                                                         data-sort="false"
                                                                         v-model="
-                                                                            KodScope
+                                                                            form
+                                                                                .form1
+                                                                                .KodScope
                                                                         "
                                                                     >
+                                                                        <option
+                                                                            value=""
+                                                                        >
+                                                                            -
+                                                                            Select
+                                                                            Scope
+                                                                            -
+                                                                        </option>
                                                                         <option
                                                                             v-for="s in scopes"
                                                                             v-bind:key="
@@ -292,7 +320,9 @@
                                                                         id="TarikhMula"
                                                                         placeholder="First name"
                                                                         v-model="
-                                                                            TarikhMula
+                                                                            form
+                                                                                .form1
+                                                                                .TarikhMula
                                                                         "
                                                                     />
                                                                 </div>
@@ -317,7 +347,9 @@
                                                                         id="TarikhTamat"
                                                                         placeholder="Last name"
                                                                         v-model="
-                                                                            TarikhTamat
+                                                                            form
+                                                                                .form1
+                                                                                .TarikhTamat
                                                                         "
                                                                     />
                                                                 </div>
@@ -352,6 +384,19 @@
                                                                             PTJ
                                                                             -
                                                                         </option>
+                                                                        <option
+                                                                            v-for="p in PTJs"
+                                                                            v-bind:key="
+                                                                                p.id
+                                                                            "
+                                                                            :value="
+                                                                                p.kodPTJ
+                                                                            "
+                                                                        >
+                                                                            {{
+                                                                                p.nama
+                                                                            }}
+                                                                        </option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -374,7 +419,9 @@
                                                                         data-search="true"
                                                                         data-sort="false"
                                                                         v-model="
-                                                                            KodPTJSub
+                                                                            form
+                                                                                .form1
+                                                                                .KodPTJSub
                                                                         "
                                                                     >
                                                                         <option
@@ -384,6 +431,19 @@
                                                                             Select
                                                                             PBU
                                                                             -
+                                                                        </option>
+                                                                        <option
+                                                                            v-for="p in PBUs"
+                                                                            v-bind:key="
+                                                                                p.id
+                                                                            "
+                                                                            :value="
+                                                                                p.kodSubPTJ
+                                                                            "
+                                                                        >
+                                                                            {{
+                                                                                p.nama
+                                                                            }}
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -411,6 +471,7 @@
                                                                         v-model="
                                                                             NoMemo
                                                                         "
+                                                                        readonly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -429,13 +490,21 @@
                                                                     class="input-group"
                                                                 >
                                                                     <input
+                                                                        type="hidden"
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .MS01_NoStaf
+                                                                        "
+                                                                    />
+                                                                    <input
                                                                         type="text"
                                                                         class="form-control"
                                                                         placeholder="Search PIC in here ..."
                                                                         aria-label="Recipient's username"
                                                                         aria-describedby="button-addon2"
                                                                         v-model="
-                                                                            MS01_NoStaf
+                                                                            staffPIC
                                                                         "
                                                                     />
                                                                     <button
@@ -445,9 +514,15 @@
                                                                         data-bs-toggle="modal"
                                                                         data-bs-target="#exampleModal"
                                                                     >
-                                                                        Serach
+                                                                        Search
                                                                         Members
                                                                     </button>
+                                                                </div>
+                                                                <div
+                                                                    class="btn btn-link"
+                                                                >
+                                                                    Assign
+                                                                    yourself
                                                                 </div>
                                                                 <div
                                                                     class="modal fade"
@@ -536,17 +611,37 @@
                                                     <div class="row mt-3 g-3">
                                                         <div class="col-lg-12">
                                                             <a
-                                                                href="#/memo-list"
-                                                                class="btn btn-secondary"
+                                                                v-if="
+                                                                    menuNo !== 1
+                                                                "
+                                                                href="#"
+                                                                class="btn btn-primary"
+                                                                @click="onBack"
                                                             >
-                                                                Save
+                                                                Back
                                                             </a>
                                                             &nbsp;
                                                             <a
-                                                                href="#/memo-add-member"
+                                                                v-if="
+                                                                    menuNo !== 3
+                                                                "
+                                                                href="#"
                                                                 class="btn btn-primary"
+                                                                @click="onNext"
                                                             >
                                                                 Next
+                                                            </a>
+                                                            &nbsp;
+                                                            <a
+                                                                v-if="
+                                                                    menuNo === 3
+                                                                "
+                                                                href="#"
+                                                                class="btn btn-secondary"
+                                                                disabled="true"
+                                                                @click="onSave"
+                                                            >
+                                                                Save
                                                             </a>
                                                         </div>
                                                     </div>
@@ -577,26 +672,25 @@ import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import TableUserMgtComponent from "@/components/TableUser.vue";
 import TableKPIComponent from "@/components/TableKPI.vue";
-import { useStaffProfile, useGetMOUSelectData } from "@/hooks/useAPI";
+import {
+    useStaffProfile,
+    useGetMOUSelectData,
+    useMouGenerateNoMemo,
+} from "@/hooks/useAPI";
 
 export default {
     name: "MemoAddView",
     data() {
         return {
             menuNo: 1,
-            PTJs: [],
-            PBUs: [],
+            staffPIC: "",
             form: {
                 form1: {
                     TajukProjek: "",
-                    KodKategori: "",
-                    KodJenis: "",
                     KodScope: "",
                     TarikhMula: "",
                     TarikhTamat: "",
-                    KodPTJ: "",
                     KodPTJSub: "",
-                    NoMemo: "",
                     NoSiri: 0,
                     Tahun: 2024,
                     NamaDok: "",
@@ -638,12 +732,49 @@ export default {
         const categories = ref([]);
         const types = ref([]);
         const scopes = ref([]);
+        const PTJs = ref([]);
+        const PBUs = ref([]);
         watch(
             () => dataMouSelectData.value,
             (dataMouSelectDataUpdated) => {
                 categories.value = dataMouSelectDataUpdated?.kategoriMemo || [];
                 types.value = dataMouSelectDataUpdated?.jenisMemo || [];
                 scopes.value = dataMouSelectDataUpdated?.scopeMemo || [];
+                PTJs.value = dataMouSelectDataUpdated?.subPTJ || [];
+                PBUs.value = dataMouSelectDataUpdated?.subPTJ || [];
+            }
+        );
+
+        const KodKategori = ref("");
+        const KodJenis = ref("");
+        const KodPTJ = ref("");
+        const NoMemo = ref("");
+        watch(
+            [KodKategori, KodJenis, KodPTJ],
+            ([newKodKategori, newKodJenis, newKodPTJ]) => {
+                console.log("aaa", newKodKategori, newKodJenis, newKodPTJ);
+                const {
+                    data: dataNoMemo,
+                    error: errorNoMemo,
+                    loading: loadingNoMemo,
+                } = useMouGenerateNoMemo({
+                    KodKategori: newKodKategori,
+                    KodJenis: newKodJenis,
+                    KodPTJ: newKodPTJ,
+                });
+
+                watch(
+                    () => loadingNoMemo.value,
+                    (newLoadingNoMemo) => {
+                        if (newLoadingNoMemo == false) {
+                            console.log("aaa", errorNoMemo.value);
+                            console.log("aaa", dataNoMemo.value);
+                            if (!errorNoMemo.value) {
+                                NoMemo.value = dataNoMemo.value?.noMemo;
+                            }
+                        }
+                    }
+                );
             }
         );
 
@@ -657,12 +788,27 @@ export default {
             categories,
             types,
             scopes,
+            PTJs,
+            PBUs,
+            KodKategori,
+            KodJenis,
+            KodPTJ,
+            NoMemo,
         };
     },
     computed: {},
     methods: {
         onMenu(mNo) {
             this.menuNo = mNo;
+        },
+        onNext() {
+            this.menuNo = this.menuNo + 1 > 3 ? 1 : this.menuNo + 1;
+        },
+        onBack() {
+            this.menuNo = this.menuNo - 1 <= 0 ? 3 : this.menuNo - 1;
+        },
+        onSave() {
+            console.log(this.form);
         },
     },
 };
