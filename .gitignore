@@ -117,6 +117,7 @@ web-app/dist/
 # web-app/.env.*.local
 web-app/.nuxt/
 web-app/.output/
+web-app/public/uploads/
 
 # Logs
 logs/

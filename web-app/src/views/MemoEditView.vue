@@ -557,7 +557,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                             <div
                                                                                 class="modal-body"
                                                                             >
-                                                                                <TableUserMgtComponent />
+                                                                                <TableUserComponent />
                                                                             </div>
                                                                             <div
                                                                                 class="modal-footer"
@@ -639,14 +639,14 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
 <script>
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
-import TableUserMgtComponent from "@/components/TableUser.vue";
+import TableUserComponent from "@/components/TableUser.vue";
 
 export default {
     name: "MemoEditView",
     components: {
         NavbarComponent,
         TopNavComponent,
-        TableUserMgtComponent,
+        TableUserComponent,
     },
 };
 </script>

@@ -28,6 +28,8 @@ NioApp.DataTable.init = function () {
   NioApp.DataTable('.datatable-init')
 }
 
+window.NioApp = NioApp;
+
 NioApp.winLoad(NioApp.DataTable.init);
 
 })(NioApp);

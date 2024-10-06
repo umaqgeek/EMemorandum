@@ -12,7 +12,7 @@
                 />
                 <LoadingComponent :loading="loading" />
                 <div class="nk-content" v-if="errorStaffProfile">
-                    <InfoNotLoggedInVue />
+                    <InfoNotLoggedInComponent />
                 </div>
                 <div class="nk-content" v-if="!errorStaffProfile">
                     <div class="container">
@@ -30,7 +30,7 @@
                                     </div>
                                 </div>
                                 <div class="nk-block">
-                                    <TableUserMgtComponent :users="users" />
+                                    <TableUserComponent :users="users" />
                                 </div>
                             </div>
                         </div>
@@ -48,8 +48,9 @@ import ValidateMeComponent from "@/components/ValidateMe.vue";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
-import TableUserMgtComponent from "@/components/TableUser.vue";
+import TableUserComponent from "@/components/TableUser.vue";
 import LoadingComponent from "@/components/Loading.vue";
+import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import { useStaffProfile, useGetAllStaff } from "@/hooks/useAPI";
 
 export default {
@@ -59,13 +60,13 @@ export default {
         NavbarComponent,
         TopNavComponent,
         FooterComponent,
-        TableUserMgtComponent,
+        TableUserComponent,
         LoadingComponent,
+        InfoNotLoggedInComponent,
     },
     setup() {
         const {
             data: dataAllStaff,
-            error: errorAllStaff,
             loading: loadingAllStaff,
             refetch: refetchAllStaff,
         } = useGetAllStaff();
@@ -78,7 +79,7 @@ export default {
         return {
             dataAllStaff,
             dataStaffProfile,
-            error: errorAllStaff || errorStaffProfile,
+            errorStaffProfile,
             loading: loadingAllStaff || loadingStaffProfile,
             refetchAllStaff,
             refetchStaffProfile,
