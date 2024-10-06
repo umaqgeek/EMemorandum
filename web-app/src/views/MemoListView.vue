@@ -12,7 +12,7 @@
                 />
                 <LoadingComponent :loading="loadingStaffProfile" />
                 <div class="nk-content" v-if="errorStaffProfile">
-                    <InfoNotLoggedInVue />
+                    <InfoNotLoggedInComponent />
                 </div>
                 <div class="nk-content" v-if="!errorStaffProfile">
                     <div class="container">
@@ -264,6 +264,7 @@ import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
+import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import ChipStatusComponent from "@/components/ChipStatus.vue";
 import { useStaffProfile, useGetAllMOU, useGetMyMOU } from "@/hooks/useAPI";
 
@@ -280,6 +281,7 @@ export default {
         TopNavComponent,
         FooterComponent,
         LoadingComponent,
+        InfoNotLoggedInComponent,
         ChipStatusComponent,
     },
     setup() {

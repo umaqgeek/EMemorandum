@@ -64,6 +64,13 @@ export function useGetAllStaff() {
     });
 }
 
+export function useGetAllStaffSimple() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/staff/less`,
+    });
+}
+
 export function useGetOneStaff(noStaf) {
     return useApi({
         method: "get",
@@ -107,5 +114,16 @@ export function useMouGenerateNoMemo(payload) {
         method: "post",
         url: `${API_URL}/mou/generate-no`,
         data: JSON.stringify(payload),
+    });
+}
+
+export function useHandleFileUpload(formData) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/upload/upload`,
+        data: formData,
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
     });
 }

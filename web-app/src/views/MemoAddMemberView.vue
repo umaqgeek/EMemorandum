@@ -104,7 +104,7 @@
                                                 <div
                                                     class="nk-todo-list card-body"
                                                 >
-                                                    <TableUserMgtComponent />
+                                                    <TableUserComponent />
                                                     <div class="col-lg-12 mt-3">
                                                         <router-link
                                                             to="/memo-list"
@@ -161,14 +161,14 @@
 <script>
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
-import TableUserMgtComponent from "@/components/TableUser.vue";
+import TableUserComponent from "@/components/TableUser.vue";
 
 export default {
     name: "MemoAddMemberView",
     components: {
         NavbarComponent,
         TopNavComponent,
-        TableUserMgtComponent,
+        TableUserComponent,
     },
 };
 </script>

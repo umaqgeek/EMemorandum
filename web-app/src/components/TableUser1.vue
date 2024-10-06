@@ -1,9 +1,6 @@
 <template>
     <div class="card">
-        <table
-            class="datatable-init1 table"
-            data-nk-container="table-responsive"
-        >
+        <DataTable :data="users" class="display">
             <thead class="table-light">
                 <tr>
                     <th class="tb-col">
@@ -16,15 +13,14 @@
                         <span class="overline-title">Status</span>
                     </th>
                     <th class="tb-col tb-col-end" data-sortable="false">
-                        <span class="overline-title">Action</span>
+                        <span class="overline-title" v-if="tableType == null"
+                            >Action</span
+                        >
                     </th>
                 </tr>
             </thead>
             <tbody>
-                <tr
-                    v-bind:key="user.noStaf + userIndex"
-                    v-for="(user, userIndex) in users"
-                >
+                <tr v-bind:key="user.noStaf" v-for="user in users">
                     <td class="tb-col">
                         <div class="media-group">
                             <div
@@ -45,7 +41,7 @@
                                 <a
                                     href="#"
                                     class="title"
-                                    :data-pic="`${JSON.stringify(user)}`"
+                                    @click="choosePIC(user, $event)"
                                     v-if="tableType == 'memoPICs'"
                                 >
                                     {{ getNama(user) }}
@@ -79,7 +75,7 @@
                         >
                     </td>
                     <td class="tb-col tb-col-end">
-                        <div class="dropdown">
+                        <div class="dropdown" v-if="tableType == null">
                             <a
                                 href="#"
                                 class="btn btn-sm btn-icon btn-zoom me-n1"
@@ -94,21 +90,13 @@
                                     <ul
                                         class="link-list link-list-hover-bg-primary link-list-md"
                                     >
-                                        <li v-if="tableType == null">
+                                        <li>
                                             <a
                                                 :href="`${publicPath}user-edit?s=${user.noStaf}`"
                                                 ><em
                                                     class="icon ni ni-edit"
                                                 ></em
                                                 ><span>Update User</span></a
-                                            >
-                                        </li>
-                                        <li v-if="tableType == 'memoPICs'">
-                                            <a href="#" @click="choosePIC(user)"
-                                                ><em
-                                                    class="icon ni ni-done"
-                                                ></em
-                                                ><span>Choose User</span></a
                                             >
                                         </li>
                                     </ul>
@@ -119,13 +107,15 @@
                     </td>
                 </tr>
             </tbody>
-        </table>
+        </DataTable>
     </div>
 </template>
 
 <script>
-import { watch, onMounted } from "vue";
-import $ from "jquery";
+import DataTable from "datatables.net-vue3";
+import DataTablesCore from "datatables.net";
+
+DataTable.use(DataTablesCore);
 
 export default {
     name: "TableUserComponent",
@@ -144,40 +134,6 @@ export default {
             publicPath: process.env.VUE_APP_PUBLIC_PATH,
         };
     },
-    setup(props, { emit }) {
-        const choosePIC = (user) => {
-            emit("handleChoosePIC", user);
-        };
-
-        const initDatatable = () => {
-            window.NioApp.DataTable.init = function () {
-                window.NioApp.DataTable(".datatable-init1");
-            };
-            window.NioApp.winLoad(window.NioApp.DataTable.init);
-
-            $(".datatable-init1").on("click", "a", (event) => {
-                if (props.tableType === "memoPICs") {
-                    const dataPICRaw = event.target?.dataset?.pic;
-                    if (dataPICRaw) {
-                        choosePIC(JSON.parse(dataPICRaw));
-                    }
-                }
-            });
-        };
-
-        onMounted(() => {
-            watch(
-                () => props.users,
-                (updatedUsers) => {
-                    if (updatedUsers.length > 0) {
-                        initDatatable();
-                    }
-                }
-            );
-        });
-
-        return {};
-    },
     methods: {
         getNama(user) {
             return (
@@ -187,6 +143,11 @@ export default {
                 " " +
                 user.nama
             );
+        },
+        choosePIC(user, event) {
+            event.stopPropagation(); // Make sure it doesn't interfere with other listeners
+            event.preventDefault(); // Prevent default action
+            this.$emit("handleChoosePIC", user);
         },
     },
 };

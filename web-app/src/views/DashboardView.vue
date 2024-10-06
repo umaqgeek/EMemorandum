@@ -12,7 +12,7 @@
                 />
                 <LoadingComponent :loading="loading" />
                 <div class="nk-content" v-if="errorStaffProfile">
-                    <InfoNotLoggedInVue />
+                    <InfoNotLoggedInComponent />
                 </div>
                 <div class="nk-content" v-if="!errorStaffProfile">
                     <div class="container-fluid">
@@ -138,7 +138,7 @@ import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
-import InfoNotLoggedInVue from "@/components/InfoNotLoggedIn.vue";
+import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import { useStaffProfile } from "@/hooks/useAPI";
 
 export default {
@@ -153,7 +153,7 @@ export default {
         NavbarComponent,
         TopNavComponent,
         FooterComponent,
-        InfoNotLoggedInVue,
+        InfoNotLoggedInComponent,
     },
     setup() {
         const {

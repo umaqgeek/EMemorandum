@@ -15,7 +15,7 @@ namespace EMemorandum.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "StaffPolicy")]
     public class StaffController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -26,6 +26,7 @@ namespace EMemorandum.Controllers.Api
         }
 
         [HttpGet]
+        [Authorize(Policy = "AdminPolicy")]
         public ActionResult<IEnumerable<EMO_Staf>> GetAllStaff()
         {
             // Fetch the token from the Authorization header
@@ -41,7 +42,31 @@ namespace EMemorandum.Controllers.Api
                 .ToList();
         }
 
+        [HttpGet("less")]
+        public ActionResult<IEnumerable<object>> GetAllStaffSimple()
+        {
+            // Fetch the token from the Authorization header
+            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+            if (authHeader == null || !authHeader.StartsWith("Bearer ")) {
+                return Unauthorized("Token is missing or invalid.");
+            }
+            var staffId = authHeader.Substring("Bearer ".Length).Trim();
+
+            return _context.EMO_Staf
+                .Where(s => s.NoStaf != staffId)
+                .Include(s => s.Roles)
+                .Select(s => (new {
+                    Email = s.Email,
+                    Gelaran = s.Gelaran,
+                    Nama = s.Nama,
+                    NoStaf = s.NoStaf,
+                    Roles = s.Roles,
+                }))
+                .ToList();
+        }
+
         [HttpGet("{noStaf}")]
+        [Authorize(Policy = "AdminPolicy")]
         public ActionResult<EMO_Staf> GetStaffProfile(string noStaf)
         {
             var _entity = _context.EMO_Staf
@@ -58,6 +83,7 @@ namespace EMemorandum.Controllers.Api
         }
 
         [HttpPost("assign-role/{noStaf}")]
+        [Authorize(Policy = "AdminPolicy")]
         public ActionResult AssignStaffRoles(string noStaf, [FromBody] AssignRolesRequest request)
         {
             // Retrieve the staff entity including its roles

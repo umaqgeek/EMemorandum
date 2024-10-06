@@ -14,7 +14,7 @@
                     :loading="loadingStaffProfile || loadingMouSelectData"
                 />
                 <div class="nk-content" v-if="errorStaffProfile">
-                    <InfoNotLoggedInVue />
+                    <InfoNotLoggedInComponent />
                 </div>
                 <div class="nk-content" v-if="!errorStaffProfile">
                     <div class="container">
@@ -506,13 +506,14 @@
                                                                         v-model="
                                                                             staffPIC
                                                                         "
+                                                                        readonly
                                                                     />
                                                                     <button
                                                                         class="btn btn-outline-primary"
                                                                         type="button"
                                                                         id="button-addon2"
                                                                         data-bs-toggle="modal"
-                                                                        data-bs-target="#exampleModal"
+                                                                        data-bs-target="#searchMembersModal"
                                                                     >
                                                                         Search
                                                                         Members
@@ -520,15 +521,18 @@
                                                                 </div>
                                                                 <div
                                                                     class="btn btn-link"
+                                                                    v-on:click="
+                                                                        assignYourselfPIC
+                                                                    "
                                                                 >
                                                                     Assign
                                                                     yourself
                                                                 </div>
                                                                 <div
                                                                     class="modal fade"
-                                                                    id="exampleModal"
+                                                                    id="searchMembersModal"
                                                                     tabindex="-1"
-                                                                    aria-labelledby="exampleModalLabel"
+                                                                    aria-labelledby="searchMembersModalLabel"
                                                                     aria-hidden="true"
                                                                 >
                                                                     <div
@@ -542,7 +546,7 @@
                                                                             >
                                                                                 <h5
                                                                                     class="modal-title"
-                                                                                    id="exampleModalLabel"
+                                                                                    id="searchMembersModalLabel"
                                                                                 >
                                                                                     Responsible
                                                                                     PIC
@@ -557,12 +561,21 @@
                                                                             <div
                                                                                 class="modal-body"
                                                                             >
-                                                                                <TableUserMgtComponent />
+                                                                                <TableUserComponent
+                                                                                    :users="
+                                                                                        allStaffSimple
+                                                                                    "
+                                                                                    tableType="memoPICs"
+                                                                                    @handleChoosePIC="
+                                                                                        handleChoosePIC
+                                                                                    "
+                                                                                />
                                                                             </div>
                                                                             <div
                                                                                 class="modal-footer"
                                                                             >
                                                                                 <button
+                                                                                    id="closeBtnPICs"
                                                                                     type="button"
                                                                                     class="btn btn-sm btn-secondary"
                                                                                     data-bs-dismiss="modal"
@@ -582,6 +595,72 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="NamaDok"
+                                                                    class="form-label"
+                                                                    >Upload a
+                                                                    document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        class="form-control"
+                                                                        type="file"
+                                                                        @change="
+                                                                            handleFileUpload
+                                                                        "
+                                                                    />
+                                                                    <div
+                                                                        class="btn btn-link"
+                                                                        v-if="
+                                                                            filePath
+                                                                        "
+                                                                    >
+                                                                        File:&nbsp;
+                                                                        <a
+                                                                            :href="
+                                                                                filePath
+                                                                            "
+                                                                            target="_blank"
+                                                                            >{{
+                                                                                filePath
+                                                                            }}</a
+                                                                        >
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="Nilai"
+                                                                    class="form-label"
+                                                                    >Value (Eg.:
+                                                                    1234 = RM
+                                                                    1,234)</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        class="form-control"
+                                                                        type="number"
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .Nilai
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     <div
@@ -593,7 +672,7 @@
                                                                     : 'none',
                                                         }"
                                                     >
-                                                        <TableUserMgtComponent />
+                                                        <TableUserComponent />
                                                     </div>
 
                                                     <div
@@ -670,12 +749,16 @@ import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
-import TableUserMgtComponent from "@/components/TableUser.vue";
+import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
+import TableUserComponent from "@/components/TableUser.vue";
 import TableKPIComponent from "@/components/TableKPI.vue";
+import { getBearerToken } from "@/utils/tokenManagement";
 import {
     useStaffProfile,
     useGetMOUSelectData,
     useMouGenerateNoMemo,
+    useGetAllStaffSimple,
+    useHandleFileUpload,
 } from "@/hooks/useAPI";
 
 export default {
@@ -713,7 +796,8 @@ export default {
         TopNavComponent,
         FooterComponent,
         LoadingComponent,
-        TableUserMgtComponent,
+        InfoNotLoggedInComponent,
+        TableUserComponent,
         TableKPIComponent,
     },
     setup() {
@@ -752,31 +836,61 @@ export default {
         watch(
             [KodKategori, KodJenis, KodPTJ],
             ([newKodKategori, newKodJenis, newKodPTJ]) => {
-                console.log("aaa", newKodKategori, newKodJenis, newKodPTJ);
-                const {
-                    data: dataNoMemo,
-                    error: errorNoMemo,
-                    loading: loadingNoMemo,
-                } = useMouGenerateNoMemo({
-                    KodKategori: newKodKategori,
-                    KodJenis: newKodJenis,
-                    KodPTJ: newKodPTJ,
-                });
+                if (newKodKategori && newKodJenis && newKodPTJ) {
+                    const { data: dataNoMemo } = useMouGenerateNoMemo({
+                        KodKategori: newKodKategori,
+                        KodJenis: newKodJenis,
+                        KodPTJ: newKodPTJ,
+                    });
 
-                watch(
-                    () => loadingNoMemo.value,
-                    (newLoadingNoMemo) => {
-                        if (newLoadingNoMemo == false) {
-                            console.log("aaa", errorNoMemo.value);
-                            console.log("aaa", dataNoMemo.value);
-                            if (!errorNoMemo.value) {
-                                NoMemo.value = dataNoMemo.value?.noMemo;
-                            }
+                    watch(
+                        () => dataNoMemo.value,
+                        (newDataNoMemo) => {
+                            NoMemo.value = newDataNoMemo?.noMemo;
                         }
-                    }
-                );
+                    );
+                }
             }
         );
+
+        const { data: dataAllStaffSimple } = useGetAllStaffSimple();
+        const allStaffSimple = ref([]);
+        watch(
+            () => dataAllStaffSimple.value,
+            (newDataAllStaffSimple) => {
+                allStaffSimple.value = newDataAllStaffSimple;
+            }
+        );
+
+        const filePath = ref("");
+        const handleFileUpload = async (event) => {
+            const file = event.target.files[0]; // Get the selected file
+            if (!file) return;
+
+            // Use FormData to send the file to the server
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const {
+                data: dataHandleUpload,
+                loading: loadingHandleUpload,
+                error: errorHandleUpload,
+            } = useHandleFileUpload(formData);
+            watch(
+                [dataHandleUpload, loadingHandleUpload, errorHandleUpload],
+                ([
+                    newDataHandleUpload,
+                    newLoadingHandleUpload,
+                    newErrorHandleUpload,
+                ]) => {
+                    if (newLoadingHandleUpload == false) {
+                        filePath.value =
+                            newDataHandleUpload?.filePath ??
+                            newErrorHandleUpload;
+                    }
+                }
+            );
+        };
 
         return {
             dataStaffProfile,
@@ -794,10 +908,32 @@ export default {
             KodJenis,
             KodPTJ,
             NoMemo,
+            allStaffSimple,
+            filePath,
+            handleFileUpload,
         };
     },
     computed: {},
     methods: {
+        handleChoosePIC(user) {
+            const gelaran = user?.gelaran?.toLowerCase()?.includes("tiada")
+                ? ""
+                : user?.gelaran;
+            this.staffPIC = `${gelaran} ${user?.nama} (${user?.noStaf} | ${user?.email})`;
+            this.form.form1.MS01_NoStaf = user?.noStaf;
+            document.getElementById("closeBtnPICs").click();
+        },
+        assignYourselfPIC() {
+            const gelaran = this.dataStaffProfile?.gelaran
+                ?.toLowerCase()
+                ?.includes("tiada")
+                ? ""
+                : this.dataStaffProfile?.gelaran;
+            this.staffPIC = `${gelaran} ${
+                this.dataStaffProfile?.nama
+            } (${getBearerToken()} | ${this.dataStaffProfile?.email})`;
+            this.form.form1.MS01_NoStaf = getBearerToken();
+        },
         onMenu(mNo) {
             this.menuNo = mNo;
         },
@@ -808,7 +944,19 @@ export default {
             this.menuNo = this.menuNo - 1 <= 0 ? 3 : this.menuNo - 1;
         },
         onSave() {
-            console.log(this.form);
+            const finalForm = {
+                ...this.form,
+                form1: {
+                    ...this.form.form1,
+                    NoMemo: this.NoMemo,
+                    KodKategori: this.KodKategori,
+                    KodJenis: this.KodJenis,
+                    KodPTJ: this.KodPTJ,
+                    NamaDok: this.filePath,
+                    Path: this.filePath,
+                },
+            };
+            console.log(finalForm);
         },
     },
 };
