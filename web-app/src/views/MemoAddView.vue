@@ -623,9 +623,7 @@
                                                                     >
                                                                         File:&nbsp;
                                                                         <a
-                                                                            :href="
-                                                                                filePath
-                                                                            "
+                                                                            :href="`${publicPath}${filePath}`"
                                                                             target="_blank"
                                                                             >{{
                                                                                 filePath
@@ -765,6 +763,7 @@ export default {
     name: "MemoAddView",
     data() {
         return {
+            publicPath: process.env.VUE_APP_PUBLIC_PATH,
             menuNo: 1,
             staffPIC: "",
             form: {

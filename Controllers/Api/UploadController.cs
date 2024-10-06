@@ -17,8 +17,7 @@ public class UploadController : ControllerBase
     public UploadController(IWebHostEnvironment env)
     {
         _env = env;
-        var environmentName = _env.EnvironmentName;
-        var uploadPath = environmentName != "Local" ? "wwwroot/uploads" : "web-app/public/uploads";
+        var uploadPath = _env.EnvironmentName != "Local" ? "wwwroot/uploads" : "web-app/public/uploads";
         _uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), uploadPath);
     }
 
@@ -49,7 +48,7 @@ public class UploadController : ControllerBase
             }
 
             // Return the relative file path
-            var relativePath = $"/uploads/{fileName}";
+            var relativePath = $"uploads/{fileName}";
             return Ok(new { filePath = relativePath });
         }
         catch (Exception ex)
