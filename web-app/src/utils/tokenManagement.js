@@ -9,6 +9,8 @@ export const getBearerToken = () => {
 
 export const resetBearerToken = () => {
     sessionStorage.removeItem(EMO_TOKEN);
+    window.open("", "_self");
+    window.close();
     location.href = process.env.VUE_APP_PUBLIC_PATH;
 };
 
