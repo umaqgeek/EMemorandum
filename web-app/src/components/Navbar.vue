@@ -131,6 +131,14 @@
                                 <span class="nk-menu-text">Approval</span>
                             </a>
                         </li>
+                        <li class="nk-menu-item">
+                            <a href="#" class="nk-menu-link" @click="logout"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-signout"></em
+                                ></span>
+                                <span class="nk-menu-text">Log Out</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -139,6 +147,8 @@
 </template>
 
 <script>
+import { resetBearerToken } from "@/utils/tokenManagement";
+
 export default {
     name: "NavbarComponent",
     data() {
@@ -157,6 +167,10 @@ export default {
                 : [];
         },
     },
-    methods: {},
+    methods: {
+        logout() {
+            resetBearerToken();
+        },
+    },
 };
 </script>
