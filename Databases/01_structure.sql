@@ -112,7 +112,7 @@ CREATE TABLE DbEMO.dbo.MOU01_Memorandum (
 -- DROP TABLE DbEMO.dbo.MOU02_Status;
 
 CREATE TABLE DbEMO.dbo.MOU02_Status (
-	Status_ID int NOT NULL,
+	Status_ID BIGINT IDENTITY(1,1) NOT NULL,
 	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	Status varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	Tarikh smalldatetime NULL,
@@ -136,7 +136,7 @@ CREATE TABLE DbEMO.dbo.MOU03_Ahli (
 	Status varchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	SuratLantikan varchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[Path] varchar(300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT PK_MOU03_Ahli PRIMARY KEY (NoStaf),
+	CONSTRAINT PK_MOU03_Ahli PRIMARY KEY (NoMemo, NoStaf),
 	CONSTRAINT FK_MOU03_Ahli_MOU01_Memorandum FOREIGN KEY (NoMemo) REFERENCES DbEMO.dbo.MOU01_Memorandum(NoMemo)
 );
 
@@ -147,7 +147,7 @@ CREATE TABLE DbEMO.dbo.MOU03_Ahli (
 -- DROP TABLE DbEMO.dbo.MOU04_KPI;
 
 CREATE TABLE DbEMO.dbo.MOU04_KPI (
-	KPI_ID int NOT NULL,
+	KPI_ID BIGINT IDENTITY(1,1) NOT NULL,
 	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	Amaun decimal(18,2) NULL,
 	MOU04_Number numeric(18,0) NULL,
@@ -167,7 +167,7 @@ CREATE TABLE DbEMO.dbo.MOU04_KPI (
 -- DROP TABLE DbEMO.dbo.MOU05_KPI_Progress;
 
 CREATE TABLE DbEMO.dbo.MOU05_KPI_Progress (
-	KPI_ID int NOT NULL,
+	KPI_ID BIGINT NOT NULL,
 	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	ProgressID timestamp NOT NULL,
 	Bukti nvarchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,

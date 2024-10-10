@@ -7,7 +7,7 @@ namespace EMemorandum.Models;
 public class MOU02_Status
 {
     [Key]
-    public int? Status_ID { get; set; }
+    public long? Status_ID { get; set; }
 
     [ForeignKey("MOU01_Memorandum")]
     public string? NoMemo { get; set; }
