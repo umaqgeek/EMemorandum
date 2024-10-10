@@ -19,7 +19,7 @@ NioApp.DataTable = function (selector, opt) {
         //scrolled rsponsive
         let dataContainer = item.dataset.nkContainer ? item.dataset.nkContainer : '',
         containerClass = dataContainer.split(' ');
-        dataContainer && dataTables.container.classList.add(...containerClass)
+        if (dataTables.container) dataContainer && dataTables.container.classList.add(...containerClass)
       })
     }
 }

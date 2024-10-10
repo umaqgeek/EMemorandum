@@ -155,6 +155,7 @@ CREATE TABLE DbEMO.dbo.MOU04_KPI (
 	TarikhMula smalldatetime NULL,
 	TarikhTamat smalldatetime NULL,
 	Komen varchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	Nama varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	CONSTRAINT PK_MOU04_KPI PRIMARY KEY (KPI_ID),
 	CONSTRAINT FK_MOU04_KPI_MOU01_Memorandum FOREIGN KEY (NoMemo) REFERENCES DbEMO.dbo.MOU01_Memorandum(NoMemo)
 );

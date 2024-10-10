@@ -19,7 +19,7 @@ NioApp.DataTable = function (selector, opt) {
         //scrolled rsponsive
         let dataContainer = item.dataset.nkContainer ? item.dataset.nkContainer : '',
         containerClass = dataContainer.split(' ');
-        dataContainer && dataTables.container.classList.add(...containerClass)
+        if (dataTables.container) dataContainer && dataTables.container.classList.add(...containerClass)
       })
     }
 }
@@ -27,6 +27,8 @@ NioApp.DataTable = function (selector, opt) {
 NioApp.DataTable.init = function () {
   NioApp.DataTable('.datatable-init')
 }
+
+window.NioApp = NioApp;
 
 NioApp.winLoad(NioApp.DataTable.init);
 

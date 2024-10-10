@@ -51,8 +51,7 @@
                                 <div class="nk-block">
                                     <div class="card">
                                         <table
-                                            :data="data"
-                                            class="datatable-init table"
+                                            class="table"
                                             data-nk-container="table-responsive"
                                         >
                                             <thead class="table-light">
@@ -126,14 +125,14 @@
                                                 <tr
                                                     v-for="(
                                                         mou, mouIndex
-                                                    ) in mouData?.value"
+                                                    ) in mouData"
                                                     v-bind:key="mouIndex"
                                                 >
                                                     <td class="tb-col">
                                                         {{ mouIndex + 1 }}.
                                                     </td>
                                                     <td class="tb-col">
-                                                        {{ mou?.noMemo }}
+                                                        {{ mou?.noMemo }}&nbsp;
                                                     </td>
                                                     <td class="tb-col">
                                                         {{ mou?.scopeButiran }}
@@ -291,7 +290,15 @@ export default {
             loading: loadingStaffProfile,
         } = useStaffProfile();
 
-        const mouData = ref(null);
+        const initDatatable = () => {
+            console.log("aaa masuk cni tak?");
+            window.NioApp.DataTable.init = function () {
+                window.NioApp.DataTable(".datatable-init1");
+            };
+            window.NioApp.winLoad(window.NioApp.DataTable.init);
+        };
+
+        const mouData = ref([]);
         const mouError = ref(null);
         const mouLoading = ref(false);
         watch(
@@ -312,23 +319,25 @@ export default {
                         ? true
                         : false;
                     if (isAdmin || isPUU) {
-                        const {
-                            data: dataAllMOU,
-                            error: errorAllMOU,
-                            loading: loadingAllMOU,
-                        } = useGetAllMOU();
-                        mouData.value = dataAllMOU;
-                        mouError.value = errorAllMOU;
-                        mouLoading.value = loadingAllMOU;
+                        const { data: dataAllMOU } = useGetAllMOU();
+                        watch(
+                            () => dataAllMOU.value,
+                            (dataAllMOUs) => {
+                                mouData.value = dataAllMOUs;
+                                initDatatable();
+                            },
+                            { immediate: true }
+                        );
                     } else {
-                        const {
-                            data: dataMyMOU,
-                            error: errorMyMOU,
-                            loading: loadingMyMOU,
-                        } = useGetMyMOU();
-                        mouData.value = dataMyMOU;
-                        mouError.value = errorMyMOU;
-                        mouLoading.value = loadingMyMOU;
+                        const { data: dataMyMOU } = useGetMyMOU();
+                        watch(
+                            () => dataMyMOU.value,
+                            (dataMyMOUs) => {
+                                mouData.value = dataMyMOUs;
+                                initDatatable();
+                            },
+                            { immediate: true }
+                        );
                     }
                 }
             },
