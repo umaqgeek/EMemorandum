@@ -291,7 +291,6 @@ export default {
         } = useStaffProfile();
 
         const initDatatable = () => {
-            console.log("aaa masuk cni tak?");
             window.NioApp.DataTable.init = function () {
                 window.NioApp.DataTable(".datatable-init1");
             };

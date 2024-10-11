@@ -93,7 +93,6 @@ public class MOUController : ControllerBase
         return Ok(genNo);
     }
 
-    // TODO: Add memorandum and its members and its KPIs (All)
     [HttpPost]
     public ActionResult<object> Store([FromBody] MOUAddModel entity)
     {
@@ -146,9 +145,13 @@ public class MOUController : ControllerBase
         {
             try
             {
+                // add MOU
                 _context.MOU01_Memorandum.Add(mou);
+
+                // add initial status for added MOU
                 _context.MOU02_Status.Add(mouStatus);
 
+                // add members for added MOU
                 foreach (var member in entity.form2.Members) {
                     _context.MOU03_Ahli.Add(new MOU03_Ahli {
                         NoMemo = genNo.noMemo,
@@ -156,6 +159,20 @@ public class MOUController : ControllerBase
                         Peranan = member.Peranan,
                         TkhMula = entity.form1.TarikhMula,
                         TkhTamat = entity.form1.TarikhTamat,
+                    });
+                }
+
+                // add KPIs for added MOU
+                foreach (var kpi in entity.form3.KPIs) {
+                    _context.MOU04_KPI.Add(new MOU04_KPI {
+                        NoMemo = genNo.noMemo,
+                        Amaun = kpi.Amaun,
+                        MOU04_Number = kpi.MOU04_Number,
+                        Penerangan = kpi.Penerangan,
+                        TarikhMula = kpi.TarikhMula,
+                        TarikhTamat = kpi.TarikhTamat,
+                        Komen = kpi.Komen,
+                        Nama = kpi.Nama,
                     });
                 }
 
@@ -335,5 +352,5 @@ public class MOUMembers
 
 public class MOUKPIs
 {
-    public ICollection<object> KPIs { get; set; }
+    public ICollection<MOU04_KPI> KPIs { get; set; }
 }

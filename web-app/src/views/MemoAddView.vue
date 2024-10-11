@@ -11,7 +11,11 @@
                     :errorStaffProfile="errorStaffProfile"
                 />
                 <LoadingComponent
-                    :loading="loadingStaffProfile || loadingMouSelectData"
+                    :loading="
+                        loadingStaffProfile ||
+                        loadingMouSelectData ||
+                        loadingAddMOU
+                    "
                 />
                 <div class="nk-content" v-if="errorStaffProfile">
                     <InfoNotLoggedInComponent />
@@ -803,6 +807,7 @@ import {
     useMouGenerateNoMemo,
     useGetAllStaffSimple,
     useHandleFileUpload,
+    useMouStoreMemo,
 } from "@/hooks/useAPI";
 
 export default {
@@ -832,6 +837,8 @@ export default {
                 },
             },
             members: [],
+            loadingAddMOU: false,
+            addedMOUNoMemo: "",
         };
     },
     components: {
@@ -1011,22 +1018,89 @@ export default {
             this.menuNo = this.menuNo - 1 <= 0 ? 3 : this.menuNo - 1;
         },
         onSave() {
+            var nilai = 0;
+            this.form.form3.kpis.map((kpi) => {
+                nilai += parseInt(kpi.Amaun);
+                return kpi;
+            });
             const finalForm = {
                 ...this.form,
                 form1: {
-                    ...this.form.form1,
                     NoMemo: this.NoMemo,
                     KodKategori: this.KodKategori,
                     KodJenis: this.KodJenis,
                     KodPTJ: this.KodPTJ,
+                    KodScope: this.form.form1.KodScope,
+                    KodPTJSub: this.form.form1.KodPTJSub,
+                    TarikhMula: this.form.form1.TarikhMula,
+                    TarikhTamat: this.form.form1.TarikhTamat,
+                    TajukProjek: this.form.form1.TajukProjek,
                     NamaDok: this.filePath,
                     Path: this.filePath,
+                    MS01_NoStaf: this.form.form1.MS01_NoStaf,
+                    Nilai: nilai,
                 },
                 form2: {
-                    members: this.members,
+                    Members: this.members.map((member) => {
+                        return {
+                            NoStaf: member.noStaf,
+                            Peranan: member.roles
+                                .map((role) => role.role)
+                                .join("|"),
+                        };
+                    }),
+                },
+                form3: {
+                    KPIs: this.form.form3.kpis.map((kpi, kpiIndex) => {
+                        return {
+                            Amaun: kpi.Amaun,
+                            MOU04_Number: kpiIndex,
+                            Penerangan: kpi.Penerangan,
+                            TarikhMula: kpi.TarikhMula,
+                            TarikhTamat: kpi.TarikhTamat,
+                            Komen: kpi.Komen,
+                            Nama: kpi.Nama,
+                        };
+                    }),
                 },
             };
-            console.log(finalForm);
+
+            const {
+                data: dataAddMOU,
+                loading: loadingAddMOU,
+                error: errorAddMOU,
+            } = useMouStoreMemo(finalForm);
+
+            this.loadingAddMOU = true;
+            var self = this;
+            watch(
+                () => loadingAddMOU.value,
+                (newLoadingAddMOU) => {
+                    self.loadingAddMOU = newLoadingAddMOU;
+                }
+            );
+            watch(
+                () => dataAddMOU.value,
+                (newDataAddMOU) => {
+                    self.addedMOUNoMemo = newDataAddMOU?.noMemo;
+                    if (newDataAddMOU?.noMemo) {
+                        location.href = self.publicPath + "memo-list";
+                    }
+                }
+            );
+            watch(
+                () => errorAddMOU.value,
+                (newErrorAddMOU) => {
+                    if (newErrorAddMOU) {
+                        self.$toast.open({
+                            message:
+                                "Saving error! Please contact the system administrator.",
+                            type: "error",
+                            position: "top-right",
+                        });
+                    }
+                }
+            );
         },
     },
 };

@@ -127,3 +127,11 @@ export function useHandleFileUpload(formData) {
         },
     });
 }
+
+export function useMouStoreMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/mou`,
+        data: JSON.stringify(payload),
+    });
+}
