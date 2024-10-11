@@ -11,7 +11,11 @@
                     :errorStaffProfile="errorStaffProfile"
                 />
                 <LoadingComponent
-                    :loading="loadingStaffProfile || loadingMouSelectData"
+                    :loading="
+                        loadingStaffProfile ||
+                        loadingMouSelectData ||
+                        loadingAddMOU
+                    "
                 />
                 <div class="nk-content" v-if="errorStaffProfile">
                     <InfoNotLoggedInComponent />
@@ -513,7 +517,7 @@
                                                                         type="button"
                                                                         id="button-addon2"
                                                                         data-bs-toggle="modal"
-                                                                        data-bs-target="#searchMembersModal"
+                                                                        data-bs-target="#searchPICsModal"
                                                                     >
                                                                         Search
                                                                         Members
@@ -530,9 +534,9 @@
                                                                 </div>
                                                                 <div
                                                                     class="modal fade"
-                                                                    id="searchMembersModal"
+                                                                    id="searchPICsModal"
                                                                     tabindex="-1"
-                                                                    aria-labelledby="searchMembersModalLabel"
+                                                                    aria-labelledby="searchPICsModalLabel"
                                                                     aria-hidden="true"
                                                                 >
                                                                     <div
@@ -546,7 +550,7 @@
                                                                             >
                                                                                 <h5
                                                                                     class="modal-title"
-                                                                                    id="searchMembersModalLabel"
+                                                                                    id="searchPICsModalLabel"
                                                                                 >
                                                                                     Responsible
                                                                                     PIC
@@ -582,20 +586,13 @@
                                                                                 >
                                                                                     Close
                                                                                 </button>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    class="btn btn-sm btn-primary"
-                                                                                >
-                                                                                    Save
-                                                                                    changes
-                                                                                </button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6">
+                                                        <div class="col-lg-12">
                                                             <div
                                                                 class="form-group"
                                                             >
@@ -633,32 +630,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6">
-                                                            <div
-                                                                class="form-group"
-                                                            >
-                                                                <label
-                                                                    for="Nilai"
-                                                                    class="form-label"
-                                                                    >Value (Eg.:
-                                                                    1234 = RM
-                                                                    1,234)</label
-                                                                >
-                                                                <div
-                                                                    class="form-control-wrap"
-                                                                >
-                                                                    <input
-                                                                        class="form-control"
-                                                                        type="number"
-                                                                        v-model="
-                                                                            form
-                                                                                .form1
-                                                                                .Nilai
-                                                                        "
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
 
                                                     <div
@@ -670,7 +641,84 @@
                                                                     : 'none',
                                                         }"
                                                     >
-                                                        <TableUserComponent />
+                                                        <div>
+                                                            <button
+                                                                class="btn btn-outline-primary"
+                                                                type="button"
+                                                                id="button-addon2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#searchMembersModal"
+                                                            >
+                                                                Add Members
+                                                            </button>
+                                                        </div>
+                                                        <TableUserComponent
+                                                            :users="members"
+                                                            tableType="memoMOUMembers"
+                                                            @removeMembers="
+                                                                removeMembers
+                                                            "
+                                                            :isNotDatatable="
+                                                                true
+                                                            "
+                                                        />
+                                                        <div
+                                                            class="modal fade"
+                                                            id="searchMembersModal"
+                                                            tabindex="-1"
+                                                            aria-labelledby="searchMembersModalLabel"
+                                                            aria-hidden="true"
+                                                        >
+                                                            <div
+                                                                class="modal-dialog modal-lg"
+                                                            >
+                                                                <div
+                                                                    class="modal-content"
+                                                                >
+                                                                    <div
+                                                                        class="modal-header"
+                                                                    >
+                                                                        <h5
+                                                                            class="modal-title"
+                                                                            id="searchMembersModalLabel"
+                                                                        >
+                                                                            Members
+                                                                        </h5>
+                                                                        <button
+                                                                            type="button"
+                                                                            class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"
+                                                                        ></button>
+                                                                    </div>
+                                                                    <div
+                                                                        class="modal-body"
+                                                                    >
+                                                                        <TableUserComponent
+                                                                            :users="
+                                                                                allStaffSimple
+                                                                            "
+                                                                            tableType="memoMembers"
+                                                                            @addMembers="
+                                                                                addMembers
+                                                                            "
+                                                                        />
+                                                                    </div>
+                                                                    <div
+                                                                        class="modal-footer"
+                                                                    >
+                                                                        <button
+                                                                            id="closeBtnMembers"
+                                                                            type="button"
+                                                                            class="btn btn-sm btn-secondary"
+                                                                            data-bs-dismiss="modal"
+                                                                        >
+                                                                            Close
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     <div
@@ -682,7 +730,9 @@
                                                                     : 'none',
                                                         }"
                                                     >
-                                                        <TableKPIComponent />
+                                                        <TableKPIComponent
+                                                            @saveKPIs="saveKPIs"
+                                                        />
                                                     </div>
 
                                                     <div class="row mt-3 g-3">
@@ -757,6 +807,7 @@ import {
     useMouGenerateNoMemo,
     useGetAllStaffSimple,
     useHandleFileUpload,
+    useMouStoreMemo,
 } from "@/hooks/useAPI";
 
 export default {
@@ -780,13 +831,14 @@ export default {
                     Nilai: "0",
                     MS01_NoStaf: "",
                 },
-                form2: {
-                    members: [],
-                },
+                form2: {},
                 form3: {
                     kpis: [],
                 },
             },
+            members: [],
+            loadingAddMOU: false,
+            addedMOUNoMemo: "",
         };
     },
     components: {
@@ -922,6 +974,26 @@ export default {
             this.form.form1.MS01_NoStaf = user?.noStaf;
             document.getElementById("closeBtnPICs").click();
         },
+        addMembers(user) {
+            const member = this.members.find((m) => m.noStaf === user.noStaf);
+            if (!member) {
+                this.members.push(user);
+                document.getElementById("closeBtnMembers").click();
+            } else {
+                this.$toast.open({
+                    message:
+                        "That staff has been added as part of the members.",
+                    type: "error",
+                    position: "top-right",
+                });
+            }
+        },
+        removeMembers(user) {
+            const members = this.members.filter(
+                (m) => m.noStaf !== user.noStaf
+            );
+            this.members = members;
+        },
         assignYourselfPIC() {
             const gelaran = this.dataStaffProfile?.gelaran
                 ?.toLowerCase()
@@ -933,6 +1005,9 @@ export default {
             } (${getBearerToken()} | ${this.dataStaffProfile?.email})`;
             this.form.form1.MS01_NoStaf = getBearerToken();
         },
+        saveKPIs(kpis) {
+            this.form.form3.kpis = kpis;
+        },
         onMenu(mNo) {
             this.menuNo = mNo;
         },
@@ -943,19 +1018,89 @@ export default {
             this.menuNo = this.menuNo - 1 <= 0 ? 3 : this.menuNo - 1;
         },
         onSave() {
+            var nilai = 0;
+            this.form.form3.kpis.map((kpi) => {
+                nilai += parseInt(kpi.Amaun);
+                return kpi;
+            });
             const finalForm = {
                 ...this.form,
                 form1: {
-                    ...this.form.form1,
                     NoMemo: this.NoMemo,
                     KodKategori: this.KodKategori,
                     KodJenis: this.KodJenis,
                     KodPTJ: this.KodPTJ,
+                    KodScope: this.form.form1.KodScope,
+                    KodPTJSub: this.form.form1.KodPTJSub,
+                    TarikhMula: this.form.form1.TarikhMula,
+                    TarikhTamat: this.form.form1.TarikhTamat,
+                    TajukProjek: this.form.form1.TajukProjek,
                     NamaDok: this.filePath,
                     Path: this.filePath,
+                    MS01_NoStaf: this.form.form1.MS01_NoStaf,
+                    Nilai: nilai,
+                },
+                form2: {
+                    Members: this.members.map((member) => {
+                        return {
+                            NoStaf: member.noStaf,
+                            Peranan: member.roles
+                                .map((role) => role.role)
+                                .join("|"),
+                        };
+                    }),
+                },
+                form3: {
+                    KPIs: this.form.form3.kpis.map((kpi, kpiIndex) => {
+                        return {
+                            Amaun: kpi.Amaun,
+                            MOU04_Number: kpiIndex,
+                            Penerangan: kpi.Penerangan,
+                            TarikhMula: kpi.TarikhMula,
+                            TarikhTamat: kpi.TarikhTamat,
+                            Komen: kpi.Komen,
+                            Nama: kpi.Nama,
+                        };
+                    }),
                 },
             };
-            console.log(finalForm);
+
+            const {
+                data: dataAddMOU,
+                loading: loadingAddMOU,
+                error: errorAddMOU,
+            } = useMouStoreMemo(finalForm);
+
+            this.loadingAddMOU = true;
+            var self = this;
+            watch(
+                () => loadingAddMOU.value,
+                (newLoadingAddMOU) => {
+                    self.loadingAddMOU = newLoadingAddMOU;
+                }
+            );
+            watch(
+                () => dataAddMOU.value,
+                (newDataAddMOU) => {
+                    self.addedMOUNoMemo = newDataAddMOU?.noMemo;
+                    if (newDataAddMOU?.noMemo) {
+                        location.href = self.publicPath + "memo-list";
+                    }
+                }
+            );
+            watch(
+                () => errorAddMOU.value,
+                (newErrorAddMOU) => {
+                    if (newErrorAddMOU) {
+                        self.$toast.open({
+                            message:
+                                "Saving error! Please contact the system administrator.",
+                            type: "error",
+                            position: "top-right",
+                        });
+                    }
+                }
+            );
         },
     },
 };

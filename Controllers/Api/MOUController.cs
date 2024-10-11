@@ -86,25 +86,110 @@ public class MOUController : ControllerBase
     public ActionResult<object> GenerateNo([FromBody] MemorandumGenNo entity)
     {
         var genNo = getGeneratedNo(entity);
-        if (genNo != null && genNo.GetType().GetProperty("error") != null) {
+        if (genNo != null && genNo.GetType().GetProperty("error") != null)
+        {
             return NotFound(genNo);
         }
         return Ok(genNo);
     }
 
-    // TODO: Add memorandum and its members and its KPIs (All)
     [HttpPost]
-    public ActionResult<string> Store([FromBody] MOU01_Memorandum entity)
+    public ActionResult<object> Store([FromBody] MOUAddModel entity)
     {
         var genNo = getGeneratedNo(new MemorandumGenNo
         {
-            KodJenis = entity.KodJenis,
-            KodKategori = entity.KodKategori,
-            KodPTJ = entity.KodPTJ,
+            KodJenis = entity.form1.KodJenis,
+            KodKategori = entity.form1.KodKategori,
+            KodPTJ = entity.form1.KodPTJ,
         });
-        if (genNo != null && genNo.GetType().GetProperty("error") != null) {
+        if (genNo != null && genNo.GetType().GetProperty("error") != null)
+        {
             return NotFound(genNo);
         }
+
+        var initialStatus = "01";
+        var noSiris = genNo.noMemo.Split(".");
+        var noSiri = "";
+        if (noSiris.Length > 0)
+        {
+            noSiri = noSiris[noSiris.Length - 1];
+        }
+        var mou = new MOU01_Memorandum
+        {
+            NoMemo = genNo.noMemo,
+            NoSiri = noSiri,
+            Tahun = DateTime.Now.Year,
+            KodPTJ = entity.form1.KodPTJ,
+            KodScope = entity.form1.KodScope,
+            KodJenis = entity.form1.KodJenis,
+            KodKategori = entity.form1.KodKategori,
+            KodPTJSub = entity.form1.KodPTJSub,
+            TarikhMula = entity.form1.TarikhMula,
+            TarikhTamat = entity.form1.TarikhTamat,
+            TajukProjek = entity.form1.TajukProjek,
+            NamaDok = entity.form1.NamaDok,
+            Path = entity.form1.Path,
+            MS01_NoStaf = entity.form1.MS01_NoStaf,
+            Status = initialStatus,
+            Nilai = entity.form1.Nilai,
+        };
+
+        var mouStatus = new MOU02_Status
+        {
+            NoMemo = genNo.noMemo,
+            Status = initialStatus,
+            Tarikh = DateTime.Now,
+        };
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                // add MOU
+                _context.MOU01_Memorandum.Add(mou);
+
+                // add initial status for added MOU
+                _context.MOU02_Status.Add(mouStatus);
+
+                // add members for added MOU
+                foreach (var member in entity.form2.Members) {
+                    _context.MOU03_Ahli.Add(new MOU03_Ahli {
+                        NoMemo = genNo.noMemo,
+                        NoStaf = member.NoStaf,
+                        Peranan = member.Peranan,
+                        TkhMula = entity.form1.TarikhMula,
+                        TkhTamat = entity.form1.TarikhTamat,
+                    });
+                }
+
+                // add KPIs for added MOU
+                foreach (var kpi in entity.form3.KPIs) {
+                    _context.MOU04_KPI.Add(new MOU04_KPI {
+                        NoMemo = genNo.noMemo,
+                        Amaun = kpi.Amaun,
+                        MOU04_Number = kpi.MOU04_Number,
+                        Penerangan = kpi.Penerangan,
+                        TarikhMula = kpi.TarikhMula,
+                        TarikhTamat = kpi.TarikhTamat,
+                        Komen = kpi.Komen,
+                        Nama = kpi.Nama,
+                    });
+                }
+
+                // Save changes to the database
+                _context.SaveChanges();
+                // Commit the transaction if all commands succeed
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                // Rollback the transaction if any command fails
+                transaction.Rollback();
+                // Log or rethrow the exception as needed
+                throw;
+            }
+        }
+
         return Ok(genNo);
     }
 
@@ -140,7 +225,7 @@ public class MOUController : ControllerBase
         return Ok(GetTransformedMOU(_entity, staffId));
     }
 
-    private object getGeneratedNo(MemorandumGenNo entity)
+    private dynamic getGeneratedNo(MemorandumGenNo entity)
     {
         // Sample:
         // MoA(P).1.2.2024.101010.001
@@ -148,19 +233,22 @@ public class MOUController : ControllerBase
         var kategori = _context.PUU_KategoriMemo
             .Where(k => k.Kod == entity.KodKategori)
             .FirstOrDefault();
-        if (kategori == null) {
+        if (kategori == null)
+        {
             return (new { error = "KodKategori not found!" });
         }
         var jenis = _context.PUU_JenisMemo
             .Where(j => j.Kod == entity.KodJenis)
             .FirstOrDefault();
-        if (jenis == null) {
+        if (jenis == null)
+        {
             return (new { error = "KodJenis not found!" });
         }
         var ptj = _context.PUU_SubPTj
             .Where(j => j.KodPTJ == entity.KodPTJ)
             .FirstOrDefault();
-        if (ptj == null) {
+        if (ptj == null)
+        {
             return (new { error = "KodPTJ not found!" });
         }
         var currentYear = DateTime.Now.Year;
@@ -217,15 +305,18 @@ public class MOUController : ControllerBase
             PIC = _entity.EMO_Staf.Nama,
             noStafPIC = _entity.EMO_Staf.NoStaf,
             Nilai = _entity.Nilai,
-            Status = new {
+            Status = new
+            {
                 _entity.MOU_Status.Kod,
                 _entity.MOU_Status.Status,
             },
-            Statuses = _entity.MOU02_Statuses.Select(mou02 => new {
+            Statuses = _entity.MOU02_Statuses.Select(mou02 => new
+            {
                 Status_ID = mou02.Status_ID,
                 NoMemo = mou02.NoMemo,
                 Tarikh = mou02.Tarikh,
-                StatusInner = new {
+                StatusInner = new
+                {
                     mou02.MOU_Status.Kod,
                     mou02.MOU_Status.Status
                 },
@@ -245,4 +336,21 @@ public class MemorandumGenNo
     public int KodKategori { get; set; }
     public int KodJenis { get; set; }
     public string KodPTJ { get; set; }
+}
+
+public class MOUAddModel
+{
+    public MOU01_Memorandum form1 { get; set; }
+    public MOUMembers form2 { get; set; }
+    public MOUKPIs form3 { get; set; }
+}
+
+public class MOUMembers
+{
+    public ICollection<MOU03_Ahli> Members { get; set; }
+}
+
+public class MOUKPIs
+{
+    public ICollection<MOU04_KPI> KPIs { get; set; }
 }

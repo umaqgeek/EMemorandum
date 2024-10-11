@@ -17,6 +17,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<PUU_ScopeMemo> PUU_ScopeMemo { get; set; }
     public DbSet<PUU_SubPTj> PUU_SubPTj { get; set; }
     public DbSet<MOU01_Memorandum> MOU01_Memorandum { get; set; }
+    public DbSet<MOU02_Status> MOU02_Status { get; set; }
+    public DbSet<MOU03_Ahli> MOU03_Ahli { get; set; }
+    public DbSet<MOU04_KPI> MOU04_KPI { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -76,6 +79,19 @@ public class ApplicationDbContext : DbContext
             .HasOne(m => m.MOU_Status)
             .WithMany(s => s.Statuses)
             .HasForeignKey(m => m.Status);
+
+        modelBuilder.Entity<MOU03_Ahli>()
+            .HasOne(m => m.MOU01_Memorandum)
+            .WithMany(s => s.MOU03_Ahli)
+            .HasForeignKey(m => m.NoMemo);
+
+        modelBuilder.Entity<MOU03_Ahli>()
+            .HasKey(m => new { m.NoMemo, m.NoStaf });
+
+        modelBuilder.Entity<MOU04_KPI>()
+            .HasOne(m => m.MOU01_Memorandum)
+            .WithMany(s => s.MOU04_KPI)
+            .HasForeignKey(m => m.NoMemo);
 
         base.OnModelCreating(modelBuilder);
     }

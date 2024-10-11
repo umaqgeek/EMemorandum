@@ -39,6 +39,7 @@ obj/
 *.sln.docstates
 wwwroot/
 publish/
+AppSettingsEnv/.env
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt

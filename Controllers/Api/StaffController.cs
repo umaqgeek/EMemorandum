@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EMemorandum.Models;
+using EMemorandum.Services;
 
 namespace EMemorandum.Controllers.Api
 {
@@ -18,11 +19,15 @@ namespace EMemorandum.Controllers.Api
     [Authorize(Policy = "StaffPolicy")]
     public class StaffController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public StaffController(IConfiguration configuration, ApplicationDbContext context)
+        public StaffController(IConfiguration configuration, ApplicationDbContext context, IEmailService emailService)
         {
+            _configuration = configuration;
             _context = context;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -116,7 +121,28 @@ namespace EMemorandum.Controllers.Api
             // Save changes to the database
             _context.SaveChanges();
 
+            if (!string.IsNullOrWhiteSpace(_entity.Email)) {
+                SendEmailInBackground(_entity);
+            }
+
             return Ok(_entity);
+        }
+
+        private void SendEmailInBackground(EMO_Staf _entity)
+        {
+            var iutemurl = _configuration.GetValue<string>("IUTeMURL");
+            var subject = "E-Memorandum UTeM (EMO) - Account Activation";
+            var gelaran = _entity.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : _entity.Gelaran;
+            var body = "<p>Assalamualaikum wrt. wbt. dan Salam Sejahtera,</p>"
+                        + "<p>" + gelaran + " " + _entity.Nama + "</p>"
+                        + "<p>Your account has been updated. Please login into EMO application under " + iutemurl + " for more info.</p>"
+                        + "<p>Regards,</p>";
+
+            // Run email sending in the background
+            Task.Run(async () =>
+            {
+                await _emailService.SendEmailAsync(_entity.Email, subject, body);
+            });
         }
     }
 }

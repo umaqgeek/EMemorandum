@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <table
-            class="datatable-init1 table"
+            :class="['table', { 'datatable-init': isNotDatatable !== true }]"
             data-nk-container="table-responsive"
         >
             <thead class="table-light">
@@ -20,11 +20,8 @@
                     </th>
                 </tr>
             </thead>
-            <tbody>
-                <tr
-                    v-bind:key="user.noStaf + userIndex"
-                    v-for="(user, userIndex) in users"
-                >
+            <tbody v-if="localUsers?.length > 0">
+                <tr v-bind:key="user.noStaf" v-for="user in localUsers">
                     <td class="tb-col">
                         <div class="media-group">
                             <div
@@ -45,8 +42,27 @@
                                 <a
                                     href="#"
                                     class="title"
+                                    @click="choosePIC(user)"
                                     :data-pic="`${JSON.stringify(user)}`"
                                     v-if="tableType == 'memoPICs'"
+                                >
+                                    {{ getNama(user) }}
+                                </a>
+                                <a
+                                    href="#"
+                                    class="title"
+                                    @click="addMember(user)"
+                                    :data-member="`${JSON.stringify(user)}`"
+                                    v-if="tableType == 'memoMembers'"
+                                >
+                                    {{ getNama(user) }}
+                                </a>
+                                <a
+                                    href="#"
+                                    class="title"
+                                    @click="removeMember(user)"
+                                    :data-moumember="`${JSON.stringify(user)}`"
+                                    v-if="tableType == 'memoMOUMembers'"
                                 >
                                     {{ getNama(user) }}
                                 </a>
@@ -94,21 +110,61 @@
                                     <ul
                                         class="link-list link-list-hover-bg-primary link-list-md"
                                     >
-                                        <li v-if="tableType == null">
+                                        <li>
                                             <a
                                                 :href="`${publicPath}user-edit?s=${user.noStaf}`"
+                                                v-if="tableType == null"
                                                 ><em
                                                     class="icon ni ni-edit"
                                                 ></em
                                                 ><span>Update User</span></a
                                             >
                                         </li>
-                                        <li v-if="tableType == 'memoPICs'">
-                                            <a href="#" @click="choosePIC(user)"
+                                        <li>
+                                            <a
+                                                href="#"
+                                                @click="choosePIC(user)"
+                                                :data-pic="`${JSON.stringify(
+                                                    user
+                                                )}`"
+                                                v-if="tableType == 'memoPICs'"
                                                 ><em
                                                     class="icon ni ni-done"
                                                 ></em
                                                 ><span>Choose User</span></a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="#"
+                                                @click="addMember(user)"
+                                                :data-member="`${JSON.stringify(
+                                                    user
+                                                )}`"
+                                                v-if="
+                                                    tableType == 'memoMembers'
+                                                "
+                                                ><em
+                                                    class="icon ni ni-plus"
+                                                ></em
+                                                ><span>Add User</span></a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="#"
+                                                @click="removeMember(user)"
+                                                :data-moumember="`${JSON.stringify(
+                                                    user
+                                                )}`"
+                                                v-if="
+                                                    tableType ==
+                                                    'memoMOUMembers'
+                                                "
+                                                ><em
+                                                    class="icon ni ni-cross"
+                                                ></em
+                                                ><span>Remove User</span></a
                                             >
                                         </li>
                                     </ul>
@@ -119,12 +175,13 @@
                     </td>
                 </tr>
             </tbody>
+            <tbody v-else></tbody>
         </table>
     </div>
 </template>
 
 <script>
-import { watch, onMounted } from "vue";
+import { watchEffect, ref } from "vue";
 import $ from "jquery";
 
 export default {
@@ -138,6 +195,10 @@ export default {
             type: String,
             required: false,
         },
+        isNotDatatable: {
+            type: Boolean,
+            required: false,
+        },
     },
     data() {
         return {
@@ -148,35 +209,48 @@ export default {
         const choosePIC = (user) => {
             emit("handleChoosePIC", user);
         };
-
+        const addMember = (user) => {
+            emit("addMembers", user);
+        };
+        const removeMember = (user) => {
+            emit("removeMembers", user);
+        };
         const initDatatable = () => {
-            window.NioApp.DataTable.init = function () {
-                window.NioApp.DataTable(".datatable-init1");
-            };
-            window.NioApp.winLoad(window.NioApp.DataTable.init);
-
-            $(".datatable-init1").on("click", "a", (event) => {
+            $(".datatable-init").on("click", "a", (event) => {
                 if (props.tableType === "memoPICs") {
                     const dataPICRaw = event.target?.dataset?.pic;
                     if (dataPICRaw) {
                         choosePIC(JSON.parse(dataPICRaw));
                     }
                 }
+                if (props.tableType === "memoMembers") {
+                    const dataMemberRaw = event.target?.dataset?.member;
+                    if (dataMemberRaw) {
+                        addMember(JSON.parse(dataMemberRaw));
+                    }
+                }
+                if (props.tableType === "memoMOUMembers") {
+                    const dataMOUMemberRaw = event.target?.dataset?.moumember;
+                    if (dataMOUMemberRaw) {
+                        removeMember(JSON.parse(dataMOUMemberRaw));
+                    }
+                }
             });
         };
 
-        onMounted(() => {
-            watch(
-                () => props.users,
-                (updatedUsers) => {
-                    if (updatedUsers.length > 0) {
-                        initDatatable();
-                    }
-                }
-            );
+        const localUsers = ref([...props.users]);
+        watchEffect(() => {
+            localUsers.value = [...props.users];
+            initDatatable();
         });
 
-        return {};
+        return {
+            localUsers,
+            choosePIC,
+            addMember,
+            removeMember,
+            initDatatable,
+        };
     },
     methods: {
         getNama(user) {

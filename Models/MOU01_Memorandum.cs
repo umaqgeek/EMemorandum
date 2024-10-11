@@ -57,4 +57,10 @@ public class MOU01_Memorandum
 
     // Navigation property for the statuses
     public ICollection<MOU02_Status>? MOU02_Statuses { get; set; }
+
+    // Navigation property for the statuses
+    public ICollection<MOU03_Ahli>? MOU03_Ahli { get; set; }
+
+    // Navigation property for the statuses
+    public ICollection<MOU04_KPI>? MOU04_KPI { get; set; }
 }

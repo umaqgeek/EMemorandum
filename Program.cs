@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using EMemorandum.Authorization;
 using EMemorandum.Models;
+using EMemorandum.Services;
 using System.Reflection;
 using System.IO;
 using System.Text;
@@ -91,6 +92,9 @@ builder.Services.AddAuthentication(x =>
 // Register the custom authorization handler as scoped
 builder.Services.AddScoped<IAuthorizationHandler, TokenHandlerAuth>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+// Register email service
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Configure Authorization with custom policy
 builder.Services.AddAuthorization(options =>
