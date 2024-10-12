@@ -10,7 +10,9 @@
                     :staffprofile="dataStaffProfile"
                     :errorStaffProfile="errorStaffProfile"
                 />
-                <LoadingComponent :loading="loadingStaffProfile" />
+                <LoadingComponent
+                    :loading="loadingStaffProfile || mouLoading"
+                />
                 <div class="nk-content" v-if="errorStaffProfile">
                     <InfoNotLoggedInComponent />
                 </div>
@@ -50,195 +52,10 @@
                                 <!-- .nk-block-head -->
                                 <div class="nk-block">
                                     <div class="card">
-                                        <table
-                                            class="table"
-                                            data-nk-container="table-responsive"
-                                        >
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th class="tb-col">
-                                                        <span
-                                                            class="overline-title"
-                                                            >No.</span
-                                                        >
-                                                    </th>
-                                                    <th class="tb-col">
-                                                        <span
-                                                            class="overline-title"
-                                                            >No.
-                                                            Memorandum</span
-                                                        >
-                                                    </th>
-                                                    <th class="tb-col">
-                                                        <span
-                                                            class="overline-title"
-                                                            >Skop
-                                                            Memorandum</span
-                                                        >
-                                                    </th>
-                                                    <th
-                                                        class="tb-col tb-col-xl"
-                                                    >
-                                                        <span
-                                                            class="overline-title"
-                                                            >Staff Name</span
-                                                        >
-                                                    </th>
-                                                    <th
-                                                        class="tb-col tb-col-xxl"
-                                                    >
-                                                        <span
-                                                            class="overline-title"
-                                                            >Start Date</span
-                                                        >
-                                                    </th>
-                                                    <th class="tb-col">
-                                                        <span
-                                                            class="overline-title"
-                                                            >End Date</span
-                                                        >
-                                                    </th>
-                                                    <th class="tb-col">
-                                                        <span
-                                                            class="overline-title"
-                                                            >Price (RM)</span
-                                                        >
-                                                    </th>
-                                                    <th class="tb-col">
-                                                        <span
-                                                            class="overline-title"
-                                                            >Status</span
-                                                        >
-                                                    </th>
-                                                    <th
-                                                        class="tb-col tb-col-end"
-                                                        data-sortable="false"
-                                                    >
-                                                        <span
-                                                            class="overline-title"
-                                                            >Action</span
-                                                        >
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr
-                                                    v-for="(
-                                                        mou, mouIndex
-                                                    ) in mouData"
-                                                    v-bind:key="mouIndex"
-                                                >
-                                                    <td class="tb-col">
-                                                        {{ mouIndex + 1 }}.
-                                                    </td>
-                                                    <td class="tb-col">
-                                                        {{ mou?.noMemo }}&nbsp;
-                                                    </td>
-                                                    <td class="tb-col">
-                                                        {{ mou?.scopeButiran }}
-                                                    </td>
-                                                    <td class="tb-col">
-                                                        <div
-                                                            class="media-group"
-                                                        >
-                                                            <div
-                                                                class="media-text"
-                                                            >
-                                                                <a
-                                                                    href="#"
-                                                                    class="title"
-                                                                    >{{
-                                                                        mou?.pic
-                                                                    }}</a
-                                                                >
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td
-                                                        class="tb-col tb-col-xxl"
-                                                    >
-                                                        {{
-                                                            mou?.tarikhMulaDate
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        class="tb-col tb-col-xxl"
-                                                    >
-                                                        {{
-                                                            mou?.tarikhTamatDate
-                                                        }}
-                                                    </td>
-                                                    <td
-                                                        class="tb-col tb-col-xxl"
-                                                    >
-                                                        {{
-                                                            mou?.nilai?.toFixed(
-                                                                2
-                                                            )
-                                                        }}
-                                                    </td>
-                                                    <td class="tb-col">
-                                                        <ChipStatusComponent
-                                                            :status="
-                                                                mou?.status
-                                                            "
-                                                        />
-                                                    </td>
-                                                    <td
-                                                        class="tb-col tb-col-end"
-                                                    >
-                                                        <div class="dropdown">
-                                                            <a
-                                                                href="#"
-                                                                class="btn btn-sm btn-icon btn-zoom me-n1"
-                                                                data-bs-toggle="dropdown"
-                                                            >
-                                                                <em
-                                                                    class="icon ni ni-more-v"
-                                                                ></em>
-                                                            </a>
-                                                            <div
-                                                                class="dropdown-menu dropdown-menu-sm dropdown-menu-end"
-                                                            >
-                                                                <div
-                                                                    class="dropdown-content py-1"
-                                                                >
-                                                                    <ul
-                                                                        class="link-list link-list-hover-bg-primary link-list-md"
-                                                                    >
-                                                                        <li>
-                                                                            <router-link
-                                                                                to="/memo-edit"
-                                                                            >
-                                                                                <em
-                                                                                    class="icon ni ni-edit"
-                                                                                ></em
-                                                                                ><span
-                                                                                    >Edit</span
-                                                                                >
-                                                                            </router-link>
-                                                                        </li>
-                                                                        <li>
-                                                                            <router-link
-                                                                                to="/memo-detail"
-                                                                                ><em
-                                                                                    class="icon ni ni-eye"
-                                                                                ></em
-                                                                                ><span
-                                                                                    >View
-                                                                                    Details</span
-                                                                                ></router-link
-                                                                            >
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- dropdown -->
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <TableLite
+                                            :columns="moucolumns"
+                                            :data="mouData"
+                                        />
                                     </div>
                                     <!-- .card -->
                                 </div>
@@ -264,8 +81,8 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import ChipStatusComponent from "@/components/ChipStatus.vue";
 import { useStaffProfile, useGetAllMOU, useGetMyMOU } from "@/hooks/useAPI";
+import TableLite from "@/components/TableLite.vue";
 
 export default {
     name: "MemoListView",
@@ -281,7 +98,7 @@ export default {
         FooterComponent,
         LoadingComponent,
         InfoNotLoggedInComponent,
-        ChipStatusComponent,
+        TableLite,
     },
     setup() {
         const {
@@ -290,16 +107,25 @@ export default {
             loading: loadingStaffProfile,
         } = useStaffProfile();
 
-        const initDatatable = () => {
-            window.NioApp.DataTable.init = function () {
-                window.NioApp.DataTable(".datatable-init1");
-            };
-            window.NioApp.winLoad(window.NioApp.DataTable.init);
-        };
+        // const initDatatable = () => {
+        //     window.NioApp.DataTable.init = function () {
+        //         window.NioApp.DataTable(".datatable-init");
+        //     };
+        //     window.NioApp.winLoad(window.NioApp.DataTable.init);
+        // };
 
         const mouData = ref([]);
         const mouError = ref(null);
         const mouLoading = ref(false);
+        const moucolumns = ref([
+            "Memorandum No.",
+            "Scope",
+            "Staff",
+            "Start Date",
+            "End Date",
+            "Price (RM)",
+            "Status",
+        ]);
         watch(
             () => dataStaffProfile.value,
             (newDataStaffProfile) => {
@@ -318,24 +144,60 @@ export default {
                         ? true
                         : false;
                     if (isAdmin || isPUU) {
-                        const { data: dataAllMOU } = useGetAllMOU();
+                        const { data: dataAllMOU, loading: loadingAllMOU } =
+                            useGetAllMOU();
+                        mouLoading.value = loadingAllMOU.value;
                         watch(
                             () => dataAllMOU.value,
                             (dataAllMOUs) => {
-                                mouData.value = dataAllMOUs;
-                                initDatatable();
+                                mouData.value = dataAllMOUs?.map((d) => {
+                                    return {
+                                        noMemo: d.noMemo,
+                                        scopeButiran: d.scopeButiran,
+                                        pic: d.pic,
+                                        tarikhMulaDate: d.tarikhMulaDate,
+                                        tarikhTamatDate: d.tarikhTamatDate,
+                                        nilai: d.nilai?.toFixed(2),
+                                        status: `<span class="badge text-bg-dark">${d.status?.status}</span>`,
+                                    };
+                                });
+                                // initDatatable();
                             },
                             { immediate: true }
                         );
+                        watch(
+                            () => loadingAllMOU.value,
+                            (newLoadingAllMOU) => {
+                                mouLoading.value = newLoadingAllMOU;
+                            }
+                        );
                     } else {
-                        const { data: dataMyMOU } = useGetMyMOU();
+                        const { data: dataMyMOU, loading: loadingMyMOU } =
+                            useGetMyMOU();
+                        mouLoading.value = loadingMyMOU.value;
                         watch(
                             () => dataMyMOU.value,
                             (dataMyMOUs) => {
-                                mouData.value = dataMyMOUs;
-                                initDatatable();
+                                mouData.value = dataMyMOUs?.map((d) => {
+                                    return {
+                                        noMemo: d.noMemo,
+                                        scopeButiran: d.scopeButiran,
+                                        pic: d.pic,
+                                        tarikhMulaDate: d.tarikhMulaDate,
+                                        tarikhTamatDate: d.tarikhTamatDate,
+                                        nilai: d.nilai?.toFixed(2),
+                                        status: `<span class="badge text-bg-dark">${d.status?.status}</span>`,
+                                    };
+                                });
+                                // initDatatable();
                             },
                             { immediate: true }
+                        );
+                        watch(
+                            () => loadingMyMOU.value,
+                            (newLoadingMyMOU) => {
+                                mouLoading.value = newLoadingMyMOU;
+                            }
                         );
                     }
                 }
@@ -350,6 +212,7 @@ export default {
             mouData,
             mouError,
             mouLoading,
+            moucolumns,
         };
     },
     computed: {},
