@@ -122,7 +122,7 @@ export default {
     setup(props) {
         const localData = ref([]);
         const oriData = ref([]);
-        const startNo = ref(0);
+        const startNo = ref(-1);
         const limitData = ref(5);
         const endNo = ref(startNo.value + limitData.value);
         const totalData = ref(0);
@@ -138,19 +138,16 @@ export default {
                         };
                     })
                     : [];
-                localData.value = Array.isArray(oriData.value)
-                    ? [...oriData.value].slice(startNo.value, endNo.value)
-                    : [];
-                endNo.value = startNo.value + limitData.value;
-                totalData.value = Array.isArray(newData)
-                    ? [...newData].length
-                    : 0;
+                totalData.value = [...oriData.value].length;
+                startNo.value = totalData.value > 0 ? 0 : -1;
+                endNo.value = parseInt(startNo.value) + parseInt(limitData.value) >= totalData.value ? totalData.value : parseInt(startNo.value) + parseInt(limitData.value);
+                localData.value = [...oriData.value].slice(startNo.value, endNo.value);
             }
         );
 
         const firstPage = () => {
-            startNo.value = 0;
-            endNo.value = parseInt(startNo.value) + parseInt(limitData.value);
+            startNo.value = totalData.value > 0 ? 0 : -1;
+            endNo.value = parseInt(startNo.value) + parseInt(limitData.value) >= totalData.value ? totalData.value : parseInt(startNo.value) + parseInt(limitData.value);
             localData.value = [...oriData.value].slice(
                 startNo.value,
                 endNo.value
@@ -158,10 +155,10 @@ export default {
         };
 
         const prevPage = () => {
-            startNo.value =
-                parseInt(startNo.value) - parseInt(limitData.value) <= 0
+            startNo.value = totalData.value > 0 ?
+                (parseInt(startNo.value) - parseInt(limitData.value) <= 0
                     ? 0
-                    : parseInt(startNo.value) - parseInt(limitData.value);
+                    : parseInt(startNo.value) - parseInt(limitData.value)) : -1;
             endNo.value =
                 parseInt(startNo.value) + parseInt(limitData.value) >=
                 totalData.value
@@ -191,9 +188,11 @@ export default {
         };
 
         const lastPage = () => {
-            const pagesLength =
+            const modulo = parseInt(oriData.value.length) % parseInt(limitData.value);
+            var pagesLength =
                 parseInt(oriData.value.length) / parseInt(limitData.value);
-            startNo.value = parseInt(pagesLength) * parseInt(limitData.value);
+            pagesLength = modulo > 0 ? pagesLength : (pagesLength - 1);
+            startNo.value = totalData.value > 0 ? (parseInt(pagesLength) * parseInt(limitData.value)) : -1;
             endNo.value =
                 parseInt(startNo.value) + parseInt(limitData.value) >=
                 totalData.value
