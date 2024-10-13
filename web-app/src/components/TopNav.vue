@@ -9,6 +9,9 @@
                     <ul class="nk-nav"></ul>
                 </nav>
                 <div class="nk-header-tools header-top-right">
+                    <div class="header-search-container">
+                        <SearchInput />
+                    </div>
                     <div
                         class="header-top-right-name"
                         v-if="!errorStaffProfile"
@@ -107,6 +110,8 @@
 <script>
 import { onMounted } from "vue";
 
+import SearchInput from "@/components/SearchInput.vue";
+
 import { resetBearerToken, setBearerToken } from "@/utils/tokenManagement";
 
 export default {
@@ -119,6 +124,9 @@ export default {
     props: {
         staffprofile: Object,
         errorStaffProfile: String,
+    },
+    components: {
+        SearchInput,
     },
     setup() {
         onMounted(() => {
@@ -163,5 +171,9 @@ export default {
 
 .header-top-right-name {
     text-align: right;
+}
+
+.header-search-container {
+    margin-right: 16px;
 }
 </style>

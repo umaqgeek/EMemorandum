@@ -88,17 +88,17 @@ export function useAssignStaffRoles(noStaf, roles = []) {
     });
 }
 
-export function useGetAllMOU() {
+export function useGetAllMOU(query = "") {
     return useApi({
         method: "get",
-        url: `${API_URL}/mou/all`,
+        url: `${API_URL}/mou/all` + (query !== "" ? `?q=${query}` : ""),
     });
 }
 
-export function useGetMyMOU() {
+export function useGetMyMOU(query) {
     return useApi({
         method: "get",
-        url: `${API_URL}/mou/mine`,
+        url: `${API_URL}/mou/mine` + (query !== "" ? `?q=${query}` : ""),
     });
 }
 

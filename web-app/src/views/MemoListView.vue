@@ -51,6 +51,30 @@
                                 </div>
                                 <!-- .nk-block-head -->
                                 <div class="nk-block">
+                                    <div
+                                        v-if="isFiltered"
+                                        class="filter-containter"
+                                    >
+                                        <button
+                                            class="btn btn-danger mb-1"
+                                            @click="resetFilter"
+                                        >
+                                            <em class="icon ni ni-cross"></em
+                                            >&nbsp; Reset filter
+                                        </button>
+                                        <input
+                                            type="text"
+                                            class="form-control mb-3"
+                                            v-model="querySearch"
+                                            @keydown.enter="onSearch"
+                                            placeholder="Search memorandum here ..."
+                                            ref="searchInput"
+                                        />
+                                        <em
+                                            class="icon ni ni-cross-circle clear-search-icon"
+                                            @click="clearSearch"
+                                        ></em>
+                                    </div>
                                     <div class="card">
                                         <TableLite
                                             :columns="moucolumns"
@@ -114,17 +138,31 @@ export default {
         //     window.NioApp.winLoad(window.NioApp.DataTable.init);
         // };
 
+        const params = new URLSearchParams(window.location.search);
+        const query = params.get("q") || "";
+        const querySearch = ref(query);
+        const isFiltered = ref(query !== "");
+
+        const color = (kod) => {
+            if (kod === "01") return "dark";
+            if (kod === "02") return "info";
+            if (kod === "03") return "success";
+            if (kod === "04") return "warning";
+            if (kod === "05") return "danger";
+            return "dark";
+        };
+
         const mouData = ref([]);
         const mouError = ref(null);
         const mouLoading = ref(false);
         const moucolumns = ref([
             "Memorandum No.",
+            "Type",
             "Scope",
             "Staff",
             "Start Date",
             "End Date",
             "Price (RM)",
-            "Status",
         ]);
         watch(
             () => dataStaffProfile.value,
@@ -145,20 +183,24 @@ export default {
                         : false;
                     if (isAdmin || isPUU) {
                         const { data: dataAllMOU, loading: loadingAllMOU } =
-                            useGetAllMOU();
+                            useGetAllMOU(query);
                         mouLoading.value = loadingAllMOU.value;
                         watch(
                             () => dataAllMOU.value,
                             (dataAllMOUs) => {
                                 mouData.value = dataAllMOUs?.map((d) => {
                                     return {
-                                        noMemo: d.noMemo,
+                                        noMemo: `<span>${
+                                            d.noMemo
+                                        }</span><span class="badge text-bg-${color(
+                                            d.status?.kod
+                                        )}">${d.status?.status}</span>`,
+                                        jenis: d.jenis,
                                         scopeButiran: d.scopeButiran,
                                         pic: d.pic,
                                         tarikhMulaDate: d.tarikhMulaDate,
                                         tarikhTamatDate: d.tarikhTamatDate,
                                         nilai: d.nilai?.toFixed(2),
-                                        status: `<span class="badge text-bg-dark">${d.status?.status}</span>`,
                                     };
                                 });
                                 // initDatatable();
@@ -173,20 +215,24 @@ export default {
                         );
                     } else {
                         const { data: dataMyMOU, loading: loadingMyMOU } =
-                            useGetMyMOU();
+                            useGetMyMOU(query);
                         mouLoading.value = loadingMyMOU.value;
                         watch(
                             () => dataMyMOU.value,
                             (dataMyMOUs) => {
                                 mouData.value = dataMyMOUs?.map((d) => {
                                     return {
-                                        noMemo: d.noMemo,
+                                        noMemo: `<span>${
+                                            d.noMemo
+                                        }</span><span class="badge text-bg-${color(
+                                            d.status?.kod
+                                        )}">${d.status?.status}</span>`,
+                                        jenis: d.jenis,
                                         scopeButiran: d.scopeButiran,
                                         pic: d.pic,
                                         tarikhMulaDate: d.tarikhMulaDate,
                                         tarikhTamatDate: d.tarikhTamatDate,
                                         nilai: d.nilai?.toFixed(2),
-                                        status: `<span class="badge text-bg-dark">${d.status?.status}</span>`,
                                     };
                                 });
                                 // initDatatable();
@@ -206,6 +252,8 @@ export default {
         );
 
         return {
+            querySearch,
+            isFiltered,
             dataStaffProfile,
             errorStaffProfile,
             loadingStaffProfile,
@@ -216,6 +264,40 @@ export default {
         };
     },
     computed: {},
-    methods: {},
+    methods: {
+        resetFilter() {
+            location.href = `${this.publicPath}memo-list`;
+        },
+        onSearch() {
+            location.href = `${this.publicPath}memo-list?q=${this.querySearch}`;
+        },
+        clearSearch() {
+            this.querySearch = "";
+            this.$nextTick(() => {
+                this.$refs.searchInput.focus();
+            });
+        },
+    },
 };
 </script>
+
+<style scoped>
+.filter-containter {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+.filter-containter > input {
+    width: 50%;
+    margin-left: 12px;
+}
+.clear-search-icon {
+    color: rgba(0, 0, 0, 0.5);
+    position: relative;
+    top: 11px;
+    right: 32px;
+    font-size: 1.3em;
+    z-index: 100;
+    cursor: pointer;
+}
+</style>

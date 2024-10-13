@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EMemorandum.Models;
+using EMemorandum.Services;
 
 namespace EMemorandum.Controllers.Api;
 
@@ -29,11 +30,11 @@ public class MOUController : ControllerBase
 
     [HttpGet("all")]
     [Authorize(Policy = "AdminOrPUUPolicy")]
-    public ActionResult<IEnumerable<object>> GetAllMemorandums()
+    public ActionResult<IEnumerable<object>> GetAllMemorandums([FromQuery] string? q)
     {
         var staffId = GetStaffID();
 
-        var memorandums = _context.MOU01_Memorandum
+        var query = _context.MOU01_Memorandum
             .Include(_entity => _entity.MOU02_Statuses)
                 .ThenInclude(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.PUU_ScopeMemo)
@@ -42,6 +43,25 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU_Status)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(q))
+        {
+            query = query.Where(_entity =>
+                _entity.NoMemo.Contains(q) ||
+                _entity.PUU_ScopeMemo.Butiran.Contains(q) ||
+                _entity.MOU02_Statuses.Any(s => s.Status.Contains(q)) ||
+                _entity.EMO_Staf.Nama.Contains(q)
+            );
+        }
+
+        // sort by ascending
+        query = query.OrderBy(_entity => _entity.Status);
+
+        // default limit of 500 rows per query
+        query = query.Take(500);
+
+        var memorandums = query
             .Select(_entity => GetTransformedMOU(_entity, staffId))
             .ToList();
 
@@ -49,11 +69,11 @@ public class MOUController : ControllerBase
     }
 
     [HttpGet("mine")]
-    public ActionResult<IEnumerable<object>> GetAllMemorandumsForAStaff()
+    public ActionResult<IEnumerable<object>> GetAllMemorandumsForAStaff([FromQuery] string? q)
     {
         var staffId = GetStaffID();
 
-        var memorandums = _context.MOU01_Memorandum
+        var query = _context.MOU01_Memorandum
             .Where(m => m.MS01_NoStaf == staffId)
             .Include(_entity => _entity.MOU02_Statuses)
                 .ThenInclude(_entity => _entity.MOU_Status)
@@ -63,6 +83,25 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU_Status)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(q))
+        {
+            query = query.Where(_entity =>
+                _entity.NoMemo.Contains(q) ||
+                _entity.PUU_ScopeMemo.Butiran.Contains(q) ||
+                _entity.MOU02_Statuses.Any(s => s.Status.Contains(q)) ||
+                _entity.EMO_Staf.Nama.Contains(q)
+            );
+        }
+
+        // sort by ascending
+        query = query.OrderBy(_entity => _entity.Status);
+
+        // default limit of 500 rows per query
+        query = query.Take(500);
+
+        var memorandums = query
             .Select(_entity => GetTransformedMOU(_entity, staffId))
             .ToList();
 
