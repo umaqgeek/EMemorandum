@@ -288,7 +288,7 @@ export default {
     align-items: flex-start;
 }
 .filter-containter > input {
-    width: 50%;
+    width: 30%;
     margin-left: 12px;
 }
 .clear-search-icon {

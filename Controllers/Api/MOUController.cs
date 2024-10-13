@@ -34,32 +34,7 @@ public class MOUController : ControllerBase
     {
         var staffId = GetStaffID();
 
-        var query = _context.MOU01_Memorandum
-            .Include(_entity => _entity.MOU02_Statuses)
-                .ThenInclude(_entity => _entity.MOU_Status)
-            .Include(_entity => _entity.PUU_ScopeMemo)
-            .Include(_entity => _entity.PUU_SubPTj)
-            .Include(_entity => _entity.PUU_JenisMemo)
-            .Include(_entity => _entity.PUU_KategoriMemo)
-            .Include(_entity => _entity.EMO_Staf)
-            .Include(_entity => _entity.MOU_Status)
-            .AsQueryable();
-
-        if (!string.IsNullOrEmpty(q))
-        {
-            query = query.Where(_entity =>
-                _entity.NoMemo.Contains(q) ||
-                _entity.PUU_ScopeMemo.Butiran.Contains(q) ||
-                _entity.MOU02_Statuses.Any(s => s.Status.Contains(q)) ||
-                _entity.EMO_Staf.Nama.Contains(q)
-            );
-        }
-
-        // sort by ascending
-        query = query.OrderBy(_entity => _entity.Status);
-
-        // default limit of 500 rows per query
-        query = query.Take(500);
+        var query = GetMemorandumBaseQuery(q);
 
         var memorandums = query
             .Select(_entity => GetTransformedMOU(_entity, staffId))
@@ -73,35 +48,10 @@ public class MOUController : ControllerBase
     {
         var staffId = GetStaffID();
 
-        var query = _context.MOU01_Memorandum
-            .Where(m => m.MS01_NoStaf == staffId)
-            .Include(_entity => _entity.MOU02_Statuses)
-                .ThenInclude(_entity => _entity.MOU_Status)
-            .Include(_entity => _entity.PUU_ScopeMemo)
-            .Include(_entity => _entity.PUU_SubPTj)
-            .Include(_entity => _entity.PUU_JenisMemo)
-            .Include(_entity => _entity.PUU_KategoriMemo)
-            .Include(_entity => _entity.EMO_Staf)
-            .Include(_entity => _entity.MOU_Status)
-            .AsQueryable();
-
-        if (!string.IsNullOrEmpty(q))
-        {
-            query = query.Where(_entity =>
-                _entity.NoMemo.Contains(q) ||
-                _entity.PUU_ScopeMemo.Butiran.Contains(q) ||
-                _entity.MOU02_Statuses.Any(s => s.Status.Contains(q)) ||
-                _entity.EMO_Staf.Nama.Contains(q)
-            );
-        }
-
-        // sort by ascending
-        query = query.OrderBy(_entity => _entity.Status);
-
-        // default limit of 500 rows per query
-        query = query.Take(500);
+        var query = GetMemorandumBaseQuery(q);
 
         var memorandums = query
+            .Where(m => m.MS01_NoStaf == staffId)
             .Select(_entity => GetTransformedMOU(_entity, staffId))
             .ToList();
 
@@ -367,6 +317,38 @@ public class MOUController : ControllerBase
     {
         DateTime dateTime = nullableDateTime ?? DateTime.MinValue;
         return dateTime.ToString("dd/MM/yyyy");
+    }
+
+    public IQueryable<MOU01_Memorandum> GetMemorandumBaseQuery(string q)
+    {
+        var query = _context.MOU01_Memorandum
+            .Include(_entity => _entity.MOU02_Statuses)
+                .ThenInclude(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.PUU_ScopeMemo)
+            .Include(_entity => _entity.PUU_SubPTj)
+            .Include(_entity => _entity.PUU_JenisMemo)
+            .Include(_entity => _entity.PUU_KategoriMemo)
+            .Include(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU_Status)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(q))
+        {
+            query = query.Where(_entity =>
+                _entity.NoMemo.Contains(q) ||
+                _entity.PUU_ScopeMemo.Butiran.Contains(q) ||
+                _entity.MOU02_Statuses.Any(s => s.Status.Contains(q)) ||
+                _entity.EMO_Staf.Nama.Contains(q)
+            );
+        }
+
+        // sort by ascending
+        query = query.OrderBy(_entity => _entity.Status);
+
+        // default limit of 500 rows per query
+        query = query.Take(500);
+
+        return query;
     }
 }
 
