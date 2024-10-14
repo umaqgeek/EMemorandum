@@ -328,7 +328,9 @@
                                                             <!-- .bio-block -->
                                                         </div>
                                                         <!-- .card-body -->
-                                                        <div class="card-body">
+                                                        <div
+                                                            class="card-body memo-detail-history-container"
+                                                        >
                                                             <div
                                                                 class="bio-block"
                                                             >
@@ -369,9 +371,9 @@
                                                                             ></div>
                                                                             <div
                                                                                 :class="[
-                                                                                    'nk-schedule-content',
+                                                                                    'nk-schedule-content flex-grow-1',
                                                                                     {
-                                                                                        'nk-schedule-content-no-border flex-grow-1':
+                                                                                        'alert alert-info':
                                                                                             hIndex ===
                                                                                             0,
                                                                                     },
@@ -384,19 +386,39 @@
                                                                                     }}</span
                                                                                 >
                                                                                 <div
-                                                                                    :class="[
-                                                                                        {
-                                                                                            'alert alert-info ':
-                                                                                                hIndex ===
-                                                                                                0,
-                                                                                        },
-                                                                                    ]"
                                                                                     role="alert"
                                                                                 >
-                                                                                    {{
-                                                                                        hist.description
-                                                                                    }}
+                                                                                    <p>
+                                                                                        {{
+                                                                                            hist.description
+                                                                                        }}
+                                                                                    </p>
+                                                                                    <p
+                                                                                        v-if="
+                                                                                            hist
+                                                                                                .comment
+                                                                                                ?.length >
+                                                                                            0
+                                                                                        "
+                                                                                    >
+                                                                                        Comment:<br />
+                                                                                        <strong
+                                                                                            >{{
+                                                                                                hist.comment
+                                                                                            }}</strong
+                                                                                        >
+                                                                                    </p>
                                                                                 </div>
+                                                                                <span
+                                                                                    class="smaller"
+                                                                                    >by
+                                                                                    {{
+                                                                                        getNama(
+                                                                                            hist.gelaran,
+                                                                                            hist.nama
+                                                                                        )
+                                                                                    }}</span
+                                                                                >
                                                                             </div>
                                                                         </div>
                                                                     </li>
@@ -759,3 +781,10 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.memo-detail-history-container {
+    max-height: 500px;
+    overflow-x: auto;
+}
+</style>
