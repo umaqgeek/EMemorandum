@@ -8,17 +8,25 @@
             <div class="nk-wrap">
                 <TopNavComponent
                     :staffprofile="dataStaffProfile"
-                    :errorStaffProfile="errorStaffProfile || errorTheMOU"
+                    :errorStaffProfile="
+                        errorStaffProfile || errorTheMOU || errorSaveComment
+                    "
                 />
                 <LoadingComponent
-                    :loading="loadingStaffProfile || loadingTheMOU"
+                    :loading="
+                        loadingStaffProfile ||
+                        loadingTheMOU ||
+                        loadingSaveComment
+                    "
                 />
                 <div class="nk-content" v-if="errorStaffProfile">
                     <InfoNotLoggedInComponent />
                 </div>
                 <div
                     class="nk-content"
-                    v-if="!errorStaffProfile && !errorTheMOU"
+                    v-if="
+                        !errorStaffProfile && !errorTheMOU && !errorSaveComment
+                    "
                 >
                     <div class="container">
                         <div class="nk-content-inner">
@@ -352,8 +360,7 @@
                                                                             hIndex
                                                                         ) in dataTheMOU?.history"
                                                                         v-bind:key="
-                                                                            hIndex +
-                                                                            hist?.Created_At
+                                                                            hIndex
                                                                         "
                                                                     >
                                                                         <div
@@ -458,7 +465,10 @@
                                                                         <textarea
                                                                             placeholder="Write your review"
                                                                             class="form-control"
-                                                                            id="exampleFormControlTextarea8"
+                                                                            id="comments"
+                                                                            v-model="
+                                                                                comments
+                                                                            "
                                                                             rows="3"
                                                                         ></textarea>
                                                                     </div>
@@ -479,6 +489,9 @@
                                                                         >
                                                                             <div
                                                                                 class="btn btn-soft btn-primary"
+                                                                                @click="
+                                                                                    onComment
+                                                                                "
                                                                             >
                                                                                 <em
                                                                                     class="icon ni ni-comments"
@@ -596,7 +609,11 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import { useStaffProfile, useGetOneMOU } from "@/hooks/useAPI";
+import {
+    useStaffProfile,
+    useGetOneMOU,
+    useMouCommentMemo,
+} from "@/hooks/useAPI";
 import TableLite from "@/components/TableLite.vue";
 
 export default {
@@ -630,6 +647,8 @@ export default {
         const loadingTheMOU = ref(true);
         const dataTheMOU = ref(null);
         const errorTheMOU = ref(null);
+        const loadingSaveComment = ref(false);
+        const errorSaveComment = ref(null);
 
         const membersCols = ref(["Name", "Roles", "Status"]);
         const members = ref([]);
@@ -757,6 +776,39 @@ export default {
             { immediate: true } // Run the watcher immediately on component mount
         );
 
+        const comments = ref("");
+        const onComment = () => {
+            loadingSaveComment.value = true;
+            const {
+                data: dataComment,
+                loading: loadingComment,
+                error: errorComment,
+            } = useMouCommentMemo({
+                Comment: comments.value,
+                NoMemo: dataTheMOU.value?.noMemo,
+            });
+            watch(
+                () => loadingComment.value,
+                (newLoadingComment) => {
+                    loadingSaveComment.value = newLoadingComment;
+                }
+            );
+            watch(
+                () => errorComment.value,
+                (newErrorComment) => {
+                    errorSaveComment.value = newErrorComment;
+                }
+            );
+            watch(
+                () => dataComment.value,
+                (newDataComment) => {
+                    if (newDataComment) {
+                        location.href = `${publicPath.value}memo-detail?memo=${dataTheMOU.value?.noMemo}`;
+                    }
+                }
+            );
+        };
+
         return {
             publicPath,
             dataStaffProfile,
@@ -777,6 +829,10 @@ export default {
             kpis,
             kpisTitle,
             getNama,
+            comments,
+            onComment,
+            loadingSaveComment,
+            errorSaveComment,
         };
     },
 };

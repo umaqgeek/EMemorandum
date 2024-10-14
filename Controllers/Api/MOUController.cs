@@ -231,8 +231,63 @@ public class MOUController : ControllerBase
     // TODO: Delete memorandum (PIC, Admin)
     // TODO: Add members to a memorandum (PIC, Admin)
     // TODO: Add KPIs to a memorandum (PIC, Admin)
-    // TODO: Review and comment a memorandum (PUU)
     // TODO: Approve or reject a memorandum (PTJ)
+
+    [HttpPost("comment")]
+    [Authorize(Policy = "AdminOrPUUPolicy")]
+    public ActionResult<object> CommentMemorandum([FromBody] MOU06_History entity)
+    {
+        var staffId = GetStaffID();
+
+        var mouHistory = new MOU06_History
+        {
+            NoMemo = entity.NoMemo,
+            NoStaf = staffId,
+            Description = "Memorandum has been reviewed",
+            Created_At = DateTime.Now,
+            Comment = entity.Comment,
+        };
+
+        var statusReviewed = "02";
+        var mouStatus = new MOU02_Status
+        {
+            NoMemo = entity.NoMemo,
+            Status = statusReviewed,
+            Tarikh = DateTime.Now,
+        };
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var memo = _context.MOU01_Memorandum.FirstOrDefault(m => m.NoMemo == entity.NoMemo);
+                if (memo == null) {
+                    return NotFound();
+                }
+                memo.Status = statusReviewed;
+
+                // Save comments and add new history
+                _context.MOU06_History.Add(mouHistory);
+
+                // add new status for existing MOU
+                _context.MOU02_Status.Add(mouStatus);
+
+                // Save changes to the database
+                _context.SaveChanges();
+                // Commit the transaction if all commands succeed
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                // Rollback the transaction if any command fails
+                transaction.Rollback();
+                // Log or rethrow the exception as needed
+                throw;
+            }
+        }
+
+        return Ok(new { Status = true });
+    }
 
     [HttpGet("get/{noMemo}")]
     public ActionResult<MOU01_Memorandum> GetMemorandum(string noMemo)
@@ -366,12 +421,13 @@ public class MOUController : ControllerBase
             History = _entity.MOU06_History.Select(mou06 => new
             {
                 Created_At = mou06.Created_At?.ToString("dd MMM yyyy, h:mm tt") ?? "",
+                Ori_Created_At = mou06.Created_At,
                 Description = mou06.Description,
                 Comment = mou06.Comment,
                 NoStaf = mou06.NoStaf,
                 Gelaran = mou06.EMO_Staf.Gelaran,
                 Nama = mou06.EMO_Staf.Nama,
-            })?.OrderByDescending(_entity => _entity.Created_At).ToList(),
+            })?.OrderByDescending(_entity => _entity.Ori_Created_At).ToList(),
             Members = _entity.MOU03_Ahli.Select(mou03 => new
             {
                 Peranan = mou03.Peranan,
