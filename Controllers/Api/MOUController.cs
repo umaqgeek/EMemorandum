@@ -249,6 +249,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.MOU06_History)
             .Include(_entity => _entity.MOU03_Ahli)
                 .ThenInclude(_entity => _entity.EMO_Staf)
+                    .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU04_KPI)
             .FirstOrDefault();
 
@@ -372,7 +373,17 @@ public class MOUController : ControllerBase
                 NoStaf = mou03.EMO_Staf.NoStaf,
                 Roles = mou03.EMO_Staf.Roles,
             })?.ToList(),
-            KPIs = _entity.MOU04_KPI?.ToList(),
+            KPIs = _entity.MOU04_KPI.Select(mou04 => new
+            {
+                Amaun = mou04.Amaun,
+                Komen = mou04.Komen,
+                Nama = mou04.Nama,
+                Penerangan = mou04.Penerangan,
+                TarikhMula = mou04.TarikhMula,
+                TarikhMulaDate = mou04.TarikhMula?.ToString("dd MMM yyyy") ?? "",
+                TarikhTamat = mou04.TarikhTamat,
+                TarikhTamatDate = mou04.TarikhTamat?.ToString("dd MMM yyyy") ?? "",
+            })?.ToList(),
         });
     }
 
@@ -396,6 +407,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.MOU06_History)
             .Include(_entity => _entity.MOU03_Ahli)
                 .ThenInclude(_entity => _entity.EMO_Staf)
+                    .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU04_KPI)
             .AsQueryable();
 

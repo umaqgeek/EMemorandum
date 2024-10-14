@@ -79,6 +79,7 @@
                                         <TableLite
                                             :columns="moucolumns"
                                             :data="mouData"
+                                            :isNoAction="true"
                                         />
                                     </div>
                                     <!-- .card -->
@@ -110,11 +111,6 @@ import TableLite from "@/components/TableLite.vue";
 
 export default {
     name: "MemoListView",
-    data() {
-        return {
-            publicPath: process.env.VUE_APP_PUBLIC_PATH,
-        };
-    },
     components: {
         ValidateMeComponent,
         NavbarComponent,
@@ -125,6 +121,8 @@ export default {
         TableLite,
     },
     setup() {
+        const publicPath = process.env.VUE_APP_PUBLIC_PATH;
+
         const {
             data: dataStaffProfile,
             error: errorStaffProfile,
@@ -190,9 +188,9 @@ export default {
                             (dataAllMOUs) => {
                                 mouData.value = dataAllMOUs?.map((d) => {
                                     return {
-                                        noMemo: `<a class="title" href="${
-                                            process.env.VUE_APP_PUBLIC_PATH
-                                        }memo-detail?memo=${d.noMemo}">${
+                                        noMemo: `<a class="title" href="${publicPath}memo-detail?memo=${
+                                            d.noMemo
+                                        }">${
                                             d.noMemo
                                         }</a><br /><span class="badge text-bg-${color(
                                             d.status?.kod
@@ -224,9 +222,9 @@ export default {
                             (dataMyMOUs) => {
                                 mouData.value = dataMyMOUs?.map((d) => {
                                     return {
-                                        noMemo: `<a class="title" href="${
-                                            process.env.VUE_APP_PUBLIC_PATH
-                                        }memo-detail?memo=${d.noMemo}">${
+                                        noMemo: `<a class="title" href="${publicPath}memo-detail?memo=${
+                                            d.noMemo
+                                        }">${
                                             d.noMemo
                                         }</a><br /><span class="badge text-bg-${color(
                                             d.status?.kod
@@ -256,6 +254,7 @@ export default {
         );
 
         return {
+            publicPath,
             querySearch,
             isFiltered,
             dataStaffProfile,

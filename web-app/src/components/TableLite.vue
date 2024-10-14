@@ -1,5 +1,6 @@
 <template>
-    <span>
+    <span class="table-lite-container">
+        <div class="table-lite-title" v-if="title !== ''" v-html="title"></div>
         <table class="table" data-nk-container="table-responsive">
             <thead class="table-light">
                 <tr>
@@ -13,7 +14,7 @@
                     >
                         <span class="overline-title">{{ c }}</span>
                     </th>
-                    <th class="tb-col">
+                    <th class="tb-col" v-if="!isNoAction">
                         <span class="overline-title">Action</span>
                     </th>
                 </tr>
@@ -28,7 +29,7 @@
                     >
                         <span v-html="d2"></span>
                     </td>
-                    <td class="tb-col tb-col-end">
+                    <td class="tb-col tb-col-end" v-if="!isNoAction">
                         <div class="dropdown">
                             <a
                                 href="#"
@@ -116,6 +117,14 @@ export default {
         },
         data: {
             type: Array,
+            required: false,
+        },
+        isNoAction: {
+            type: Boolean,
+            required: false,
+        },
+        title: {
+            type: String,
             required: false,
         },
     },
@@ -240,6 +249,13 @@ export default {
 </script>
 
 <style scoped>
+.table-lite-container {
+    width: 100%;
+    overflow-y: auto;
+}
+.table-lite-title {
+    padding: 20px;
+}
 .table-lite-footer {
     width: 100%;
     text-align: center;

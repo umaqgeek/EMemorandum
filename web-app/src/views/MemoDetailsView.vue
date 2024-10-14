@@ -80,8 +80,8 @@
                                         <div class="gap-col">
                                             <ul class="d-flex gap g-2">
                                                 <li class="d-none d-md-block">
-                                                    <router-link
-                                                        to="/memo-edit"
+                                                    <a
+                                                        href="/memo-edit"
                                                         class="btn btn-soft btn-primary"
                                                     >
                                                         <em
@@ -91,16 +91,7 @@
                                                             >Edit
                                                             Memorandum</span
                                                         >
-                                                    </router-link>
-                                                </li>
-                                                <li class="d-md-none">
-                                                    <a
-                                                        href="./html/user-manage/user-edit.html"
-                                                        class="btn btn-soft btn-primary btn-icon"
-                                                        ><em
-                                                            class="icon ni ni-edit"
-                                                        ></em
-                                                    ></a>
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -137,15 +128,16 @@
                                                                     >
                                                                         <span
                                                                             class="title fw-medium w-100 d-inline-block"
-                                                                            >No.
-                                                                            Memorandum:</span
+                                                                            >Memorandum
+                                                                            No.:</span
                                                                         >
-                                                                        <span
+                                                                        <h4
                                                                             class="text"
-                                                                            >{{
+                                                                        >
+                                                                            {{
                                                                                 dataTheMOU?.noMemo
                                                                             }}
-                                                                        </span>
+                                                                        </h4>
                                                                     </li>
                                                                     <li
                                                                         class="list-group-item"
@@ -274,15 +266,14 @@
                                                                     </li>
                                                                     <li
                                                                         class="list-group-item"
+                                                                        v-if="
+                                                                            dataTheMOU?.path
+                                                                        "
                                                                     >
                                                                         <span
                                                                             class="title fw-medium w-100 d-inline-block"
                                                                             >Document:</span
                                                                         >
-                                                                        <em
-                                                                            class="icon ni ni-file-download icon-lg"
-                                                                        ></em
-                                                                        >&nbsp;
                                                                         <a
                                                                             :href="`${publicPath}${dataTheMOU?.path}`"
                                                                             target="_blank"
@@ -290,6 +281,21 @@
                                                                                 dataTheMOU?.path
                                                                             }}</a
                                                                         >
+                                                                        <div
+                                                                            class="d-block mt-1"
+                                                                        >
+                                                                            <a
+                                                                                :href="`${publicPath}${dataTheMOU?.path}`"
+                                                                                target="_blank"
+                                                                                class="btn btn-md btn-info"
+                                                                                ><em
+                                                                                    class="icon ni ni-download"
+                                                                                ></em
+                                                                                ><span
+                                                                                    >Download</span
+                                                                                ></a
+                                                                            >
+                                                                        </div>
                                                                     </li>
                                                                 </ul>
                                                             </div>
@@ -413,7 +419,12 @@
                                                 <div
                                                     class="card-row card-row-lg col-sep col-sep-lg"
                                                 >
-                                                    tab 2
+                                                    <TableLite
+                                                        :title="membersTitle"
+                                                        :columns="membersCols"
+                                                        :data="members"
+                                                        :isNoAction="true"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -426,7 +437,12 @@
                                                 <div
                                                     class="card-row card-row-lg col-sep col-sep-lg"
                                                 >
-                                                    tab 3
+                                                    <TableLite
+                                                        :title="kpisTitle"
+                                                        :columns="kpisCols"
+                                                        :data="kpis"
+                                                        :isNoAction="true"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -456,7 +472,7 @@ import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import { useStaffProfile, useGetOneMOU } from "@/hooks/useAPI";
-// import TableLite from "@/components/TableLite.vue";
+import TableLite from "@/components/TableLite.vue";
 
 export default {
     name: "MemoDetailsView",
@@ -467,7 +483,7 @@ export default {
         FooterComponent,
         LoadingComponent,
         InfoNotLoggedInComponent,
-        // TableLite,
+        TableLite,
     },
     setup() {
         const publicPath = ref(process.env.VUE_APP_PUBLIC_PATH);
@@ -486,6 +502,45 @@ export default {
         const loadingTheMOU = ref(true);
         const dataTheMOU = ref(null);
         const errorTheMOU = ref(null);
+
+        const membersCols = ref(["Name", "Roles", "Status"]);
+        const members = ref([]);
+        const membersTitle = ref("");
+
+        const kpisCols = ref([
+            "KPI",
+            "Description",
+            "Notes",
+            "Amount (RM)",
+            "Date From",
+            "Date To",
+        ]);
+        const kpis = ref([]);
+        const kpisTitle = ref("");
+
+        const getNama = (gelaran, nama) => {
+            return (
+                (gelaran?.toLowerCase()?.includes("tiada") ? "" : gelaran) +
+                " " +
+                nama
+            );
+        };
+
+        const getRolesStr = (roles) => {
+            return roles?.length > 0
+                ? roles?.map((r) => r.role)?.join(", ")
+                : "-";
+        };
+
+        const getStatus = (roles) => {
+            const isActive =
+                roles?.length > 0 && roles?.find((r) => r.role === "Staff")
+                    ? true
+                    : false;
+            const color = isActive ? "success" : "danger";
+            const label = isActive ? "Active" : "Inactive";
+            return `<span class="badge text-bg-${color}-soft">${label}</span>`;
+        };
 
         watch(
             () => dataStaffProfile.value,
@@ -521,6 +576,32 @@ export default {
                         () => dataMOU.value,
                         (newDataMOU) => {
                             dataTheMOU.value = newDataMOU;
+                            membersTitle.value = `<div class="flex-div mb-2"><div class="me-2">Memorandum No.:</div><h4 class="text">${newDataMOU?.noMemo}</h4></div><h5>Members of Memorandum</h5>`;
+                            members.value = [
+                                ...newDataMOU?.members?.map((member) => {
+                                    return {
+                                        name: getNama(
+                                            member.gelaran,
+                                            member.nama
+                                        ),
+                                        roles: getRolesStr(member.roles),
+                                        status: getStatus(member.roles),
+                                    };
+                                }),
+                            ];
+                            kpisTitle.value = `<div class="flex-div mb-2"><div class="me-2">Memorandum No.:</div><h4 class="text">${newDataMOU?.noMemo}</h4></div><h5>KPIs of Memorandum</h5>`;
+                            kpis.value = [
+                                ...newDataMOU?.kpIs?.map((kpi) => {
+                                    return {
+                                        kpi: kpi.nama,
+                                        description: kpi.penerangan,
+                                        notes: kpi.komen,
+                                        amount: kpi.amaun,
+                                        dateFrom: kpi.tarikhMulaDate,
+                                        dateTo: kpi.tarikhTamatDate,
+                                    };
+                                }),
+                            ];
                         }
                     );
                     watch(
@@ -546,16 +627,14 @@ export default {
             loadingTheMOU,
             dataTheMOU,
             errorTheMOU,
+            membersCols,
+            members,
+            membersTitle,
+            kpisCols,
+            kpis,
+            kpisTitle,
+            getNama,
         };
-    },
-    methods: {
-        getNama(gelaran, nama) {
-            return (
-                (gelaran?.toLowerCase()?.includes("tiada") ? "" : gelaran) +
-                " " +
-                nama
-            );
-        },
     },
 };
 </script>
