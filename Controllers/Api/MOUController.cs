@@ -89,6 +89,8 @@ public class MOUController : ControllerBase
     [HttpPost]
     public ActionResult<object> Store([FromBody] MOUAddModel entity)
     {
+        var staffId = GetStaffID();
+
         var genNo = getGeneratedNo(new MemorandumGenNo
         {
             KodJenis = entity.form1.KodJenis,
@@ -139,6 +141,7 @@ public class MOUController : ControllerBase
             NoMemo = genNo.noMemo,
             Description = "Memorandum has been created",
             Created_At = DateTime.Now,
+            NoStaf = staffId,
         };
 
         using (var transaction = _context.Database.BeginTransaction())
@@ -247,6 +250,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.MOU06_History)
+                .ThenInclude(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU03_Ahli)
                 .ThenInclude(_entity => _entity.EMO_Staf)
                     .ThenInclude(_entity => _entity.Roles)
@@ -363,6 +367,10 @@ public class MOUController : ControllerBase
             {
                 Created_At = mou06.Created_At?.ToString("dd MMM yyyy, h:mm tt") ?? "",
                 Description = mou06.Description,
+                Comment = mou06.Comment,
+                NoStaf = mou06.NoStaf,
+                Gelaran = mou06.EMO_Staf.Gelaran,
+                Nama = mou06.EMO_Staf.Nama,
             })?.OrderByDescending(_entity => _entity.Created_At).ToList(),
             Members = _entity.MOU03_Ahli.Select(mou03 => new
             {
@@ -405,6 +413,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.MOU06_History)
+                .ThenInclude(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU03_Ahli)
                 .ThenInclude(_entity => _entity.EMO_Staf)
                     .ThenInclude(_entity => _entity.Roles)
