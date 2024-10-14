@@ -46,6 +46,7 @@ public class AuthController : ControllerBase
                 s.Gelaran,
                 s.JGiliran,
                 s.Roles,
+                s.NoStaf,
             })
             .FirstOrDefault();
 

@@ -56,10 +56,36 @@
                                         v-if="
                                             roles.find(
                                                 (r) => r.role === 'Staff'
-                                            )
+                                            ) ||
+                                            roles.find((r) => r.role === 'PTJ')
                                         "
                                     >
-                                        <a :href="`${publicPath}memo-list`">
+                                        <a
+                                            :href="`${publicPath}memo-list`"
+                                            v-if="
+                                                roles.find(
+                                                    (r) => r.role === 'PTJ'
+                                                )
+                                            "
+                                        >
+                                            <div class="card">
+                                                <div
+                                                    class="card-body dashboard-card"
+                                                >
+                                                    <h4 class="mb-3">
+                                                        Approval
+                                                    </h4>
+                                                    <font-awesome-icon
+                                                        icon="fa-solid fa-check-to-slot"
+                                                        size="2x"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a
+                                            :href="`${publicPath}memo-list`"
+                                            v-else
+                                        >
                                             <div class="card">
                                                 <div
                                                     class="card-body dashboard-card"
@@ -99,7 +125,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div
+                                    <!-- <div
                                         class="col-md-3"
                                         v-if="
                                             roles.find((r) => r.role === 'PTJ')
@@ -120,7 +146,7 @@
                                                 </div>
                                             </div>
                                         </a>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>

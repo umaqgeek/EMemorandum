@@ -86,11 +86,24 @@
                                 'nk-menu-item',
                                 { active: activeLabel === 'memo-list' },
                             ]"
-                            v-if="roles.find((r) => r.role === 'Staff')"
+                            v-if="
+                                roles.find((r) => r.role === 'Staff') ||
+                                roles.find((r) => r.role === 'PTJ')
+                            "
                         >
                             <a
                                 :href="`${publicPath}memo-list`"
                                 class="nk-menu-link"
+                                v-if="roles.find((r) => r.role === 'PTJ')"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-check-round-cut"></em
+                                ></span>
+                                <span class="nk-menu-text">Approval</span>
+                            </a>
+                            <a
+                                :href="`${publicPath}memo-list`"
+                                class="nk-menu-link"
+                                v-else
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-note-add"></em
                                 ></span>
@@ -115,7 +128,7 @@
                                 <span class="nk-menu-text">Manage Code</span>
                             </a>
                         </li>
-                        <li
+                        <!-- <li
                             :class="[
                                 'nk-menu-item',
                                 { active: activeLabel === 'approval-list' },
@@ -130,7 +143,7 @@
                                 ></span>
                                 <span class="nk-menu-text">Approval</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nk-menu-item">
                             <a href="#" class="nk-menu-link" @click="logout"
                                 ><span class="nk-menu-icon"

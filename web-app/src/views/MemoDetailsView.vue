@@ -77,7 +77,10 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="gap-col">
+                                        <div
+                                            class="gap-col"
+                                            v-if="isPIC || isAdmin"
+                                        >
                                             <ul class="d-flex gap g-2">
                                                 <li class="d-none d-md-block">
                                                     <a
@@ -402,6 +405,106 @@
                                                             <!-- .bio-block -->
                                                         </div>
                                                         <!-- .card-body -->
+                                                        <div
+                                                            class="card-body"
+                                                            v-if="
+                                                                isPUU ||
+                                                                isPTJ ||
+                                                                isMember
+                                                            "
+                                                        >
+                                                            <div
+                                                                class="bio-block"
+                                                            >
+                                                                <h4
+                                                                    class="bio-block-title"
+                                                                >
+                                                                    Comments
+                                                                </h4>
+                                                                <div
+                                                                    class="js-quill"
+                                                                    data-toolbar="minimal"
+                                                                    data-placeholder="Write some awesome text"
+                                                                ></div>
+
+                                                                <div
+                                                                    class="form-group"
+                                                                >
+                                                                    <div
+                                                                        class="form-control-wrap"
+                                                                    >
+                                                                        <textarea
+                                                                            placeholder="Write your review"
+                                                                            class="form-control"
+                                                                            id="exampleFormControlTextarea8"
+                                                                            rows="3"
+                                                                        ></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    class="mt-3"
+                                                                >
+                                                                    <ul
+                                                                        class="d-flex gap g-2 justify-content-start"
+                                                                    >
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPTJ ||
+                                                                                isPUU ||
+                                                                                isMember
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-soft btn-primary"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-comments"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Comment
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <ul
+                                                                        class="d-flex gap g-2 justify-content-end"
+                                                                    >
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPTJ
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-success"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-done"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Approve
+                                                                            </div>
+                                                                        </li>
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPTJ
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-soft btn-danger"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-cross"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Reject
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <!-- .card-content -->
                                                 </div>
@@ -499,6 +602,9 @@ export default {
 
         const isAdmin = ref(false);
         const isPUU = ref(false);
+        const isPTJ = ref(false);
+        const isPIC = ref(false);
+        const isMember = ref(false);
         const loadingTheMOU = ref(true);
         const dataTheMOU = ref(null);
         const errorTheMOU = ref(null);
@@ -559,6 +665,11 @@ export default {
                     )
                         ? true
                         : false;
+                    isPTJ.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "PTJ"
+                    )
+                        ? true
+                        : false;
 
                     const {
                         data: dataMOU,
@@ -579,6 +690,12 @@ export default {
                             membersTitle.value = `<div class="flex-div mb-2"><div class="me-2">Memorandum No.:</div><h4 class="text">${newDataMOU?.noMemo}</h4></div><h5>Members of Memorandum</h5>`;
                             members.value = [
                                 ...newDataMOU?.members?.map((member) => {
+                                    if (
+                                        member.noStaf ===
+                                        newDataStaffProfile?.noStaf
+                                    ) {
+                                        isMember.value = true;
+                                    }
                                     return {
                                         name: getNama(
                                             member.gelaran,
@@ -602,6 +719,7 @@ export default {
                                     };
                                 }),
                             ];
+                            isPIC.value = newDataMOU?.isPIC;
                         }
                     );
                     watch(
@@ -624,6 +742,9 @@ export default {
             loadingStaffProfile,
             isAdmin,
             isPUU,
+            isPTJ,
+            isPIC,
+            isMember,
             loadingTheMOU,
             dataTheMOU,
             errorTheMOU,

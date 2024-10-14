@@ -1,6 +1,10 @@
 <template>
     <span class="table-lite-container">
-        <div class="table-lite-title" v-if="title !== ''" v-html="title"></div>
+        <div
+            class="table-lite-title"
+            v-if="title?.length > 0"
+            v-html="title"
+        ></div>
         <table class="table" data-nk-container="table-responsive">
             <thead class="table-light">
                 <tr>
