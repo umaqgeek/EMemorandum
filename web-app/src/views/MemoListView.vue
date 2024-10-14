@@ -190,9 +190,11 @@ export default {
                             (dataAllMOUs) => {
                                 mouData.value = dataAllMOUs?.map((d) => {
                                     return {
-                                        noMemo: `<span>${
+                                        noMemo: `<a class="title" href="${
+                                            process.env.VUE_APP_PUBLIC_PATH
+                                        }memo-detail?memo=${d.noMemo}">${
                                             d.noMemo
-                                        }</span><span class="badge text-bg-${color(
+                                        }</a><br /><span class="badge text-bg-${color(
                                             d.status?.kod
                                         )}">${d.status?.status}</span>`,
                                         jenis: d.jenis,
@@ -222,9 +224,11 @@ export default {
                             (dataMyMOUs) => {
                                 mouData.value = dataMyMOUs?.map((d) => {
                                     return {
-                                        noMemo: `<span>${
+                                        noMemo: `<a class="title" href="${
+                                            process.env.VUE_APP_PUBLIC_PATH
+                                        }memo-detail?memo=${d.noMemo}">${
                                             d.noMemo
-                                        }</span><span class="badge text-bg-${color(
+                                        }</a><br /><span class="badge text-bg-${color(
                                             d.status?.kod
                                         )}">${d.status?.status}</span>`,
                                         jenis: d.jenis,
@@ -288,7 +292,7 @@ export default {
     align-items: flex-start;
 }
 .filter-containter > input {
-    width: 50%;
+    width: 30%;
     margin-left: 12px;
 }
 .clear-search-icon {

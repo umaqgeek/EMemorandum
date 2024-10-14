@@ -94,7 +94,9 @@ builder.Services.AddScoped<IAuthorizationHandler, TokenHandlerAuth>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Register email service
-builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddHostedService<EmailBackgroundService>();
+builder.Services.AddSingleton<IEmailQueueService, EmailQueueService>();
 
 // Configure Authorization with custom policy
 builder.Services.AddAuthorization(options =>

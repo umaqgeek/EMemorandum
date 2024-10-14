@@ -131,12 +131,10 @@ namespace EMemorandum.Controllers.Api
         private void SendEmailInBackground(EMO_Staf _entity)
         {
             var iutemurl = _configuration.GetValue<string>("IUTeMURL");
-            var subject = "E-Memorandum UTeM (EMO) - Account Activation";
+            var subject = "Account Activation";
             var gelaran = _entity.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : _entity.Gelaran;
-            var body = "<p>Assalamualaikum wrt. wbt. dan Salam Sejahtera,</p>"
-                        + "<p>" + gelaran + " " + _entity.Nama + "</p>"
-                        + "<p>Your account has been updated. Please login into EMO application under " + iutemurl + " for more info.</p>"
-                        + "<p>Regards,</p>";
+            var body = "<p>" + gelaran + " " + _entity.Nama + "</p>"
+                        + "<p>Your account has been updated. Please login into EMO application under " + iutemurl + " for more info.</p>";
 
             // Run email sending in the background
             Task.Run(async () =>

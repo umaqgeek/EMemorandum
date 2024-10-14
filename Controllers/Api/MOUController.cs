@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EMemorandum.Models;
 using EMemorandum.Services;
+using EMemorandum.Jobs;
 
 namespace EMemorandum.Controllers.Api;
 
@@ -21,11 +22,15 @@ public class MOUController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
     private readonly string _delimeter;
+    private readonly IConfiguration _configuration;
+    private readonly IEmailQueueService _emailQueueService;
 
-    public MOUController(IConfiguration configuration, ApplicationDbContext context)
+    public MOUController(IConfiguration configuration, ApplicationDbContext context, IEmailQueueService emailQueueService)
     {
         _context = context;
         _delimeter = ".";
+        _configuration = configuration;
+        _emailQueueService = emailQueueService;
     }
 
     [HttpGet("all")]
@@ -34,32 +39,7 @@ public class MOUController : ControllerBase
     {
         var staffId = GetStaffID();
 
-        var query = _context.MOU01_Memorandum
-            .Include(_entity => _entity.MOU02_Statuses)
-                .ThenInclude(_entity => _entity.MOU_Status)
-            .Include(_entity => _entity.PUU_ScopeMemo)
-            .Include(_entity => _entity.PUU_SubPTj)
-            .Include(_entity => _entity.PUU_JenisMemo)
-            .Include(_entity => _entity.PUU_KategoriMemo)
-            .Include(_entity => _entity.EMO_Staf)
-            .Include(_entity => _entity.MOU_Status)
-            .AsQueryable();
-
-        if (!string.IsNullOrEmpty(q))
-        {
-            query = query.Where(_entity =>
-                _entity.NoMemo.Contains(q) ||
-                _entity.PUU_ScopeMemo.Butiran.Contains(q) ||
-                _entity.MOU02_Statuses.Any(s => s.Status.Contains(q)) ||
-                _entity.EMO_Staf.Nama.Contains(q)
-            );
-        }
-
-        // sort by ascending
-        query = query.OrderBy(_entity => _entity.Status);
-
-        // default limit of 500 rows per query
-        query = query.Take(500);
+        var query = GetMemorandumBaseQuery(q);
 
         var memorandums = query
             .Select(_entity => GetTransformedMOU(_entity, staffId))
@@ -73,35 +53,10 @@ public class MOUController : ControllerBase
     {
         var staffId = GetStaffID();
 
-        var query = _context.MOU01_Memorandum
-            .Where(m => m.MS01_NoStaf == staffId)
-            .Include(_entity => _entity.MOU02_Statuses)
-                .ThenInclude(_entity => _entity.MOU_Status)
-            .Include(_entity => _entity.PUU_ScopeMemo)
-            .Include(_entity => _entity.PUU_SubPTj)
-            .Include(_entity => _entity.PUU_JenisMemo)
-            .Include(_entity => _entity.PUU_KategoriMemo)
-            .Include(_entity => _entity.EMO_Staf)
-            .Include(_entity => _entity.MOU_Status)
-            .AsQueryable();
-
-        if (!string.IsNullOrEmpty(q))
-        {
-            query = query.Where(_entity =>
-                _entity.NoMemo.Contains(q) ||
-                _entity.PUU_ScopeMemo.Butiran.Contains(q) ||
-                _entity.MOU02_Statuses.Any(s => s.Status.Contains(q)) ||
-                _entity.EMO_Staf.Nama.Contains(q)
-            );
-        }
-
-        // sort by ascending
-        query = query.OrderBy(_entity => _entity.Status);
-
-        // default limit of 500 rows per query
-        query = query.Take(500);
+        var query = GetMemorandumBaseQuery(q);
 
         var memorandums = query
+            .Where(m => m.MS01_NoStaf == staffId)
             .Select(_entity => GetTransformedMOU(_entity, staffId))
             .ToList();
 
@@ -117,7 +72,6 @@ public class MOUController : ControllerBase
             KategoriMemo = _context.PUU_KategoriMemo.ToList(),
             ScopeMemo = _context.PUU_ScopeMemo.ToList(),
             SubPTJ = _context.PUU_SubPTj.ToList(),
-            // TODO: List all staff for memo's members
         });
     }
 
@@ -180,6 +134,13 @@ public class MOUController : ControllerBase
             Tarikh = DateTime.Now,
         };
 
+        var history = new MOU06_History
+        {
+            NoMemo = genNo.noMemo,
+            Description = "Memorandum has been created",
+            Created_At = DateTime.Now,
+        };
+
         using (var transaction = _context.Database.BeginTransaction())
         {
             try
@@ -190,20 +151,29 @@ public class MOUController : ControllerBase
                 // add initial status for added MOU
                 _context.MOU02_Status.Add(mouStatus);
 
+                // add history
+                _context.MOU06_History.Add(history);
+
                 // add members for added MOU
-                foreach (var member in entity.form2.Members) {
-                    _context.MOU03_Ahli.Add(new MOU03_Ahli {
+                List<string> noStafList = new List<string>();
+                foreach (var member in entity.form2.Members)
+                {
+                    _context.MOU03_Ahli.Add(new MOU03_Ahli
+                    {
                         NoMemo = genNo.noMemo,
                         NoStaf = member.NoStaf,
                         Peranan = member.Peranan,
                         TkhMula = entity.form1.TarikhMula,
                         TkhTamat = entity.form1.TarikhTamat,
                     });
+                    noStafList.Add(member.NoStaf);
                 }
 
                 // add KPIs for added MOU
-                foreach (var kpi in entity.form3.KPIs) {
-                    _context.MOU04_KPI.Add(new MOU04_KPI {
+                foreach (var kpi in entity.form3.KPIs)
+                {
+                    _context.MOU04_KPI.Add(new MOU04_KPI
+                    {
                         NoMemo = genNo.noMemo,
                         Amaun = kpi.Amaun,
                         MOU04_Number = kpi.MOU04_Number,
@@ -213,6 +183,28 @@ public class MOUController : ControllerBase
                         Komen = kpi.Komen,
                         Nama = kpi.Nama,
                     });
+                }
+
+                // get emails of MOU's members
+                var staffs = _context.EMO_Staf
+                    .Where(s => noStafList.Contains(s.NoStaf) && !string.IsNullOrEmpty(s.Email))
+                    .ToList();
+
+                // Trigger sending emails in the background
+                foreach (var staff in staffs)
+                {
+                    var iutemurl = "https://iutem.example.com"; // Replace with actual configuration value
+                    var subject = "Member of a Memorandum";
+                    var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
+                    var body = $"<p>{gelaran} {staff.Nama}</p><p>You have been added as a member of a memorandum with Memo ID "
+                        + $"<strong>{genNo.noMemo}</strong>. Please login into EMO application under {iutemurl} for more info.</p>";
+                    var emailJob = new EmailJob
+                    {
+                        Email = staff.Email,
+                        Subject = subject,
+                        Body = body,
+                    };
+                    _emailQueueService.QueueEmailJob(emailJob);
                 }
 
                 // Save changes to the database
@@ -254,6 +246,10 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.MOU06_History)
+            .Include(_entity => _entity.MOU03_Ahli)
+                .ThenInclude(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU04_KPI)
             .FirstOrDefault();
 
         if (_entity == null)
@@ -340,8 +336,10 @@ public class MOUController : ControllerBase
             TarikhTamat = _entity.TarikhTamat,
             TarikhTamatDate = GetDisplayDate(_entity.TarikhTamat),
             TajukProjek = _entity.TajukProjek,
+            Path = _entity.Path,
             IsPIC = _entity.MS01_NoStaf == staffId,
             PIC = _entity.EMO_Staf.Nama,
+            PICGelaran = _entity.EMO_Staf.Gelaran,
             noStafPIC = _entity.EMO_Staf.NoStaf,
             Nilai = _entity.Nilai,
             Status = new
@@ -359,7 +357,22 @@ public class MOUController : ControllerBase
                     mou02.MOU_Status.Kod,
                     mou02.MOU_Status.Status
                 },
-            }).ToList(),
+            })?.OrderByDescending(_entity => _entity.Tarikh).ToList(),
+            History = _entity.MOU06_History.Select(mou06 => new
+            {
+                Created_At = mou06.Created_At?.ToString("dd MMM yyyy, h:mm tt") ?? "",
+                Description = mou06.Description,
+            })?.OrderByDescending(_entity => _entity.Created_At).ToList(),
+            Members = _entity.MOU03_Ahli.Select(mou03 => new
+            {
+                Peranan = mou03.Peranan,
+                Email = mou03.EMO_Staf.Email,
+                Gelaran = mou03.EMO_Staf.Gelaran,
+                Nama = mou03.EMO_Staf.Nama,
+                NoStaf = mou03.EMO_Staf.NoStaf,
+                Roles = mou03.EMO_Staf.Roles,
+            })?.ToList(),
+            KPIs = _entity.MOU04_KPI?.ToList(),
         });
     }
 
@@ -367,6 +380,43 @@ public class MOUController : ControllerBase
     {
         DateTime dateTime = nullableDateTime ?? DateTime.MinValue;
         return dateTime.ToString("dd/MM/yyyy");
+    }
+
+    private IQueryable<MOU01_Memorandum> GetMemorandumBaseQuery(string q)
+    {
+        var query = _context.MOU01_Memorandum
+            .Include(_entity => _entity.MOU02_Statuses)
+                .ThenInclude(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.PUU_ScopeMemo)
+            .Include(_entity => _entity.PUU_SubPTj)
+            .Include(_entity => _entity.PUU_JenisMemo)
+            .Include(_entity => _entity.PUU_KategoriMemo)
+            .Include(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.MOU06_History)
+            .Include(_entity => _entity.MOU03_Ahli)
+                .ThenInclude(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU04_KPI)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(q))
+        {
+            query = query.Where(_entity =>
+                _entity.NoMemo.ToLower().Contains(q.ToLower()) ||
+                _entity.TajukProjek.ToLower().Contains(q.ToLower()) ||
+                _entity.PUU_ScopeMemo.Butiran.ToLower().Contains(q.ToLower()) ||
+                _entity.MOU02_Statuses.Any(s => s.Status.ToLower().Contains(q.ToLower())) ||
+                _entity.EMO_Staf.Nama.ToLower().Contains(q.ToLower())
+            );
+        }
+
+        // sort by ascending
+        query = query.OrderBy(_entity => _entity.Status);
+
+        // default limit of 500 rows per query
+        query = query.Take(500);
+
+        return query;
     }
 }
 

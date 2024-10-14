@@ -1,17 +1,25 @@
 <template>
-    <!-- Root @s -->
     <div class="nk-app-root">
-        <!-- main @s -->
         <div class="nk-main">
-            <NavbarComponent />
-            <!-- .nki-sidebar -->
-            <!-- sidebar @e -->
-            <!-- wrap @s -->
+            <NavbarComponent
+                :staffprofile="dataStaffProfile"
+                :activeLabel="`memo-list`"
+            />
             <div class="nk-wrap">
-                <TopNavComponent />
-                <!-- header -->
-                <!-- content @s -->
-                <div class="nk-content">
+                <TopNavComponent
+                    :staffprofile="dataStaffProfile"
+                    :errorStaffProfile="errorStaffProfile || errorTheMOU"
+                />
+                <LoadingComponent
+                    :loading="loadingStaffProfile || loadingTheMOU"
+                />
+                <div class="nk-content" v-if="errorStaffProfile">
+                    <InfoNotLoggedInComponent />
+                </div>
+                <div
+                    class="nk-content"
+                    v-if="!errorStaffProfile && !errorTheMOU"
+                >
                     <div class="container">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
@@ -50,6 +58,8 @@
                                                 <li class="nav-item">
                                                     <button
                                                         class="nav-link"
+                                                        data-bs-toggle="tab"
+                                                        data-bs-target="#tab-2"
                                                         type="button"
                                                     >
                                                         Members
@@ -58,6 +68,8 @@
                                                 <li class="nav-item">
                                                     <button
                                                         class="nav-link"
+                                                        data-bs-toggle="tab"
+                                                        data-bs-target="#tab-3"
                                                         type="button"
                                                     >
                                                         KPI
@@ -130,7 +142,9 @@
                                                                         >
                                                                         <span
                                                                             class="text"
-                                                                            >MoA(TP),13.2.2023.010000.007
+                                                                            >{{
+                                                                                dataTheMOU?.noMemo
+                                                                            }}
                                                                         </span>
                                                                     </li>
                                                                     <li
@@ -144,7 +158,9 @@
                                                                         >
                                                                         <span
                                                                             class="text"
-                                                                            >Kerahsiaan</span
+                                                                            >{{
+                                                                                dataTheMOU?.kategori
+                                                                            }}</span
                                                                         >
                                                                     </li>
                                                                     <li
@@ -158,7 +174,9 @@
                                                                         >
                                                                         <span
                                                                             class="text"
-                                                                            >Kerahsiaan</span
+                                                                            >{{
+                                                                                dataTheMOU?.jenis
+                                                                            }}</span
                                                                         >
                                                                     </li>
                                                                     <li
@@ -171,21 +189,26 @@
                                                                         >
                                                                         <span
                                                                             class="text"
-                                                                            >Kerahsiaan</span
+                                                                            >{{
+                                                                                dataTheMOU?.scopeButiran
+                                                                            }}</span
                                                                         >
                                                                     </li>
                                                                     <li
                                                                         class="list-group-item"
                                                                     >
                                                                         <span
-                                                                            class="title fw-medium w-40 d-inline-block"
-                                                                            >Staff
-                                                                            Name:</span
+                                                                            class="title fw-medium w-100 d-inline-block"
+                                                                            >PIC:</span
                                                                         >
                                                                         <span
                                                                             class="text"
-                                                                            >Florenza
-                                                                            Desporte</span
+                                                                            >{{
+                                                                                getNama(
+                                                                                    dataTheMOU?.picGelaran,
+                                                                                    dataTheMOU?.pic
+                                                                                )
+                                                                            }}</span
                                                                         >
                                                                     </li>
                                                                     <li
@@ -194,13 +217,13 @@
                                                                         <span
                                                                             class="title fw-medium w-40 d-inline-block"
                                                                             >Start
-                                                                            Date</span
+                                                                            Date:</span
                                                                         >
                                                                         <span
                                                                             class="text"
-                                                                            >25
-                                                                            Dec
-                                                                            2021</span
+                                                                            >{{
+                                                                                dataTheMOU?.tarikhMulaDate
+                                                                            }}</span
                                                                         >
                                                                     </li>
                                                                     <li
@@ -209,13 +232,13 @@
                                                                         <span
                                                                             class="title fw-medium w-40 d-inline-block"
                                                                             >End
-                                                                            Date</span
+                                                                            Date:</span
                                                                         >
                                                                         <span
                                                                             class="text"
-                                                                            >24
-                                                                            Dec
-                                                                            2021</span
+                                                                            >{{
+                                                                                dataTheMOU?.tarikhTamatDate
+                                                                            }}</span
                                                                         >
                                                                     </li>
                                                                     <li
@@ -228,7 +251,44 @@
                                                                         >
                                                                         <span
                                                                             class="text"
-                                                                            >0.00</span
+                                                                            >{{
+                                                                                dataTheMOU?.nilai?.toFixed(
+                                                                                    2
+                                                                                )
+                                                                            }}</span
+                                                                        >
+                                                                    </li>
+                                                                    <li
+                                                                        class="list-group-item"
+                                                                    >
+                                                                        <span
+                                                                            class="title fw-medium w-100 d-inline-block"
+                                                                            >PTJ:</span
+                                                                        >
+                                                                        <span
+                                                                            class="text"
+                                                                            >{{
+                                                                                dataTheMOU?.ptjNama
+                                                                            }}</span
+                                                                        >
+                                                                    </li>
+                                                                    <li
+                                                                        class="list-group-item"
+                                                                    >
+                                                                        <span
+                                                                            class="title fw-medium w-100 d-inline-block"
+                                                                            >Document:</span
+                                                                        >
+                                                                        <em
+                                                                            class="icon ni ni-file-download icon-lg"
+                                                                        ></em
+                                                                        >&nbsp;
+                                                                        <a
+                                                                            :href="`${publicPath}${dataTheMOU?.path}`"
+                                                                            target="_blank"
+                                                                            >{{
+                                                                                dataTheMOU?.path
+                                                                            }}</a
                                                                         >
                                                                     </li>
                                                                 </ul>
@@ -250,6 +310,11 @@
                                                                     Project
                                                                     Title
                                                                 </h4>
+                                                                <p>
+                                                                    {{
+                                                                        dataTheMOU?.tajukProjek
+                                                                    }}
+                                                                </p>
                                                             </div>
                                                             <!-- .bio-block -->
                                                         </div>
@@ -262,173 +327,67 @@
                                                                     class="bio-block-title"
                                                                 >
                                                                     Recent
-                                                                    Activity
+                                                                    Activities
+                                                                    &amp;
+                                                                    History
                                                                 </h4>
                                                                 <ul
                                                                     class="nk-schedule mt-4"
                                                                 >
                                                                     <li
                                                                         class="nk-schedule-item"
+                                                                        v-for="(
+                                                                            hist,
+                                                                            hIndex
+                                                                        ) in dataTheMOU?.history"
+                                                                        v-bind:key="
+                                                                            hIndex +
+                                                                            hist?.Created_At
+                                                                        "
                                                                     >
                                                                         <div
                                                                             class="nk-schedule-item-inner"
                                                                         >
                                                                             <div
-                                                                                class="nk-schedule-symbol active"
+                                                                                :class="[
+                                                                                    'nk-schedule-symbol',
+                                                                                    {
+                                                                                        active:
+                                                                                            hIndex ===
+                                                                                            0,
+                                                                                    },
+                                                                                ]"
                                                                             ></div>
                                                                             <div
-                                                                                class="nk-schedule-content nk-schedule-content-no-border flex-grow-1"
+                                                                                :class="[
+                                                                                    'nk-schedule-content',
+                                                                                    {
+                                                                                        'nk-schedule-content-no-border flex-grow-1':
+                                                                                            hIndex ===
+                                                                                            0,
+                                                                                    },
+                                                                                ]"
                                                                             >
                                                                                 <span
                                                                                     class="smaller"
-                                                                                    >5:05
-                                                                                    PM</span
+                                                                                    >{{
+                                                                                        hist.created_At
+                                                                                    }}</span
                                                                                 >
                                                                                 <div
-                                                                                    class="h6"
-                                                                                >
-                                                                                    Document
-                                                                                    uploaded
-                                                                                </div>
-                                                                                <div
-                                                                                    class="alert alert-info mt-2"
+                                                                                    :class="[
+                                                                                        {
+                                                                                            'alert alert-info ':
+                                                                                                hIndex ===
+                                                                                                0,
+                                                                                        },
+                                                                                    ]"
                                                                                     role="alert"
                                                                                 >
-                                                                                    <div
-                                                                                        class="d-flex"
-                                                                                    >
-                                                                                        <em
-                                                                                            class="icon icon-lg ni ni-file-code opacity-75"
-                                                                                        ></em>
-                                                                                        <div
-                                                                                            class="ms-2 d-flex flex-wrap flex-grow-1 justify-content-between"
-                                                                                        >
-                                                                                            <div>
-                                                                                                <h6
-                                                                                                    class="alert-heading mb-0"
-                                                                                                >
-                                                                                                    Memorandum
-                                                                                                    -
-                                                                                                    Final
-                                                                                                    v2
-                                                                                                </h6>
-                                                                                                <span
-                                                                                                    class="smaller"
-                                                                                                    >Hak
-                                                                                                    milik
-                                                                                                    kerajaan
-                                                                                                    UTeM.</span
-                                                                                                >
-                                                                                            </div>
-                                                                                            <div
-                                                                                                class="d-block mt-1"
-                                                                                            >
-                                                                                                <a
-                                                                                                    href="#"
-                                                                                                    class="btn btn-md btn-info"
-                                                                                                    ><em
-                                                                                                        class="icon ni ni-download"
-                                                                                                    ></em
-                                                                                                    ><span
-                                                                                                        >Download</span
-                                                                                                    ></a
-                                                                                                >
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
+                                                                                    {{
+                                                                                        hist.description
+                                                                                    }}
                                                                                 </div>
-                                                                                <!-- .alert -->
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li
-                                                                        class="nk-schedule-item"
-                                                                    >
-                                                                        <div
-                                                                            class="nk-schedule-item-inner"
-                                                                        >
-                                                                            <div
-                                                                                class="nk-schedule-symbol active"
-                                                                            ></div>
-                                                                            <div
-                                                                                class="nk-schedule-content"
-                                                                            >
-                                                                                <span
-                                                                                    class="smaller"
-                                                                                    >4:23
-                                                                                    PM</span
-                                                                                >
-                                                                                <div
-                                                                                    class="h6"
-                                                                                >
-                                                                                    <a
-                                                                                        href=""
-                                                                                        >User</a
-                                                                                    >
-                                                                                    making
-                                                                                    revisions
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li
-                                                                        class="nk-schedule-item"
-                                                                    >
-                                                                        <div
-                                                                            class="nk-schedule-item-inner"
-                                                                        >
-                                                                            <div
-                                                                                class="nk-schedule-symbol active"
-                                                                            ></div>
-                                                                            <div
-                                                                                class="nk-schedule-content nk-schedule-content-no-border"
-                                                                            >
-                                                                                <div
-                                                                                    class="list-group-dotted mt-3"
-                                                                                >
-                                                                                    <div
-                                                                                        class="list-group-wrap"
-                                                                                    >
-                                                                                        <div
-                                                                                            class="p-3"
-                                                                                        >
-                                                                                            <span
-                                                                                                class="smaller"
-                                                                                                >10:30
-                                                                                                PM</span
-                                                                                            >
-                                                                                            <div
-                                                                                                class="media-group"
-                                                                                            >
-                                                                                                <div
-                                                                                                    class="media media-sm media-middle media-circle text-bg-success"
-                                                                                                >
-                                                                                                    <em
-                                                                                                        class="icon ni ni-check"
-                                                                                                    ></em>
-                                                                                                </div>
-                                                                                                <div
-                                                                                                    class="media-text ms-1"
-                                                                                                >
-                                                                                                    <div
-                                                                                                        class="h6"
-                                                                                                    >
-                                                                                                        <a
-                                                                                                            href="#"
-                                                                                                            >PTJ
-                                                                                                            User</a
-                                                                                                        >
-                                                                                                        has
-                                                                                                        approved
-                                                                                                        memorandum
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <!-- .media-group -->
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <!-- .list-group-dotted -->
                                                                             </div>
                                                                         </div>
                                                                     </li>
@@ -445,6 +404,32 @@
                                             <!-- .card -->
                                         </div>
                                         <!-- .tab-pane -->
+                                        <div
+                                            class="tab-pane"
+                                            id="tab-2"
+                                            tabindex="1"
+                                        >
+                                            <div class="card card-gutter-md">
+                                                <div
+                                                    class="card-row card-row-lg col-sep col-sep-lg"
+                                                >
+                                                    tab 2
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="tab-pane"
+                                            id="tab-3"
+                                            tabindex="2"
+                                        >
+                                            <div class="card card-gutter-md">
+                                                <div
+                                                    class="card-row card-row-lg col-sep col-sep-lg"
+                                                >
+                                                    tab 3
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!-- .tab-content -->
                                 </div>
@@ -453,411 +438,124 @@
                         </div>
                     </div>
                 </div>
-                <!-- .nk-content -->
-                <!-- include Footer -->
-                <div class="nk-footer">
-                    <div class="container-fluid">
-                        <div class="nk-footer-wrap">
-                            <div class="nk-footer-copyright">
-                                &copy; 2024 UTeM.
-                            </div>
-                            <div class="nk-footer-links">
-                                <ul class="nav nav-sm"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- .nk-footer -->
-            </div>
-            <!-- .nk-wrap -->
-        </div>
-        <!-- .nk-main -->
-        <!-- Modal -->
-        <div
-            class="modal fade"
-            id="addUserModal"
-            tabindex="-1"
-            aria-labelledby="addUserModalLabel"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="addUserModalLabel">
-                            Add User
-                        </h4>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <!-- .modal-header -->
-                    <div class="modal-body">
-                        <form action="#">
-                            <div class="row g-3">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label
-                                            for="firstname"
-                                            class="form-label"
-                                            >First Name</label
-                                        >
-                                        <div class="form-control-wrap">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                placeholder="First name"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="lastname" class="form-label"
-                                            >Last Name</label
-                                        >
-                                        <div class="form-control-wrap">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                placeholder="Last name"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="email" class="form-label"
-                                            >Email Address</label
-                                        >
-                                        <div class="form-control-wrap">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                placeholder="Email address"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="status" class="form-label"
-                                            >Status</label
-                                        >
-                                        <div class="form-control-wrap">
-                                            <select
-                                                class="js-select"
-                                                data-search="true"
-                                                data-sort="false"
-                                            >
-                                                <option value="">
-                                                    Select a status
-                                                </option>
-                                                <option value="1">
-                                                    Pending
-                                                </option>
-                                                <option value="2">
-                                                    Active
-                                                </option>
-                                                <option value="3">
-                                                    Inactive
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label for="role" class="form-label"
-                                            >Role</label
-                                        >
-                                        <div class="form-control-wrap">
-                                            <select
-                                                class="js-select"
-                                                data-search="true"
-                                                data-sort="false"
-                                            >
-                                                <option value="">
-                                                    Select a role
-                                                </option>
-                                                <option value="1">
-                                                    Administrator
-                                                </option>
-                                                <option value="2">
-                                                    Developer
-                                                </option>
-                                                <option value="3">
-                                                    Analyst
-                                                </option>
-                                                <option value="4">
-                                                    Support
-                                                </option>
-                                                <option value="5">Trial</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="d-flex gap g-2">
-                                        <div class="gap-col">
-                                            <button
-                                                class="btn btn-primary"
-                                                type="submit"
-                                            >
-                                                Add User
-                                            </button>
-                                        </div>
-                                        <div class="gap-col">
-                                            <button
-                                                type="button"
-                                                class="btn border-0"
-                                                data-bs-dismiss="modal"
-                                            >
-                                                Discard
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- .modal-body -->
-                </div>
+                <FooterComponent />
             </div>
         </div>
-        <!-- .modal -->
-        <div
-            class="offcanvas offcanvas-end offcanvas-size-lg"
-            id="notificationOffcanvas"
-        >
-            <div class="offcanvas-header border-bottom border-light">
-                <h5 class="offcanvas-title" id="offcanvasTopLabel">
-                    Recent Notification
-                </h5>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="offcanvas"
-                    aria-label="Close"
-                ></button>
-            </div>
-            <div class="offcanvas-body" data-simplebar>
-                <ul class="nk-schedule">
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">2:12 PM</span>
-                                <div class="h6">Added 3 New Images</div>
-                                <ul class="d-flex flex-wrap gap g-2 py-2">
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/a.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/b.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="media media-xxl">
-                                            <img
-                                                src="../assets/images/product/c.jpg"
-                                                alt=""
-                                                class="img-thumbnail"
-                                            />
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">4:23 PM</span>
-                                <div class="h6">
-                                    Invitation for creative designs pattern
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div
-                                class="nk-schedule-content nk-schedule-content-no-border"
-                            >
-                                <span class="smaller">10:30 PM</span>
-                                <div class="h6">
-                                    Task report - uploaded weekly reports
-                                </div>
-                                <div class="list-group-dotted mt-3">
-                                    <div class="list-group-wrap">
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-pdf.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Modern Designs
-                                                        Pattern</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >1.6.mb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-doc.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Cpanel Upload
-                                                        Guidelines</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >18kb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                        <div class="p-3">
-                                            <div class="media-group">
-                                                <div class="media rounded-0">
-                                                    <img
-                                                        src="../assets/images/icon/file-type-code.svg"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                                <div class="media-text ms-1">
-                                                    <a href="#" class="title"
-                                                        >Weekly Finance
-                                                        Reports</a
-                                                    >
-                                                    <span class="text smaller"
-                                                        >10mb</span
-                                                    >
-                                                </div>
-                                            </div>
-                                            <!-- .media-group -->
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- .list-group-dotted -->
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">3:23 PM</span>
-                                <div class="h6">
-                                    Assigned you to new database design project
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div
-                                class="nk-schedule-content nk-schedule-content-no-border flex-grow-1"
-                            >
-                                <span class="smaller">5:05 PM</span>
-                                <div class="h6">
-                                    You have received a new order
-                                </div>
-                                <div class="alert alert-info mt-2" role="alert">
-                                    <div class="d-flex">
-                                        <em
-                                            class="icon icon-lg ni ni-file-code opacity-75"
-                                        ></em>
-                                        <div
-                                            class="ms-2 d-flex flex-wrap flex-grow-1 justify-content-between"
-                                        >
-                                            <div>
-                                                <h6 class="alert-heading mb-0">
-                                                    Business Template - UI/UX
-                                                    design
-                                                </h6>
-                                                <span class="smaller"
-                                                    >Shared information with
-                                                    your team to understand and
-                                                    contribute to your
-                                                    project.</span
-                                                >
-                                            </div>
-                                            <div class="d-block mt-1">
-                                                <a
-                                                    href="#"
-                                                    class="btn btn-md btn-info"
-                                                    ><em
-                                                        class="icon ni ni-download"
-                                                    ></em
-                                                    ><span>Download</span></a
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- .alert -->
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nk-schedule-item">
-                        <div class="nk-schedule-item-inner">
-                            <div class="nk-schedule-symbol active"></div>
-                            <div class="nk-schedule-content">
-                                <span class="smaller">2:45 PM</span>
-                                <div class="h6">
-                                    Project status updated successfully
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <ValidateMeComponent />
     </div>
-    <!-- .nk-app-root -->
 </template>
 
 <!-- JavaScript -->
 <script>
+import { ref, watch } from "vue";
+
+import ValidateMeComponent from "@/components/ValidateMe.vue";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
+import FooterComponent from "@/components/Footer.vue";
+import LoadingComponent from "@/components/Loading.vue";
+import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
+import { useStaffProfile, useGetOneMOU } from "@/hooks/useAPI";
+// import TableLite from "@/components/TableLite.vue";
 
 export default {
     name: "MemoDetailsView",
     components: {
+        ValidateMeComponent,
         NavbarComponent,
         TopNavComponent,
+        FooterComponent,
+        LoadingComponent,
+        InfoNotLoggedInComponent,
+        // TableLite,
+    },
+    setup() {
+        const publicPath = ref(process.env.VUE_APP_PUBLIC_PATH);
+
+        const {
+            data: dataStaffProfile,
+            error: errorStaffProfile,
+            loading: loadingStaffProfile,
+        } = useStaffProfile();
+
+        const params = new URLSearchParams(window.location.search);
+        const noMemo = params.get("memo") || "";
+
+        const isAdmin = ref(false);
+        const isPUU = ref(false);
+        const loadingTheMOU = ref(true);
+        const dataTheMOU = ref(null);
+        const errorTheMOU = ref(null);
+
+        watch(
+            () => dataStaffProfile.value,
+            (newDataStaffProfile) => {
+                if (
+                    newDataStaffProfile &&
+                    newDataStaffProfile?.roles?.length > 0
+                ) {
+                    isAdmin.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "Admin"
+                    )
+                        ? true
+                        : false;
+                    isPUU.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "PUU"
+                    )
+                        ? true
+                        : false;
+
+                    const {
+                        data: dataMOU,
+                        loading: loadingMOU,
+                        error: errorMOU,
+                    } = useGetOneMOU(noMemo);
+
+                    watch(
+                        () => loadingMOU.value,
+                        (newLoadingMOU) => {
+                            loadingTheMOU.value = newLoadingMOU;
+                        }
+                    );
+                    watch(
+                        () => dataMOU.value,
+                        (newDataMOU) => {
+                            dataTheMOU.value = newDataMOU;
+                        }
+                    );
+                    watch(
+                        () => errorMOU.value,
+                        (newErrorMOU) => {
+                            if (newErrorMOU) {
+                                location.href = `${publicPath.value}memo-list`;
+                            }
+                        }
+                    );
+                }
+            },
+            { immediate: true } // Run the watcher immediately on component mount
+        );
+
+        return {
+            publicPath,
+            dataStaffProfile,
+            errorStaffProfile,
+            loadingStaffProfile,
+            isAdmin,
+            isPUU,
+            loadingTheMOU,
+            dataTheMOU,
+            errorTheMOU,
+        };
+    },
+    methods: {
+        getNama(gelaran, nama) {
+            return (
+                (gelaran?.toLowerCase()?.includes("tiada") ? "" : gelaran) +
+                " " +
+                nama
+            );
+        },
     },
 };
 </script>

@@ -35,8 +35,10 @@ public class EmailService : IEmailService
 
             var mailMessage = new MailMessage(fromAddress, toAddress)
             {
-                Subject = subject,
-                Body = body,
+                Subject = "E-Memorandum UTeM (EMO) - " + subject,
+                Body = "<p>Assalamualaikum wrt. wbt. dan Salam Sejahtera,</p>"
+                    + body
+                    + "<p>Regards,</p>",
                 IsBodyHtml = true
             };
 

@@ -68,6 +68,24 @@ const routes = [
         path: "/memo-add",
         component: MemoAddView,
     },
+
+    {
+        path: "/memo-edit",
+        component: MemoEditView,
+    },
+    {
+        path: "/memo-detail",
+        component: MemoDetailsView,
+    },
+    {
+        path: "/approval-list",
+        component: ApprovalListView,
+    },
+    {
+        path: "/approval-detail",
+        component: ApprovalDetailsView,
+    },
+
     {
         path: "/:pathMatch(.*)*",
         component: NotFoundView, // Your custom 404 page component
@@ -126,7 +144,6 @@ const routesOld = [
         path: "/memo-add-kpi",
         component: MemoAddKPIView,
     },
-
     {
         path: "/memo-edit-member",
         component: MemoEditMemberView,
