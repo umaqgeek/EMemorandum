@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EMemorandum.Models;
 using EMemorandum.Services;
+using EMemorandum.Jobs;
 
 namespace EMemorandum.Controllers.Api;
 
@@ -21,11 +22,15 @@ public class MOUController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
     private readonly string _delimeter;
+    private readonly IConfiguration _configuration;
+    private readonly IEmailQueueService _emailQueueService;
 
-    public MOUController(IConfiguration configuration, ApplicationDbContext context)
+    public MOUController(IConfiguration configuration, ApplicationDbContext context, IEmailQueueService emailQueueService)
     {
         _context = context;
         _delimeter = ".";
+        _configuration = configuration;
+        _emailQueueService = emailQueueService;
     }
 
     [HttpGet("all")]
@@ -141,19 +146,25 @@ public class MOUController : ControllerBase
                 _context.MOU02_Status.Add(mouStatus);
 
                 // add members for added MOU
-                foreach (var member in entity.form2.Members) {
-                    _context.MOU03_Ahli.Add(new MOU03_Ahli {
+                List<string> noStafList = new List<string>();
+                foreach (var member in entity.form2.Members)
+                {
+                    _context.MOU03_Ahli.Add(new MOU03_Ahli
+                    {
                         NoMemo = genNo.noMemo,
                         NoStaf = member.NoStaf,
                         Peranan = member.Peranan,
                         TkhMula = entity.form1.TarikhMula,
                         TkhTamat = entity.form1.TarikhTamat,
                     });
+                    noStafList.Add(member.NoStaf);
                 }
 
                 // add KPIs for added MOU
-                foreach (var kpi in entity.form3.KPIs) {
-                    _context.MOU04_KPI.Add(new MOU04_KPI {
+                foreach (var kpi in entity.form3.KPIs)
+                {
+                    _context.MOU04_KPI.Add(new MOU04_KPI
+                    {
                         NoMemo = genNo.noMemo,
                         Amaun = kpi.Amaun,
                         MOU04_Number = kpi.MOU04_Number,
@@ -163,6 +174,28 @@ public class MOUController : ControllerBase
                         Komen = kpi.Komen,
                         Nama = kpi.Nama,
                     });
+                }
+
+                // get emails of MOU's members
+                var staffs = _context.EMO_Staf
+                    .Where(s => noStafList.Contains(s.NoStaf) && !string.IsNullOrEmpty(s.Email))
+                    .ToList();
+
+                // Trigger sending emails in the background
+                foreach (var staff in staffs)
+                {
+                    var iutemurl = "https://iutem.example.com"; // Replace with actual configuration value
+                    var subject = "Member of a Memorandum";
+                    var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
+                    var body = $"<p>{gelaran} {staff.Nama}</p><p>You have been added as a member of a memorandum with Memo ID "
+                        + $"<strong>{genNo.noMemo}</strong>. Please login into EMO application under {iutemurl} for more info.</p>";
+                    var emailJob = new EmailJob
+                    {
+                        Email = staff.Email,
+                        Subject = subject,
+                        Body = body,
+                    };
+                    _emailQueueService.QueueEmailJob(emailJob);
                 }
 
                 // Save changes to the database
@@ -319,7 +352,7 @@ public class MOUController : ControllerBase
         return dateTime.ToString("dd/MM/yyyy");
     }
 
-    public IQueryable<MOU01_Memorandum> GetMemorandumBaseQuery(string q)
+    private IQueryable<MOU01_Memorandum> GetMemorandumBaseQuery(string q)
     {
         var query = _context.MOU01_Memorandum
             .Include(_entity => _entity.MOU02_Statuses)
