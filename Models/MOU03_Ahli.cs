@@ -7,11 +7,11 @@ namespace EMemorandum.Models;
 public class MOU03_Ahli
 {
     [Key, Column(Order = 0)]
-    [StringLength(50)]
+    [ForeignKey("MOU01_Memorandum")]
     public string? NoMemo { get; set; }
 
     [Key, Column(Order = 1)]
-    [StringLength(5)]
+    [ForeignKey("EMO_Staf")]
     public string NoStaf { get; set; }
 
     [StringLength(250)]

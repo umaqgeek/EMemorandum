@@ -72,7 +72,6 @@ public class MOUController : ControllerBase
             KategoriMemo = _context.PUU_KategoriMemo.ToList(),
             ScopeMemo = _context.PUU_ScopeMemo.ToList(),
             SubPTJ = _context.PUU_SubPTj.ToList(),
-            // TODO: List all staff for memo's members
         });
     }
 
@@ -135,6 +134,13 @@ public class MOUController : ControllerBase
             Tarikh = DateTime.Now,
         };
 
+        var history = new MOU06_History
+        {
+            NoMemo = genNo.noMemo,
+            Description = "Memorandum has been created",
+            Created_At = DateTime.Now,
+        };
+
         using (var transaction = _context.Database.BeginTransaction())
         {
             try
@@ -144,6 +150,9 @@ public class MOUController : ControllerBase
 
                 // add initial status for added MOU
                 _context.MOU02_Status.Add(mouStatus);
+
+                // add history
+                _context.MOU06_History.Add(history);
 
                 // add members for added MOU
                 List<string> noStafList = new List<string>();
@@ -237,6 +246,10 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.MOU06_History)
+            .Include(_entity => _entity.MOU03_Ahli)
+                .ThenInclude(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU04_KPI)
             .FirstOrDefault();
 
         if (_entity == null)
@@ -323,8 +336,10 @@ public class MOUController : ControllerBase
             TarikhTamat = _entity.TarikhTamat,
             TarikhTamatDate = GetDisplayDate(_entity.TarikhTamat),
             TajukProjek = _entity.TajukProjek,
+            Path = _entity.Path,
             IsPIC = _entity.MS01_NoStaf == staffId,
             PIC = _entity.EMO_Staf.Nama,
+            PICGelaran = _entity.EMO_Staf.Gelaran,
             noStafPIC = _entity.EMO_Staf.NoStaf,
             Nilai = _entity.Nilai,
             Status = new
@@ -342,7 +357,22 @@ public class MOUController : ControllerBase
                     mou02.MOU_Status.Kod,
                     mou02.MOU_Status.Status
                 },
-            }).ToList(),
+            })?.OrderByDescending(_entity => _entity.Tarikh).ToList(),
+            History = _entity.MOU06_History.Select(mou06 => new
+            {
+                Created_At = mou06.Created_At?.ToString("dd MMM yyyy, h:mm tt") ?? "",
+                Description = mou06.Description,
+            })?.OrderByDescending(_entity => _entity.Created_At).ToList(),
+            Members = _entity.MOU03_Ahli.Select(mou03 => new
+            {
+                Peranan = mou03.Peranan,
+                Email = mou03.EMO_Staf.Email,
+                Gelaran = mou03.EMO_Staf.Gelaran,
+                Nama = mou03.EMO_Staf.Nama,
+                NoStaf = mou03.EMO_Staf.NoStaf,
+                Roles = mou03.EMO_Staf.Roles,
+            })?.ToList(),
+            KPIs = _entity.MOU04_KPI?.ToList(),
         });
     }
 
@@ -363,15 +393,20 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.MOU06_History)
+            .Include(_entity => _entity.MOU03_Ahli)
+                .ThenInclude(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU04_KPI)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(q))
         {
             query = query.Where(_entity =>
-                _entity.NoMemo.Contains(q) ||
-                _entity.PUU_ScopeMemo.Butiran.Contains(q) ||
-                _entity.MOU02_Statuses.Any(s => s.Status.Contains(q)) ||
-                _entity.EMO_Staf.Nama.Contains(q)
+                _entity.NoMemo.ToLower().Contains(q.ToLower()) ||
+                _entity.TajukProjek.ToLower().Contains(q.ToLower()) ||
+                _entity.PUU_ScopeMemo.Butiran.ToLower().Contains(q.ToLower()) ||
+                _entity.MOU02_Statuses.Any(s => s.Status.ToLower().Contains(q.ToLower())) ||
+                _entity.EMO_Staf.Nama.ToLower().Contains(q.ToLower())
             );
         }
 

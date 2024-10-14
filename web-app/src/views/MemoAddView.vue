@@ -149,8 +149,7 @@
                                                                 <div
                                                                     class="form-control-wrap"
                                                                 >
-                                                                    <input
-                                                                        type="text"
+                                                                    <textarea
                                                                         class="form-control"
                                                                         placeholder="Eg.: Memorandum Persefahaman X dan K"
                                                                         v-model="
@@ -158,7 +157,7 @@
                                                                                 .form1
                                                                                 .TajukProjek
                                                                         "
-                                                                    />
+                                                                    ></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>

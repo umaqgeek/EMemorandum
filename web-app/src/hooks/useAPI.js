@@ -135,3 +135,10 @@ export function useMouStoreMemo(payload) {
         data: JSON.stringify(payload),
     });
 }
+
+export function useGetOneMOU(noMemo = "-") {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/mou/get/${noMemo}`,
+    });
+}

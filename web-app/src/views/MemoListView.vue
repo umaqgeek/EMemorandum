@@ -190,9 +190,11 @@ export default {
                             (dataAllMOUs) => {
                                 mouData.value = dataAllMOUs?.map((d) => {
                                     return {
-                                        noMemo: `<span>${
+                                        noMemo: `<a class="title" href="${
+                                            process.env.VUE_APP_PUBLIC_PATH
+                                        }memo-detail?memo=${d.noMemo}">${
                                             d.noMemo
-                                        }</span><span class="badge text-bg-${color(
+                                        }</a><br /><span class="badge text-bg-${color(
                                             d.status?.kod
                                         )}">${d.status?.status}</span>`,
                                         jenis: d.jenis,
@@ -222,9 +224,11 @@ export default {
                             (dataMyMOUs) => {
                                 mouData.value = dataMyMOUs?.map((d) => {
                                     return {
-                                        noMemo: `<span>${
+                                        noMemo: `<a class="title" href="${
+                                            process.env.VUE_APP_PUBLIC_PATH
+                                        }memo-detail?memo=${d.noMemo}">${
                                             d.noMemo
-                                        }</span><span class="badge text-bg-${color(
+                                        }</a><br /><span class="badge text-bg-${color(
                                             d.status?.kod
                                         )}">${d.status?.status}</span>`,
                                         jenis: d.jenis,

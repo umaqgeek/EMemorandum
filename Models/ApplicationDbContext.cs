@@ -20,6 +20,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<MOU02_Status> MOU02_Status { get; set; }
     public DbSet<MOU03_Ahli> MOU03_Ahli { get; set; }
     public DbSet<MOU04_KPI> MOU04_KPI { get; set; }
+    public DbSet<MOU06_History> MOU06_History { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -91,6 +92,11 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<MOU04_KPI>()
             .HasOne(m => m.MOU01_Memorandum)
             .WithMany(s => s.MOU04_KPI)
+            .HasForeignKey(m => m.NoMemo);
+
+        modelBuilder.Entity<MOU06_History>()
+            .HasOne(m => m.MOU01_Memorandum)
+            .WithMany(s => s.MOU06_History)
             .HasForeignKey(m => m.NoMemo);
 
         base.OnModelCreating(modelBuilder);

@@ -264,3 +264,17 @@ CREATE TABLE DbEMO.dbo.PUU_SubPTj (
 	Nama varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CONSTRAINT PUU_SubPTj_PK PRIMARY KEY (ID)
 );
+
+-- DbEMO.dbo.MOU06_History definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.MOU06_History;
+
+CREATE TABLE DbEMO.dbo.MOU06_History (
+	id bigint IDENTITY(0,1) NOT NULL,
+	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Description varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Created_At datetime NOT NULL,
+	CONSTRAINT MOU06_History_PK PRIMARY KEY (id)
+);
