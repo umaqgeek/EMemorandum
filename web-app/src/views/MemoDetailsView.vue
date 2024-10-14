@@ -8,17 +8,25 @@
             <div class="nk-wrap">
                 <TopNavComponent
                     :staffprofile="dataStaffProfile"
-                    :errorStaffProfile="errorStaffProfile || errorTheMOU"
+                    :errorStaffProfile="
+                        errorStaffProfile || errorTheMOU || errorSaveComment
+                    "
                 />
                 <LoadingComponent
-                    :loading="loadingStaffProfile || loadingTheMOU"
+                    :loading="
+                        loadingStaffProfile ||
+                        loadingTheMOU ||
+                        loadingSaveComment
+                    "
                 />
                 <div class="nk-content" v-if="errorStaffProfile">
                     <InfoNotLoggedInComponent />
                 </div>
                 <div
                     class="nk-content"
-                    v-if="!errorStaffProfile && !errorTheMOU"
+                    v-if="
+                        !errorStaffProfile && !errorTheMOU && !errorSaveComment
+                    "
                 >
                     <div class="container">
                         <div class="nk-content-inner">
@@ -77,11 +85,14 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="gap-col">
+                                        <div
+                                            class="gap-col"
+                                            v-if="isPIC || isAdmin"
+                                        >
                                             <ul class="d-flex gap g-2">
                                                 <li class="d-none d-md-block">
-                                                    <router-link
-                                                        to="/memo-edit"
+                                                    <a
+                                                        href="/memo-edit"
                                                         class="btn btn-soft btn-primary"
                                                     >
                                                         <em
@@ -91,16 +102,7 @@
                                                             >Edit
                                                             Memorandum</span
                                                         >
-                                                    </router-link>
-                                                </li>
-                                                <li class="d-md-none">
-                                                    <a
-                                                        href="./html/user-manage/user-edit.html"
-                                                        class="btn btn-soft btn-primary btn-icon"
-                                                        ><em
-                                                            class="icon ni ni-edit"
-                                                        ></em
-                                                    ></a>
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -137,15 +139,16 @@
                                                                     >
                                                                         <span
                                                                             class="title fw-medium w-100 d-inline-block"
-                                                                            >No.
-                                                                            Memorandum:</span
+                                                                            >Memorandum
+                                                                            No.:</span
                                                                         >
-                                                                        <span
+                                                                        <h4
                                                                             class="text"
-                                                                            >{{
+                                                                        >
+                                                                            {{
                                                                                 dataTheMOU?.noMemo
                                                                             }}
-                                                                        </span>
+                                                                        </h4>
                                                                     </li>
                                                                     <li
                                                                         class="list-group-item"
@@ -274,15 +277,14 @@
                                                                     </li>
                                                                     <li
                                                                         class="list-group-item"
+                                                                        v-if="
+                                                                            dataTheMOU?.path
+                                                                        "
                                                                     >
                                                                         <span
                                                                             class="title fw-medium w-100 d-inline-block"
                                                                             >Document:</span
                                                                         >
-                                                                        <em
-                                                                            class="icon ni ni-file-download icon-lg"
-                                                                        ></em
-                                                                        >&nbsp;
                                                                         <a
                                                                             :href="`${publicPath}${dataTheMOU?.path}`"
                                                                             target="_blank"
@@ -290,6 +292,21 @@
                                                                                 dataTheMOU?.path
                                                                             }}</a
                                                                         >
+                                                                        <div
+                                                                            class="d-block mt-1"
+                                                                        >
+                                                                            <a
+                                                                                :href="`${publicPath}${dataTheMOU?.path}`"
+                                                                                target="_blank"
+                                                                                class="btn btn-md btn-info"
+                                                                                ><em
+                                                                                    class="icon ni ni-download"
+                                                                                ></em
+                                                                                ><span
+                                                                                    >Download</span
+                                                                                ></a
+                                                                            >
+                                                                        </div>
                                                                     </li>
                                                                 </ul>
                                                             </div>
@@ -319,7 +336,9 @@
                                                             <!-- .bio-block -->
                                                         </div>
                                                         <!-- .card-body -->
-                                                        <div class="card-body">
+                                                        <div
+                                                            class="card-body memo-detail-history-container"
+                                                        >
                                                             <div
                                                                 class="bio-block"
                                                             >
@@ -341,8 +360,7 @@
                                                                             hIndex
                                                                         ) in dataTheMOU?.history"
                                                                         v-bind:key="
-                                                                            hIndex +
-                                                                            hist?.Created_At
+                                                                            hIndex
                                                                         "
                                                                     >
                                                                         <div
@@ -360,9 +378,9 @@
                                                                             ></div>
                                                                             <div
                                                                                 :class="[
-                                                                                    'nk-schedule-content',
+                                                                                    'nk-schedule-content flex-grow-1',
                                                                                     {
-                                                                                        'nk-schedule-content-no-border flex-grow-1':
+                                                                                        'alert alert-info':
                                                                                             hIndex ===
                                                                                             0,
                                                                                     },
@@ -375,19 +393,39 @@
                                                                                     }}</span
                                                                                 >
                                                                                 <div
-                                                                                    :class="[
-                                                                                        {
-                                                                                            'alert alert-info ':
-                                                                                                hIndex ===
-                                                                                                0,
-                                                                                        },
-                                                                                    ]"
                                                                                     role="alert"
                                                                                 >
-                                                                                    {{
-                                                                                        hist.description
-                                                                                    }}
+                                                                                    <p>
+                                                                                        {{
+                                                                                            hist.description
+                                                                                        }}
+                                                                                    </p>
+                                                                                    <p
+                                                                                        v-if="
+                                                                                            hist
+                                                                                                .comment
+                                                                                                ?.length >
+                                                                                            0
+                                                                                        "
+                                                                                    >
+                                                                                        Comment:<br />
+                                                                                        <strong
+                                                                                            >{{
+                                                                                                hist.comment
+                                                                                            }}</strong
+                                                                                        >
+                                                                                    </p>
                                                                                 </div>
+                                                                                <span
+                                                                                    class="smaller"
+                                                                                    >by
+                                                                                    {{
+                                                                                        getNama(
+                                                                                            hist.gelaran,
+                                                                                            hist.nama
+                                                                                        )
+                                                                                    }}</span
+                                                                                >
                                                                             </div>
                                                                         </div>
                                                                     </li>
@@ -396,6 +434,112 @@
                                                             <!-- .bio-block -->
                                                         </div>
                                                         <!-- .card-body -->
+                                                        <div
+                                                            class="card-body"
+                                                            v-if="
+                                                                isPUU ||
+                                                                isPTJ ||
+                                                                isMember
+                                                            "
+                                                        >
+                                                            <div
+                                                                class="bio-block"
+                                                            >
+                                                                <h4
+                                                                    class="bio-block-title"
+                                                                >
+                                                                    Comments
+                                                                </h4>
+                                                                <div
+                                                                    class="js-quill"
+                                                                    data-toolbar="minimal"
+                                                                    data-placeholder="Write some awesome text"
+                                                                ></div>
+
+                                                                <div
+                                                                    class="form-group"
+                                                                >
+                                                                    <div
+                                                                        class="form-control-wrap"
+                                                                    >
+                                                                        <textarea
+                                                                            placeholder="Write your review"
+                                                                            class="form-control"
+                                                                            id="comments"
+                                                                            v-model="
+                                                                                comments
+                                                                            "
+                                                                            rows="3"
+                                                                        ></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    class="mt-3"
+                                                                >
+                                                                    <ul
+                                                                        class="d-flex gap g-2 justify-content-start"
+                                                                    >
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPTJ ||
+                                                                                isPUU ||
+                                                                                isMember
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-soft btn-primary"
+                                                                                @click="
+                                                                                    onComment
+                                                                                "
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-comments"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Comment
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <ul
+                                                                        class="d-flex gap g-2 justify-content-end"
+                                                                    >
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPTJ
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-success"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-done"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Approve
+                                                                            </div>
+                                                                        </li>
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPTJ
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-soft btn-danger"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-cross"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Reject
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <!-- .card-content -->
                                                 </div>
@@ -413,7 +557,12 @@
                                                 <div
                                                     class="card-row card-row-lg col-sep col-sep-lg"
                                                 >
-                                                    tab 2
+                                                    <TableLite
+                                                        :title="membersTitle"
+                                                        :columns="membersCols"
+                                                        :data="members"
+                                                        :isNoAction="true"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -426,7 +575,12 @@
                                                 <div
                                                     class="card-row card-row-lg col-sep col-sep-lg"
                                                 >
-                                                    tab 3
+                                                    <TableLite
+                                                        :title="kpisTitle"
+                                                        :columns="kpisCols"
+                                                        :data="kpis"
+                                                        :isNoAction="true"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -455,8 +609,12 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import { useStaffProfile, useGetOneMOU } from "@/hooks/useAPI";
-// import TableLite from "@/components/TableLite.vue";
+import {
+    useStaffProfile,
+    useGetOneMOU,
+    useMouCommentMemo,
+} from "@/hooks/useAPI";
+import TableLite from "@/components/TableLite.vue";
 
 export default {
     name: "MemoDetailsView",
@@ -467,7 +625,7 @@ export default {
         FooterComponent,
         LoadingComponent,
         InfoNotLoggedInComponent,
-        // TableLite,
+        TableLite,
     },
     setup() {
         const publicPath = ref(process.env.VUE_APP_PUBLIC_PATH);
@@ -483,9 +641,53 @@ export default {
 
         const isAdmin = ref(false);
         const isPUU = ref(false);
+        const isPTJ = ref(false);
+        const isPIC = ref(false);
+        const isMember = ref(false);
         const loadingTheMOU = ref(true);
         const dataTheMOU = ref(null);
         const errorTheMOU = ref(null);
+        const loadingSaveComment = ref(false);
+        const errorSaveComment = ref(null);
+
+        const membersCols = ref(["Name", "Roles", "Status"]);
+        const members = ref([]);
+        const membersTitle = ref("");
+
+        const kpisCols = ref([
+            "KPI",
+            "Description",
+            "Notes",
+            "Amount (RM)",
+            "Date From",
+            "Date To",
+        ]);
+        const kpis = ref([]);
+        const kpisTitle = ref("");
+
+        const getNama = (gelaran, nama) => {
+            return (
+                (gelaran?.toLowerCase()?.includes("tiada") ? "" : gelaran) +
+                " " +
+                nama
+            );
+        };
+
+        const getRolesStr = (roles) => {
+            return roles?.length > 0
+                ? roles?.map((r) => r.role)?.join(", ")
+                : "-";
+        };
+
+        const getStatus = (roles) => {
+            const isActive =
+                roles?.length > 0 && roles?.find((r) => r.role === "Staff")
+                    ? true
+                    : false;
+            const color = isActive ? "success" : "danger";
+            const label = isActive ? "Active" : "Inactive";
+            return `<span class="badge text-bg-${color}-soft">${label}</span>`;
+        };
 
         watch(
             () => dataStaffProfile.value,
@@ -501,6 +703,11 @@ export default {
                         : false;
                     isPUU.value = newDataStaffProfile?.roles?.find(
                         (r) => r.role === "PUU"
+                    )
+                        ? true
+                        : false;
+                    isPTJ.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "PTJ"
                     )
                         ? true
                         : false;
@@ -521,6 +728,39 @@ export default {
                         () => dataMOU.value,
                         (newDataMOU) => {
                             dataTheMOU.value = newDataMOU;
+                            membersTitle.value = `<div class="flex-div mb-2"><div class="me-2">Memorandum No.:</div><h4 class="text">${newDataMOU?.noMemo}</h4></div><h5>Members of Memorandum</h5>`;
+                            members.value = [
+                                ...newDataMOU?.members?.map((member) => {
+                                    if (
+                                        member.noStaf ===
+                                        newDataStaffProfile?.noStaf
+                                    ) {
+                                        isMember.value = true;
+                                    }
+                                    return {
+                                        name: getNama(
+                                            member.gelaran,
+                                            member.nama
+                                        ),
+                                        roles: getRolesStr(member.roles),
+                                        status: getStatus(member.roles),
+                                    };
+                                }),
+                            ];
+                            kpisTitle.value = `<div class="flex-div mb-2"><div class="me-2">Memorandum No.:</div><h4 class="text">${newDataMOU?.noMemo}</h4></div><h5>KPIs of Memorandum</h5>`;
+                            kpis.value = [
+                                ...newDataMOU?.kpIs?.map((kpi) => {
+                                    return {
+                                        kpi: kpi.nama,
+                                        description: kpi.penerangan,
+                                        notes: kpi.komen,
+                                        amount: kpi.amaun,
+                                        dateFrom: kpi.tarikhMulaDate,
+                                        dateTo: kpi.tarikhTamatDate,
+                                    };
+                                }),
+                            ];
+                            isPIC.value = newDataMOU?.isPIC;
                         }
                     );
                     watch(
@@ -536,6 +776,39 @@ export default {
             { immediate: true } // Run the watcher immediately on component mount
         );
 
+        const comments = ref("");
+        const onComment = () => {
+            loadingSaveComment.value = true;
+            const {
+                data: dataComment,
+                loading: loadingComment,
+                error: errorComment,
+            } = useMouCommentMemo({
+                Comment: comments.value,
+                NoMemo: dataTheMOU.value?.noMemo,
+            });
+            watch(
+                () => loadingComment.value,
+                (newLoadingComment) => {
+                    loadingSaveComment.value = newLoadingComment;
+                }
+            );
+            watch(
+                () => errorComment.value,
+                (newErrorComment) => {
+                    errorSaveComment.value = newErrorComment;
+                }
+            );
+            watch(
+                () => dataComment.value,
+                (newDataComment) => {
+                    if (newDataComment) {
+                        location.href = `${publicPath.value}memo-detail?memo=${dataTheMOU.value?.noMemo}`;
+                    }
+                }
+            );
+        };
+
         return {
             publicPath,
             dataStaffProfile,
@@ -543,19 +816,31 @@ export default {
             loadingStaffProfile,
             isAdmin,
             isPUU,
+            isPTJ,
+            isPIC,
+            isMember,
             loadingTheMOU,
             dataTheMOU,
             errorTheMOU,
+            membersCols,
+            members,
+            membersTitle,
+            kpisCols,
+            kpis,
+            kpisTitle,
+            getNama,
+            comments,
+            onComment,
+            loadingSaveComment,
+            errorSaveComment,
         };
-    },
-    methods: {
-        getNama(gelaran, nama) {
-            return (
-                (gelaran?.toLowerCase()?.includes("tiada") ? "" : gelaran) +
-                " " +
-                nama
-            );
-        },
     },
 };
 </script>
+
+<style scoped>
+.memo-detail-history-container {
+    max-height: 500px;
+    overflow-x: auto;
+}
+</style>

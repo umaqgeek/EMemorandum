@@ -89,6 +89,8 @@ public class MOUController : ControllerBase
     [HttpPost]
     public ActionResult<object> Store([FromBody] MOUAddModel entity)
     {
+        var staffId = GetStaffID();
+
         var genNo = getGeneratedNo(new MemorandumGenNo
         {
             KodJenis = entity.form1.KodJenis,
@@ -139,6 +141,7 @@ public class MOUController : ControllerBase
             NoMemo = genNo.noMemo,
             Description = "Memorandum has been created",
             Created_At = DateTime.Now,
+            NoStaf = staffId,
         };
 
         using (var transaction = _context.Database.BeginTransaction())
@@ -228,8 +231,63 @@ public class MOUController : ControllerBase
     // TODO: Delete memorandum (PIC, Admin)
     // TODO: Add members to a memorandum (PIC, Admin)
     // TODO: Add KPIs to a memorandum (PIC, Admin)
-    // TODO: Review and comment a memorandum (PUU)
     // TODO: Approve or reject a memorandum (PTJ)
+
+    [HttpPost("comment")]
+    [Authorize(Policy = "AdminOrPUUPolicy")]
+    public ActionResult<object> CommentMemorandum([FromBody] MOU06_History entity)
+    {
+        var staffId = GetStaffID();
+
+        var mouHistory = new MOU06_History
+        {
+            NoMemo = entity.NoMemo,
+            NoStaf = staffId,
+            Description = "Memorandum has been reviewed",
+            Created_At = DateTime.Now,
+            Comment = entity.Comment,
+        };
+
+        var statusReviewed = "02";
+        var mouStatus = new MOU02_Status
+        {
+            NoMemo = entity.NoMemo,
+            Status = statusReviewed,
+            Tarikh = DateTime.Now,
+        };
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var memo = _context.MOU01_Memorandum.FirstOrDefault(m => m.NoMemo == entity.NoMemo);
+                if (memo == null) {
+                    return NotFound();
+                }
+                memo.Status = statusReviewed;
+
+                // Save comments and add new history
+                _context.MOU06_History.Add(mouHistory);
+
+                // add new status for existing MOU
+                _context.MOU02_Status.Add(mouStatus);
+
+                // Save changes to the database
+                _context.SaveChanges();
+                // Commit the transaction if all commands succeed
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                // Rollback the transaction if any command fails
+                transaction.Rollback();
+                // Log or rethrow the exception as needed
+                throw;
+            }
+        }
+
+        return Ok(new { Status = true });
+    }
 
     [HttpGet("get/{noMemo}")]
     public ActionResult<MOU01_Memorandum> GetMemorandum(string noMemo)
@@ -247,8 +305,10 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.MOU06_History)
+                .ThenInclude(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU03_Ahli)
                 .ThenInclude(_entity => _entity.EMO_Staf)
+                    .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU04_KPI)
             .FirstOrDefault();
 
@@ -361,8 +421,13 @@ public class MOUController : ControllerBase
             History = _entity.MOU06_History.Select(mou06 => new
             {
                 Created_At = mou06.Created_At?.ToString("dd MMM yyyy, h:mm tt") ?? "",
+                Ori_Created_At = mou06.Created_At,
                 Description = mou06.Description,
-            })?.OrderByDescending(_entity => _entity.Created_At).ToList(),
+                Comment = mou06.Comment,
+                NoStaf = mou06.NoStaf,
+                Gelaran = mou06.EMO_Staf.Gelaran,
+                Nama = mou06.EMO_Staf.Nama,
+            })?.OrderByDescending(_entity => _entity.Ori_Created_At).ToList(),
             Members = _entity.MOU03_Ahli.Select(mou03 => new
             {
                 Peranan = mou03.Peranan,
@@ -372,7 +437,17 @@ public class MOUController : ControllerBase
                 NoStaf = mou03.EMO_Staf.NoStaf,
                 Roles = mou03.EMO_Staf.Roles,
             })?.ToList(),
-            KPIs = _entity.MOU04_KPI?.ToList(),
+            KPIs = _entity.MOU04_KPI.Select(mou04 => new
+            {
+                Amaun = mou04.Amaun,
+                Komen = mou04.Komen,
+                Nama = mou04.Nama,
+                Penerangan = mou04.Penerangan,
+                TarikhMula = mou04.TarikhMula,
+                TarikhMulaDate = mou04.TarikhMula?.ToString("dd MMM yyyy") ?? "",
+                TarikhTamat = mou04.TarikhTamat,
+                TarikhTamatDate = mou04.TarikhTamat?.ToString("dd MMM yyyy") ?? "",
+            })?.ToList(),
         });
     }
 
@@ -394,8 +469,10 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.MOU06_History)
+                .ThenInclude(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU03_Ahli)
                 .ThenInclude(_entity => _entity.EMO_Staf)
+                    .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU04_KPI)
             .AsQueryable();
 

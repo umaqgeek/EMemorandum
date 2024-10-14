@@ -21,3 +21,8 @@
     cursor: pointer;
     height: 150px;
 }
+
+.flex-div {
+    display: flex;
+    flex-direction: row;
+}

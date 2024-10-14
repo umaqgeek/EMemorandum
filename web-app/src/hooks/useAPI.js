@@ -142,3 +142,11 @@ export function useGetOneMOU(noMemo = "-") {
         url: `${API_URL}/mou/get/${noMemo}`,
     });
 }
+
+export function useMouCommentMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/mou/comment`,
+        data: JSON.stringify(payload),
+    });
+}
