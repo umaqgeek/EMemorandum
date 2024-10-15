@@ -130,6 +130,11 @@ builder.Services.AddAuthorization(options =>
     {
         policy.Requirements.Add(new TokenRequirement(new[] { "Admin", "PUU" }));
     });
+
+    options.AddPolicy("AdminOrPUUOrPTJPolicy", policy =>
+    {
+        policy.Requirements.Add(new TokenRequirement(new[] { "Admin", "PUU", "PTJ" }));
+    });
 });
 
 builder.Services.AddHttpContextAccessor();

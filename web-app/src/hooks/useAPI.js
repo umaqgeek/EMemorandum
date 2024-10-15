@@ -78,6 +78,13 @@ export function useGetOneStaff(noStaf) {
     });
 }
 
+export function useGetOneStaffSimple(noStaf) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/staff/less/${noStaf}`,
+    });
+}
+
 export function useAssignStaffRoles(noStaf, roles = []) {
     return useApi({
         method: "post",
@@ -147,6 +154,22 @@ export function useMouCommentMemo(payload) {
     return useApi({
         method: "post",
         url: `${API_URL}/mou/comment`,
+        data: JSON.stringify(payload),
+    });
+}
+
+export function useMouApprovalRejectionMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/mou/approval`,
+        data: JSON.stringify(payload),
+    });
+}
+
+export function useMouUpdateMemo(payload) {
+    return useApi({
+        method: "put",
+        url: `${API_URL}/mou`,
         data: JSON.stringify(payload),
     });
 }

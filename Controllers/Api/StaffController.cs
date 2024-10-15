@@ -34,12 +34,7 @@ namespace EMemorandum.Controllers.Api
         [Authorize(Policy = "AdminPolicy")]
         public ActionResult<IEnumerable<EMO_Staf>> GetAllStaff()
         {
-            // Fetch the token from the Authorization header
-            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
-            if (authHeader == null || !authHeader.StartsWith("Bearer ")) {
-                return Unauthorized("Token is missing or invalid.");
-            }
-            var staffId = authHeader.Substring("Bearer ".Length).Trim();
+            var staffId = GetStaffID();
 
             return _context.EMO_Staf
                 .Where(s => s.NoStaf != staffId)
@@ -50,12 +45,7 @@ namespace EMemorandum.Controllers.Api
         [HttpGet("less")]
         public ActionResult<IEnumerable<object>> GetAllStaffSimple()
         {
-            // Fetch the token from the Authorization header
-            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
-            if (authHeader == null || !authHeader.StartsWith("Bearer ")) {
-                return Unauthorized("Token is missing or invalid.");
-            }
-            var staffId = authHeader.Substring("Bearer ".Length).Trim();
+            var staffId = GetStaffID();
 
             return _context.EMO_Staf
                 .Where(s => s.NoStaf != staffId)
@@ -68,6 +58,32 @@ namespace EMemorandum.Controllers.Api
                     Roles = s.Roles,
                 }))
                 .ToList();
+        }
+
+        [HttpGet("less/{noStaf}")]
+        public ActionResult<EMO_Staf> GetStaffProfileLess(string noStaf)
+        {
+            var _entity = _context.EMO_Staf
+                .Where(s => s.NoStaf == noStaf)
+                .Include(s => s.Roles)
+                .Select(s => new
+                {
+                    Email = s.Email,
+                    Gelaran = s.Gelaran,
+                    Nama = s.Nama,
+                    NoStaf = s.NoStaf,
+                    NoTelBimbit = s.NoTelBimbit,
+                    NPejabat = s.NPejabat,
+                    Roles = s.Roles,
+                })
+                .FirstOrDefault();
+
+            if (_entity == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_entity);
         }
 
         [HttpGet("{noStaf}")]
@@ -130,17 +146,30 @@ namespace EMemorandum.Controllers.Api
 
         private void SendEmailInBackground(EMO_Staf _entity)
         {
-            var iutemurl = _configuration.GetValue<string>("IUTeMURL");
+            var EMOURL = _configuration.GetValue<string>("EMOURL");
             var subject = "Account Activation";
             var gelaran = _entity.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : _entity.Gelaran;
             var body = "<p>" + gelaran + " " + _entity.Nama + "</p>"
-                        + "<p>Your account has been updated. Please login into EMO application under " + iutemurl + " for more info.</p>";
+                        + "<p>Your account has been updated. Please click this link "
+                        + $"<a target='_blank' href='{EMOURL}?UsrLogin={_entity.NoStaf}'>{EMOURL}</a>"
+                        + " for more info.</p>";
 
             // Run email sending in the background
             Task.Run(async () =>
             {
                 await _emailService.SendEmailAsync(_entity.Email, subject, body);
             });
+        }
+
+        private string GetStaffID()
+        {
+            // Fetch the token from the Authorization header
+            var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+            if (authHeader != null && authHeader.StartsWith("Bearer "))
+            {
+                return authHeader.Substring("Bearer ".Length).Trim();
+            }
+            return null;
         }
     }
 }

@@ -92,7 +92,7 @@
                                             <ul class="d-flex gap g-2">
                                                 <li class="d-none d-md-block">
                                                     <a
-                                                        href="/memo-edit"
+                                                        :href="`${publicPath}memo-edit?memo=${dataTheMOU?.noMemo}`"
                                                         class="btn btn-soft btn-primary"
                                                     >
                                                         <em
@@ -134,6 +134,26 @@
                                                                 <ul
                                                                     class="list-group list-group-borderless small"
                                                                 >
+                                                                    <li
+                                                                        class="list-group-item"
+                                                                    >
+                                                                        <span
+                                                                            class="title fw-medium w-100 d-inline-block"
+                                                                            >Status:</span
+                                                                        >
+                                                                        <span
+                                                                            :class="`badge text-bg-${color(
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod
+                                                                            )}`"
+                                                                            >{{
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.status
+                                                                            }}</span
+                                                                        >
+                                                                    </li>
                                                                     <li
                                                                         class="list-group-item"
                                                                     >
@@ -204,14 +224,15 @@
                                                                             class="title fw-medium w-100 d-inline-block"
                                                                             >PIC:</span
                                                                         >
-                                                                        <span
-                                                                            class="text"
+                                                                        <a
+                                                                            :href="`${publicPath}user-view?s=${dataTheMOU?.noStafPIC}`"
+                                                                            class="btn-link"
                                                                             >{{
                                                                                 getNama(
                                                                                     dataTheMOU?.picGelaran,
                                                                                     dataTheMOU?.pic
                                                                                 )
-                                                                            }}</span
+                                                                            }}</a
                                                                         >
                                                                     </li>
                                                                     <li
@@ -416,15 +437,16 @@
                                                                                         >
                                                                                     </p>
                                                                                 </div>
-                                                                                <span
+                                                                                <a
                                                                                     class="smaller"
+                                                                                    :href="`${publicPath}user-view?s=${hist.noStaf}`"
                                                                                     >by
                                                                                     {{
                                                                                         getNama(
                                                                                             hist.gelaran,
                                                                                             hist.nama
                                                                                         )
-                                                                                    }}</span
+                                                                                    }}</a
                                                                                 >
                                                                             </div>
                                                                         </div>
@@ -434,14 +456,7 @@
                                                             <!-- .bio-block -->
                                                         </div>
                                                         <!-- .card-body -->
-                                                        <div
-                                                            class="card-body"
-                                                            v-if="
-                                                                isPUU ||
-                                                                isPTJ ||
-                                                                isMember
-                                                            "
-                                                        >
+                                                        <div class="card-body">
                                                             <div
                                                                 class="bio-block"
                                                             >
@@ -481,11 +496,6 @@
                                                                     >
                                                                         <li
                                                                             class="d-none d-md-block"
-                                                                            v-if="
-                                                                                isPTJ ||
-                                                                                isPUU ||
-                                                                                isMember
-                                                                            "
                                                                         >
                                                                             <div
                                                                                 class="btn btn-soft btn-primary"
@@ -503,11 +513,20 @@
                                                                     </ul>
                                                                     <ul
                                                                         class="d-flex gap g-2 justify-content-end"
+                                                                        v-if="
+                                                                            isAdmin ||
+                                                                            isPTJ
+                                                                        "
                                                                     >
                                                                         <li
                                                                             class="d-none d-md-block"
                                                                             v-if="
                                                                                 isPTJ
+                                                                            "
+                                                                            @click="
+                                                                                onApproval(
+                                                                                    '03'
+                                                                                )
                                                                             "
                                                                         >
                                                                             <div
@@ -525,6 +544,11 @@
                                                                             v-if="
                                                                                 isPTJ
                                                                             "
+                                                                            @click="
+                                                                                onApproval(
+                                                                                    '05'
+                                                                                )
+                                                                            "
                                                                         >
                                                                             <div
                                                                                 class="btn btn-soft btn-danger"
@@ -534,6 +558,29 @@
                                                                                 ></em
                                                                                 >&nbsp;
                                                                                 Reject
+                                                                            </div>
+                                                                        </li>
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPTJ
+                                                                            "
+                                                                            @click="
+                                                                                onApproval(
+                                                                                    '04'
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-soft btn-secondary"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-edit-fill"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Back
+                                                                                to
+                                                                                PIC
                                                                             </div>
                                                                         </li>
                                                                     </ul>
@@ -602,6 +649,8 @@
 <!-- JavaScript -->
 <script>
 import { ref, watch } from "vue";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 import ValidateMeComponent from "@/components/ValidateMe.vue";
 import NavbarComponent from "@/components/Navbar.vue";
@@ -613,6 +662,7 @@ import {
     useStaffProfile,
     useGetOneMOU,
     useMouCommentMemo,
+    useMouApprovalRejectionMemo,
 } from "@/hooks/useAPI";
 import TableLite from "@/components/TableLite.vue";
 
@@ -628,6 +678,7 @@ export default {
         TableLite,
     },
     setup() {
+        const $toast = useToast();
         const publicPath = ref(process.env.VUE_APP_PUBLIC_PATH);
 
         const {
@@ -737,13 +788,14 @@ export default {
                                     ) {
                                         isMember.value = true;
                                     }
+                                    let memberName = getNama(
+                                        member.gelaran,
+                                        member.nama
+                                    );
                                     return {
-                                        name: getNama(
-                                            member.gelaran,
-                                            member.nama
-                                        ),
-                                        roles: getRolesStr(member.roles),
-                                        status: getStatus(member.roles),
+                                        Name: `<a href="${publicPath.value}user-view?s=${member.noStaf}">${memberName}</a>`,
+                                        Roles: getRolesStr(member.roles),
+                                        Status: getStatus(member.roles),
                                     };
                                 }),
                             ];
@@ -751,12 +803,12 @@ export default {
                             kpis.value = [
                                 ...newDataMOU?.kpIs?.map((kpi) => {
                                     return {
-                                        kpi: kpi.nama,
-                                        description: kpi.penerangan,
-                                        notes: kpi.komen,
-                                        amount: kpi.amaun,
-                                        dateFrom: kpi.tarikhMulaDate,
-                                        dateTo: kpi.tarikhTamatDate,
+                                        KPI: kpi.nama,
+                                        Description: kpi.penerangan,
+                                        Notes: kpi.komen,
+                                        "Amount (RM)": kpi.amaun,
+                                        "Date From": kpi.tarikhMulaDate,
+                                        "Date To": kpi.tarikhTamatDate,
                                     };
                                 }),
                             ];
@@ -778,6 +830,14 @@ export default {
 
         const comments = ref("");
         const onComment = () => {
+            if (!(comments.value?.length > 0)) {
+                $toast.open({
+                    message: "Please fill in the comment!",
+                    type: "error",
+                    position: "top-right",
+                });
+                return;
+            }
             loadingSaveComment.value = true;
             const {
                 data: dataComment,
@@ -786,6 +846,48 @@ export default {
             } = useMouCommentMemo({
                 Comment: comments.value,
                 NoMemo: dataTheMOU.value?.noMemo,
+            });
+            watch(
+                () => loadingComment.value,
+                (newLoadingComment) => {
+                    loadingSaveComment.value = newLoadingComment;
+                }
+            );
+            watch(
+                () => errorComment.value,
+                (newErrorComment) => {
+                    errorSaveComment.value = newErrorComment;
+                }
+            );
+            watch(
+                () => dataComment.value,
+                (newDataComment) => {
+                    if (newDataComment) {
+                        location.href = `${publicPath.value}memo-detail?memo=${dataTheMOU.value?.noMemo}`;
+                    }
+                }
+            );
+        };
+
+        const color = (kod) => {
+            if (kod === "01") return "dark";
+            if (kod === "02") return "info";
+            if (kod === "03") return "success";
+            if (kod === "04") return "warning";
+            if (kod === "05") return "danger";
+            return "dark";
+        };
+
+        const onApproval = (status) => {
+            loadingSaveComment.value = true;
+            const {
+                data: dataComment,
+                loading: loadingComment,
+                error: errorComment,
+            } = useMouApprovalRejectionMemo({
+                Comment: comments.value,
+                NoMemo: dataTheMOU.value?.noMemo,
+                Status: status,
             });
             watch(
                 () => loadingComment.value,
@@ -833,6 +935,8 @@ export default {
             onComment,
             loadingSaveComment,
             errorSaveComment,
+            color,
+            onApproval,
         };
     },
 };

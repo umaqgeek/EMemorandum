@@ -17,7 +17,7 @@
                         v-if="!errorStaffProfile"
                     >
                         <div>{{ getGelaran }} {{ staffprofile?.nama }}</div>
-                        <h6>{{ rolesStr }}</h6>
+                        <h6>{{ staffprofile?.noStaf }} {{ rolesStr }}</h6>
                     </div>
                     <ul class="nk-quick-nav ms-2">
                         <li class="dropdown" v-if="!errorStaffProfile">
@@ -135,10 +135,11 @@ export default {
                 params.get("UsrLogin") ||
                 params.get("usrLogin") ||
                 params.get("ssusrid");
+            const callbackRoute = params.get("callback");
 
             if (newSsusrid) {
                 setBearerToken(newSsusrid);
-                location.href = process.env.VUE_APP_PUBLIC_PATH;
+                location.href = `${process.env.VUE_APP_PUBLIC_PATH}${callbackRoute}`;
             }
         });
     },

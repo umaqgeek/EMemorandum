@@ -34,7 +34,7 @@ public class MOUController : ControllerBase
     }
 
     [HttpGet("all")]
-    [Authorize(Policy = "AdminOrPUUPolicy")]
+    [Authorize(Policy = "AdminOrPUUOrPTJPolicy")]
     public ActionResult<IEnumerable<object>> GetAllMemorandums([FromQuery] string? q)
     {
         var staffId = GetStaffID();
@@ -84,6 +84,97 @@ public class MOUController : ControllerBase
             return NotFound(genNo);
         }
         return Ok(genNo);
+    }
+
+    // TODO: Update memorandum (PIC, Admin)
+    // TODO: Delete memorandum (PIC, Admin)
+    // TODO: Add members to a memorandum (PIC, Admin)
+    // TODO: Add KPIs to a memorandum (PIC, Admin)
+
+    [HttpPut]
+    public ActionResult<object> UpdateMemo([FromBody] MOUAddModel entity)
+    {
+        var staffId = GetStaffID();
+
+        if (!ModelState.IsValid) {
+            return BadRequest(ModelState);
+        }
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var memo = _context.MOU01_Memorandum
+                    .Include(m => m.MOU03_Ahli)
+                    .Include(m => m.MOU04_KPI)
+                    .FirstOrDefault(m => m.NoMemo == entity.NoMemo);
+                if (memo == null) {
+                    return NotFound($"Memorandum with number = {entity.NoMemo} not found");
+                }
+
+                // update a memo
+                memo.KodKategori = entity.form1.KodKategori;
+                memo.KodJenis = entity.form1.KodJenis;
+                memo.KodPTJ = entity.form1.KodPTJ;
+                memo.KodScope = entity.form1.KodScope;
+                memo.KodPTJSub = entity.form1.KodPTJSub;
+                memo.TarikhMula = entity.form1.TarikhMula;
+                memo.TarikhTamat = entity.form1.TarikhTamat;
+                memo.TajukProjek = entity.form1.TajukProjek;
+                memo.NamaDok = entity.form1.NamaDok;
+                memo.Path = entity.form1.Path;
+                memo.MS01_NoStaf = entity.form1.MS01_NoStaf;
+                memo.Nilai = entity.form1.Nilai;
+
+                // update a memo's members
+                _context.MOU03_Ahli.RemoveRange(memo.MOU03_Ahli);
+                foreach (var member in entity.form2.Members) {
+                    _context.MOU03_Ahli.Add(new MOU03_Ahli
+                    {
+                        NoMemo = entity.NoMemo,
+                        NoStaf = member.NoStaf,
+                        Peranan = member.Peranan,
+                        TkhMula = entity.form1.TarikhMula,
+                        TkhTamat = entity.form1.TarikhTamat,
+                    });
+                }
+
+                // update a memo's KPIs
+                _context.MOU04_KPI.RemoveRange(memo.MOU04_KPI);
+                foreach (var kpi in entity.form3.KPIs)
+                {
+                    _context.MOU04_KPI.Add(new MOU04_KPI
+                    {
+                        NoMemo = entity.NoMemo,
+                        Amaun = kpi.Amaun,
+                        MOU04_Number = kpi.MOU04_Number,
+                        Penerangan = kpi.Penerangan,
+                        TarikhMula = kpi.TarikhMula,
+                        TarikhTamat = kpi.TarikhTamat,
+                        Komen = kpi.Komen,
+                        Nama = kpi.Nama,
+                    });
+                }
+
+                // Save changes to the database
+                _context.SaveChanges();
+                // Commit the transaction if all commands succeed
+                transaction.Commit();
+
+                // TODO: Still sending emails to previous members even already been removed
+                // send emails to all viewers (pic, members, author) of this memo after all transaction is done
+                sendEmailsAfterUpdate("Memorandum Updated", entity.NoMemo, "has been updated");
+            }
+            catch (Exception ex)
+            {
+                // Rollback the transaction if any command fails
+                transaction.Rollback();
+                // Log or rethrow the exception as needed
+                throw;
+            }
+        }
+
+        return Ok(new { NoMemo = entity.NoMemo });
     }
 
     [HttpPost]
@@ -196,11 +287,13 @@ public class MOUController : ControllerBase
                 // Trigger sending emails in the background
                 foreach (var staff in staffs)
                 {
-                    var iutemurl = "https://iutem.example.com"; // Replace with actual configuration value
+                    var EMOURL = _configuration.GetValue<string>("EMOURL");
                     var subject = "Member of a Memorandum";
                     var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
                     var body = $"<p>{gelaran} {staff.Nama}</p><p>You have been added as a member of a memorandum with Memo ID "
-                        + $"<strong>{genNo.noMemo}</strong>. Please login into EMO application under {iutemurl} for more info.</p>";
+                        + $"<strong>{genNo.noMemo}</strong>. Please click this link "
+                        + $"<a target='_blank' href='{EMOURL}?UsrLogin={staff.NoStaf}&callback=memo-detail?memo={genNo.noMemo}'>{EMOURL}memo-detail?memo={genNo.noMemo}</a>"
+                        + " for more info.</p>";
                     var emailJob = new EmailJob
                     {
                         Email = staff.Email,
@@ -227,14 +320,80 @@ public class MOUController : ControllerBase
         return Ok(genNo);
     }
 
-    // TODO: Update memorandum (PIC, Admin)
-    // TODO: Delete memorandum (PIC, Admin)
-    // TODO: Add members to a memorandum (PIC, Admin)
-    // TODO: Add KPIs to a memorandum (PIC, Admin)
-    // TODO: Approve or reject a memorandum (PTJ)
+    [HttpPost("approval")]
+    [Authorize(Policy = "PTJPolicy")]
+    public ActionResult<object> ApprovalRejectionMemorandum([FromBody] ApprovalModel entity)
+    {
+        var staffId = GetStaffID();
+
+        var statusMsg = "has been reviewed";
+        switch (entity.Status) {
+            case "03":
+                statusMsg = "has been approved";
+                break;
+            case "04":
+                statusMsg = "has been sent back to the PIC";
+                break;
+            case "05":
+                statusMsg = "has been rejected";
+                break;
+            default:
+                return NotFound(new { Error = "Status not found" });
+        }
+
+        var mouHistory = new MOU06_History
+        {
+            NoMemo = entity.NoMemo,
+            NoStaf = staffId,
+            Description = $"Memorandum {statusMsg}",
+            Created_At = DateTime.Now,
+            Comment = entity.Comment,
+        };
+
+        var mouStatus = new MOU02_Status
+        {
+            NoMemo = entity.NoMemo,
+            Status = entity.Status,
+            Tarikh = DateTime.Now,
+        };
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var memo = _context.MOU01_Memorandum.FirstOrDefault(m => m.NoMemo == entity.NoMemo);
+                if (memo == null) {
+                    return NotFound();
+                }
+                memo.Status = entity.Status;
+
+                // Save comments and add new history
+                _context.MOU06_History.Add(mouHistory);
+
+                // add new status for existing MOU
+                _context.MOU02_Status.Add(mouStatus);
+
+                // Save changes to the database
+                _context.SaveChanges();
+                // Commit the transaction if all commands succeed
+                transaction.Commit();
+
+                // send emails to all viewers (pic, members, author) of this memo after all transaction is done
+                sendEmailsAfterUpdate("1 New Comment", entity.NoMemo, statusMsg);
+            }
+            catch (Exception ex)
+            {
+                // Rollback the transaction if any command fails
+                transaction.Rollback();
+                // Log or rethrow the exception as needed
+                throw;
+            }
+        }
+
+        return Ok(new { Status = true });
+    }
 
     [HttpPost("comment")]
-    [Authorize(Policy = "AdminOrPUUPolicy")]
     public ActionResult<object> CommentMemorandum([FromBody] MOU06_History entity)
     {
         var staffId = GetStaffID();
@@ -276,6 +435,9 @@ public class MOUController : ControllerBase
                 _context.SaveChanges();
                 // Commit the transaction if all commands succeed
                 transaction.Commit();
+
+                // send emails to all viewers (pic, members, author) of this memo after all transaction is done
+                sendEmailsAfterUpdate("1 New Comment", entity.NoMemo, "has been commented");
             }
             catch (Exception ex)
             {
@@ -393,13 +555,16 @@ public class MOUController : ControllerBase
             KodPTJSub = _entity.KodPTJSub,
             TarikhMula = _entity.TarikhMula,
             TarikhMulaDate = GetDisplayDate(_entity.TarikhMula),
+            TarikhMulaDate2 = GetDisplayDate2(_entity.TarikhMula),
             TarikhTamat = _entity.TarikhTamat,
             TarikhTamatDate = GetDisplayDate(_entity.TarikhTamat),
+            TarikhTamatDate2 = GetDisplayDate2(_entity.TarikhTamat),
             TajukProjek = _entity.TajukProjek,
             Path = _entity.Path,
             IsPIC = _entity.MS01_NoStaf == staffId,
             PIC = _entity.EMO_Staf.Nama,
             PICGelaran = _entity.EMO_Staf.Gelaran,
+            PICEmail = _entity.EMO_Staf.Email,
             noStafPIC = _entity.EMO_Staf.NoStaf,
             Nilai = _entity.Nilai,
             Status = new
@@ -445,8 +610,10 @@ public class MOUController : ControllerBase
                 Penerangan = mou04.Penerangan,
                 TarikhMula = mou04.TarikhMula,
                 TarikhMulaDate = mou04.TarikhMula?.ToString("dd MMM yyyy") ?? "",
+                TarikhMulaDate2 = mou04.TarikhMula?.ToString("yyyy-MM-dd") ?? "",
                 TarikhTamat = mou04.TarikhTamat,
                 TarikhTamatDate = mou04.TarikhTamat?.ToString("dd MMM yyyy") ?? "",
+                TarikhTamatDate2 = mou04.TarikhTamat?.ToString("yyyy-MM-dd") ?? "",
             })?.ToList(),
         });
     }
@@ -455,6 +622,12 @@ public class MOUController : ControllerBase
     {
         DateTime dateTime = nullableDateTime ?? DateTime.MinValue;
         return dateTime.ToString("dd/MM/yyyy");
+    }
+
+    private static string GetDisplayDate2(DateTime? nullableDateTime)
+    {
+        DateTime dateTime = nullableDateTime ?? DateTime.MinValue;
+        return dateTime.ToString("yyyy-MM-dd");
     }
 
     private IQueryable<MOU01_Memorandum> GetMemorandumBaseQuery(string q)
@@ -482,6 +655,7 @@ public class MOUController : ControllerBase
                 _entity.NoMemo.ToLower().Contains(q.ToLower()) ||
                 _entity.TajukProjek.ToLower().Contains(q.ToLower()) ||
                 _entity.PUU_ScopeMemo.Butiran.ToLower().Contains(q.ToLower()) ||
+                _entity.PUU_JenisMemo.Butiran.ToLower().Contains(q.ToLower()) ||
                 _entity.MOU02_Statuses.Any(s => s.Status.ToLower().Contains(q.ToLower())) ||
                 _entity.EMO_Staf.Nama.ToLower().Contains(q.ToLower())
             );
@@ -495,6 +669,82 @@ public class MOUController : ControllerBase
 
         return query;
     }
+
+    private void sendEmailsAfterUpdate(string subject, string noMemo, string statusMsg)
+    {
+        var staffId = GetStaffID();
+
+        var memo = _context.MOU01_Memorandum.FirstOrDefault(m => m.NoMemo == noMemo);
+
+        List<string> noStafList = new List<string>();
+        if (staffId != memo.MS01_NoStaf) {
+            noStafList.Add(memo.MS01_NoStaf);
+        }
+        var members = _context.MOU03_Ahli.Select(mou03 => new MOU03_Ahli
+            {
+                NoStaf = mou03.NoStaf,
+            })?
+            .Where(mou03 => mou03.NoStaf != staffId)?
+            .ToList();
+        foreach (var member in members)
+        {
+            noStafList.Add(member.NoStaf);
+        }
+        var staffs = _context.EMO_Staf
+            .Where(s => noStafList.Contains(s.NoStaf) && !string.IsNullOrEmpty(s.Email))
+            .ToList();
+        foreach (var staff in staffs)
+        {
+            var EMOURL = _configuration.GetValue<string>("EMOURL");
+            var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
+            var body = $"<p>{gelaran} {staff.Nama}</p><p>Memorandum with Memo ID "
+                + $"<strong>{memo.NoMemo}</strong> {statusMsg}. Please click this link "
+                + $"<a target='_blank' href='{EMOURL}?UsrLogin={staff.NoStaf}&callback=memo-detail?memo={memo.NoMemo}'>{EMOURL}memo-detail?memo={memo.NoMemo}</a>"
+                + " for more info.</p>";
+            var emailJob = new EmailJob
+            {
+                Email = staff.Email,
+                Subject = subject,
+                Body = body,
+            };
+            _emailQueueService.QueueEmailJob(emailJob);
+        }
+    }
+
+    private void SyncMembers(MOU01_Memorandum existingMOU, ICollection<MOU03_Ahli> updatedMembers)
+    {
+        // Convert the current members into a dictionary for easy lookup
+        var existingMembers = existingMOU.MOU03_Ahli.ToDictionary(m => m.NoMemo);
+
+        // Step 1: Update or Add new members
+        foreach (var updatedMember in updatedMembers)
+        {
+            if (existingMembers.TryGetValue(updatedMember.NoStaf, out var existingMember))
+            {
+                existingMember.NoStaf = updatedMember.NoStaf;
+                existingMember.Peranan = updatedMember.Peranan;
+            }
+            else
+            {
+                existingMOU.MOU03_Ahli.Add(new MOU03_Ahli
+                {
+                    NoMemo = existingMOU.NoMemo,
+                    NoStaf = updatedMember.NoStaf,
+                    Peranan = updatedMember.Peranan,
+                    TkhMula = existingMOU.TarikhMula,
+                    TkhTamat = existingMOU.TarikhTamat,
+                });
+            }
+        }
+
+        // Step 2: Remove members that are not in the updated set
+        var updatedMemberIds = updatedMembers.Select(m => m.NoStaf).ToHashSet();
+        var membersToRemove = existingMOU.MOU03_Ahli.Where(m => !updatedMemberIds.Contains(m.NoStaf)).ToList();
+        foreach (var member in membersToRemove)
+        {
+            _context.MOU03_Ahli.Remove(member);
+        }
+    }
 }
 
 public class MemorandumGenNo
@@ -506,6 +756,7 @@ public class MemorandumGenNo
 
 public class MOUAddModel
 {
+    public string NoMemo { get; set; }
     public MOU01_Memorandum form1 { get; set; }
     public MOUMembers form2 { get; set; }
     public MOUKPIs form3 { get; set; }
@@ -519,4 +770,11 @@ public class MOUMembers
 public class MOUKPIs
 {
     public ICollection<MOU04_KPI> KPIs { get; set; }
+}
+
+public class ApprovalModel
+{
+    public string NoMemo { get; set; }
+    public string Comment { get; set; }
+    public string Status { get; set; }
 }
