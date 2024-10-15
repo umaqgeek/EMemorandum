@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-// all
-// import LoginView from "@/views/LoginView.vue";
+
 import DashboardView from "@/views/DashboardView.vue";
 import MemoListView from "@/views/MemoListView.vue";
 import MemoAddView from "@/views/MemoAddView.vue";
@@ -12,39 +11,10 @@ import MemoEditKPIView from "@/views/MemoEditKPIView.vue";
 import MemoDetailsView from "@/views/MemoDetailsView.vue";
 import ApprovalListView from "@/views/ApprovalListView.vue";
 import ApprovalDetailsView from "@/views/ApprovalDetailsView.vue";
-// admin
 import UserListView from "@/views/UserList.vue";
 import UserEditView from "@/views/UserEdit.vue";
+import UserViewView from "@/views/UserView.vue";
 import CodeListView from "@/views/CodeListView.vue";
-// import adminDashboardView from "@/views/DashboardView.vue";
-// import adminMemoListView from "@/views/MemoListView.vue";
-// import adminMemoAddView from "@/views/MemoAddView.vue";
-// import adminMemoAddMemberView from "@/views/MemoAddMemberView.vue";
-// import adminMemoEditView from "@/views/MemoEditView.vue";
-// import adminMemoDetailsView from "@/views/MemoDetailsView.vue";
-// import adminApprovalListView from "@/views/ApprovalListView.vue";
-// import adminApprovalDetailsView from "@/views/ApprovalDetailsView.vue";
-// PUU
-// import PUULoginView from "@/views/PUU/LoginView.vue";
-// import PUUDashboardView from "@/views/DashboardViewPUU.vue";
-// import PUUMemoListView from "@/views/PUU/MemoListView.vue";
-// import PUUMemoAddView from "@/views/PUU/MemoAddView.vue";
-// import PUUMemoAddMemberView from "@/views/PUU/MemoAddMemberView.vue";
-// import PUUMemoEditView from "@/views/PUU/MemoEditView.vue";
-// import PUUMemoDetailsView from "@/views/PUU/MemoDetailsView.vue";
-// import PUUApprovalListView from "@/views/PUU/ApprovalListView.vue";
-// import PUUApprovalDetailsView from "@/views/PUU/ApprovalDetailsView.vue";
-// PTJ
-// import PTJLoginView from "@/views/PTJ/LoginView.vue";
-// import PTJDashboardView from "@/views/DashboardViewPTJ.vue";
-// import PTJMemoListView from "@/views/PTJ/MemoListView.vue";
-// import PTJMemoAddView from "@/views/PTJ/MemoAddView.vue";
-// import PTJMemoAddMemberView from "@/views/PTJ/MemoAddMemberView.vue";
-// import PTJMemoEditView from "@/views/PTJ/MemoEditView.vue";
-// import PTJMemoDetailsView from "@/views/PTJ/MemoDetailsView.vue";
-// import PTJApprovalListView from "@/views/PTJ/ApprovalListView.vue";
-// import PTJApprovalDetailsView from "@/views/PTJ/ApprovalDetailsView.vue";
-// Not Found placeholder view page
 import NotFoundView from "@/views/NotFoundView.vue";
 
 const routes = [
@@ -61,6 +31,10 @@ const routes = [
         component: UserEditView,
     },
     {
+        path: "/user-view",
+        component: UserViewView,
+    },
+    {
         path: "/memo-list",
         component: MemoListView,
     },
@@ -68,7 +42,6 @@ const routes = [
         path: "/memo-add",
         component: MemoAddView,
     },
-
     {
         path: "/memo-edit",
         component: MemoEditView,
@@ -77,15 +50,6 @@ const routes = [
         path: "/memo-detail",
         component: MemoDetailsView,
     },
-    {
-        path: "/approval-list",
-        component: ApprovalListView,
-    },
-    {
-        path: "/approval-detail",
-        component: ApprovalDetailsView,
-    },
-
     {
         path: "/:pathMatch(.*)*",
         component: NotFoundView, // Your custom 404 page component

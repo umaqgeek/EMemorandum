@@ -78,6 +78,13 @@ export function useGetOneStaff(noStaf) {
     });
 }
 
+export function useGetOneStaffSimple(noStaf) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/staff/less/${noStaf}`,
+    });
+}
+
 export function useAssignStaffRoles(noStaf, roles = []) {
     return useApi({
         method: "post",

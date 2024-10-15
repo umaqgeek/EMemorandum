@@ -147,24 +147,21 @@
                                                             <div
                                                                 class="form-check form-switch"
                                                             >
-                                                                <input
-                                                                    class="form-check-input"
-                                                                    type="checkbox"
-                                                                    v-model="
+                                                                <span
+                                                                    class="badge text-bg-success-soft"
+                                                                    v-if="
                                                                         isActive
                                                                     "
-                                                                    id="flexSwitchDefault"
-                                                                />
-                                                                <label
-                                                                    class="form-check-label"
-                                                                    for="flexSwitchDefault"
+                                                                    >Active</span
                                                                 >
-                                                                    Inactive/Active
-                                                                </label>
+                                                                <span
+                                                                    class="badge text-bg-danger-soft"
+                                                                    v-else
+                                                                    >Inactive</span
+                                                                >
                                                             </div>
                                                             <div
                                                                 class="form-group"
-                                                                v-if="isActive"
                                                             >
                                                                 <label
                                                                     class="form-label"
@@ -173,14 +170,16 @@
                                                                 <div
                                                                     class="form-check"
                                                                 >
-                                                                    <input
-                                                                        class="form-check-input"
-                                                                        type="checkbox"
-                                                                        v-model="
+                                                                    <em
+                                                                        class="icon ni ni-check-round"
+                                                                        v-if="
                                                                             isEachRoles.PUU
                                                                         "
-                                                                        id="flexCheckPUU"
-                                                                    />
+                                                                    ></em>
+                                                                    <em
+                                                                        class="icon ni ni-na"
+                                                                        v-else
+                                                                    ></em>
                                                                     <label
                                                                         class="form-check-label"
                                                                         for="flexCheckPUU"
@@ -191,14 +190,16 @@
                                                                 <div
                                                                     class="form-check"
                                                                 >
-                                                                    <input
-                                                                        class="form-check-input"
-                                                                        type="checkbox"
-                                                                        v-model="
+                                                                    <em
+                                                                        class="icon ni ni-check-round"
+                                                                        v-if="
                                                                             isEachRoles.PTJ
                                                                         "
-                                                                        id="flexCheckPTJ"
-                                                                    />
+                                                                    ></em>
+                                                                    <em
+                                                                        class="icon ni ni-na"
+                                                                        v-else
+                                                                    ></em>
                                                                     <label
                                                                         class="form-check-label"
                                                                         for="flexCheckPTJ"
@@ -209,14 +210,16 @@
                                                                 <div
                                                                     class="form-check"
                                                                 >
-                                                                    <input
-                                                                        class="form-check-input"
-                                                                        type="checkbox"
-                                                                        v-model="
+                                                                    <em
+                                                                        class="icon ni ni-check-round"
+                                                                        v-if="
                                                                             isEachRoles.Admin
                                                                         "
-                                                                        id="flexCheckAdmin"
-                                                                    />
+                                                                    ></em>
+                                                                    <em
+                                                                        class="icon ni ni-na"
+                                                                        v-else
+                                                                    ></em>
                                                                     <label
                                                                         class="form-check-label"
                                                                         for="flexCheckAdmin"
@@ -224,18 +227,6 @@
                                                                         Administrator
                                                                     </label>
                                                                 </div>
-                                                            </div>
-                                                            <div class="mt-5">
-                                                                <a
-                                                                    href="#"
-                                                                    v-on:click="
-                                                                        updateRoles
-                                                                    "
-                                                                    class="btn btn-primary"
-                                                                >
-                                                                    Update
-                                                                    Profile
-                                                                </a>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -272,14 +263,10 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import {
-    useStaffProfile,
-    useGetOneStaff,
-    useAssignStaffRoles,
-} from "@/hooks/useAPI";
+import { useStaffProfile, useGetOneStaffSimple } from "@/hooks/useAPI";
 
 export default {
-    name: "UserEditView",
+    name: "UserViewView",
     data() {
         return {
             loadingUpdate: false,
@@ -308,7 +295,7 @@ export default {
             error: errorOneStaff,
             loading: loadingOneStaff,
             refetch: refetchOneStaff,
-        } = useGetOneStaff(noStaf);
+        } = useGetOneStaffSimple(noStaf);
         const roles =
             dataOneStaff?.roles?.length > 0 ? dataOneStaff?.roles : [];
 
@@ -386,42 +373,24 @@ export default {
             return this.dataOneStaff?.nPejabat;
         },
     },
-    methods: {
-        updateRoles() {
-            this.loadingUpdate = true;
-            let newRoles = [];
-            if (this.isEachRoles.Admin) {
-                newRoles.push("Admin");
-            }
-            if (this.isEachRoles.PUU) {
-                newRoles.push("PUU");
-            }
-            if (this.isEachRoles.PTJ) {
-                newRoles.push("PTJ");
-            }
-            if (this.isActive) {
-                newRoles.push("Staff");
-            } else {
-                newRoles = [];
-            }
-            const { loading } = useAssignStaffRoles(this.noStaf, newRoles);
-            this.loadingUpdate = loading.value;
-
-            var self = this;
-            watch(
-                () => loading.value, // Watch the `data` reactive property
-                (newLoading) => {
-                    self.loadingUpdate = newLoading;
-                    if (newLoading == false) {
-                        this.$toast.open({
-                            message: "Staff profile updated.",
-                            type: "success",
-                            position: "top-right",
-                        });
-                    }
-                }
-            );
-        },
-    },
+    methods: {},
 };
 </script>
+
+<style scoped>
+.form-check .icon.ni {
+    font-size: 2em;
+}
+
+.form-check .icon.ni-check-round {
+    color: green;
+}
+
+.form-check .icon.ni-na {
+    color: rgba(255, 0, 0, 0.3);
+}
+
+.form-check .badge {
+    font-size: 1.5em;
+}
+</style>
