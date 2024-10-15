@@ -240,16 +240,16 @@ public class MOUController : ControllerBase
     {
         var staffId = GetStaffID();
 
-        var msgDesc = "Memorandum has been reviewed";
+        var statusMsg = "has been reviewed";
         switch (entity.Status) {
             case "03":
-                msgDesc = "Memorandum has been approved";
+                statusMsg = "has been approved";
                 break;
             case "04":
-                msgDesc = "Memorandum has been sent back to the PIC";
+                statusMsg = "has been sent back to the PIC";
                 break;
             case "05":
-                msgDesc = "Memorandum has been rejected";
+                statusMsg = "has been rejected";
                 break;
             default:
                 return NotFound(new { Error = "Status not found" });
@@ -259,7 +259,7 @@ public class MOUController : ControllerBase
         {
             NoMemo = entity.NoMemo,
             NoStaf = staffId,
-            Description = msgDesc,
+            Description = $"Memorandum {statusMsg}",
             Created_At = DateTime.Now,
             Comment = entity.Comment,
         };
@@ -286,6 +286,9 @@ public class MOUController : ControllerBase
 
                 // add new status for existing MOU
                 _context.MOU02_Status.Add(mouStatus);
+
+                // email to all members and pic of this memo
+                sendEmailsAfterComment(memo, statusMsg);
 
                 // Save changes to the database
                 _context.SaveChanges();
@@ -343,40 +346,7 @@ public class MOUController : ControllerBase
                 _context.MOU02_Status.Add(mouStatus);
 
                 // email to all members and pic of this memo
-                List<string> noStafList = new List<string>();
-                if (staffId != memo.MS01_NoStaf) {
-                    noStafList.Add(memo.MS01_NoStaf);
-                }
-                var members = _context.MOU03_Ahli.Select(mou03 => new MOU03_Ahli
-                    {
-                        NoStaf = mou03.NoStaf,
-                    })?
-                    .Where(mou03 => mou03.NoStaf != staffId)?
-                    .ToList();
-                foreach (var member in members)
-                {
-                    noStafList.Add(member.NoStaf);
-                }
-                var staffs = _context.EMO_Staf
-                    .Where(s => noStafList.Contains(s.NoStaf) && !string.IsNullOrEmpty(s.Email))
-                    .ToList();
-                foreach (var staff in staffs)
-                {
-                    var EMOURL = _configuration.GetValue<string>("EMOURL");
-                    var subject = "1 New Comment";
-                    var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
-                    var body = $"<p>{gelaran} {staff.Nama}</p><p>Memorandum with Memo ID "
-                        + $"<strong>{memo.NoMemo}</strong> has been commented. Please click this link "
-                        + $"<a target='_blank' href='{EMOURL}?UsrLogin={staff.NoStaf}&callback=memo-detail?memo={memo.NoMemo}'>{EMOURL}memo-detail?memo={memo.NoMemo}</a>"
-                        + " for more info.</p>";
-                    var emailJob = new EmailJob
-                    {
-                        Email = staff.Email,
-                        Subject = subject,
-                        Body = body,
-                    };
-                    _emailQueueService.QueueEmailJob(emailJob);
-                }
+                sendEmailsAfterComment(memo, "has been commented");
 
                 // Save changes to the database
                 _context.SaveChanges();
@@ -601,6 +571,46 @@ public class MOUController : ControllerBase
         query = query.Take(500);
 
         return query;
+    }
+
+    private void sendEmailsAfterComment(MOU01_Memorandum memo, string statusMsg)
+    {
+        var staffId = GetStaffID();
+
+        List<string> noStafList = new List<string>();
+        if (staffId != memo.MS01_NoStaf) {
+            noStafList.Add(memo.MS01_NoStaf);
+        }
+        var members = _context.MOU03_Ahli.Select(mou03 => new MOU03_Ahli
+            {
+                NoStaf = mou03.NoStaf,
+            })?
+            .Where(mou03 => mou03.NoStaf != staffId)?
+            .ToList();
+        foreach (var member in members)
+        {
+            noStafList.Add(member.NoStaf);
+        }
+        var staffs = _context.EMO_Staf
+            .Where(s => noStafList.Contains(s.NoStaf) && !string.IsNullOrEmpty(s.Email))
+            .ToList();
+        foreach (var staff in staffs)
+        {
+            var EMOURL = _configuration.GetValue<string>("EMOURL");
+            var subject = "1 New Comment";
+            var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
+            var body = $"<p>{gelaran} {staff.Nama}</p><p>Memorandum with Memo ID "
+                + $"<strong>{memo.NoMemo}</strong> {statusMsg}. Please click this link "
+                + $"<a target='_blank' href='{EMOURL}?UsrLogin={staff.NoStaf}&callback=memo-detail?memo={memo.NoMemo}'>{EMOURL}memo-detail?memo={memo.NoMemo}</a>"
+                + " for more info.</p>";
+            var emailJob = new EmailJob
+            {
+                Email = staff.Email,
+                Subject = subject,
+                Body = body,
+            };
+            _emailQueueService.QueueEmailJob(emailJob);
+        }
     }
 }
 
