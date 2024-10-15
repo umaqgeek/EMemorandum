@@ -175,37 +175,14 @@
                                                                 <div
                                                                     class="form-control-wrap"
                                                                 >
-                                                                    <select
-                                                                        class="form-select"
-                                                                        id="KodKategori"
-                                                                        data-search="true"
-                                                                        data-sort="false"
-                                                                        v-model="
-                                                                            KodKategori
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        :value="
+                                                                            dataTheMOU?.kategori
                                                                         "
-                                                                    >
-                                                                        <option
-                                                                            value=""
-                                                                        >
-                                                                            -
-                                                                            Select
-                                                                            Category
-                                                                            -
-                                                                        </option>
-                                                                        <option
-                                                                            v-for="cat in categories"
-                                                                            v-bind:key="
-                                                                                cat.kod
-                                                                            "
-                                                                            :value="
-                                                                                cat.kod
-                                                                            "
-                                                                        >
-                                                                            {{
-                                                                                cat.butiran
-                                                                            }}
-                                                                        </option>
-                                                                    </select>
+                                                                        readonly
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -222,37 +199,14 @@
                                                                 <div
                                                                     class="form-control-wrap"
                                                                 >
-                                                                    <select
-                                                                        class="form-select"
-                                                                        id="KodJenis"
-                                                                        data-search="true"
-                                                                        data-sort="false"
-                                                                        v-model="
-                                                                            KodJenis
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        :value="
+                                                                            dataTheMOU?.jenis
                                                                         "
-                                                                    >
-                                                                        <option
-                                                                            value=""
-                                                                        >
-                                                                            -
-                                                                            Select
-                                                                            Type
-                                                                            -
-                                                                        </option>
-                                                                        <option
-                                                                            v-for="t in types"
-                                                                            v-bind:key="
-                                                                                t.kod
-                                                                            "
-                                                                            :value="
-                                                                                t.kod
-                                                                            "
-                                                                        >
-                                                                            {{
-                                                                                t.butiran
-                                                                            }}
-                                                                        </option>
-                                                                    </select>
+                                                                        readonly
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -371,37 +325,14 @@
                                                                 <div
                                                                     class="form-control-wrap"
                                                                 >
-                                                                    <select
-                                                                        class="form-select"
-                                                                        id="KodPTJ"
-                                                                        data-search="true"
-                                                                        data-sort="false"
-                                                                        v-model="
-                                                                            KodPTJ
+                                                                    <input
+                                                                        type="text"
+                                                                        class="form-control"
+                                                                        :value="
+                                                                            dataTheMOU?.ptjNama
                                                                         "
-                                                                    >
-                                                                        <option
-                                                                            value=""
-                                                                        >
-                                                                            -
-                                                                            Select
-                                                                            PTJ
-                                                                            -
-                                                                        </option>
-                                                                        <option
-                                                                            v-for="p in PTJs"
-                                                                            v-bind:key="
-                                                                                p.id
-                                                                            "
-                                                                            :value="
-                                                                                p.kodPTJ
-                                                                            "
-                                                                        >
-                                                                            {{
-                                                                                p.nama
-                                                                            }}
-                                                                        </option>
-                                                                    </select>
+                                                                        readonly
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -764,7 +695,7 @@
                                                                     menuNo === 3
                                                                 "
                                                                 href="#"
-                                                                class="btn btn-secondary"
+                                                                class="btn btn-success"
                                                                 disabled="true"
                                                                 @click="onSave"
                                                             >
@@ -806,7 +737,7 @@ import {
     useGetMOUSelectData,
     useGetAllStaffSimple,
     useHandleFileUpload,
-    useMouStoreMemo,
+    useMouUpdateMemo,
     useGetOneMOU,
 } from "@/hooks/useAPI";
 
@@ -1114,7 +1045,6 @@ export default {
                 return kpi;
             });
             const finalForm = {
-                ...this.form,
                 NoMemo: this.NoMemo,
                 form1: {
                     KodKategori: this.KodKategori,
@@ -1155,13 +1085,11 @@ export default {
                 },
             };
 
-            console.log(finalForm);
-
             const {
                 data: dataAddMOU,
                 loading: loadingAddMOU,
                 error: errorAddMOU,
-            } = useMouStoreMemo(finalForm);
+            } = useMouUpdateMemo(finalForm);
 
             this.loadingAddMOU = true;
             var self = this;
@@ -1176,7 +1104,7 @@ export default {
                 (newDataAddMOU) => {
                     self.addedMOUNoMemo = newDataAddMOU?.noMemo;
                     if (newDataAddMOU?.noMemo) {
-                        location.href = self.publicPath + "memo-list";
+                        location.href = `${self.publicPath}memo-detail?memo=${self.NoMemo}`;
                     }
                 }
             );

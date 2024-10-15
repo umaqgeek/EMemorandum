@@ -91,6 +91,57 @@ public class MOUController : ControllerBase
     // TODO: Add members to a memorandum (PIC, Admin)
     // TODO: Add KPIs to a memorandum (PIC, Admin)
 
+    [HttpPut]
+    public ActionResult<object> UpdateMemo([FromBody] MOUAddModel entity)
+    {
+        var staffId = GetStaffID();
+
+        if (!ModelState.IsValid) {
+            return BadRequest(ModelState);
+        }
+
+        var memo = _context.MOU01_Memorandum.FirstOrDefault(m => m.NoMemo == entity.NoMemo);
+        if (memo == null) {
+            return NotFound($"Memorandum with number = {entity.NoMemo} not found");
+        }
+
+        memo.KodKategori = entity.form1.KodKategori;
+        memo.KodJenis = entity.form1.KodJenis;
+        memo.KodPTJ = entity.form1.KodPTJ;
+        memo.KodScope = entity.form1.KodScope;
+        memo.KodPTJSub = entity.form1.KodPTJSub;
+        memo.TarikhMula = entity.form1.TarikhMula;
+        memo.TarikhTamat = entity.form1.TarikhTamat;
+        memo.TajukProjek = entity.form1.TajukProjek;
+        memo.NamaDok = entity.form1.NamaDok;
+        memo.Path = entity.form1.Path;
+        memo.MS01_NoStaf = entity.form1.MS01_NoStaf;
+        memo.Nilai = entity.form1.Nilai;
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                // Save changes to the database
+                _context.SaveChanges();
+                // Commit the transaction if all commands succeed
+                transaction.Commit();
+
+                // send emails to all viewers (pic, members, author) of this memo after all transaction is done
+                sendEmailsAfterUpdate("Memorandum Updated", memo, "has been updated");
+            }
+            catch (Exception ex)
+            {
+                // Rollback the transaction if any command fails
+                transaction.Rollback();
+                // Log or rethrow the exception as needed
+                throw;
+            }
+        }
+
+        return Ok(new { NoMemo = entity.NoMemo });
+    }
+
     [HttpPost]
     public ActionResult<object> Store([FromBody] MOUAddModel entity)
     {
@@ -287,13 +338,13 @@ public class MOUController : ControllerBase
                 // add new status for existing MOU
                 _context.MOU02_Status.Add(mouStatus);
 
-                // email to all members and pic of this memo
-                sendEmailsAfterComment(memo, statusMsg);
-
                 // Save changes to the database
                 _context.SaveChanges();
                 // Commit the transaction if all commands succeed
                 transaction.Commit();
+
+                // send emails to all viewers (pic, members, author) of this memo after all transaction is done
+                sendEmailsAfterUpdate("1 New Comment", memo, statusMsg);
             }
             catch (Exception ex)
             {
@@ -345,13 +396,13 @@ public class MOUController : ControllerBase
                 // add new status for existing MOU
                 _context.MOU02_Status.Add(mouStatus);
 
-                // email to all members and pic of this memo
-                sendEmailsAfterComment(memo, "has been commented");
-
                 // Save changes to the database
                 _context.SaveChanges();
                 // Commit the transaction if all commands succeed
                 transaction.Commit();
+
+                // send emails to all viewers (pic, members, author) of this memo after all transaction is done
+                sendEmailsAfterUpdate("1 New Comment", memo, "has been commented");
             }
             catch (Exception ex)
             {
@@ -584,7 +635,7 @@ public class MOUController : ControllerBase
         return query;
     }
 
-    private void sendEmailsAfterComment(MOU01_Memorandum memo, string statusMsg)
+    private void sendEmailsAfterUpdate(string subject, MOU01_Memorandum memo, string statusMsg)
     {
         var staffId = GetStaffID();
 
@@ -608,7 +659,6 @@ public class MOUController : ControllerBase
         foreach (var staff in staffs)
         {
             var EMOURL = _configuration.GetValue<string>("EMOURL");
-            var subject = "1 New Comment";
             var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
             var body = $"<p>{gelaran} {staff.Nama}</p><p>Memorandum with Memo ID "
                 + $"<strong>{memo.NoMemo}</strong> {statusMsg}. Please click this link "
@@ -634,6 +684,7 @@ public class MemorandumGenNo
 
 public class MOUAddModel
 {
+    public string NoMemo { get; set; }
     public MOU01_Memorandum form1 { get; set; }
     public MOUMembers form2 { get; set; }
     public MOUKPIs form3 { get; set; }

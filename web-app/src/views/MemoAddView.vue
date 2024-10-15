@@ -765,7 +765,7 @@
                                                                     menuNo === 3
                                                                 "
                                                                 href="#"
-                                                                class="btn btn-secondary"
+                                                                class="btn btn-success"
                                                                 disabled="true"
                                                                 @click="onSave"
                                                             >

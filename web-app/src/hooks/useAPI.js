@@ -165,3 +165,11 @@ export function useMouApprovalRejectionMemo(payload) {
         data: JSON.stringify(payload),
     });
 }
+
+export function useMouUpdateMemo(payload) {
+    return useApi({
+        method: "put",
+        url: `${API_URL}/mou`,
+        data: JSON.stringify(payload),
+    });
+}
