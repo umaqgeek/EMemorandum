@@ -101,7 +101,22 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div
+                                    <div class="col-md-3">
+                                        <a :href="`${publicPath}report`">
+                                            <div class="card">
+                                                <div
+                                                    class="card-body dashboard-card"
+                                                >
+                                                    <h4 class="mb-3">Report</h4>
+                                                    <font-awesome-icon
+                                                        icon="fa-solid fa-pie-chart"
+                                                        size="2x"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <!-- <div
                                         class="col-md-3"
                                         v-if="
                                             roles.find(
@@ -124,7 +139,7 @@
                                                 </div>
                                             </div>
                                         </a>
-                                    </div>
+                                    </div> -->
                                     <!-- <div
                                         class="col-md-3"
                                         v-if="
