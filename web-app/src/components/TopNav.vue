@@ -135,10 +135,11 @@ export default {
                 params.get("UsrLogin") ||
                 params.get("usrLogin") ||
                 params.get("ssusrid");
+            const callbackRoute = params.get("callback");
 
             if (newSsusrid) {
                 setBearerToken(newSsusrid);
-                location.href = process.env.VUE_APP_PUBLIC_PATH;
+                location.href = `${process.env.VUE_APP_PUBLIC_PATH}${callbackRoute}`;
             }
         });
     },

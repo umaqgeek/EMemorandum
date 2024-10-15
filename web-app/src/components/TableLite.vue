@@ -15,6 +15,7 @@
                         class="tb-col"
                         v-for="(c, cIndex) in columns"
                         v-bind:key="cIndex"
+                        @click="sortingColumn(c)"
                     >
                         <span class="overline-title">{{ c }}</span>
                     </th>
@@ -230,6 +231,15 @@ export default {
             );
         };
 
+        // TODO: Sorting data table by columns
+        const sortingColumn = (key) => {
+            console.log("aaa", key);
+            oriData.value?.map(d => {
+                console.log("aaa", d[key]);
+                return d;
+            });
+        };
+
         return {
             localData,
             oriData,
@@ -242,6 +252,7 @@ export default {
             nextPage,
             lastPage,
             updateSize,
+            sortingColumn,
         };
     },
     methods: {

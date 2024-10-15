@@ -34,7 +34,7 @@ public class MOUController : ControllerBase
     }
 
     [HttpGet("all")]
-    [Authorize(Policy = "AdminOrPUUPolicy")]
+    [Authorize(Policy = "AdminOrPUUOrPTJPolicy")]
     public ActionResult<IEnumerable<object>> GetAllMemorandums([FromQuery] string? q)
     {
         var staffId = GetStaffID();
@@ -196,11 +196,13 @@ public class MOUController : ControllerBase
                 // Trigger sending emails in the background
                 foreach (var staff in staffs)
                 {
-                    var iutemurl = "https://iutem.example.com"; // Replace with actual configuration value
+                    var EMOURL = _configuration.GetValue<string>("EMOURL");
                     var subject = "Member of a Memorandum";
                     var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
                     var body = $"<p>{gelaran} {staff.Nama}</p><p>You have been added as a member of a memorandum with Memo ID "
-                        + $"<strong>{genNo.noMemo}</strong>. Please login into EMO application under {iutemurl} for more info.</p>";
+                        + $"<strong>{genNo.noMemo}</strong>. Please click this link "
+                        + $"<a target='_blank' href='{EMOURL}?UsrLogin={staff.NoStaf}&callback=memo-detail?memo={genNo.noMemo}'>{EMOURL}memo-detail?memo={genNo.noMemo}</a>"
+                        + " for more info.</p>";
                     var emailJob = new EmailJob
                     {
                         Email = staff.Email,
@@ -231,10 +233,78 @@ public class MOUController : ControllerBase
     // TODO: Delete memorandum (PIC, Admin)
     // TODO: Add members to a memorandum (PIC, Admin)
     // TODO: Add KPIs to a memorandum (PIC, Admin)
-    // TODO: Approve or reject a memorandum (PTJ)
+
+    [HttpPost("approval")]
+    [Authorize(Policy = "PTJPolicy")]
+    public ActionResult<object> ApprovalRejectionMemorandum([FromBody] ApprovalModel entity)
+    {
+        var staffId = GetStaffID();
+
+        var msgDesc = "Memorandum has been reviewed";
+        switch (entity.Status) {
+            case "03":
+                msgDesc = "Memorandum has been approved";
+                break;
+            case "04":
+                msgDesc = "Memorandum has been sent back to the PIC";
+                break;
+            case "05":
+                msgDesc = "Memorandum has been rejected";
+                break;
+            default:
+                return NotFound(new { Error = "Status not found" });
+        }
+
+        var mouHistory = new MOU06_History
+        {
+            NoMemo = entity.NoMemo,
+            NoStaf = staffId,
+            Description = msgDesc,
+            Created_At = DateTime.Now,
+            Comment = entity.Comment,
+        };
+
+        var mouStatus = new MOU02_Status
+        {
+            NoMemo = entity.NoMemo,
+            Status = entity.Status,
+            Tarikh = DateTime.Now,
+        };
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var memo = _context.MOU01_Memorandum.FirstOrDefault(m => m.NoMemo == entity.NoMemo);
+                if (memo == null) {
+                    return NotFound();
+                }
+                memo.Status = entity.Status;
+
+                // Save comments and add new history
+                _context.MOU06_History.Add(mouHistory);
+
+                // add new status for existing MOU
+                _context.MOU02_Status.Add(mouStatus);
+
+                // Save changes to the database
+                _context.SaveChanges();
+                // Commit the transaction if all commands succeed
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                // Rollback the transaction if any command fails
+                transaction.Rollback();
+                // Log or rethrow the exception as needed
+                throw;
+            }
+        }
+
+        return Ok(new { Status = true });
+    }
 
     [HttpPost("comment")]
-    [Authorize(Policy = "AdminOrPUUPolicy")]
     public ActionResult<object> CommentMemorandum([FromBody] MOU06_History entity)
     {
         var staffId = GetStaffID();
@@ -271,6 +341,42 @@ public class MOUController : ControllerBase
 
                 // add new status for existing MOU
                 _context.MOU02_Status.Add(mouStatus);
+
+                // email to all members and pic of this memo
+                List<string> noStafList = new List<string>();
+                if (staffId != memo.MS01_NoStaf) {
+                    noStafList.Add(memo.MS01_NoStaf);
+                }
+                var members = _context.MOU03_Ahli.Select(mou03 => new MOU03_Ahli
+                    {
+                        NoStaf = mou03.NoStaf,
+                    })?
+                    .Where(mou03 => mou03.NoStaf != staffId)?
+                    .ToList();
+                foreach (var member in members)
+                {
+                    noStafList.Add(member.NoStaf);
+                }
+                var staffs = _context.EMO_Staf
+                    .Where(s => noStafList.Contains(s.NoStaf) && !string.IsNullOrEmpty(s.Email))
+                    .ToList();
+                foreach (var staff in staffs)
+                {
+                    var EMOURL = _configuration.GetValue<string>("EMOURL");
+                    var subject = "1 New Comment";
+                    var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
+                    var body = $"<p>{gelaran} {staff.Nama}</p><p>Memorandum with Memo ID "
+                        + $"<strong>{memo.NoMemo}</strong> has been commented. Please click this link "
+                        + $"<a target='_blank' href='{EMOURL}?UsrLogin={staff.NoStaf}&callback=memo-detail?memo={memo.NoMemo}'>{EMOURL}memo-detail?memo={memo.NoMemo}</a>"
+                        + " for more info.</p>";
+                    var emailJob = new EmailJob
+                    {
+                        Email = staff.Email,
+                        Subject = subject,
+                        Body = body,
+                    };
+                    _emailQueueService.QueueEmailJob(emailJob);
+                }
 
                 // Save changes to the database
                 _context.SaveChanges();
@@ -482,6 +588,7 @@ public class MOUController : ControllerBase
                 _entity.NoMemo.ToLower().Contains(q.ToLower()) ||
                 _entity.TajukProjek.ToLower().Contains(q.ToLower()) ||
                 _entity.PUU_ScopeMemo.Butiran.ToLower().Contains(q.ToLower()) ||
+                _entity.PUU_JenisMemo.Butiran.ToLower().Contains(q.ToLower()) ||
                 _entity.MOU02_Statuses.Any(s => s.Status.ToLower().Contains(q.ToLower())) ||
                 _entity.EMO_Staf.Nama.ToLower().Contains(q.ToLower())
             );
@@ -519,4 +626,11 @@ public class MOUMembers
 public class MOUKPIs
 {
     public ICollection<MOU04_KPI> KPIs { get; set; }
+}
+
+public class ApprovalModel
+{
+    public string NoMemo { get; set; }
+    public string Comment { get; set; }
+    public string Status { get; set; }
 }

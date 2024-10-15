@@ -150,3 +150,11 @@ export function useMouCommentMemo(payload) {
         data: JSON.stringify(payload),
     });
 }
+
+export function useMouApprovalRejectionMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/mou/approval`,
+        data: JSON.stringify(payload),
+    });
+}

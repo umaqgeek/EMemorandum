@@ -64,7 +64,7 @@
                                         </button>
                                         <input
                                             type="text"
-                                            class="form-control mb-3"
+                                            class="form-control mb-3 query-search"
                                             v-model="querySearch"
                                             @keydown.enter="onSearch"
                                             placeholder="Search memorandum here ..."
@@ -74,6 +74,14 @@
                                             class="icon ni ni-cross-circle clear-search-icon"
                                             @click="clearSearch"
                                         ></em>
+                                    </div>
+                                    <div
+                                        class="btn btn-link"
+                                        @click="onFilter"
+                                        v-else
+                                    >
+                                        <em class="icon ni ni-filter"></em
+                                        >&nbsp; Filter
                                     </div>
                                     <div class="card">
                                         <TableLite
@@ -179,7 +187,12 @@ export default {
                     )
                         ? true
                         : false;
-                    if (isAdmin || isPUU) {
+                    const isPTJ = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "PTJ"
+                    )
+                        ? true
+                        : false;
+                    if (isAdmin || isPUU || isPTJ) {
                         const { data: dataAllMOU, loading: loadingAllMOU } =
                             useGetAllMOU(query);
                         mouLoading.value = loadingAllMOU.value;
@@ -188,19 +201,19 @@ export default {
                             (dataAllMOUs) => {
                                 mouData.value = dataAllMOUs?.map((d) => {
                                     return {
-                                        noMemo: `<a class="title" href="${publicPath}memo-detail?memo=${
+                                        "Memorandum No.": `<a class="title" href="${publicPath}memo-detail?memo=${
                                             d.noMemo
                                         }">${
                                             d.noMemo
                                         }</a><br /><span class="badge text-bg-${color(
                                             d.status?.kod
                                         )}">${d.status?.status}</span>`,
-                                        jenis: d.jenis,
-                                        scopeButiran: d.scopeButiran,
-                                        pic: d.pic,
-                                        tarikhMulaDate: d.tarikhMulaDate,
-                                        tarikhTamatDate: d.tarikhTamatDate,
-                                        nilai: d.nilai?.toFixed(2),
+                                        Type: d.jenis,
+                                        Scope: d.scopeButiran,
+                                        Staff: d.pic,
+                                        "Start Date": d.tarikhMulaDate,
+                                        "End Date": d.tarikhTamatDate,
+                                        "Price (RM)": d.nilai?.toFixed(2),
                                     };
                                 });
                                 // initDatatable();
@@ -222,19 +235,19 @@ export default {
                             (dataMyMOUs) => {
                                 mouData.value = dataMyMOUs?.map((d) => {
                                     return {
-                                        noMemo: `<a class="title" href="${publicPath}memo-detail?memo=${
+                                        "Memorandum No.": `<a class="title" href="${publicPath}memo-detail?memo=${
                                             d.noMemo
                                         }">${
                                             d.noMemo
                                         }</a><br /><span class="badge text-bg-${color(
                                             d.status?.kod
                                         )}">${d.status?.status}</span>`,
-                                        jenis: d.jenis,
-                                        scopeButiran: d.scopeButiran,
-                                        pic: d.pic,
-                                        tarikhMulaDate: d.tarikhMulaDate,
-                                        tarikhTamatDate: d.tarikhTamatDate,
-                                        nilai: d.nilai?.toFixed(2),
+                                        Type: d.jenis,
+                                        Scope: d.scopeButiran,
+                                        Staff: d.pic,
+                                        "Start Date": d.tarikhMulaDate,
+                                        "End Date": d.tarikhTamatDate,
+                                        "Price (RM)": d.nilai?.toFixed(2),
                                     };
                                 });
                                 // initDatatable();
@@ -253,10 +266,15 @@ export default {
             { immediate: true } // Run the watcher immediately on component mount
         );
 
+        const onFilter = () => {
+            isFiltered.value = true;
+        };
+
         return {
             publicPath,
             querySearch,
             isFiltered,
+            onFilter,
             dataStaffProfile,
             errorStaffProfile,
             loadingStaffProfile,
@@ -290,8 +308,8 @@ export default {
     flex-direction: row;
     align-items: flex-start;
 }
-.filter-containter > input {
-    width: 30%;
+.filter-containter > .query-search {
+    width: 20%;
     margin-left: 12px;
 }
 .clear-search-icon {
