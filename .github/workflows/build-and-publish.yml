@@ -26,6 +26,12 @@ jobs:
           cd web-app
           npm install
 
+      - name: Create VERSION.txt file for Development
+        run: |
+          echo "Environment: Development" > web-app/public/VERSION.txt
+          echo "Version: ${GITHUB_REF##*/}" >> web-app/public/VERSION.txt
+          echo "Commit Hash: $(git rev-parse HEAD)" >> web-app/public/VERSION.txt
+
       - name: Build Vue.js app for Development
         run: |
           npm run build:development
@@ -74,6 +80,12 @@ jobs:
           cd web-app
           npm install
 
+      - name: Create VERSION.txt file for Staging
+        run: |
+          echo "Environment: Staging" > web-app/public/VERSION.txt
+          echo "Version: ${GITHUB_REF##*/}" >> web-app/public/VERSION.txt
+          echo "Commit Hash: $(git rev-parse HEAD)" >> web-app/public/VERSION.txt
+
       - name: Build Vue.js app for Staging
         run: |
           npm run build:staging
@@ -121,6 +133,12 @@ jobs:
         run: |
           cd web-app
           npm install
+
+      - name: Create VERSION.txt file for Production
+        run: |
+          echo "Environment: Production" > web-app/public/VERSION.txt
+          echo "Version: ${GITHUB_REF##*/}" >> web-app/public/VERSION.txt
+          echo "Commit Hash: $(git rev-parse HEAD)" >> web-app/public/VERSION.txt
 
       - name: Build Vue.js app for Production
         run: |
