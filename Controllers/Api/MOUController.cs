@@ -86,10 +86,7 @@ public class MOUController : ControllerBase
         return Ok(genNo);
     }
 
-    // TODO: Update memorandum (PIC, Admin)
     // TODO: Delete memorandum (PIC, Admin)
-    // TODO: Add members to a memorandum (PIC, Admin)
-    // TODO: Add KPIs to a memorandum (PIC, Admin)
 
     [HttpPut]
     public ActionResult<object> UpdateMemo([FromBody] MOUAddModel entity)
@@ -99,6 +96,9 @@ public class MOUController : ControllerBase
         if (!ModelState.IsValid) {
             return BadRequest(ModelState);
         }
+
+        var updatedStatus = "02";
+        var msg = "has been updated";
 
         using (var transaction = _context.Database.BeginTransaction())
         {
@@ -125,6 +125,7 @@ public class MOUController : ControllerBase
                 memo.Path = entity.form1.Path;
                 memo.MS01_NoStaf = entity.form1.MS01_NoStaf;
                 memo.Nilai = entity.form1.Nilai;
+                memo.Status = updatedStatus;
 
                 // update a memo's members
                 _context.MOU03_Ahli.RemoveRange(memo.MOU03_Ahli);
@@ -156,6 +157,23 @@ public class MOUController : ControllerBase
                     });
                 }
 
+                var mouStatus = new MOU02_Status
+                {
+                    NoMemo = entity.NoMemo,
+                    Status = updatedStatus,
+                    Tarikh = DateTime.Now,
+                };
+                _context.MOU02_Status.Add(mouStatus);
+
+                var history = new MOU06_History
+                {
+                    NoMemo = entity.NoMemo,
+                    Description = $"Memorandum {msg}",
+                    Created_At = DateTime.Now,
+                    NoStaf = staffId,
+                };
+                _context.MOU06_History.Add(history);
+
                 // Save changes to the database
                 _context.SaveChanges();
                 // Commit the transaction if all commands succeed
@@ -163,7 +181,7 @@ public class MOUController : ControllerBase
 
                 // TODO: Still sending emails to previous members even already been removed
                 // send emails to all viewers (pic, members, author) of this memo after all transaction is done
-                sendEmailsAfterUpdate("Memorandum Updated", entity.NoMemo, "has been updated");
+                sendEmailsAfterUpdate("Memorandum Updated", entity.NoMemo, msg);
             }
             catch (Exception ex)
             {
