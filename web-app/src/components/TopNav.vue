@@ -135,7 +135,7 @@ export default {
                 params.get("UsrLogin") ||
                 params.get("usrLogin") ||
                 params.get("ssusrid");
-            const callbackRoute = params.get("callback");
+            const callbackRoute = params.get("callback") || "";
 
             if (newSsusrid) {
                 setBearerToken(newSsusrid);
