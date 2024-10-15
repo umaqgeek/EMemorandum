@@ -100,35 +100,70 @@ public class MOUController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var memo = _context.MOU01_Memorandum.FirstOrDefault(m => m.NoMemo == entity.NoMemo);
-        if (memo == null) {
-            return NotFound($"Memorandum with number = {entity.NoMemo} not found");
-        }
-
-        memo.KodKategori = entity.form1.KodKategori;
-        memo.KodJenis = entity.form1.KodJenis;
-        memo.KodPTJ = entity.form1.KodPTJ;
-        memo.KodScope = entity.form1.KodScope;
-        memo.KodPTJSub = entity.form1.KodPTJSub;
-        memo.TarikhMula = entity.form1.TarikhMula;
-        memo.TarikhTamat = entity.form1.TarikhTamat;
-        memo.TajukProjek = entity.form1.TajukProjek;
-        memo.NamaDok = entity.form1.NamaDok;
-        memo.Path = entity.form1.Path;
-        memo.MS01_NoStaf = entity.form1.MS01_NoStaf;
-        memo.Nilai = entity.form1.Nilai;
-
         using (var transaction = _context.Database.BeginTransaction())
         {
             try
             {
+                var memo = _context.MOU01_Memorandum
+                    .Include(m => m.MOU03_Ahli)
+                    .Include(m => m.MOU04_KPI)
+                    .FirstOrDefault(m => m.NoMemo == entity.NoMemo);
+                if (memo == null) {
+                    return NotFound($"Memorandum with number = {entity.NoMemo} not found");
+                }
+
+                // update a memo
+                memo.KodKategori = entity.form1.KodKategori;
+                memo.KodJenis = entity.form1.KodJenis;
+                memo.KodPTJ = entity.form1.KodPTJ;
+                memo.KodScope = entity.form1.KodScope;
+                memo.KodPTJSub = entity.form1.KodPTJSub;
+                memo.TarikhMula = entity.form1.TarikhMula;
+                memo.TarikhTamat = entity.form1.TarikhTamat;
+                memo.TajukProjek = entity.form1.TajukProjek;
+                memo.NamaDok = entity.form1.NamaDok;
+                memo.Path = entity.form1.Path;
+                memo.MS01_NoStaf = entity.form1.MS01_NoStaf;
+                memo.Nilai = entity.form1.Nilai;
+
+                // update a memo's members
+                _context.MOU03_Ahli.RemoveRange(memo.MOU03_Ahli);
+                foreach (var member in entity.form2.Members) {
+                    _context.MOU03_Ahli.Add(new MOU03_Ahli
+                    {
+                        NoMemo = entity.NoMemo,
+                        NoStaf = member.NoStaf,
+                        Peranan = member.Peranan,
+                        TkhMula = entity.form1.TarikhMula,
+                        TkhTamat = entity.form1.TarikhTamat,
+                    });
+                }
+
+                // update a memo's KPIs
+                _context.MOU04_KPI.RemoveRange(memo.MOU04_KPI);
+                foreach (var kpi in entity.form3.KPIs)
+                {
+                    _context.MOU04_KPI.Add(new MOU04_KPI
+                    {
+                        NoMemo = entity.NoMemo,
+                        Amaun = kpi.Amaun,
+                        MOU04_Number = kpi.MOU04_Number,
+                        Penerangan = kpi.Penerangan,
+                        TarikhMula = kpi.TarikhMula,
+                        TarikhTamat = kpi.TarikhTamat,
+                        Komen = kpi.Komen,
+                        Nama = kpi.Nama,
+                    });
+                }
+
                 // Save changes to the database
                 _context.SaveChanges();
                 // Commit the transaction if all commands succeed
                 transaction.Commit();
 
+                // TODO: Still sending emails to previous members even already been removed
                 // send emails to all viewers (pic, members, author) of this memo after all transaction is done
-                sendEmailsAfterUpdate("Memorandum Updated", memo, "has been updated");
+                sendEmailsAfterUpdate("Memorandum Updated", entity.NoMemo, "has been updated");
             }
             catch (Exception ex)
             {
@@ -344,7 +379,7 @@ public class MOUController : ControllerBase
                 transaction.Commit();
 
                 // send emails to all viewers (pic, members, author) of this memo after all transaction is done
-                sendEmailsAfterUpdate("1 New Comment", memo, statusMsg);
+                sendEmailsAfterUpdate("1 New Comment", entity.NoMemo, statusMsg);
             }
             catch (Exception ex)
             {
@@ -402,7 +437,7 @@ public class MOUController : ControllerBase
                 transaction.Commit();
 
                 // send emails to all viewers (pic, members, author) of this memo after all transaction is done
-                sendEmailsAfterUpdate("1 New Comment", memo, "has been commented");
+                sendEmailsAfterUpdate("1 New Comment", entity.NoMemo, "has been commented");
             }
             catch (Exception ex)
             {
@@ -635,9 +670,11 @@ public class MOUController : ControllerBase
         return query;
     }
 
-    private void sendEmailsAfterUpdate(string subject, MOU01_Memorandum memo, string statusMsg)
+    private void sendEmailsAfterUpdate(string subject, string noMemo, string statusMsg)
     {
         var staffId = GetStaffID();
+
+        var memo = _context.MOU01_Memorandum.FirstOrDefault(m => m.NoMemo == noMemo);
 
         List<string> noStafList = new List<string>();
         if (staffId != memo.MS01_NoStaf) {
@@ -671,6 +708,41 @@ public class MOUController : ControllerBase
                 Body = body,
             };
             _emailQueueService.QueueEmailJob(emailJob);
+        }
+    }
+
+    private void SyncMembers(MOU01_Memorandum existingMOU, ICollection<MOU03_Ahli> updatedMembers)
+    {
+        // Convert the current members into a dictionary for easy lookup
+        var existingMembers = existingMOU.MOU03_Ahli.ToDictionary(m => m.NoMemo);
+
+        // Step 1: Update or Add new members
+        foreach (var updatedMember in updatedMembers)
+        {
+            if (existingMembers.TryGetValue(updatedMember.NoStaf, out var existingMember))
+            {
+                existingMember.NoStaf = updatedMember.NoStaf;
+                existingMember.Peranan = updatedMember.Peranan;
+            }
+            else
+            {
+                existingMOU.MOU03_Ahli.Add(new MOU03_Ahli
+                {
+                    NoMemo = existingMOU.NoMemo,
+                    NoStaf = updatedMember.NoStaf,
+                    Peranan = updatedMember.Peranan,
+                    TkhMula = existingMOU.TarikhMula,
+                    TkhTamat = existingMOU.TarikhTamat,
+                });
+            }
+        }
+
+        // Step 2: Remove members that are not in the updated set
+        var updatedMemberIds = updatedMembers.Select(m => m.NoStaf).ToHashSet();
+        var membersToRemove = existingMOU.MOU03_Ahli.Where(m => !updatedMemberIds.Contains(m.NoStaf)).ToList();
+        foreach (var member in membersToRemove)
+        {
+            _context.MOU03_Ahli.Remove(member);
         }
     }
 }
