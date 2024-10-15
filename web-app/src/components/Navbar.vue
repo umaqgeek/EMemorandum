@@ -115,6 +115,21 @@
                         <li
                             :class="[
                                 'nk-menu-item',
+                                { active: activeLabel === 'report' },
+                            ]"
+                        >
+                            <a
+                                :href="`${publicPath}report`"
+                                class="nk-menu-link"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-layers"></em
+                                ></span>
+                                <span class="nk-menu-text">Reports</span>
+                            </a>
+                        </li>
+                        <!-- <li
+                            :class="[
+                                'nk-menu-item',
                                 { active: activeLabel === 'code-list' },
                             ]"
                             v-if="roles.find((r) => r.role === 'Admin')"
@@ -127,7 +142,7 @@
                                 ></span>
                                 <span class="nk-menu-text">Manage Code</span>
                             </a>
-                        </li>
+                        </li> -->
                         <!-- <li
                             :class="[
                                 'nk-menu-item',

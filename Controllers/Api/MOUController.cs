@@ -87,6 +87,11 @@ public class MOUController : ControllerBase
     }
 
     // TODO: Delete memorandum (PIC, Admin)
+    // TODO: Report memo progress
+    // TODO: Report memo per category
+    // TODO: Report memo per scope
+    // TODO: Report memo per type
+    // TODO: Report memo dateline
 
     [HttpPut]
     public ActionResult<object> UpdateMemo([FromBody] MOUAddModel entity)

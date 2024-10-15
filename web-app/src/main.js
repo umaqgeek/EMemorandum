@@ -6,6 +6,7 @@ import {
     faGear,
     faFile,
     faCheckToSlot,
+    faPieChart,
 } from "@fortawesome/free-solid-svg-icons";
 import VueToast from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
@@ -20,6 +21,7 @@ library.add(faUsers);
 library.add(faGear);
 library.add(faFile);
 library.add(faCheckToSlot);
+library.add(faPieChart);
 
 createApp(App)
     .use(store)

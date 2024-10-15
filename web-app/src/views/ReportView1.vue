@@ -1,20 +1,18 @@
 <template>
+    <!-- Root -->
     <div class="nk-app-root">
+        <!-- main  -->
         <div class="nk-main">
-            <NavbarComponent
-                :staffprofile="dataStaffProfile"
-                :activeLabel="`dashboard`"
-            />
+            <NavbarComponent />
+            <!-- .nki-sidebar -->
+            <!-- sidebar @e -->
+            <!-- wrap -->
             <div class="nk-wrap">
-                <TopNavComponent
-                    :staffprofile="dataStaffProfile"
-                    :errorStaffProfile="errorStaffProfile"
-                />
-                <LoadingComponent :loading="loading" />
-                <div class="nk-content" v-if="errorStaffProfile">
-                    <InfoNotLoggedInComponent />
-                </div>
-                <div class="nk-content" v-if="!errorStaffProfile">
+                <!-- include Header  -->
+                <TopNavComponent />
+                <!-- header -->
+                <!-- content -->
+                <div class="nk-content">
                     <div class="container-fluid">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
@@ -218,11 +216,11 @@
                                                 <div class="card-title-group">
                                                     <div class="card-title">
                                                         <h5 class="title">
-                                                            Report &amp; Data
-                                                            Summarization
+                                                            Recent Activity
                                                         </h5>
                                                     </div>
                                                 </div>
+                                                <!-- .card-title-group -->
                                                 <div
                                                     class="nk-timeline nk-timeline-center mt-4"
                                                 >
@@ -453,6 +451,7 @@
                                                         </ul>
                                                     </div>
                                                 </div>
+                                                <!-- .nk-timeline -->
                                             </div>
                                             <!-- .card-body -->
                                         </div>
@@ -564,11 +563,11 @@
                                                                     class="icon icon-lg ni ni-note-add"
                                                                 ></em>
                                                             </span>
-                                                            <a
-                                                                :href="`${publicPath}memo-add`"
+                                                            <router-link
+                                                                to="/memo-add"
                                                                 class="h6"
                                                                 >Create
-                                                                Memorandum</a
+                                                                Memorandum</router-link
                                                             >
                                                         </div>
                                                     </li>
@@ -586,11 +585,11 @@
                                                                 ></em>
                                                             </span>
 
-                                                            <a
-                                                                :href="`${publicPath}memo-list`"
+                                                            <router-link
+                                                                to="/approval-list"
                                                                 class="h6"
                                                                 >Reviews
-                                                                Memorandum</a
+                                                                Memorandum</router-link
                                                             >
                                                         </div>
                                                     </li>
@@ -607,10 +606,33 @@
                                                                     class="icon icon-lg ni ni-users"
                                                                 ></em>
                                                             </span>
-                                                            <a
-                                                                :href="`${publicPath}user-list`"
+                                                            <router-link
+                                                                to="/user-list"
                                                                 class="h6"
-                                                                >Manage User</a
+                                                                >Manage
+                                                                User</router-link
+                                                            >
+                                                        </div>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item py-3 d-flex justify-content-between align-items-center"
+                                                    >
+                                                        <div
+                                                            class="d-flex align-items-center"
+                                                        >
+                                                            <span
+                                                                class="nk-menu-icon"
+                                                            >
+                                                                <em
+                                                                    class="icon icon-lg ni ni-layers"
+                                                                ></em>
+                                                            </span>
+
+                                                            <router-link
+                                                                to="/code-list"
+                                                                class="h6"
+                                                                >Manage
+                                                                Code</router-link
                                                             >
                                                         </div>
                                                     </li>
@@ -619,15 +641,21 @@
                                         </div>
                                         <!-- .card -->
                                     </div>
+                                    <!-- .col -->
                                 </div>
+                                <!-- .row -->
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- .nk-content -->
                 <FooterComponent />
             </div>
+            <!-- .nk-wrap -->
         </div>
+        <!-- .nk-main -->
     </div>
+    <!-- .nk-app-root -->
 </template>
 
 <!-- JavaScript -->
@@ -635,45 +663,13 @@
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
-import LoadingComponent from "@/components/Loading.vue";
-import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import { useStaffProfile } from "@/hooks/useAPI";
 
 export default {
-    name: "ReportView",
-    data() {
-        return {
-            publicPath: process.env.VUE_APP_PUBLIC_PATH,
-        };
-    },
+    name: "DashboardView",
     components: {
-        LoadingComponent,
         NavbarComponent,
         TopNavComponent,
         FooterComponent,
-        InfoNotLoggedInComponent,
     },
-    setup() {
-        const {
-            data: dataStaffProfile,
-            error: errorStaffProfile,
-            loading: loadingStaffProfile,
-            refetch,
-        } = useStaffProfile();
-        return {
-            dataStaffProfile,
-            errorStaffProfile,
-            loading: loadingStaffProfile,
-            refetch,
-        };
-    },
-    computed: {
-        roles() {
-            return this.dataStaffProfile?.roles?.length > 0
-                ? this.dataStaffProfile?.roles
-                : [];
-        },
-    },
-    methods: {},
 };
 </script>

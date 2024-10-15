@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import DashboardView from "@/views/DashboardView.vue";
+import ReportView from "@/views/ReportView.vue";
 import MemoListView from "@/views/MemoListView.vue";
 import MemoAddView from "@/views/MemoAddView.vue";
 import MemoAddMemberView from "@/views/MemoAddMemberView.vue";
@@ -49,6 +50,10 @@ const routes = [
     {
         path: "/memo-detail",
         component: MemoDetailsView,
+    },
+    {
+        path: "/report",
+        component: ReportView,
     },
     {
         path: "/:pathMatch(.*)*",
