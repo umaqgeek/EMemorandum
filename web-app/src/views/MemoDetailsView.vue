@@ -224,14 +224,15 @@
                                                                             class="title fw-medium w-100 d-inline-block"
                                                                             >PIC:</span
                                                                         >
-                                                                        <span
-                                                                            class="text"
+                                                                        <a
+                                                                            :href="`${publicPath}user-view?s=${dataTheMOU?.noStafPIC}`"
+                                                                            class="btn-link"
                                                                             >{{
                                                                                 getNama(
                                                                                     dataTheMOU?.picGelaran,
                                                                                     dataTheMOU?.pic
                                                                                 )
-                                                                            }}</span
+                                                                            }}</a
                                                                         >
                                                                     </li>
                                                                     <li
@@ -436,15 +437,16 @@
                                                                                         >
                                                                                     </p>
                                                                                 </div>
-                                                                                <span
+                                                                                <a
                                                                                     class="smaller"
+                                                                                    :href="`${publicPath}user-view?s=${hist.noStaf}`"
                                                                                     >by
                                                                                     {{
                                                                                         getNama(
                                                                                             hist.gelaran,
                                                                                             hist.nama
                                                                                         )
-                                                                                    }}</span
+                                                                                    }}</a
                                                                                 >
                                                                             </div>
                                                                         </div>
@@ -786,11 +788,12 @@ export default {
                                     ) {
                                         isMember.value = true;
                                     }
+                                    let memberName = getNama(
+                                        member.gelaran,
+                                        member.nama
+                                    );
                                     return {
-                                        Name: getNama(
-                                            member.gelaran,
-                                            member.nama
-                                        ),
+                                        Name: `<a href="${publicPath.value}user-view?s=${member.noStaf}">${memberName}</a>`,
                                         Roles: getRolesStr(member.roles),
                                         Status: getStatus(member.roles),
                                     };
