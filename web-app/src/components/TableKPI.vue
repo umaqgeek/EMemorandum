@@ -139,8 +139,10 @@ export default {
             });
             // this.saveKPIs();
         },
+        // TODO: clear row throw mutable error for kpis
         clearKPI(kpiIndex) {
-            const kpis = this.kpis.map((k, kIndex) => {
+            // eslint-disable-next-line
+            this.kpis = [...this.kpis, newKpi].map((k, kIndex) => {
                 if (kpiIndex === kIndex) {
                     k.Nama = "";
                     k.Penerangan = "";
@@ -151,14 +153,14 @@ export default {
                 }
                 return k;
             });
-            // eslint-disable-next-line
-            this.kpis = [...kpis];
             // this.saveKPIs();
         },
+        // TODO: clear row throw mutable error for kpis
         removeKPI(kpiIndex) {
-            const kpis = this.kpis.filter((_, kIndex) => kIndex !== kpiIndex);
             // eslint-disable-next-line
-            this.kpis = [...kpis];
+            this.kpis = [...this.kpis, newKpi].filter(
+                (_, kIndex) => kIndex !== kpiIndex
+            );
             // this.saveKPIs();
         },
     },
