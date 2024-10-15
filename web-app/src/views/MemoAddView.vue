@@ -730,7 +730,9 @@
                                                         }"
                                                     >
                                                         <TableKPIComponent
-                                                            @saveKPIs="saveKPIs"
+                                                            :kpis="
+                                                                form.form3.kpis
+                                                            "
                                                         />
                                                     </div>
 
@@ -1004,9 +1006,9 @@ export default {
             } (${getBearerToken()} | ${this.dataStaffProfile?.email})`;
             this.form.form1.MS01_NoStaf = getBearerToken();
         },
-        saveKPIs(kpis) {
-            this.form.form3.kpis = kpis;
-        },
+        // saveKPIs(kpis) {
+        //     this.form.form3.kpis = kpis;
+        // },
         onMenu(mNo) {
             this.menuNo = mNo;
         },

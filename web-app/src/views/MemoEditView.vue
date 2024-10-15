@@ -1,17 +1,27 @@
 <template>
-    <!-- Root @s -->
     <div class="nk-app-root">
-        <!-- main @s -->
         <div class="nk-main">
-            <NavbarComponent />
-            <!-- .nki-sidebar -->
-            <!-- sidebar @e -->
-            <!-- wrap @s -->
+            <NavbarComponent
+                :staffprofile="dataStaffProfile"
+                :activeLabel="`memo-list`"
+            />
             <div class="nk-wrap">
-                <TopNavComponent />
-                <!-- header -->
-                <!-- content @s -->
-                <div class="nk-content">
+                <TopNavComponent
+                    :staffprofile="dataStaffProfile"
+                    :errorStaffProfile="errorStaffProfile"
+                />
+                <LoadingComponent
+                    :loading="
+                        loadingStaffProfile ||
+                        loadingTheMOU ||
+                        loadingMouSelectData ||
+                        loadingAddMOU
+                    "
+                />
+                <div class="nk-content" v-if="errorStaffProfile">
+                    <InfoNotLoggedInComponent />
+                </div>
+                <div class="nk-content" v-if="!errorStaffProfile">
                     <div class="container">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
@@ -24,48 +34,6 @@
                                                 <h2 class="nk-block-title">
                                                     Edit Memorandum
                                                 </h2>
-                                            </div>
-                                            <!-- .nk-block-head-content -->
-                                            <div class="nk-block-head-content">
-                                                <ul
-                                                    class="d-flex gap g-2 d-none"
-                                                >
-                                                    <li
-                                                        class="d-none d-md-block"
-                                                    >
-                                                        <a
-                                                            href="./html/user-manage/user-profile.html"
-                                                            class="btn btn-soft btn-primary"
-                                                            ><em
-                                                                class="icon ni ni-user"
-                                                            ></em
-                                                            ><span
-                                                                >Members</span
-                                                            ></a
-                                                        >
-                                                    </li>
-                                                    <li
-                                                        class="d-none d-md-block"
-                                                    >
-                                                        <a
-                                                            href="./html/user-manage/user-profile.html"
-                                                            class="btn btn-soft btn-primary"
-                                                            ><em
-                                                                class="icon ni ni-user"
-                                                            ></em
-                                                            ><span>KPI</span></a
-                                                        >
-                                                    </li>
-                                                    <li class="d-md-none">
-                                                        <a
-                                                            href="./html/user-manage/user-profile.html"
-                                                            class="btn btn-soft btn-primary btn-icon"
-                                                            ><em
-                                                                class="icon ni ni-user"
-                                                            ></em
-                                                        ></a>
-                                                    </li>
-                                                </ul>
                                             </div>
                                             <!-- .nk-block-head-content -->
                                         </div>
@@ -92,9 +60,18 @@
                                                     class="nk-todo-aside-header"
                                                 ></div>
                                                 <ul class="nk-todo-menu pb-3">
-                                                    <li class="active">
-                                                        <router-link
-                                                            to="/memo-edit"
+                                                    <li
+                                                        :class="[
+                                                            {
+                                                                active:
+                                                                    menuNo ===
+                                                                    1,
+                                                            },
+                                                        ]"
+                                                        @click="() => onMenu(1)"
+                                                    >
+                                                        <a
+                                                            href="#"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
@@ -104,36 +81,62 @@
                                                                 >Project
                                                                 Details</span
                                                             >
-                                                        </router-link>
+                                                        </a>
                                                     </li>
-                                                    <li>
-                                                        <router-link
-                                                            to="/memo-edit-member"
+                                                    <li
+                                                        :class="[
+                                                            {
+                                                                active:
+                                                                    menuNo ===
+                                                                    2,
+                                                            },
+                                                        ]"
+                                                        @click="() => onMenu(2)"
+                                                    >
+                                                        <a
+                                                            href="#"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
                                                                 class="icon ni ni-users"
                                                             ></em>
                                                             <span>Members</span>
-                                                        </router-link>
+                                                        </a>
                                                     </li>
-                                                    <li>
-                                                        <router-link
-                                                            to="/memo-edit-kpi"
+                                                    <li
+                                                        :class="[
+                                                            {
+                                                                active:
+                                                                    menuNo ===
+                                                                    3,
+                                                            },
+                                                        ]"
+                                                        @click="() => onMenu(3)"
+                                                    >
+                                                        <a
+                                                            href="#"
                                                             class="nk-todo-menu-item"
                                                         >
                                                             <em
                                                                 class="icon ni ni-list"
                                                             ></em>
                                                             <span>KPI</span>
-                                                        </router-link>
+                                                        </a>
                                                     </li>
                                                 </ul>
                                             </div>
                                             <!-- .nk-todo-aside -->
                                             <div class="nk-todo-body card-body">
                                                 <form action="#">
-                                                    <div class="row g-3">
+                                                    <div
+                                                        class="row g-3"
+                                                        :style="{
+                                                            display:
+                                                                menuNo === 1
+                                                                    ? 'flex'
+                                                                    : 'none',
+                                                        }"
+                                                    >
                                                         <div class="col-lg-12">
                                                             <div
                                                                 class="form-group"
@@ -149,11 +152,13 @@
                                                                 >
                                                                     <textarea
                                                                         class="form-control"
-                                                                        id="aboutme"
-                                                                        rows="3"
-                                                                    >
-Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</textarea
-                                                                    >
+                                                                        placeholder="Eg.: Memorandum Persefahaman X dan K"
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .TajukProjek
+                                                                        "
+                                                                    ></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -162,7 +167,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="city"
+                                                                    for="KodKategori"
                                                                     class="form-label"
                                                                     >Category of
                                                                     Memorandum</label
@@ -172,40 +177,33 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 >
                                                                     <select
                                                                         class="form-select"
-                                                                        id="country"
+                                                                        id="KodKategori"
                                                                         data-search="true"
                                                                         data-sort="false"
+                                                                        v-model="
+                                                                            KodKategori
+                                                                        "
                                                                     >
                                                                         <option
                                                                             value=""
                                                                         >
+                                                                            -
                                                                             Select
-                                                                            Options
+                                                                            Category
+                                                                            -
                                                                         </option>
                                                                         <option
-                                                                            selected
-                                                                            value="1"
+                                                                            v-for="cat in categories"
+                                                                            v-bind:key="
+                                                                                cat.kod
+                                                                            "
+                                                                            :value="
+                                                                                cat.kod
+                                                                            "
                                                                         >
-                                                                            Energy
-                                                                            Efficiency
-                                                                            and
-                                                                            IoT
-                                                                            Technology
-                                                                        </option>
-                                                                        <option
-                                                                            value="2"
-                                                                        >
-                                                                            Canada
-                                                                        </option>
-                                                                        <option
-                                                                            value="3"
-                                                                        >
-                                                                            Usa
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Aus
+                                                                            {{
+                                                                                cat.butiran
+                                                                            }}
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -216,7 +214,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="country"
+                                                                    for="KodJenis"
                                                                     class="form-label"
                                                                     >Type of
                                                                     Memorandum</label
@@ -226,38 +224,33 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 >
                                                                     <select
                                                                         class="form-select"
-                                                                        id="country"
+                                                                        id="KodJenis"
                                                                         data-search="true"
                                                                         data-sort="false"
+                                                                        v-model="
+                                                                            KodJenis
+                                                                        "
                                                                     >
                                                                         <option
                                                                             value=""
                                                                         >
+                                                                            -
                                                                             Select
-                                                                            Options
+                                                                            Type
+                                                                            -
                                                                         </option>
                                                                         <option
-                                                                            selected
-                                                                            value="1"
+                                                                            v-for="t in types"
+                                                                            v-bind:key="
+                                                                                t.kod
+                                                                            "
+                                                                            :value="
+                                                                                t.kod
+                                                                            "
                                                                         >
-                                                                            Development
-                                                                            and
-                                                                            Implementation
-                                                                        </option>
-                                                                        <option
-                                                                            value="2"
-                                                                        >
-                                                                            Canada
-                                                                        </option>
-                                                                        <option
-                                                                            value="3"
-                                                                        >
-                                                                            Usa
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Aus
+                                                                            {{
+                                                                                t.butiran
+                                                                            }}
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -268,7 +261,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="postalcode"
+                                                                    for="KodScope"
                                                                     class="form-label"
                                                                     >Memorandum
                                                                     Scope</label
@@ -278,42 +271,35 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 >
                                                                     <select
                                                                         class="form-select"
-                                                                        id="country"
+                                                                        id="KodScope"
                                                                         data-search="true"
                                                                         data-sort="false"
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .KodScope
+                                                                        "
                                                                     >
                                                                         <option
                                                                             value=""
                                                                         >
+                                                                            -
                                                                             Select
-                                                                            Options
+                                                                            Scope
+                                                                            -
                                                                         </option>
                                                                         <option
-                                                                            selected
-                                                                            value="1"
+                                                                            v-for="s in scopes"
+                                                                            v-bind:key="
+                                                                                s.kod
+                                                                            "
+                                                                            :value="
+                                                                                s.kod
+                                                                            "
                                                                         >
-                                                                            Install
-                                                                            IoT
-                                                                            energy
-                                                                            meters
-                                                                            in
-                                                                            UTeM
-                                                                            buildings
-                                                                        </option>
-                                                                        <option
-                                                                            value="2"
-                                                                        >
-                                                                            Canada
-                                                                        </option>
-                                                                        <option
-                                                                            value="3"
-                                                                        >
-                                                                            Usa
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Aus
+                                                                            {{
+                                                                                s.butiran
+                                                                            }}
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -324,7 +310,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="datePicker1"
+                                                                    for="TarikhMula"
                                                                     class="form-label"
                                                                     >Start
                                                                     Date</label
@@ -333,15 +319,15 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
-                                                                        placeholder="dd/mm/yyyy"
-                                                                        type="text"
-                                                                        class="form-control js-datepicker"
-                                                                        data-title="Text"
-                                                                        data-today-btn="true"
-                                                                        data-clear-btn="true"
-                                                                        autocomplete="off"
-                                                                        id="datePicker1"
-                                                                        value="12/03/2024"
+                                                                        type="date"
+                                                                        class="form-control"
+                                                                        id="TarikhMula"
+                                                                        placeholder="First name"
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .TarikhMula
+                                                                        "
                                                                     />
                                                                 </div>
                                                             </div>
@@ -351,7 +337,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="datePicker1"
+                                                                    for="TarikhTamat"
                                                                     class="form-label"
                                                                     >End
                                                                     Date</label
@@ -360,15 +346,15 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
-                                                                        placeholder="dd/mm/yyyy"
-                                                                        type="text"
-                                                                        class="form-control js-datepicker"
-                                                                        data-title="Text"
-                                                                        data-today-btn="true"
-                                                                        data-clear-btn="true"
-                                                                        autocomplete="off"
-                                                                        id="datePicker1"
-                                                                        value="23/04/2024"
+                                                                        type="date"
+                                                                        class="form-control"
+                                                                        id="TarikhTamat"
+                                                                        placeholder="Last name"
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .TarikhTamat
+                                                                        "
                                                                     />
                                                                 </div>
                                                             </div>
@@ -378,7 +364,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="email"
+                                                                    for="KodPTJ"
                                                                     class="form-label"
                                                                     >PTJ</label
                                                                 >
@@ -387,35 +373,33 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 >
                                                                     <select
                                                                         class="form-select"
-                                                                        id="country"
+                                                                        id="KodPTJ"
                                                                         data-search="true"
                                                                         data-sort="false"
+                                                                        v-model="
+                                                                            KodPTJ
+                                                                        "
                                                                     >
                                                                         <option
                                                                             value=""
                                                                         >
+                                                                            -
                                                                             Select
-                                                                            Options
+                                                                            PTJ
+                                                                            -
                                                                         </option>
                                                                         <option
-                                                                            value="1"
+                                                                            v-for="p in PTJs"
+                                                                            v-bind:key="
+                                                                                p.id
+                                                                            "
+                                                                            :value="
+                                                                                p.kodPTJ
+                                                                            "
                                                                         >
-                                                                            Germany
-                                                                        </option>
-                                                                        <option
-                                                                            value="2"
-                                                                        >
-                                                                            Canada
-                                                                        </option>
-                                                                        <option
-                                                                            value="3"
-                                                                        >
-                                                                            Usa
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Aus
+                                                                            {{
+                                                                                p.nama
+                                                                            }}
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -426,7 +410,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="company"
+                                                                    for="KodPTJSub"
                                                                     class="form-label"
                                                                     >PBU</label
                                                                 >
@@ -435,35 +419,35 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 >
                                                                     <select
                                                                         class="form-select"
-                                                                        id="country"
+                                                                        id="KodPTJSub"
                                                                         data-search="true"
                                                                         data-sort="false"
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .KodPTJSub
+                                                                        "
                                                                     >
                                                                         <option
                                                                             value=""
                                                                         >
+                                                                            -
                                                                             Select
-                                                                            Options
+                                                                            PBU
+                                                                            -
                                                                         </option>
                                                                         <option
-                                                                            value="1"
+                                                                            v-for="p in PBUs"
+                                                                            v-bind:key="
+                                                                                p.id
+                                                                            "
+                                                                            :value="
+                                                                                p.kodSubPTJ
+                                                                            "
                                                                         >
-                                                                            Germany
-                                                                        </option>
-                                                                        <option
-                                                                            value="2"
-                                                                        >
-                                                                            Canada
-                                                                        </option>
-                                                                        <option
-                                                                            value="3"
-                                                                        >
-                                                                            Usa
-                                                                        </option>
-                                                                        <option
-                                                                            value="4"
-                                                                        >
-                                                                            Aus
+                                                                            {{
+                                                                                p.nama
+                                                                            }}
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -474,7 +458,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="address"
+                                                                    for="NoMemo"
                                                                     class="form-label"
                                                                     >Memorandum
                                                                     Registration
@@ -486,9 +470,12 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                     <input
                                                                         type="text"
                                                                         class="form-control"
-                                                                        id="address"
-                                                                        placeholder=""
-                                                                        value="UTeM-EN-1024"
+                                                                        id="NoMemo"
+                                                                        placeholder="Eg.: MoA(P).1.2.2024.101010.001"
+                                                                        v-model="
+                                                                            NoMemo
+                                                                        "
+                                                                        readonly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -498,7 +485,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                 class="form-group"
                                                             >
                                                                 <label
-                                                                    for="address"
+                                                                    for="MS01_NoStaf"
                                                                     class="form-label"
                                                                     >Responsible
                                                                     PIC</label
@@ -507,28 +494,49 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                     class="input-group"
                                                                 >
                                                                     <input
+                                                                        type="hidden"
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .MS01_NoStaf
+                                                                        "
+                                                                    />
+                                                                    <input
                                                                         type="text"
                                                                         class="form-control"
+                                                                        placeholder="Search PIC in here ..."
                                                                         aria-label="Recipient's username"
                                                                         aria-describedby="button-addon2"
-                                                                        value="Dr. Ahmad Zulkifli"
+                                                                        v-model="
+                                                                            staffPIC
+                                                                        "
+                                                                        readonly
                                                                     />
                                                                     <button
                                                                         class="btn btn-outline-primary"
                                                                         type="button"
                                                                         id="button-addon2"
                                                                         data-bs-toggle="modal"
-                                                                        data-bs-target="#exampleModal"
+                                                                        data-bs-target="#searchPICsModal"
                                                                     >
                                                                         Search
                                                                         Members
                                                                     </button>
                                                                 </div>
                                                                 <div
+                                                                    class="btn btn-link"
+                                                                    v-on:click="
+                                                                        assignYourselfPIC
+                                                                    "
+                                                                >
+                                                                    Assign
+                                                                    yourself
+                                                                </div>
+                                                                <div
                                                                     class="modal fade"
-                                                                    id="exampleModal"
+                                                                    id="searchPICsModal"
                                                                     tabindex="-1"
-                                                                    aria-labelledby="exampleModalLabel"
+                                                                    aria-labelledby="searchPICsModalLabel"
                                                                     aria-hidden="true"
                                                                 >
                                                                     <div
@@ -542,7 +550,7 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                             >
                                                                                 <h5
                                                                                     class="modal-title"
-                                                                                    id="exampleModalLabel"
+                                                                                    id="searchPICsModalLabel"
                                                                                 >
                                                                                     Responsible
                                                                                     PIC
@@ -557,24 +565,26 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                                             <div
                                                                                 class="modal-body"
                                                                             >
-                                                                                <TableUserComponent />
+                                                                                <TableUserComponent
+                                                                                    :users="
+                                                                                        allStaffSimple
+                                                                                    "
+                                                                                    tableType="memoPICs"
+                                                                                    @handleChoosePIC="
+                                                                                        handleChoosePIC
+                                                                                    "
+                                                                                />
                                                                             </div>
                                                                             <div
                                                                                 class="modal-footer"
                                                                             >
                                                                                 <button
+                                                                                    id="closeBtnPICs"
                                                                                     type="button"
                                                                                     class="btn btn-sm btn-secondary"
                                                                                     data-bs-dismiss="modal"
                                                                                 >
                                                                                     Close
-                                                                                </button>
-                                                                                <button
-                                                                                    type="button"
-                                                                                    class="btn btn-sm btn-primary"
-                                                                                >
-                                                                                    Save
-                                                                                    changes
                                                                                 </button>
                                                                             </div>
                                                                         </div>
@@ -583,70 +593,607 @@ Development of an IoT-Based Smart Energy Monitoring System for UTeM Campus</text
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-12">
-                                                            <router-link
-                                                                to="/memo-list"
-                                                                class="btn btn-secondary"
+                                                            <div
+                                                                class="form-group"
                                                             >
-                                                                Save
-                                                            </router-link>
-                                                            &nbsp;
-                                                            <router-link
-                                                                to="/memo-edit-member"
+                                                                <label
+                                                                    for="NamaDok"
+                                                                    class="form-label"
+                                                                    >Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <div
+                                                                        class="btn btn-link"
+                                                                        v-if="
+                                                                            filePath
+                                                                        "
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${filePath}`"
+                                                                            target="_blank"
+                                                                            >{{
+                                                                                filePath
+                                                                            }}</a
+                                                                        >
+                                                                    </div>
+                                                                    <input
+                                                                        class="form-control"
+                                                                        type="file"
+                                                                        @change="
+                                                                            handleFileUpload
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div
+                                                        class="row g-3"
+                                                        :style="{
+                                                            display:
+                                                                menuNo === 2
+                                                                    ? 'flex'
+                                                                    : 'none',
+                                                        }"
+                                                    >
+                                                        <div>
+                                                            <button
+                                                                class="btn btn-outline-primary"
+                                                                type="button"
+                                                                id="button-addon2"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#searchMembersModal"
+                                                            >
+                                                                Add Members
+                                                            </button>
+                                                        </div>
+                                                        <TableUserComponent
+                                                            :users="members"
+                                                            tableType="memoMOUMembers"
+                                                            @removeMembers="
+                                                                removeMembers
+                                                            "
+                                                            :isNotDatatable="
+                                                                true
+                                                            "
+                                                        />
+                                                        <div
+                                                            class="modal fade"
+                                                            id="searchMembersModal"
+                                                            tabindex="-1"
+                                                            aria-labelledby="searchMembersModalLabel"
+                                                            aria-hidden="true"
+                                                        >
+                                                            <div
+                                                                class="modal-dialog modal-lg"
+                                                            >
+                                                                <div
+                                                                    class="modal-content"
+                                                                >
+                                                                    <div
+                                                                        class="modal-header"
+                                                                    >
+                                                                        <h5
+                                                                            class="modal-title"
+                                                                            id="searchMembersModalLabel"
+                                                                        >
+                                                                            Members
+                                                                        </h5>
+                                                                        <button
+                                                                            type="button"
+                                                                            class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"
+                                                                        ></button>
+                                                                    </div>
+                                                                    <div
+                                                                        class="modal-body"
+                                                                    >
+                                                                        <TableUserComponent
+                                                                            :users="
+                                                                                allStaffSimple
+                                                                            "
+                                                                            tableType="memoMembers"
+                                                                            @addMembers="
+                                                                                addMembers
+                                                                            "
+                                                                        />
+                                                                    </div>
+                                                                    <div
+                                                                        class="modal-footer"
+                                                                    >
+                                                                        <button
+                                                                            id="closeBtnMembers"
+                                                                            type="button"
+                                                                            class="btn btn-sm btn-secondary"
+                                                                            data-bs-dismiss="modal"
+                                                                        >
+                                                                            Close
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div
+                                                        class="row g-3"
+                                                        :style="{
+                                                            display:
+                                                                menuNo === 3
+                                                                    ? 'flex'
+                                                                    : 'none',
+                                                        }"
+                                                    >
+                                                        <TableKPIComponent
+                                                            :kpis="
+                                                                form.form3.kpis
+                                                            "
+                                                        />
+                                                    </div>
+
+                                                    <div class="row mt-3 g-3">
+                                                        <div class="col-lg-12">
+                                                            <a
+                                                                v-if="
+                                                                    menuNo !== 1
+                                                                "
+                                                                href="#"
                                                                 class="btn btn-primary"
+                                                                @click="onBack"
+                                                            >
+                                                                Back
+                                                            </a>
+                                                            &nbsp;
+                                                            <a
+                                                                v-if="
+                                                                    menuNo !== 3
+                                                                "
+                                                                href="#"
+                                                                class="btn btn-primary"
+                                                                @click="onNext"
                                                             >
                                                                 Next
-                                                            </router-link>
+                                                            </a>
+                                                            &nbsp;
+                                                            <a
+                                                                v-if="
+                                                                    menuNo === 3
+                                                                "
+                                                                href="#"
+                                                                class="btn btn-secondary"
+                                                                disabled="true"
+                                                                @click="onSave"
+                                                            >
+                                                                Save
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
-                                            <!-- .nk-todo-body -->
                                         </div>
-                                        <!-- .nk-todo -->
                                     </div>
-                                    <!-- .card -->
                                 </div>
-                                <!-- .nk-block -->
-                                <!-- .nk-block -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- .nk-content -->
-                <!-- include Footer -->
-                <div class="nk-footer">
-                    <div class="container-fluid">
-                        <div class="nk-footer-wrap">
-                            <div class="nk-footer-copyright">
-                                &copy; 2024 UTeM.
-                            </div>
-                            <div class="nk-footer-links">
-                                <ul class="nav nav-sm"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- .nk-footer -->
+                <FooterComponent />
             </div>
-            <!-- .nk-wrap -->
         </div>
-        <!-- .nk-main -->
+        <ValidateMeComponent />
     </div>
-    <!-- .nk-app-root -->
 </template>
 
 <!-- JavaScript -->
 <script>
+import { watch, ref } from "vue";
+
+import ValidateMeComponent from "@/components/ValidateMe.vue";
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
+import FooterComponent from "@/components/Footer.vue";
+import LoadingComponent from "@/components/Loading.vue";
+import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import TableUserComponent from "@/components/TableUser.vue";
+import TableKPIComponent from "@/components/TableKPI.vue";
+import { getBearerToken } from "@/utils/tokenManagement";
+import {
+    useStaffProfile,
+    useGetMOUSelectData,
+    useGetAllStaffSimple,
+    useHandleFileUpload,
+    useMouStoreMemo,
+    useGetOneMOU,
+} from "@/hooks/useAPI";
 
 export default {
     name: "MemoEditView",
+    data() {
+        return {
+            menuNo: 1,
+            loadingAddMOU: false,
+            addedMOUNoMemo: "",
+        };
+    },
     components: {
+        ValidateMeComponent,
         NavbarComponent,
         TopNavComponent,
+        FooterComponent,
+        LoadingComponent,
+        InfoNotLoggedInComponent,
         TableUserComponent,
+        TableKPIComponent,
+    },
+    setup() {
+        const publicPath = ref(process.env.VUE_APP_PUBLIC_PATH);
+
+        const {
+            data: dataStaffProfile,
+            error: errorStaffProfile,
+            loading: loadingStaffProfile,
+        } = useStaffProfile();
+
+        const {
+            data: dataMouSelectData,
+            error: errorMouSelectData,
+            loading: loadingMouSelectData,
+        } = useGetMOUSelectData();
+
+        const categories = ref([]);
+        const types = ref([]);
+        const scopes = ref([]);
+        const PTJs = ref([]);
+        const PBUs = ref([]);
+        watch(
+            () => dataMouSelectData.value,
+            (dataMouSelectDataUpdated) => {
+                categories.value = dataMouSelectDataUpdated?.kategoriMemo || [];
+                types.value = dataMouSelectDataUpdated?.jenisMemo || [];
+                scopes.value = dataMouSelectDataUpdated?.scopeMemo || [];
+                PTJs.value = dataMouSelectDataUpdated?.subPTJ || [];
+                PBUs.value = dataMouSelectDataUpdated?.subPTJ || [];
+            }
+        );
+
+        const KodKategori = ref("");
+        const KodJenis = ref("");
+        const KodPTJ = ref("");
+        const NoMemo = ref("");
+
+        const { data: dataAllStaffSimple } = useGetAllStaffSimple();
+        const allStaffSimple = ref([]);
+        watch(
+            () => dataAllStaffSimple.value,
+            (newDataAllStaffSimple) => {
+                allStaffSimple.value = newDataAllStaffSimple;
+            }
+        );
+
+        const filePath = ref("");
+        const handleFileUpload = async (event) => {
+            const file = event.target.files[0]; // Get the selected file
+            if (!file) return;
+
+            // Use FormData to send the file to the server
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const {
+                data: dataHandleUpload,
+                loading: loadingHandleUpload,
+                error: errorHandleUpload,
+            } = useHandleFileUpload(formData);
+            watch(
+                [dataHandleUpload, loadingHandleUpload, errorHandleUpload],
+                ([
+                    newDataHandleUpload,
+                    newLoadingHandleUpload,
+                    newErrorHandleUpload,
+                ]) => {
+                    if (newLoadingHandleUpload == false) {
+                        filePath.value =
+                            newDataHandleUpload?.filePath ??
+                            newErrorHandleUpload;
+                    }
+                }
+            );
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const noMemo = params.get("memo") || "";
+
+        const isAdmin = ref(false);
+        const isPUU = ref(false);
+        const isPTJ = ref(false);
+        const isPIC = ref(false);
+        const loadingTheMOU = ref(true);
+        const dataTheMOU = ref(null);
+        const staffPIC = ref("");
+        const members = ref([]);
+        const form = ref({
+            form1: {
+                TajukProjek: "",
+                KodScope: "",
+                TarikhMula: "",
+                TarikhTamat: "",
+                KodPTJSub: "",
+                NamaDok: "",
+                Path: "",
+                Nilai: "0",
+                MS01_NoStaf: "",
+            },
+            form2: {},
+            form3: {
+                kpis: [],
+            },
+        });
+
+        watch(
+            () => dataStaffProfile.value,
+            (newDataStaffProfile) => {
+                if (
+                    newDataStaffProfile &&
+                    newDataStaffProfile?.roles?.length > 0
+                ) {
+                    isAdmin.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "Admin"
+                    )
+                        ? true
+                        : false;
+                    isPUU.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "PUU"
+                    )
+                        ? true
+                        : false;
+                    isPTJ.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "PTJ"
+                    )
+                        ? true
+                        : false;
+
+                    const {
+                        data: dataMOU,
+                        loading: loadingMOU,
+                        error: errorMOU,
+                    } = useGetOneMOU(noMemo);
+
+                    watch(
+                        () => loadingMOU.value,
+                        (newLoadingMOU) => {
+                            loadingTheMOU.value = newLoadingMOU;
+                        }
+                    );
+                    watch(
+                        () => dataMOU.value,
+                        (newDataMOU) => {
+                            dataTheMOU.value = newDataMOU;
+                            NoMemo.value = newDataMOU?.noMemo;
+                            KodKategori.value = newDataMOU?.kodKategori;
+                            KodJenis.value = newDataMOU?.kodJenis;
+                            KodPTJ.value = newDataMOU?.kodPTJ;
+                            form.value.form1.KodScope = newDataMOU?.kodScope;
+                            form.value.form1.KodPTJSub = newDataMOU?.kodPTJSub;
+                            form.value.form1.TarikhMula =
+                                newDataMOU?.tarikhMulaDate2;
+                            form.value.form1.TarikhTamat =
+                                newDataMOU?.tarikhTamatDate2;
+                            form.value.form1.TajukProjek =
+                                newDataMOU?.tajukProjek;
+                            filePath.value = newDataMOU?.path;
+                            form.value.form1.MS01_NoStaf =
+                                newDataMOU?.noStafPIC;
+                            const gelaran = newDataMOU?.picGelaran
+                                ?.toLowerCase()
+                                ?.includes("tiada")
+                                ? ""
+                                : newDataMOU?.picGelaran;
+                            staffPIC.value = `${gelaran} ${newDataMOU?.pic} (${newDataMOU?.noStafPIC} | ${newDataMOU?.picEmail})`;
+                            members.value = [...newDataMOU?.members];
+                            form.value.form3.kpis = [...newDataMOU?.kpIs].map(
+                                (kpi) => {
+                                    return {
+                                        ...kpi,
+                                        Nama: kpi.nama,
+                                        Penerangan: kpi.penerangan,
+                                        Komen: kpi.komen,
+                                        Amaun: kpi.amaun,
+                                        TarikhMula: kpi.tarikhMulaDate2,
+                                        TarikhTamat: kpi.tarikhTamatDate2,
+                                    };
+                                }
+                            );
+                            isPIC.value = newDataMOU?.isPIC;
+                        }
+                    );
+                    watch(
+                        () => errorMOU.value,
+                        (newErrorMOU) => {
+                            if (newErrorMOU) {
+                                location.href = `${publicPath.value}memo-list`;
+                            }
+                        }
+                    );
+                }
+            },
+            { immediate: true } // Run the watcher immediately on component mount
+        );
+
+        return {
+            publicPath,
+            dataStaffProfile,
+            errorStaffProfile,
+            loadingStaffProfile,
+            dataMouSelectData,
+            errorMouSelectData,
+            loadingMouSelectData,
+            categories,
+            types,
+            scopes,
+            PTJs,
+            PBUs,
+            KodKategori,
+            KodJenis,
+            KodPTJ,
+            NoMemo,
+            allStaffSimple,
+            filePath,
+            handleFileUpload,
+            isAdmin,
+            isPUU,
+            isPTJ,
+            isPIC,
+            loadingTheMOU,
+            dataTheMOU,
+            staffPIC,
+            members,
+            form,
+        };
+    },
+    computed: {},
+    methods: {
+        handleChoosePIC(user) {
+            const gelaran = user?.gelaran?.toLowerCase()?.includes("tiada")
+                ? ""
+                : user?.gelaran;
+            this.staffPIC = `${gelaran} ${user?.nama} (${user?.noStaf} | ${user?.email})`;
+            this.form.form1.MS01_NoStaf = user?.noStaf;
+            document.getElementById("closeBtnPICs").click();
+        },
+        addMembers(user) {
+            const member = this.members.find((m) => m.noStaf === user.noStaf);
+            if (!member) {
+                this.members.push(user);
+                document.getElementById("closeBtnMembers").click();
+            } else {
+                this.$toast.open({
+                    message:
+                        "That staff has been added as part of the members.",
+                    type: "error",
+                    position: "top-right",
+                });
+            }
+        },
+        removeMembers(user) {
+            const members = this.members.filter(
+                (m) => m.noStaf !== user.noStaf
+            );
+            this.members = members;
+        },
+        assignYourselfPIC() {
+            const gelaran = this.dataStaffProfile?.gelaran
+                ?.toLowerCase()
+                ?.includes("tiada")
+                ? ""
+                : this.dataStaffProfile?.gelaran;
+            this.staffPIC = `${gelaran} ${
+                this.dataStaffProfile?.nama
+            } (${getBearerToken()} | ${this.dataStaffProfile?.email})`;
+            this.form.form1.MS01_NoStaf = getBearerToken();
+        },
+        // saveKPIs(kpis) {
+        //     this.form.form3.kpis = kpis;
+        // },
+        onMenu(mNo) {
+            this.menuNo = mNo;
+        },
+        onNext() {
+            this.menuNo = this.menuNo + 1 > 3 ? 1 : this.menuNo + 1;
+        },
+        onBack() {
+            this.menuNo = this.menuNo - 1 <= 0 ? 3 : this.menuNo - 1;
+        },
+        onSave() {
+            var nilai = 0;
+            this.form.form3.kpis.map((kpi) => {
+                nilai += parseInt(kpi.Amaun);
+                return kpi;
+            });
+            const finalForm = {
+                ...this.form,
+                NoMemo: this.NoMemo,
+                form1: {
+                    KodKategori: this.KodKategori,
+                    KodJenis: this.KodJenis,
+                    KodPTJ: this.KodPTJ,
+                    KodScope: this.form.form1.KodScope,
+                    KodPTJSub: this.form.form1.KodPTJSub,
+                    TarikhMula: this.form.form1.TarikhMula,
+                    TarikhTamat: this.form.form1.TarikhTamat,
+                    TajukProjek: this.form.form1.TajukProjek,
+                    NamaDok: this.filePath,
+                    Path: this.filePath,
+                    MS01_NoStaf: this.form.form1.MS01_NoStaf,
+                    Nilai: nilai,
+                },
+                form2: {
+                    Members: this.members.map((member) => {
+                        return {
+                            NoStaf: member.noStaf,
+                            Peranan: member.roles
+                                .map((role) => role.role)
+                                .join("|"),
+                        };
+                    }),
+                },
+                form3: {
+                    KPIs: this.form.form3.kpis.map((kpi, kpiIndex) => {
+                        return {
+                            Amaun: kpi.Amaun,
+                            MOU04_Number: kpiIndex,
+                            Penerangan: kpi.Penerangan,
+                            TarikhMula: kpi.TarikhMula,
+                            TarikhTamat: kpi.TarikhTamat,
+                            Komen: kpi.Komen,
+                            Nama: kpi.Nama,
+                        };
+                    }),
+                },
+            };
+
+            console.log(finalForm);
+
+            const {
+                data: dataAddMOU,
+                loading: loadingAddMOU,
+                error: errorAddMOU,
+            } = useMouStoreMemo(finalForm);
+
+            this.loadingAddMOU = true;
+            var self = this;
+            watch(
+                () => loadingAddMOU.value,
+                (newLoadingAddMOU) => {
+                    self.loadingAddMOU = newLoadingAddMOU;
+                }
+            );
+            watch(
+                () => dataAddMOU.value,
+                (newDataAddMOU) => {
+                    self.addedMOUNoMemo = newDataAddMOU?.noMemo;
+                    if (newDataAddMOU?.noMemo) {
+                        location.href = self.publicPath + "memo-list";
+                    }
+                }
+            );
+            watch(
+                () => errorAddMOU.value,
+                (newErrorAddMOU) => {
+                    if (newErrorAddMOU) {
+                        self.$toast.open({
+                            message:
+                                "Saving error! Please contact the system administrator.",
+                            type: "error",
+                            position: "top-right",
+                        });
+                    }
+                }
+            );
+        },
     },
 };
 </script>

@@ -86,6 +86,11 @@ public class MOUController : ControllerBase
         return Ok(genNo);
     }
 
+    // TODO: Update memorandum (PIC, Admin)
+    // TODO: Delete memorandum (PIC, Admin)
+    // TODO: Add members to a memorandum (PIC, Admin)
+    // TODO: Add KPIs to a memorandum (PIC, Admin)
+
     [HttpPost]
     public ActionResult<object> Store([FromBody] MOUAddModel entity)
     {
@@ -228,11 +233,6 @@ public class MOUController : ControllerBase
 
         return Ok(genNo);
     }
-
-    // TODO: Update memorandum (PIC, Admin)
-    // TODO: Delete memorandum (PIC, Admin)
-    // TODO: Add members to a memorandum (PIC, Admin)
-    // TODO: Add KPIs to a memorandum (PIC, Admin)
 
     [HttpPost("approval")]
     [Authorize(Policy = "PTJPolicy")]
@@ -469,13 +469,16 @@ public class MOUController : ControllerBase
             KodPTJSub = _entity.KodPTJSub,
             TarikhMula = _entity.TarikhMula,
             TarikhMulaDate = GetDisplayDate(_entity.TarikhMula),
+            TarikhMulaDate2 = GetDisplayDate2(_entity.TarikhMula),
             TarikhTamat = _entity.TarikhTamat,
             TarikhTamatDate = GetDisplayDate(_entity.TarikhTamat),
+            TarikhTamatDate2 = GetDisplayDate2(_entity.TarikhTamat),
             TajukProjek = _entity.TajukProjek,
             Path = _entity.Path,
             IsPIC = _entity.MS01_NoStaf == staffId,
             PIC = _entity.EMO_Staf.Nama,
             PICGelaran = _entity.EMO_Staf.Gelaran,
+            PICEmail = _entity.EMO_Staf.Email,
             noStafPIC = _entity.EMO_Staf.NoStaf,
             Nilai = _entity.Nilai,
             Status = new
@@ -521,8 +524,10 @@ public class MOUController : ControllerBase
                 Penerangan = mou04.Penerangan,
                 TarikhMula = mou04.TarikhMula,
                 TarikhMulaDate = mou04.TarikhMula?.ToString("dd MMM yyyy") ?? "",
+                TarikhMulaDate2 = mou04.TarikhMula?.ToString("yyyy-MM-dd") ?? "",
                 TarikhTamat = mou04.TarikhTamat,
                 TarikhTamatDate = mou04.TarikhTamat?.ToString("dd MMM yyyy") ?? "",
+                TarikhTamatDate2 = mou04.TarikhTamat?.ToString("yyyy-MM-dd") ?? "",
             })?.ToList(),
         });
     }
@@ -531,6 +536,12 @@ public class MOUController : ControllerBase
     {
         DateTime dateTime = nullableDateTime ?? DateTime.MinValue;
         return dateTime.ToString("dd/MM/yyyy");
+    }
+
+    private static string GetDisplayDate2(DateTime? nullableDateTime)
+    {
+        DateTime dateTime = nullableDateTime ?? DateTime.MinValue;
+        return dateTime.ToString("yyyy-MM-dd");
     }
 
     private IQueryable<MOU01_Memorandum> GetMemorandumBaseQuery(string q)

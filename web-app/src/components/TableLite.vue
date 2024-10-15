@@ -51,13 +51,13 @@
                                         class="link-list link-list-hover-bg-primary link-list-md"
                                     >
                                         <li>
-                                            <router-link to="/memo-edit">
+                                            <router-link to="/">
                                                 <em class="icon ni ni-edit"></em
                                                 ><span>Edit</span>
                                             </router-link>
                                         </li>
                                         <li>
-                                            <router-link to="/memo-detail"
+                                            <router-link to="/"
                                                 ><em class="icon ni ni-eye"></em
                                                 ><span
                                                     >View Details</span

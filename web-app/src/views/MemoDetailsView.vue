@@ -92,7 +92,7 @@
                                             <ul class="d-flex gap g-2">
                                                 <li class="d-none d-md-block">
                                                     <a
-                                                        href="/memo-edit"
+                                                        :href="`${publicPath}memo-edit?memo=${dataTheMOU?.noMemo}`"
                                                         class="btn btn-soft btn-primary"
                                                     >
                                                         <em

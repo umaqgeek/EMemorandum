@@ -22,7 +22,7 @@
                         <th class="tb-col">Date</th>
                     </tr>
                 </thead>
-                <tbody v-if="kpis.length > 0">
+                <tbody v-if="kpis?.length > 0">
                     <tr v-for="(kpi, kpiIndex) in kpis" v-bind:key="kpiIndex">
                         <td class="tb-col">{{ kpiIndex + 1 }}.</td>
                         <td class="tb-col">
@@ -71,10 +71,7 @@
                         </td>
                         <td class="tb-col">
                             <div class="form-group">
-                                <div
-                                    class="input-group js-datepicker"
-                                    data-range="init"
-                                >
+                                <div class="input-group">
                                     <input
                                         placeholder="dd/mm/yyyy"
                                         type="date"
@@ -121,18 +118,17 @@
 export default {
     name: "TableKPIComponent",
     props: {
-        label: String,
-    },
-    data() {
-        return {
-            kpis: [],
-        };
+        kpis: {
+            type: Array,
+            required: true,
+        },
     },
     methods: {
-        saveKPIs() {
-            this.$emit("saveKPIs", this.kpis);
-        },
+        // saveKPIs() {
+        //     this.$emit("saveKPIs", this.kpis);
+        // },
         addKPI() {
+            // eslint-disable-next-line
             this.kpis.push({
                 Nama: "",
                 Penerangan: "",
@@ -141,7 +137,7 @@ export default {
                 TarikhMula: "",
                 TarikhTamat: "",
             });
-            this.saveKPIs();
+            // this.saveKPIs();
         },
         clearKPI(kpiIndex) {
             const kpis = this.kpis.map((k, kIndex) => {
@@ -155,13 +151,15 @@ export default {
                 }
                 return k;
             });
+            // eslint-disable-next-line
             this.kpis = [...kpis];
-            this.saveKPIs();
+            // this.saveKPIs();
         },
         removeKPI(kpiIndex) {
             const kpis = this.kpis.filter((_, kIndex) => kIndex !== kpiIndex);
+            // eslint-disable-next-line
             this.kpis = [...kpis];
-            this.saveKPIs();
+            // this.saveKPIs();
         },
     },
 };
