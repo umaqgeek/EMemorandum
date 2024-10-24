@@ -71,7 +71,8 @@ public class MOUController : ControllerBase
             JenisMemo = _context.PUU_JenisMemo.ToList(),
             KategoriMemo = _context.PUU_KategoriMemo.ToList(),
             ScopeMemo = _context.PUU_ScopeMemo.ToList(),
-            SubPTJ = _context.PUU_SubPTj.ToList(),
+            PTJ = _context.EMO_Pejabat.Where(e => e.StatusPTJ == true).ToList(),
+            SubPTJ = _context.EMO_Pejabat.ToList(),
         });
     }
 

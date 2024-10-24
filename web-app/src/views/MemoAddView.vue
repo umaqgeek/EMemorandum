@@ -397,6 +397,9 @@
                                                                         v-model="
                                                                             KodPTJ
                                                                         "
+                                                                        @input="
+                                                                            onPTJ
+                                                                        "
                                                                     >
                                                                         <option
                                                                             value=""
@@ -409,14 +412,14 @@
                                                                         <option
                                                                             v-for="p in PTJs"
                                                                             v-bind:key="
-                                                                                p.id
+                                                                                p.kodPBU
                                                                             "
                                                                             :value="
-                                                                                p.kodPTJ
+                                                                                p.kodPBU
                                                                             "
                                                                         >
                                                                             {{
-                                                                                p.nama
+                                                                                p.namaPBU
                                                                             }}
                                                                         </option>
                                                                     </select>
@@ -457,14 +460,14 @@
                                                                         <option
                                                                             v-for="p in PBUs"
                                                                             v-bind:key="
-                                                                                p.id
+                                                                                p.kodPBU
                                                                             "
                                                                             :value="
-                                                                                p.kodSubPTJ
+                                                                                p.kodPBU
                                                                             "
                                                                         >
                                                                             {{
-                                                                                p.nama
+                                                                                p.namaPBU
                                                                             }}
                                                                         </option>
                                                                     </select>
@@ -890,6 +893,7 @@ export default {
         const types = ref([]);
         const scopes = ref([]);
         const PTJs = ref([]);
+        const PBUsOri = ref([]);
         const PBUs = ref([]);
         watch(
             () => dataMouSelectData.value,
@@ -897,8 +901,8 @@ export default {
                 categories.value = dataMouSelectDataUpdated?.kategoriMemo || [];
                 types.value = dataMouSelectDataUpdated?.jenisMemo || [];
                 scopes.value = dataMouSelectDataUpdated?.scopeMemo || [];
-                PTJs.value = dataMouSelectDataUpdated?.subPTJ || [];
-                PBUs.value = dataMouSelectDataUpdated?.subPTJ || [];
+                PTJs.value = dataMouSelectDataUpdated?.ptj || [];
+                PBUsOri.value = dataMouSelectDataUpdated?.subPTJ || [];
             }
         );
 
@@ -976,6 +980,7 @@ export default {
             types,
             scopes,
             PTJs,
+            PBUsOri,
             PBUs,
             KodKategori,
             KodJenis,
@@ -1140,6 +1145,13 @@ export default {
             } else {
                 this.isLimitReached = false;
             }
+        },
+        onPTJ(evt) {
+            const selectedPTJ = evt.target.value;
+            this.KodPTJ = selectedPTJ;
+            this.PBUs = [...this.PBUsOri].filter(
+                (p) => p.kodPejPBU == selectedPTJ
+            );
         },
     },
 };

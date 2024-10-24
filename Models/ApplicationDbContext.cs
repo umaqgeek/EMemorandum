@@ -12,6 +12,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<EMO_KPI> EMO_KPI { get; set; }
     public DbSet<EMO_Staf> EMO_Staf { get; set; }
     public DbSet<EMO_Roles> EMO_Roles { get; set; }
+    public DbSet<EMO_Pejabat> EMO_Pejabat { get; set; }
     public DbSet<MOU_Status> MOU_Status { get; set; }
     public DbSet<PUU_JenisMemo> PUU_JenisMemo { get; set; }
     public DbSet<PUU_KategoriMemo> PUU_KategoriMemo { get; set; }
