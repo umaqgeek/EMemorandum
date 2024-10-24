@@ -151,13 +151,32 @@
                                                                 >
                                                                     <textarea
                                                                         class="form-control"
+                                                                        :style="
+                                                                            textareaStyle
+                                                                        "
                                                                         placeholder="Eg.: Memorandum Persefahaman X dan K"
                                                                         v-model="
                                                                             form
                                                                                 .form1
                                                                                 .TajukProjek
                                                                         "
+                                                                        @input="
+                                                                            checkLength
+                                                                        "
                                                                     ></textarea>
+                                                                    <div>
+                                                                        {{
+                                                                            form
+                                                                                .form1
+                                                                                .TajukProjek
+                                                                                ?.length
+                                                                        }}
+                                                                        /
+                                                                        {{
+                                                                            charLimit
+                                                                        }}
+                                                                        characters.
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -840,6 +859,8 @@ export default {
             members: [],
             loadingAddMOU: false,
             addedMOUNoMemo: "",
+            charLimit: 250,
+            isLimitReached: false,
         };
     },
     components: {
@@ -965,7 +986,15 @@ export default {
             handleFileUpload,
         };
     },
-    computed: {},
+    computed: {
+        textareaStyle() {
+            return {
+                backgroundColor: this.isLimitReached
+                    ? "rgba(255, 0, 0, 0.2)"
+                    : "white",
+            };
+        },
+    },
     methods: {
         handleChoosePIC(user) {
             const gelaran = user?.gelaran?.toLowerCase()?.includes("tiada")
@@ -1102,6 +1131,15 @@ export default {
                     }
                 }
             );
+        },
+        checkLength() {
+            if (this.form.form1.TajukProjek.length > this.charLimit) {
+                this.form.form1.TajukProjek =
+                    this.form.form1.TajukProjek?.substring(0, this.charLimit);
+                this.isLimitReached = true;
+            } else {
+                this.isLimitReached = false;
+            }
         },
     },
 };
