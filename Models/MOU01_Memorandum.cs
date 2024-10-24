@@ -29,6 +29,8 @@ public class MOU01_Memorandum
     public string? TajukProjek { get; set; }
     public string? NamaDok { get; set; }
     public string? Path { get; set; }
+    public string? Author { get; set; }
+    public string? Negara { get; set; }
 
     [ForeignKey("EMO_Staf")]
     public string? MS01_NoStaf { get; set; }

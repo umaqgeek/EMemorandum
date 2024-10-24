@@ -9,6 +9,7 @@ public class MOU04_KPI
     [Key]
     public long? KPI_ID { get; set; }
 
+    public string? Kod { get; set; }
     public string? NoMemo { get; set; }
 
     public decimal? Amaun { get; set; }
@@ -24,6 +25,8 @@ public class MOU04_KPI
     public string? Komen { get; set; }
 
     public string? Nama { get; set; }
+
+    public decimal? Nilai { get; set; }
 
     [JsonIgnore]  // This will prevent the MOU01_Memorandum reference from being serialized
     public MOU01_Memorandum? MOU01_Memorandum { get; set; }  // Navigation property back to MOU01_Memorandum

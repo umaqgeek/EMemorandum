@@ -779,7 +779,7 @@ public class MemorandumGenNo
 
 public class MOUAddModel
 {
-    public string NoMemo { get; set; }
+    public string? NoMemo { get; set; }
     public MOU01_Memorandum form1 { get; set; }
     public MOUMembers form2 { get; set; }
     public MOUKPIs form3 { get; set; }

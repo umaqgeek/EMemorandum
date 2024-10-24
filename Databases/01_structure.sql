@@ -27,6 +27,18 @@ CREATE TABLE DbEMO.dbo.EMO_Pejabat (
 	CONSTRAINT EMO_Pejabat_PK PRIMARY KEY (KodPBU)
 );
 
+-- DbEMO.dbo.EMO_KPI definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.EMO_KPI;
+
+CREATE TABLE DbEMO.dbo.EMO_KPI (
+	Kod varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	KPI varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT EMO_KPI_PK PRIMARY KEY (Kod)
+);
+
 -- DbEMO.dbo.EMO_Staf definition
 
 -- Drop table
@@ -101,6 +113,8 @@ CREATE TABLE DbEMO.dbo.MOU01_Memorandum (
 	MS01_NoStaf nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Status varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Nilai decimal(18,2) NULL,
+	Author nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	Negara nvarchar(3) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CONSTRAINT PK_MOU01_Memorandum PRIMARY KEY (NoMemo),
 	CONSTRAINT FK_MOU01_Memorandum_EMO_Staf FOREIGN KEY (MS01_NoStaf) REFERENCES DbEMO.dbo.EMO_Staf(NoStaf)
 );
@@ -148,6 +162,7 @@ CREATE TABLE DbEMO.dbo.MOU03_Ahli (
 
 CREATE TABLE DbEMO.dbo.MOU04_KPI (
 	KPI_ID BIGINT IDENTITY(1,1) NOT NULL,
+	Kod varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	Amaun decimal(18,2) NULL,
 	MOU04_Number numeric(18,0) NULL,
@@ -156,6 +171,7 @@ CREATE TABLE DbEMO.dbo.MOU04_KPI (
 	TarikhTamat smalldatetime NULL,
 	Komen varchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Nama varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Nilai numeric(18,0) NULL,
 	CONSTRAINT PK_MOU04_KPI PRIMARY KEY (KPI_ID),
 	CONSTRAINT FK_MOU04_KPI_MOU01_Memorandum FOREIGN KEY (NoMemo) REFERENCES DbEMO.dbo.MOU01_Memorandum(NoMemo)
 );
