@@ -862,7 +862,7 @@ export default {
             members: [],
             loadingAddMOU: false,
             addedMOUNoMemo: "",
-            charLimit: 250,
+            charLimit: 500,
             isLimitReached: false,
         };
     },
