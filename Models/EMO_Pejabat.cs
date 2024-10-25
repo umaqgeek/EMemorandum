@@ -10,4 +10,10 @@ public class EMO_Pejabat
     public string? Pejabat { get; set; }
     public string? NamaPBU { get; set; }
     public bool? StatusPTJ { get; set; }
+
+    // Navigation property for the memorandums
+    public ICollection<MOU01_Memorandum>? PTJMemorandums { get; set; }
+
+    // Navigation property for the memorandums
+    public ICollection<MOU01_Memorandum>? SubPTJMemorandums { get; set; }
 }

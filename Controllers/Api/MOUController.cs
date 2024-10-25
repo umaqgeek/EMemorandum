@@ -294,12 +294,14 @@ public class MOUController : ControllerBase
                     {
                         NoMemo = genNo.noMemo,
                         Amaun = kpi.Amaun,
+                        Nilai = 0,
                         MOU04_Number = kpi.MOU04_Number,
                         Penerangan = kpi.Penerangan,
                         TarikhMula = kpi.TarikhMula,
                         TarikhTamat = kpi.TarikhTamat,
                         Komen = kpi.Komen,
                         Nama = kpi.Nama,
+                        Kod = "02"
                     });
                 }
 
@@ -485,7 +487,8 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.MOU02_Statuses)
                 .ThenInclude(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.PUU_ScopeMemo)
-            .Include(_entity => _entity.PUU_SubPTj)
+            .Include(_entity => _entity.EMO_PejabatPTJ)
+            .Include(_entity => _entity.EMO_PejabatSubPTJ)
             .Include(_entity => _entity.PUU_JenisMemo)
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)
@@ -525,8 +528,8 @@ public class MOUController : ControllerBase
         {
             return (new { error = "KodJenis not found!" });
         }
-        var ptj = _context.PUU_SubPTj
-            .Where(j => j.KodPTJ == entity.KodPTJ)
+        var ptj = _context.EMO_Pejabat
+            .Where(j => j.KodPejPBU == entity.KodPTJ)
             .FirstOrDefault();
         if (ptj == null)
         {
@@ -569,7 +572,7 @@ public class MOUController : ControllerBase
             NoSiri = _entity.NoSiri,
             Tahun = _entity.Tahun,
             KodPTJ = _entity.KodPTJ,
-            PTJNama = _entity.PUU_SubPTj.Nama,
+            PTJNama = _entity.EMO_PejabatPTJ.NamaPBU,
             KodScope = _entity.KodScope,
             ScopeButiran = _entity.PUU_ScopeMemo.Butiran,
             KodJenis = _entity.KodJenis,
@@ -577,6 +580,7 @@ public class MOUController : ControllerBase
             KodKategori = _entity.KodKategori,
             Kategori = _entity.PUU_KategoriMemo.Butiran,
             KodPTJSub = _entity.KodPTJSub,
+            SubPTJNama = _entity.EMO_PejabatSubPTJ.NamaPBU,
             TarikhMula = _entity.TarikhMula,
             TarikhMulaDate = GetDisplayDate(_entity.TarikhMula),
             TarikhMulaDate2 = GetDisplayDate2(_entity.TarikhMula),
@@ -585,6 +589,7 @@ public class MOUController : ControllerBase
             TarikhTamatDate2 = GetDisplayDate2(_entity.TarikhTamat),
             TajukProjek = _entity.TajukProjek,
             Path = _entity.Path,
+            NamaDok = _entity.NamaDok,
             IsPIC = _entity.MS01_NoStaf == staffId,
             PIC = _entity.EMO_Staf.Nama,
             PICGelaran = _entity.EMO_Staf.Gelaran,
@@ -660,7 +665,8 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.MOU02_Statuses)
                 .ThenInclude(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.PUU_ScopeMemo)
-            .Include(_entity => _entity.PUU_SubPTj)
+            .Include(_entity => _entity.EMO_PejabatPTJ)
+            .Include(_entity => _entity.EMO_PejabatSubPTJ)
             .Include(_entity => _entity.PUU_JenisMemo)
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)

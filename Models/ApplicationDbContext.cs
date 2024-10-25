@@ -33,10 +33,16 @@ public class ApplicationDbContext : DbContext
             .HasConstraintName("FK_EMO_Roles_EMO_Staf_NoStaf");
 
         modelBuilder.Entity<MOU01_Memorandum>()
-            .HasOne(c => c.PUU_SubPTj)
-            .WithMany(p => p.Memorandums)
+            .HasOne(c => c.EMO_PejabatPTJ)
+            .WithMany(p => p.PTJMemorandums)
             .HasForeignKey(c => c.KodPTJ)
-            .HasPrincipalKey(p => p.KodPTJ);
+            .HasPrincipalKey(p => p.KodPBU);
+
+        modelBuilder.Entity<MOU01_Memorandum>()
+            .HasOne(c => c.EMO_PejabatSubPTJ)
+            .WithMany(p => p.SubPTJMemorandums)
+            .HasForeignKey(c => c.KodPTJSub)
+            .HasPrincipalKey(p => p.KodPBU);
 
         modelBuilder.Entity<MOU01_Memorandum>()
             .HasOne(c => c.PUU_ScopeMemo)

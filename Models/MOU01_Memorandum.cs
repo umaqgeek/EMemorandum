@@ -11,7 +11,7 @@ public class MOU01_Memorandum
     public string? NoSiri { get; set; }
     public int? Tahun { get; set; }
 
-    [ForeignKey("PUU_SubPTj")]
+    [ForeignKey("EMO_Pejabat")]
     public string KodPTJ { get; set; }
 
     [ForeignKey("PUU_ScopeMemo")]
@@ -23,7 +23,9 @@ public class MOU01_Memorandum
     [ForeignKey("PUU_KategoriMemo")]
     public int KodKategori { get; set; }
 
+    [ForeignKey("EMO_Pejabat")]
     public string? KodPTJSub { get; set; }
+
     public DateTime? TarikhMula { get; set; }
     public DateTime? TarikhTamat { get; set; }
     public string? TajukProjek { get; set; }
@@ -51,8 +53,11 @@ public class MOU01_Memorandum
     [JsonIgnore]  // This will prevent the PUU_KategoriMemo reference from being serialized
     public PUU_KategoriMemo? PUU_KategoriMemo { get; set; }  // Navigation property back to PUU_KategoriMemo
 
-    [JsonIgnore]  // This will prevent the PUU_SubPTj reference from being serialized
-    public PUU_SubPTj? PUU_SubPTj { get; set; }  // Navigation property back to PUU_SubPTj
+    [JsonIgnore]  // This will prevent the EMO_Pejabat reference from being serialized
+    public EMO_Pejabat? EMO_PejabatPTJ { get; set; }  // Navigation property back to EMO_Pejabat
+
+    [JsonIgnore]  // This will prevent the EMO_Pejabat reference from being serialized
+    public EMO_Pejabat? EMO_PejabatSubPTJ { get; set; }  // Navigation property back to EMO_Pejabat
 
     [JsonIgnore]  // This will prevent the MOU_Status reference from being serialized
     public MOU_Status? MOU_Status { get; set; }  // Navigation property back to MOU_Status

@@ -10,6 +10,7 @@ public class MOU04_KPI
     public long? KPI_ID { get; set; }
 
     public string? Kod { get; set; }
+
     public string? NoMemo { get; set; }
 
     public decimal? Amaun { get; set; }
