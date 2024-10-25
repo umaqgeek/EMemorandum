@@ -34,10 +34,10 @@ namespace EMemorandum.Controllers.Api
         [Authorize(Policy = "AdminPolicy")]
         public ActionResult<IEnumerable<EMO_Staf>> GetAllStaff()
         {
-            var staffId = GetStaffID();
+            // var staffId = GetStaffID();
 
             return _context.EMO_Staf
-                .Where(s => s.NoStaf != staffId)
+                // .Where(s => s.NoStaf != staffId)
                 .Include(s => s.Roles)
                 .ToList();
         }
@@ -45,10 +45,10 @@ namespace EMemorandum.Controllers.Api
         [HttpGet("less")]
         public ActionResult<IEnumerable<object>> GetAllStaffSimple()
         {
-            var staffId = GetStaffID();
+            // var staffId = GetStaffID();
 
             return _context.EMO_Staf
-                .Where(s => s.NoStaf != staffId)
+                // .Where(s => s.NoStaf != staffId)
                 .Include(s => s.Roles)
                 .Select(s => (new {
                     Email = s.Email,
