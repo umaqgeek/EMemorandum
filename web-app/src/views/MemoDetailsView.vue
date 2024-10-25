@@ -298,6 +298,20 @@
                                                                     </li>
                                                                     <li
                                                                         class="list-group-item"
+                                                                    >
+                                                                        <span
+                                                                            class="title fw-medium w-100 d-inline-block"
+                                                                            >PBU:</span
+                                                                        >
+                                                                        <span
+                                                                            class="text"
+                                                                            >{{
+                                                                                dataTheMOU?.subPTJNama
+                                                                            }}</span
+                                                                        >
+                                                                    </li>
+                                                                    <li
+                                                                        class="list-group-item"
                                                                         v-if="
                                                                             dataTheMOU?.path
                                                                         "
@@ -310,7 +324,7 @@
                                                                             :href="`${publicPath}${dataTheMOU?.path}`"
                                                                             target="_blank"
                                                                             >{{
-                                                                                dataTheMOU?.path
+                                                                                dataTheMOU?.namaDok
                                                                             }}</a
                                                                         >
                                                                         <div

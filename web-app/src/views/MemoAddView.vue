@@ -644,7 +644,7 @@
                                                                             :href="`${publicPath}${filePath}`"
                                                                             target="_blank"
                                                                             >{{
-                                                                                filePath
+                                                                                fileName
                                                                             }}</a
                                                                         >
                                                                     </div>
@@ -940,6 +940,7 @@ export default {
         );
 
         const filePath = ref("");
+        const fileName = ref("");
         const handleFileUpload = async (event) => {
             const file = event.target.files[0]; // Get the selected file
             if (!file) return;
@@ -963,6 +964,9 @@ export default {
                     if (newLoadingHandleUpload == false) {
                         filePath.value =
                             newDataHandleUpload?.filePath ??
+                            newErrorHandleUpload;
+                        fileName.value =
+                            newDataHandleUpload?.fileName ??
                             newErrorHandleUpload;
                     }
                 }
@@ -988,6 +992,7 @@ export default {
             NoMemo,
             allStaffSimple,
             filePath,
+            fileName,
             handleFileUpload,
         };
     },
@@ -1070,7 +1075,7 @@ export default {
                     TarikhMula: this.form.form1.TarikhMula,
                     TarikhTamat: this.form.form1.TarikhTamat,
                     TajukProjek: this.form.form1.TajukProjek,
-                    NamaDok: this.filePath,
+                    NamaDok: this.fileName,
                     Path: this.filePath,
                     MS01_NoStaf: this.form.form1.MS01_NoStaf,
                     Nilai: nilai,
