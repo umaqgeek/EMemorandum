@@ -9,6 +9,9 @@ using System.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Text.Json;
+using System.Threading.Tasks;
 using EMemorandum.Models;
 using EMemorandum.Services;
 using EMemorandum.Jobs;
@@ -24,6 +27,7 @@ public class MOUController : ControllerBase
     private readonly string _delimeter;
     private readonly IConfiguration _configuration;
     private readonly IEmailQueueService _emailQueueService;
+    private readonly string _jsonFilePath;
 
     public MOUController(IConfiguration configuration, ApplicationDbContext context, IEmailQueueService emailQueueService)
     {
@@ -31,6 +35,7 @@ public class MOUController : ControllerBase
         _delimeter = ".";
         _configuration = configuration;
         _emailQueueService = emailQueueService;
+        _jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "JSONs", "countries.json");
     }
 
     [HttpGet("all")]
@@ -64,17 +69,36 @@ public class MOUController : ControllerBase
     }
 
     [HttpGet("select-data")]
-    public ActionResult<IEnumerable<object>> GetSelectData()
+    public async Task<IActionResult> GetSelectData()
     {
-        return Ok(new
-        {
-            JenisMemo = _context.PUU_JenisMemo.ToList(),
-            KategoriMemo = _context.PUU_KategoriMemo.ToList(),
-            ScopeMemo = _context.PUU_ScopeMemo.ToList(),
-            PTJ = _context.EMO_Pejabat.Where(e => e.StatusPTJ == true).ToList(),
-            SubPTJ = _context.EMO_Pejabat.ToList(),
-            KPIs = _context.EMO_KPI.ToList()
-        });
+        try {
+            // Ensure the file exists
+            if (!System.IO.File.Exists(_jsonFilePath)) {
+                return NotFound("JSON file for Countries not found!");
+            }
+            var jsonData = await System.IO.File.ReadAllTextAsync(_jsonFilePath);
+            var countries = JsonSerializer.Deserialize<List<Country>>(jsonData);
+            if (countries == null || countries.Count == 0) {
+                return BadRequest("The JSON file Countries is empty or invalid.");
+            }
+            foreach (var country in countries) {
+                country.name = country.name.ToUpper();
+            }
+
+            return Ok(new
+            {
+                JenisMemo = _context.PUU_JenisMemo.ToList(),
+                KategoriMemo = _context.PUU_KategoriMemo.ToList(),
+                ScopeMemo = _context.PUU_ScopeMemo.ToList(),
+                PTJ = _context.EMO_Pejabat.Where(e => e.StatusPTJ == true).ToList(),
+                SubPTJ = _context.EMO_Pejabat.ToList(),
+                KPIs = _context.EMO_KPI.ToList(),
+                Countries = countries,
+            });
+
+        } catch (Exception ex) {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 
     [HttpPost("generate-no")]
@@ -245,6 +269,8 @@ public class MOUController : ControllerBase
             MS01_NoStaf = entity.form1.MS01_NoStaf,
             Status = initialStatus,
             Nilai = entity.form1.Nilai,
+            Author = staffId,
+            Negara = entity.form1.Negara,
         };
 
         var mouStatus = new MOU02_Status

@@ -175,12 +175,9 @@ export default {
             });
             // this.saveKPIs();
         },
-        // TODO: clear row throw mutable error for kpis
         removeKPI(kpiIndex) {
             // eslint-disable-next-line
-            this.kpis = [...this.kpis, newKpi].filter(
-                (_, kIndex) => kIndex !== kpiIndex
-            );
+            this.kpis.splice(kpiIndex, 1);
             // this.saveKPIs();
         },
     },

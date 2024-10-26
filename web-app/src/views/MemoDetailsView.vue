@@ -87,7 +87,7 @@
                                         </div>
                                         <div
                                             class="gap-col"
-                                            v-if="isPIC || isAdmin"
+                                            v-if="isPIC || isAdmin || isPUU"
                                         >
                                             <ul class="d-flex gap g-2">
                                                 <li class="d-none d-md-block">
