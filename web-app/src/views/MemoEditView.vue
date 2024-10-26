@@ -152,13 +152,32 @@
                                                                 >
                                                                     <textarea
                                                                         class="form-control"
+                                                                        :style="
+                                                                            textareaStyle
+                                                                        "
                                                                         placeholder="Eg.: Memorandum Persefahaman X dan K"
                                                                         v-model="
                                                                             form
                                                                                 .form1
                                                                                 .TajukProjek
                                                                         "
+                                                                        @input="
+                                                                            checkLength
+                                                                        "
                                                                     ></textarea>
+                                                                    <div>
+                                                                        {{
+                                                                            form
+                                                                                .form1
+                                                                                .TajukProjek
+                                                                                ?.length
+                                                                        }}
+                                                                        /
+                                                                        {{
+                                                                            charLimit
+                                                                        }}
+                                                                        characters.
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -370,14 +389,14 @@
                                                                         <option
                                                                             v-for="p in PBUs"
                                                                             v-bind:key="
-                                                                                p.id
+                                                                                p.kodPBU
                                                                             "
                                                                             :value="
-                                                                                p.kodSubPTJ
+                                                                                p.kodPBU
                                                                             "
                                                                         >
                                                                             {{
-                                                                                p.nama
+                                                                                p.namaPBU
                                                                             }}
                                                                         </option>
                                                                     </select>
@@ -545,7 +564,7 @@
                                                                             :href="`${publicPath}${filePath}`"
                                                                             target="_blank"
                                                                             >{{
-                                                                                filePath
+                                                                                fileName
                                                                             }}</a
                                                                         >
                                                                     </div>
@@ -663,6 +682,7 @@
                                                             :kpis="
                                                                 form.form3.kpis
                                                             "
+                                                            :listKPIs="KPIs"
                                                         />
                                                     </div>
 
@@ -748,6 +768,8 @@ export default {
             menuNo: 1,
             loadingAddMOU: false,
             addedMOUNoMemo: "",
+            charLimit: 500,
+            isLimitReached: false,
         };
     },
     components: {
@@ -779,15 +801,18 @@ export default {
         const types = ref([]);
         const scopes = ref([]);
         const PTJs = ref([]);
+        const PBUsOri = ref([]);
         const PBUs = ref([]);
+        const KPIs = ref([]);
         watch(
             () => dataMouSelectData.value,
             (dataMouSelectDataUpdated) => {
                 categories.value = dataMouSelectDataUpdated?.kategoriMemo || [];
                 types.value = dataMouSelectDataUpdated?.jenisMemo || [];
                 scopes.value = dataMouSelectDataUpdated?.scopeMemo || [];
-                PTJs.value = dataMouSelectDataUpdated?.subPTJ || [];
-                PBUs.value = dataMouSelectDataUpdated?.subPTJ || [];
+                PTJs.value = dataMouSelectDataUpdated?.ptj || [];
+                PBUsOri.value = dataMouSelectDataUpdated?.subPTJ || [];
+                KPIs.value = dataMouSelectDataUpdated?.kpIs || [];
             }
         );
 
@@ -806,6 +831,7 @@ export default {
         );
 
         const filePath = ref("");
+        const fileName = ref("");
         const handleFileUpload = async (event) => {
             const file = event.target.files[0]; // Get the selected file
             if (!file) return;
@@ -829,6 +855,9 @@ export default {
                     if (newLoadingHandleUpload == false) {
                         filePath.value =
                             newDataHandleUpload?.filePath ??
+                            newErrorHandleUpload;
+                        fileName.value =
+                            newDataHandleUpload?.fileName ??
                             newErrorHandleUpload;
                     }
                 }
@@ -907,6 +936,9 @@ export default {
                             KodKategori.value = newDataMOU?.kodKategori;
                             KodJenis.value = newDataMOU?.kodJenis;
                             KodPTJ.value = newDataMOU?.kodPTJ;
+                            PBUs.value = [...PBUsOri.value].filter(
+                                (p) => p.kodPejPBU == newDataMOU?.kodPTJ
+                            );
                             form.value.form1.KodScope = newDataMOU?.kodScope;
                             form.value.form1.KodPTJSub = newDataMOU?.kodPTJSub;
                             form.value.form1.TarikhMula =
@@ -916,6 +948,7 @@ export default {
                             form.value.form1.TajukProjek =
                                 newDataMOU?.tajukProjek;
                             filePath.value = newDataMOU?.path;
+                            fileName.value = newDataMOU?.namaDok;
                             form.value.form1.MS01_NoStaf =
                                 newDataMOU?.noStafPIC;
                             const gelaran = newDataMOU?.picGelaran
@@ -929,12 +962,17 @@ export default {
                                 (kpi) => {
                                     return {
                                         ...kpi,
-                                        Nama: kpi.nama,
+                                        Amaun:
+                                            kpi.amaun > 0
+                                                ? kpi.amaun
+                                                : kpi.nilai,
+                                        isAmount: kpi.amaun > 0,
                                         Penerangan: kpi.penerangan,
-                                        Komen: kpi.komen,
-                                        Amaun: kpi.amaun,
                                         TarikhMula: kpi.tarikhMulaDate2,
                                         TarikhTamat: kpi.tarikhTamatDate2,
+                                        Komen: kpi.komen,
+                                        Nama: kpi.nama,
+                                        Kod: kpi.kod,
                                     };
                                 }
                             );
@@ -966,13 +1004,16 @@ export default {
             types,
             scopes,
             PTJs,
+            PBUsOri,
             PBUs,
+            KPIs,
             KodKategori,
             KodJenis,
             KodPTJ,
             NoMemo,
             allStaffSimple,
             filePath,
+            fileName,
             handleFileUpload,
             isAdmin,
             isPUU,
@@ -985,7 +1026,15 @@ export default {
             form,
         };
     },
-    computed: {},
+    computed: {
+        textareaStyle() {
+            return {
+                backgroundColor: this.isLimitReached
+                    ? "rgba(255, 0, 0, 0.2)"
+                    : "white",
+            };
+        },
+    },
     methods: {
         handleChoosePIC(user) {
             const gelaran = user?.gelaran?.toLowerCase()?.includes("tiada")
@@ -1041,7 +1090,8 @@ export default {
         onSave() {
             var nilai = 0;
             this.form.form3.kpis.map((kpi) => {
-                nilai += parseInt(kpi.Amaun);
+                nilai =
+                    kpi.isAmount == false ? parseInt(kpi.Amaun) + nilai : nilai;
                 return kpi;
             });
             const finalForm = {
@@ -1055,7 +1105,7 @@ export default {
                     TarikhMula: this.form.form1.TarikhMula,
                     TarikhTamat: this.form.form1.TarikhTamat,
                     TajukProjek: this.form.form1.TajukProjek,
-                    NamaDok: this.filePath,
+                    NamaDok: this.fileName,
                     Path: this.filePath,
                     MS01_NoStaf: this.form.form1.MS01_NoStaf,
                     Nilai: nilai,
@@ -1074,12 +1124,14 @@ export default {
                     KPIs: this.form.form3.kpis.map((kpi, kpiIndex) => {
                         return {
                             Amaun: kpi.Amaun,
+                            isAmount: kpi.isAmount,
                             MOU04_Number: kpiIndex,
                             Penerangan: kpi.Penerangan,
                             TarikhMula: kpi.TarikhMula,
                             TarikhTamat: kpi.TarikhTamat,
                             Komen: kpi.Komen,
                             Nama: kpi.Nama,
+                            Kod: kpi.Kod,
                         };
                     }),
                 },
@@ -1121,6 +1173,15 @@ export default {
                     }
                 }
             );
+        },
+        checkLength() {
+            if (this.form.form1.TajukProjek.length > this.charLimit) {
+                this.form.form1.TajukProjek =
+                    this.form.form1.TajukProjek?.substring(0, this.charLimit);
+                this.isLimitReached = true;
+            } else {
+                this.isLimitReached = false;
+            }
         },
     },
 };

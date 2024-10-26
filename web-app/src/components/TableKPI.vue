@@ -33,11 +33,11 @@
                                 >
                                     <option value="">- Select KPI -</option>
                                     <option
-                                        v-for="kpi in listKPIs"
-                                        v-bind:key="kpi.kod"
-                                        :value="kpi.kod"
+                                        v-for="listKPI in listKPIs"
+                                        v-bind:key="listKPI.kod"
+                                        :value="listKPI.kod"
                                     >
-                                        {{ kpi.kpi }}
+                                        {{ listKPI.kpi }}
                                     </option>
                                 </select>
                             </div>
