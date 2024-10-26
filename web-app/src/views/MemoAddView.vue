@@ -755,6 +755,7 @@
                                                             :kpis="
                                                                 form.form3.kpis
                                                             "
+                                                            :listKPIs="KPIs"
                                                         />
                                                     </div>
 
@@ -895,6 +896,7 @@ export default {
         const PTJs = ref([]);
         const PBUsOri = ref([]);
         const PBUs = ref([]);
+        const KPIs = ref([]);
         watch(
             () => dataMouSelectData.value,
             (dataMouSelectDataUpdated) => {
@@ -903,6 +905,7 @@ export default {
                 scopes.value = dataMouSelectDataUpdated?.scopeMemo || [];
                 PTJs.value = dataMouSelectDataUpdated?.ptj || [];
                 PBUsOri.value = dataMouSelectDataUpdated?.subPTJ || [];
+                KPIs.value = dataMouSelectDataUpdated?.kpIs || [];
             }
         );
 
@@ -986,6 +989,7 @@ export default {
             PTJs,
             PBUsOri,
             PBUs,
+            KPIs,
             KodKategori,
             KodJenis,
             KodPTJ,
@@ -1094,12 +1098,14 @@ export default {
                     KPIs: this.form.form3.kpis.map((kpi, kpiIndex) => {
                         return {
                             Amaun: kpi.Amaun,
+                            isAmount: kpi.isAmount,
                             MOU04_Number: kpiIndex,
                             Penerangan: kpi.Penerangan,
                             TarikhMula: kpi.TarikhMula,
                             TarikhTamat: kpi.TarikhTamat,
                             Komen: kpi.Komen,
                             Nama: kpi.Nama,
+                            Kod: kpi.Kod,
                         };
                     }),
                 },

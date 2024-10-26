@@ -73,6 +73,7 @@ public class MOUController : ControllerBase
             ScopeMemo = _context.PUU_ScopeMemo.ToList(),
             PTJ = _context.EMO_Pejabat.Where(e => e.StatusPTJ == true).ToList(),
             SubPTJ = _context.EMO_Pejabat.ToList(),
+            KPIs = _context.EMO_KPI.ToList()
         });
     }
 
