@@ -102,6 +102,11 @@ public class ApplicationDbContext : DbContext
             .WithMany(s => s.MOU04_KPI)
             .HasForeignKey(m => m.NoMemo);
 
+        modelBuilder.Entity<MOU04_KPI>()
+            .HasOne(m => m.EMO_KPI)
+            .WithMany(s => s.MOU04_KPIs)
+            .HasForeignKey(m => m.Kod);
+
         modelBuilder.Entity<MOU06_History>()
             .HasOne(m => m.MOU01_Memorandum)
             .WithMany(s => s.MOU06_History)

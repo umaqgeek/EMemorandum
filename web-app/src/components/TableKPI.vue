@@ -75,16 +75,16 @@
                                     <input
                                         type="radio"
                                         v-model="kpi.isAmount"
-                                        :value="true"
+                                        :value="false"
                                         :name="`isAmount_${kpiIndex}`"
                                     />
-                                    Amount (RM)
+                                    Price (RM)
                                 </label>
                                 <label>
                                     <input
                                         type="radio"
                                         v-model="kpi.isAmount"
-                                        :value="false"
+                                        :value="true"
                                         :name="`isAmount_${kpiIndex}`"
                                     />
                                     Unit
@@ -151,7 +151,7 @@ export default {
                 Penerangan: "",
                 Komen: "",
                 Amaun: 0,
-                isAmount: true,
+                isAmount: false,
                 TarikhMula: "",
                 TarikhTamat: "",
             });
@@ -167,7 +167,7 @@ export default {
                     k.Penerangan = "";
                     k.Komen = "";
                     k.Amaun = 0;
-                    k.isAmount = true;
+                    k.isAmount = false;
                     k.TarikhMula = "";
                     k.TarikhTamat = "";
                 }

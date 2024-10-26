@@ -722,7 +722,7 @@ export default {
         const kpisCols = ref([
             "KPI",
             "Description",
-            "Notes",
+            // "Notes",
             "Amount (RM)",
             "Date From",
             "Date To",
@@ -816,11 +816,23 @@ export default {
                             kpisTitle.value = `<div class="flex-div mb-2"><div class="me-2">Memorandum No.:</div><h4 class="text">${newDataMOU?.noMemo}</h4></div><h5>KPIs of Memorandum</h5>`;
                             kpis.value = [
                                 ...newDataMOU?.kpIs?.map((kpi) => {
+                                    const isUnit = kpi.amaun != 0;
+                                    const unit = isUnit ? kpi.amaun : 0;
+                                    const isNilai = kpi.nilai != 0;
+                                    const nilai = isNilai ? kpi.nilai : 0;
+                                    var priceUnit = "-";
+                                    if (isUnit) {
+                                        priceUnit = `${unit} unit${
+                                            unit > 1 ? "s" : ""
+                                        }`;
+                                    } else if (isNilai) {
+                                        priceUnit = `RM ${nilai}`;
+                                    }
                                     return {
-                                        KPI: kpi.nama,
+                                        KPI: `${kpi.kpi} (${kpi.kod})`,
                                         Description: kpi.penerangan,
-                                        Notes: kpi.komen,
-                                        "Amount (RM)": kpi.amaun,
+                                        // Notes: kpi.komen,
+                                        "Price (RM) / Unit": priceUnit,
                                         "Date From": kpi.tarikhMulaDate,
                                         "Date To": kpi.tarikhTamatDate,
                                     };

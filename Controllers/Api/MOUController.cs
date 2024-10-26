@@ -154,13 +154,15 @@ public class MOUController : ControllerBase
                     _context.MOU04_KPI.Add(new MOU04_KPI
                     {
                         NoMemo = entity.NoMemo,
-                        Amaun = kpi.Amaun,
+                        Amaun = kpi.isAmount == true ? kpi.Amaun : 0,
+                        Nilai = kpi.isAmount == false ? kpi.Amaun : 0,
                         MOU04_Number = kpi.MOU04_Number,
                         Penerangan = kpi.Penerangan,
                         TarikhMula = kpi.TarikhMula,
                         TarikhTamat = kpi.TarikhTamat,
                         Komen = kpi.Komen,
                         Nama = kpi.Nama,
+                        Kod = kpi.Kod,
                     });
                 }
 
@@ -294,15 +296,15 @@ public class MOUController : ControllerBase
                     _context.MOU04_KPI.Add(new MOU04_KPI
                     {
                         NoMemo = genNo.noMemo,
-                        Amaun = kpi.Amaun,
-                        Nilai = 0,
+                        Amaun = kpi.isAmount == true ? kpi.Amaun : 0,
+                        Nilai = kpi.isAmount == false ? kpi.Amaun : 0,
                         MOU04_Number = kpi.MOU04_Number,
                         Penerangan = kpi.Penerangan,
                         TarikhMula = kpi.TarikhMula,
                         TarikhTamat = kpi.TarikhTamat,
                         Komen = kpi.Komen,
                         Nama = kpi.Nama,
-                        Kod = "02"
+                        Kod = kpi.Kod,
                     });
                 }
 
@@ -500,6 +502,7 @@ public class MOUController : ControllerBase
                 .ThenInclude(_entity => _entity.EMO_Staf)
                     .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU04_KPI)
+                .ThenInclude(_entity => _entity.EMO_KPI)
             .FirstOrDefault();
 
         if (_entity == null)
@@ -634,7 +637,10 @@ public class MOUController : ControllerBase
             })?.ToList(),
             KPIs = _entity.MOU04_KPI.Select(mou04 => new
             {
+                Kod = mou04.Kod,
+                Kpi = mou04.EMO_KPI.KPI,
                 Amaun = mou04.Amaun,
+                Nilai = mou04.Nilai,
                 Komen = mou04.Komen,
                 Nama = mou04.Nama,
                 Penerangan = mou04.Penerangan,
@@ -678,6 +684,7 @@ public class MOUController : ControllerBase
                 .ThenInclude(_entity => _entity.EMO_Staf)
                     .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU04_KPI)
+                .ThenInclude(_entity => _entity.EMO_KPI)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(q))

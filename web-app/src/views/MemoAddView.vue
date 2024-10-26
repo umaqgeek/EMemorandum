@@ -1064,7 +1064,8 @@ export default {
         onSave() {
             var nilai = 0;
             this.form.form3.kpis.map((kpi) => {
-                nilai += parseInt(kpi.Amaun);
+                nilai =
+                    kpi.isAmount == false ? parseInt(kpi.Amaun) + nilai : nilai;
                 return kpi;
             });
             const finalForm = {
