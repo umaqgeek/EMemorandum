@@ -9,6 +9,7 @@ public class ApplicationDbContext : DbContext
     {
     }
 
+    public DbSet<EMO_Countries> EMO_Countries { get; set; }
     public DbSet<EMO_KPI> EMO_KPI { get; set; }
     public DbSet<EMO_Staf> EMO_Staf { get; set; }
     public DbSet<EMO_Roles> EMO_Roles { get; set; }
@@ -57,6 +58,12 @@ public class ApplicationDbContext : DbContext
             .HasPrincipalKey(p => p.Kod);
 
         modelBuilder.Entity<MOU01_Memorandum>()
+            .HasOne(c => c.EMO_Countries)
+            .WithMany(p => p.Memorandums)
+            .HasForeignKey(c => c.Negara)
+            .HasPrincipalKey(p => p.code);
+
+        modelBuilder.Entity<MOU01_Memorandum>()
             .HasOne(c => c.PUU_KategoriMemo)
             .WithMany(p => p.Memorandums)
             .HasForeignKey(c => c.KodKategori)
@@ -66,6 +73,12 @@ public class ApplicationDbContext : DbContext
             .HasOne(c => c.EMO_Staf)
             .WithMany(p => p.Memorandums)
             .HasForeignKey(c => c.MS01_NoStaf)
+            .HasPrincipalKey(p => p.NoStaf);
+
+        modelBuilder.Entity<MOU01_Memorandum>()
+            .HasOne(c => c.EMO_StafAuthor)
+            .WithMany(p => p.AuthorMemorandums)
+            .HasForeignKey(c => c.Author)
             .HasPrincipalKey(p => p.NoStaf);
 
         modelBuilder.Entity<MOU01_Memorandum>()

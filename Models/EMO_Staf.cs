@@ -26,6 +26,9 @@ public class EMO_Staf
     // Navigation property for the memorandums
     public ICollection<MOU01_Memorandum> Memorandums { get; set; }
 
+    // Navigation property for the memorandums
+    public ICollection<MOU01_Memorandum> AuthorMemorandums { get; set; }
+
     // Navigation property for the mou03_ahli
     public ICollection<MOU03_Ahli> Members { get; set; }
 }

@@ -9,9 +9,6 @@ using System.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
-using System.Text.Json;
-using System.Threading.Tasks;
 using EMemorandum.Models;
 using EMemorandum.Services;
 using EMemorandum.Jobs;
@@ -27,7 +24,6 @@ public class MOUController : ControllerBase
     private readonly string _delimeter;
     private readonly IConfiguration _configuration;
     private readonly IEmailQueueService _emailQueueService;
-    private readonly string _jsonFilePath;
 
     public MOUController(IConfiguration configuration, ApplicationDbContext context, IEmailQueueService emailQueueService)
     {
@@ -35,7 +31,6 @@ public class MOUController : ControllerBase
         _delimeter = ".";
         _configuration = configuration;
         _emailQueueService = emailQueueService;
-        _jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "JSONs", "countries.json");
     }
 
     [HttpGet("all")]
@@ -69,36 +64,22 @@ public class MOUController : ControllerBase
     }
 
     [HttpGet("select-data")]
-    public async Task<IActionResult> GetSelectData()
+    public ActionResult<IEnumerable<object>> GetSelectData()
     {
-        try {
-            // Ensure the file exists
-            if (!System.IO.File.Exists(_jsonFilePath)) {
-                return NotFound("JSON file for Countries not found!");
-            }
-            var jsonData = await System.IO.File.ReadAllTextAsync(_jsonFilePath);
-            var countries = JsonSerializer.Deserialize<List<Country>>(jsonData);
-            if (countries == null || countries.Count == 0) {
-                return BadRequest("The JSON file Countries is empty or invalid.");
-            }
-            foreach (var country in countries) {
-                country.name = country.name.ToUpper();
-            }
-
-            return Ok(new
+        return Ok(new
+        {
+            JenisMemo = _context.PUU_JenisMemo.ToList(),
+            KategoriMemo = _context.PUU_KategoriMemo.ToList(),
+            ScopeMemo = _context.PUU_ScopeMemo.ToList(),
+            PTJ = _context.EMO_Pejabat.Where(e => e.StatusPTJ == true).ToList(),
+            SubPTJ = _context.EMO_Pejabat.ToList(),
+            KPIs = _context.EMO_KPI.ToList(),
+            Countries = _context.EMO_Countries.Select(c => new
             {
-                JenisMemo = _context.PUU_JenisMemo.ToList(),
-                KategoriMemo = _context.PUU_KategoriMemo.ToList(),
-                ScopeMemo = _context.PUU_ScopeMemo.ToList(),
-                PTJ = _context.EMO_Pejabat.Where(e => e.StatusPTJ == true).ToList(),
-                SubPTJ = _context.EMO_Pejabat.ToList(),
-                KPIs = _context.EMO_KPI.ToList(),
-                Countries = countries,
-            });
-
-        } catch (Exception ex) {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+                code = c.code,
+                name = c.name,
+            }).ToList(),
+        });
     }
 
     [HttpPost("generate-no")]
@@ -157,6 +138,7 @@ public class MOUController : ControllerBase
                 memo.MS01_NoStaf = entity.form1.MS01_NoStaf;
                 memo.Nilai = entity.form1.Nilai;
                 memo.Status = updatedStatus;
+                memo.Negara = entity.form1.Negara;
 
                 // update a memo's members
                 _context.MOU03_Ahli.RemoveRange(memo.MOU03_Ahli);
@@ -521,6 +503,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.PUU_JenisMemo)
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.EMO_StafAuthor)
             .Include(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.MOU06_History)
                 .ThenInclude(_entity => _entity.EMO_Staf)
@@ -529,6 +512,7 @@ public class MOUController : ControllerBase
                     .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU04_KPI)
                 .ThenInclude(_entity => _entity.EMO_KPI)
+            .Include(_entity => _entity.EMO_Countries)
             .FirstOrDefault();
 
         if (_entity == null)
@@ -625,7 +609,16 @@ public class MOUController : ControllerBase
             PICGelaran = _entity.EMO_Staf.Gelaran,
             PICEmail = _entity.EMO_Staf.Email,
             noStafPIC = _entity.EMO_Staf.NoStaf,
+            Author = _entity.EMO_StafAuthor.Nama,
+            AuthorGelaran = _entity.EMO_StafAuthor.Gelaran,
+            AuthorEmail = _entity.EMO_StafAuthor.Email,
+            AuthorNoStaf = _entity.EMO_StafAuthor.NoStaf,
             Nilai = _entity.Nilai,
+            Negara = new
+            {
+                _entity.EMO_Countries.code,
+                _entity.EMO_Countries.name,
+            },
             Status = new
             {
                 _entity.MOU_Status.Kod,
@@ -703,6 +696,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.PUU_JenisMemo)
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.EMO_StafAuthor)
             .Include(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.MOU06_History)
                 .ThenInclude(_entity => _entity.EMO_Staf)
@@ -711,6 +705,7 @@ public class MOUController : ControllerBase
                     .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU04_KPI)
                 .ThenInclude(_entity => _entity.EMO_KPI)
+            .Include(_entity => _entity.EMO_Countries)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(q))

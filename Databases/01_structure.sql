@@ -12,6 +12,18 @@ END
 -- Optionally, you can set the default database for the `sa` user or another user
 USE DbEMO;
 
+-- DbEMO.dbo.EMO_Countries definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.EMO_Countries;
+
+CREATE TABLE DbEMO.dbo.EMO_Countries (
+	code nvarchar(3) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	name nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	CONSTRAINT EMO_Countries_PK PRIMARY KEY (code)
+);
+
 -- DbEMO.dbo.EMO_Pejabat definition
 
 -- Drop table

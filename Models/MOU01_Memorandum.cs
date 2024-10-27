@@ -31,7 +31,11 @@ public class MOU01_Memorandum
     public string? TajukProjek { get; set; }
     public string? NamaDok { get; set; }
     public string? Path { get; set; }
+
+    [ForeignKey("EMO_StafAuthor")]
     public string? Author { get; set; }
+
+    [ForeignKey("EMO_Countries")]
     public string? Negara { get; set; }
 
     [ForeignKey("EMO_Staf")]
@@ -41,8 +45,14 @@ public class MOU01_Memorandum
     public string? Status { get; set; }
     public decimal? Nilai { get; set; }
 
+    [JsonIgnore]  // This will prevent the EMO_Countries reference from being serialized
+    public EMO_Countries? EMO_Countries { get; set; }  // Navigation property back to EMO_Countries
+
     [JsonIgnore]  // This will prevent the EMO_Staf reference from being serialized
     public EMO_Staf? EMO_Staf { get; set; }  // Navigation property back to EMO_Staf
+
+    [JsonIgnore]  // This will prevent the EMO_Staf reference from being serialized
+    public EMO_Staf? EMO_StafAuthor { get; set; }  // Navigation property back to EMO_Staf
 
     [JsonIgnore]  // This will prevent the PUU_ScopeMemo reference from being serialized
     public PUU_ScopeMemo? PUU_ScopeMemo { get; set; }  // Navigation property back to PUU_ScopeMemo
