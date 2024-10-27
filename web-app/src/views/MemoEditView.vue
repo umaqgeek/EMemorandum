@@ -242,39 +242,22 @@
                                                                 <div
                                                                     class="form-control-wrap"
                                                                 >
-                                                                    <select
-                                                                        class="form-select"
-                                                                        id="KodScope"
-                                                                        data-search="true"
-                                                                        data-sort="false"
+                                                                    <multiselect
+                                                                        :allow-empty="
+                                                                            false
+                                                                        "
                                                                         v-model="
                                                                             form
                                                                                 .form1
                                                                                 .KodScope
                                                                         "
-                                                                    >
-                                                                        <option
-                                                                            value=""
-                                                                        >
-                                                                            -
-                                                                            Select
-                                                                            Scope
-                                                                            -
-                                                                        </option>
-                                                                        <option
-                                                                            v-for="s in scopes"
-                                                                            v-bind:key="
-                                                                                s.kod
-                                                                            "
-                                                                            :value="
-                                                                                s.kod
-                                                                            "
-                                                                        >
-                                                                            {{
-                                                                                s.butiran
-                                                                            }}
-                                                                        </option>
-                                                                    </select>
+                                                                        :options="
+                                                                            scopes
+                                                                        "
+                                                                        placeholder="Select a Scope"
+                                                                        label="butiran"
+                                                                        track-by="butiran"
+                                                                    ></multiselect>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -367,43 +350,26 @@
                                                                 <div
                                                                     class="form-control-wrap"
                                                                 >
-                                                                    <select
-                                                                        class="form-select"
-                                                                        id="KodPTJSub"
-                                                                        data-search="true"
-                                                                        data-sort="false"
+                                                                    <multiselect
+                                                                        :allow-empty="
+                                                                            false
+                                                                        "
                                                                         v-model="
                                                                             form
                                                                                 .form1
                                                                                 .KodPTJSub
                                                                         "
-                                                                    >
-                                                                        <option
-                                                                            value=""
-                                                                        >
-                                                                            -
-                                                                            Select
-                                                                            PBU
-                                                                            -
-                                                                        </option>
-                                                                        <option
-                                                                            v-for="p in PBUs"
-                                                                            v-bind:key="
-                                                                                p.kodPBU
-                                                                            "
-                                                                            :value="
-                                                                                p.kodPBU
-                                                                            "
-                                                                        >
-                                                                            {{
-                                                                                p.namaPBU
-                                                                            }}
-                                                                        </option>
-                                                                    </select>
+                                                                        :options="
+                                                                            PBUs
+                                                                        "
+                                                                        placeholder="Select a PBU"
+                                                                        label="namaPBU"
+                                                                        track-by="namaPBU"
+                                                                    ></multiselect>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6">
                                                             <div
                                                                 class="form-group"
                                                             >
@@ -427,6 +393,35 @@
                                                                         "
                                                                         readonly
                                                                     />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="Negara"
+                                                                    class="form-label"
+                                                                    >Country</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <multiselect
+                                                                        :allow-empty="
+                                                                            false
+                                                                        "
+                                                                        v-model="
+                                                                            Negara
+                                                                        "
+                                                                        :options="
+                                                                            countries
+                                                                        "
+                                                                        placeholder="Select a Country"
+                                                                        label="name"
+                                                                        track-by="name"
+                                                                    ></multiselect>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -742,6 +737,8 @@
 <!-- JavaScript -->
 <script>
 import { watch, ref } from "vue";
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.min.css";
 
 import ValidateMeComponent from "@/components/ValidateMe.vue";
 import NavbarComponent from "@/components/Navbar.vue";
@@ -781,6 +778,7 @@ export default {
         InfoNotLoggedInComponent,
         TableUserComponent,
         TableKPIComponent,
+        Multiselect,
     },
     setup() {
         const publicPath = ref(process.env.VUE_APP_PUBLIC_PATH);
@@ -797,6 +795,7 @@ export default {
             loading: loadingMouSelectData,
         } = useGetMOUSelectData();
 
+        const countries = ref([]);
         const categories = ref([]);
         const types = ref([]);
         const scopes = ref([]);
@@ -807,6 +806,7 @@ export default {
         watch(
             () => dataMouSelectData.value,
             (dataMouSelectDataUpdated) => {
+                countries.value = dataMouSelectDataUpdated?.countries || [];
                 categories.value = dataMouSelectDataUpdated?.kategoriMemo || [];
                 types.value = dataMouSelectDataUpdated?.jenisMemo || [];
                 scopes.value = dataMouSelectDataUpdated?.scopeMemo || [];
@@ -820,6 +820,7 @@ export default {
         const KodJenis = ref("");
         const KodPTJ = ref("");
         const NoMemo = ref("");
+        const Negara = ref("");
 
         const { data: dataAllStaffSimple } = useGetAllStaffSimple();
         const allStaffSimple = ref([]);
@@ -939,8 +940,18 @@ export default {
                             PBUs.value = [...PBUsOri.value].filter(
                                 (p) => p.kodPejPBU == newDataMOU?.kodPTJ
                             );
-                            form.value.form1.KodScope = newDataMOU?.kodScope;
-                            form.value.form1.KodPTJSub = newDataMOU?.kodPTJSub;
+                            form.value.form1.KodScope = {
+                                kod: newDataMOU?.kodScope,
+                                butiran: newDataMOU?.scopeButiran,
+                            };
+                            form.value.form1.KodPTJSub = {
+                                kodPBU: newDataMOU?.kodPTJSub,
+                                namaPBU: newDataMOU?.subPTJNama,
+                            };
+                            Negara.value = {
+                                code: newDataMOU?.negara?.code,
+                                name: newDataMOU?.negara?.name,
+                            };
                             form.value.form1.TarikhMula =
                                 newDataMOU?.tarikhMulaDate2;
                             form.value.form1.TarikhTamat =
@@ -1000,6 +1011,7 @@ export default {
             dataMouSelectData,
             errorMouSelectData,
             loadingMouSelectData,
+            countries,
             categories,
             types,
             scopes,
@@ -1011,6 +1023,7 @@ export default {
             KodJenis,
             KodPTJ,
             NoMemo,
+            Negara,
             allStaffSimple,
             filePath,
             fileName,
@@ -1100,8 +1113,8 @@ export default {
                     KodKategori: this.KodKategori,
                     KodJenis: this.KodJenis,
                     KodPTJ: this.KodPTJ,
-                    KodScope: this.form.form1.KodScope,
-                    KodPTJSub: this.form.form1.KodPTJSub,
+                    KodScope: this.form.form1.KodScope.kod,
+                    KodPTJSub: this.form.form1.KodPTJSub.kodPBU,
                     TarikhMula: this.form.form1.TarikhMula,
                     TarikhTamat: this.form.form1.TarikhTamat,
                     TajukProjek: this.form.form1.TajukProjek,
@@ -1109,6 +1122,7 @@ export default {
                     Path: this.filePath,
                     MS01_NoStaf: this.form.form1.MS01_NoStaf,
                     Nilai: nilai,
+                    Negara: this.Negara.code,
                 },
                 form2: {
                     Members: this.members.map((member) => {

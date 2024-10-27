@@ -616,13 +616,13 @@ public class MOUController : ControllerBase
             Nilai = _entity.Nilai,
             Negara = new
             {
-                _entity.EMO_Countries.code,
-                _entity.EMO_Countries.name,
+                code = _entity.EMO_Countries?.code,
+                name = _entity.EMO_Countries?.name,
             },
             Status = new
             {
-                _entity.MOU_Status.Kod,
-                _entity.MOU_Status.Status,
+                Kod = _entity.MOU_Status?.Kod,
+                Status = _entity.MOU_Status?.Status,
             },
             Statuses = _entity.MOU02_Statuses.Select(mou02 => new
             {
@@ -631,8 +631,8 @@ public class MOUController : ControllerBase
                 Tarikh = mou02.Tarikh,
                 StatusInner = new
                 {
-                    mou02.MOU_Status.Kod,
-                    mou02.MOU_Status.Status
+                    Kod = mou02.MOU_Status?.Kod,
+                    Status = mou02.MOU_Status?.Status
                 },
             })?.OrderByDescending(_entity => _entity.Tarikh).ToList(),
             History = _entity.MOU06_History.Select(mou06 => new
