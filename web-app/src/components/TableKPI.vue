@@ -71,24 +71,28 @@
                                     placeholder="Eg.: 9943"
                                     v-model="kpi.Amaun"
                                 />
-                                <label>
-                                    <input
-                                        type="radio"
-                                        v-model="kpi.isAmount"
-                                        :value="false"
-                                        :name="`isAmount_${kpiIndex}`"
-                                    />
-                                    Price (RM)
-                                </label>
-                                <label>
-                                    <input
-                                        type="radio"
-                                        v-model="kpi.isAmount"
-                                        :value="true"
-                                        :name="`isAmount_${kpiIndex}`"
-                                    />
-                                    Unit
-                                </label>
+                                <div
+                                    class="table-kpi-amount-option-container mt-3"
+                                >
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            v-model="kpi.isAmount"
+                                            :value="false"
+                                            :name="`isAmount_${kpiIndex}`"
+                                        />
+                                        Price (RM)
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            v-model="kpi.isAmount"
+                                            :value="true"
+                                            :name="`isAmount_${kpiIndex}`"
+                                        />
+                                        Unit
+                                    </label>
+                                </div>
                             </div>
                         </td>
                         <td class="tb-col">
@@ -195,5 +199,9 @@ export default {
 }
 .table-kpi-amount {
     width: 40%;
+}
+.table-kpi-amount-option-container {
+    display: flex;
+    flex-direction: column;
 }
 </style>

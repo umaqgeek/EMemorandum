@@ -429,6 +429,63 @@ public class MOUController : ControllerBase
         return Ok(new { Status = true });
     }
 
+    [HttpPost("kpi-progress")]
+    public ActionResult<object> AddKPIProgress([FromBody] MOU05_KPI_Progress entity)
+    {
+        var staffId = GetStaffID();
+
+        var mouHistory = new MOU06_History
+        {
+            NoMemo = entity.NoMemo,
+            NoStaf = staffId,
+            Description = "New KPI Progress has been added",
+            Created_At = DateTime.Now,
+        };
+
+        var kpiProgress = new MOU05_KPI_Progress
+        {
+            KPI_ID = entity.KPI_ID,
+            NoMemo = entity.NoMemo,
+            Bukti = entity.Bukti,
+            Amaun = entity.Amaun,
+            Number = entity.Number,
+            Penerangan = entity.Penerangan,
+            TarikhKemaskini = DateTime.Now,
+            NoStaf = staffId,
+        };
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var memo = _context.MOU01_Memorandum.FirstOrDefault(m => m.NoMemo == entity.NoMemo);
+                if (memo == null) {
+                    return NotFound();
+                }
+
+                // Save comments and add new history
+                _context.MOU06_History.Add(mouHistory);
+
+                // Add new kpi progress
+                _context.MOU05_KPI_Progress.Add(kpiProgress);
+
+                // Save changes to the database
+                _context.SaveChanges();
+                // Commit the transaction if all commands succeed
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                // Rollback the transaction if any command fails
+                transaction.Rollback();
+                // Log or rethrow the exception as needed
+                throw;
+            }
+        }
+
+        return Ok(new { Status = true });
+    }
+
     [HttpPost("comment")]
     public ActionResult<object> CommentMemorandum([FromBody] MOU06_History entity)
     {
@@ -549,6 +606,8 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.MOU01_Memorandum)
                 .ThenInclude(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.EMO_KPI)
+            .Include(_entity => _entity.MOU05_KPI_Progress)
+                .ThenInclude(_entity => _entity.EMO_Staf)
             .FirstOrDefault();
 
         if (query == null) {
@@ -562,14 +621,14 @@ public class MOUController : ControllerBase
             KPI = query.EMO_KPI.KPI,
             NoMemo = TransformToCode(query.NoMemo),
             Amaun = query.Amaun,
-            isAmount = query.isAmount,
+            isAmount = query.Amaun != 0 ? true : false,
             MOU04_Number = query.MOU04_Number,
             Penerangan = query.Penerangan,
             TarikhMula = query.TarikhMula,
             TarikhTamat = query.TarikhTamat,
             Komen = query.Komen,
             Nama = query.Nama,
-            Nilai = query.Nilai,
+            Nilai = query.MOU01_Memorandum.Nilai,
             PTJNama = query.MOU01_Memorandum.EMO_PejabatPTJ.NamaPBU,
             ScopeButiran = query.MOU01_Memorandum.PUU_ScopeMemo.Butiran,
             Jenis = query.MOU01_Memorandum.PUU_JenisMemo.Butiran,
@@ -594,6 +653,24 @@ public class MOUController : ControllerBase
             AuthorEmail = query.MOU01_Memorandum.EMO_StafAuthor.Email,
             AuthorNoStaf = query.MOU01_Memorandum.EMO_StafAuthor.NoStaf,
             Status = query.MOU01_Memorandum.MOU_Status,
+            Progress = query.MOU05_KPI_Progress.Select(mou05 => new
+            {
+                TarikhKemaskini = mou05.TarikhKemaskini?.ToString("dd MMM yyyy, h:mm tt") ?? "",
+                Amaun = mou05.Amaun,
+                Bukti = mou05.Bukti,
+                IsAmount = mou05.Amaun != 0 ? true : false,
+                KPI_ID = mou05.KPI_ID,
+                Number = mou05.Number,
+                Penerangan = mou05.Penerangan,
+                ProgressID = mou05.ProgressID,
+                Stafff = mou05?.EMO_Staf,
+                Author = new
+                {
+                    NoStaf = mou05?.EMO_Staf?.NoStaf,
+                    Nama = mou05?.EMO_Staf?.Nama,
+                    Gelaran = mou05?.EMO_Staf?.Gelaran,
+                }
+            })?.OrderByDescending(mou05 => mou05.TarikhKemaskini).ToList(),
         });
     }
 

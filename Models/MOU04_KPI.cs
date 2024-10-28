@@ -39,4 +39,7 @@ public class MOU04_KPI
 
     [JsonIgnore]  // This will prevent the MOU01_Memorandum reference from being serialized
     public MOU01_Memorandum? MOU01_Memorandum { get; set; }  // Navigation property back to MOU01_Memorandum
+
+    // Navigation property for the kpi progress
+    public ICollection<MOU05_KPI_Progress>? MOU05_KPI_Progress { get; set; }
 }

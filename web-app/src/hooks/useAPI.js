@@ -165,6 +165,14 @@ export function useMouCommentMemo(payload) {
     });
 }
 
+export function useMouEvidenceMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/mou/kpi-progress`,
+        data: JSON.stringify(payload),
+    });
+}
+
 export function useMouApprovalRejectionMemo(payload) {
     return useApi({
         method: "post",

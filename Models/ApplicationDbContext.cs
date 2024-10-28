@@ -23,6 +23,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<MOU02_Status> MOU02_Status { get; set; }
     public DbSet<MOU03_Ahli> MOU03_Ahli { get; set; }
     public DbSet<MOU04_KPI> MOU04_KPI { get; set; }
+    public DbSet<MOU05_KPI_Progress> MOU05_KPI_Progress { get; set; }
     public DbSet<MOU06_History> MOU06_History { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -119,6 +120,16 @@ public class ApplicationDbContext : DbContext
             .HasOne(m => m.EMO_KPI)
             .WithMany(s => s.MOU04_KPIs)
             .HasForeignKey(m => m.Kod);
+
+        modelBuilder.Entity<MOU05_KPI_Progress>()
+            .HasOne(m => m.MOU04_KPI)
+            .WithMany(s => s.MOU05_KPI_Progress)
+            .HasForeignKey(m => m.KPI_ID);
+
+        modelBuilder.Entity<MOU05_KPI_Progress>()
+            .HasOne(m => m.MOU01_Memorandum)
+            .WithMany(s => s.MOU05_KPI_Progress)
+            .HasForeignKey(m => m.NoMemo);
 
         modelBuilder.Entity<MOU06_History>()
             .HasOne(m => m.MOU01_Memorandum)

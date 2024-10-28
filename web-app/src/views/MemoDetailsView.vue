@@ -425,14 +425,7 @@
                                                                             class="nk-schedule-item-inner"
                                                                         >
                                                                             <div
-                                                                                :class="[
-                                                                                    'nk-schedule-symbol',
-                                                                                    {
-                                                                                        active:
-                                                                                            hIndex ===
-                                                                                            0,
-                                                                                    },
-                                                                                ]"
+                                                                                class="nk-schedule-symbol active"
                                                                             ></div>
                                                                             <div
                                                                                 :class="[
@@ -757,7 +750,7 @@ export default {
             "KPI",
             "Description",
             // "Notes",
-            "Amount (RM)",
+            "Price (RM) / Unit",
             "Date From",
             "Date To",
         ]);
