@@ -545,13 +545,50 @@
                                                                         class="d-flex gap g-2 justify-content-end"
                                                                         v-if="
                                                                             isAdmin ||
-                                                                            isPTJ
+                                                                            isPTJ ||
+                                                                            isPUU ||
+                                                                            isPIC
                                                                         "
                                                                     >
                                                                         <li
                                                                             class="d-none d-md-block"
                                                                             v-if="
-                                                                                isPTJ
+                                                                                (isPUU &&
+                                                                                    dataTheMOU
+                                                                                        ?.status
+                                                                                        ?.kod ==
+                                                                                        '01') ||
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod ==
+                                                                                    '00'
+                                                                            "
+                                                                            @click="
+                                                                                onApproval(
+                                                                                    '02'
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-success"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-done"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Mark
+                                                                                as
+                                                                                Reviewed
+                                                                            </div>
+                                                                        </li>
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPTJ &&
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod ==
+                                                                                    '02'
                                                                             "
                                                                             @click="
                                                                                 onApproval(
@@ -572,7 +609,11 @@
                                                                         <li
                                                                             class="d-none d-md-block"
                                                                             v-if="
-                                                                                isPTJ
+                                                                                isPTJ &&
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod ==
+                                                                                    '02'
                                                                             "
                                                                             @click="
                                                                                 onApproval(
@@ -593,7 +634,11 @@
                                                                         <li
                                                                             class="d-none d-md-block"
                                                                             v-if="
-                                                                                isPTJ
+                                                                                isPTJ &&
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod ==
+                                                                                    '02'
                                                                             "
                                                                             @click="
                                                                                 onApproval(
@@ -611,6 +656,31 @@
                                                                                 Back
                                                                                 to
                                                                                 PIC
+                                                                            </div>
+                                                                        </li>
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPIC &&
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod ==
+                                                                                    '04'
+                                                                            "
+                                                                            @click="
+                                                                                onApproval(
+                                                                                    '00'
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-success"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-edit-fill"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Ready
                                                                             </div>
                                                                         </li>
                                                                     </ul>

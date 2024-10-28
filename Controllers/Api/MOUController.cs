@@ -40,6 +40,40 @@ public class MOUController : ControllerBase
 
         var query = GetMemorandumBaseQuery(q);
 
+        var roles = _context.EMO_Roles
+            .Where(r => r.NoStaf == staffId)
+            .Select(r => r.Role)
+            .ToList();
+
+        if (roles.Contains("Admin")) {
+            query = query.Where(m =>
+                m.Status == "00" ||
+                m.Status == "01" ||
+                m.Status == "02" ||
+                m.Status == "03" ||
+                m.Status == "04" ||
+                m.Status == "05"
+            );
+        } else if (roles.Contains("PUU")) {
+            query = query.Where(m =>
+                m.Status == "00" ||
+                m.Status == "01" ||
+                m.Status == "03" ||
+                m.Status == "05"
+            );
+        } else if (roles.Contains("PTJ")) {
+            query = query.Where(m =>
+                m.Status == "02" ||
+                m.Status == "03" ||
+                m.Status == "05"
+            );
+        } else {
+            query = query.Where(m =>
+                m.MS01_NoStaf == staffId ||
+                m.Author == staffId
+            );
+        }
+
         var memorandums = query
             .Select(_entity => GetTransformedMOU(_entity, staffId))
             .ToList();
@@ -284,6 +318,7 @@ public class MOUController : ControllerBase
 
                 // add members for added MOU
                 List<string> noStafList = new List<string>();
+                noStafList.Add(entity.form1.MS01_NoStaf);
                 foreach (var member in entity.form2.Members)
                 {
                     _context.MOU03_Ahli.Add(new MOU03_Ahli
@@ -320,13 +355,15 @@ public class MOUController : ControllerBase
                     .Where(s => noStafList.Contains(s.NoStaf) && !string.IsNullOrEmpty(s.Email))
                     .ToList();
 
+                // TODO: Email all PUU for newly created Memo.
+
                 // Trigger sending emails in the background
                 foreach (var staff in staffs)
                 {
                     var EMOURL = _configuration.GetValue<string>("EMOURL");
-                    var subject = "Member of a Memorandum";
+                    var subject = "New Memorandum Created";
                     var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
-                    var body = $"<p>{gelaran} {staff.Nama}</p><p>You have been added as a member of a memorandum with Memo ID "
+                    var body = $"<p>{gelaran} {staff.Nama}</p><p>A new memorandum has been created with Memorandum No. "
                         + $"<strong>{genNo.noMemo}</strong>. Please click this link "
                         + $"<a target='_blank' href='{EMOURL}?UsrLogin={staff.NoStaf}&callback=memo-detail?memo={genNo.noMemo}'>{EMOURL}memo-detail?memo={genNo.noMemo}</a>"
                         + " for more info.</p>";
@@ -357,13 +394,18 @@ public class MOUController : ControllerBase
     }
 
     [HttpPost("approval")]
-    [Authorize(Policy = "PTJPolicy")]
     public ActionResult<object> ApprovalRejectionMemorandum([FromBody] ApprovalModel entity)
     {
         var staffId = GetStaffID();
 
-        var statusMsg = "has been reviewed";
+        var statusMsg = "is been viewed";
         switch (entity.Status) {
+            case "00":
+                statusMsg = "is ready to be reviewed";
+                break;
+            case "02":
+                statusMsg = "has been reviewed";
+                break;
             case "03":
                 statusMsg = "has been approved";
                 break;
@@ -415,7 +457,7 @@ public class MOUController : ControllerBase
                 transaction.Commit();
 
                 // send emails to all viewers (pic, members, author) of this memo after all transaction is done
-                sendEmailsAfterUpdate("1 New Comment", entity.NoMemo, statusMsg);
+                sendEmailsAfterUpdate("New Update", entity.NoMemo, statusMsg);
             }
             catch (Exception ex)
             {
@@ -495,17 +537,9 @@ public class MOUController : ControllerBase
         {
             NoMemo = entity.NoMemo,
             NoStaf = staffId,
-            Description = "Memorandum has been reviewed",
+            Description = "Memorandum has been commented",
             Created_At = DateTime.Now,
             Comment = entity.Comment,
-        };
-
-        var statusReviewed = "02";
-        var mouStatus = new MOU02_Status
-        {
-            NoMemo = entity.NoMemo,
-            Status = statusReviewed,
-            Tarikh = DateTime.Now,
         };
 
         using (var transaction = _context.Database.BeginTransaction())
@@ -516,21 +550,15 @@ public class MOUController : ControllerBase
                 if (memo == null) {
                     return NotFound();
                 }
-                memo.Status = statusReviewed;
 
                 // Save comments and add new history
                 _context.MOU06_History.Add(mouHistory);
 
-                // add new status for existing MOU
-                _context.MOU02_Status.Add(mouStatus);
-
                 // Save changes to the database
                 _context.SaveChanges();
+
                 // Commit the transaction if all commands succeed
                 transaction.Commit();
-
-                // send emails to all viewers (pic, members, author) of this memo after all transaction is done
-                sendEmailsAfterUpdate("1 New Comment", entity.NoMemo, "has been commented");
             }
             catch (Exception ex)
             {
@@ -908,7 +936,7 @@ public class MOUController : ControllerBase
         {
             var EMOURL = _configuration.GetValue<string>("EMOURL");
             var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
-            var body = $"<p>{gelaran} {staff.Nama}</p><p>Memorandum with Memo ID "
+            var body = $"<p>{gelaran} {staff.Nama}</p><p>Memorandum with Memorandum No. "
                 + $"<strong>{memo.NoMemo}</strong> {statusMsg}. Please click this link "
                 + $"<a target='_blank' href='{EMOURL}?UsrLogin={staff.NoStaf}&callback=memo-detail?memo={memo.NoMemo}'>{EMOURL}memo-detail?memo={memo.NoMemo}</a>"
                 + " for more info.</p>";
