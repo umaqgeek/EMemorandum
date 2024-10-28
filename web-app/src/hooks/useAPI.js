@@ -150,6 +150,13 @@ export function useGetOneMOU(noMemo = "-") {
     });
 }
 
+export function useGetOneMOUKPI(kpiId = "-") {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/mou/kpi/${kpiId}`,
+    });
+}
+
 export function useMouCommentMemo(payload) {
     return useApi({
         method: "post",

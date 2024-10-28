@@ -55,7 +55,13 @@
                                             >
                                                 <li class="nav-item">
                                                     <button
-                                                        class="nav-link active"
+                                                        :class="[
+                                                            'nav-link',
+                                                            {
+                                                                active:
+                                                                    tab == 1,
+                                                            },
+                                                        ]"
                                                         data-bs-toggle="tab"
                                                         data-bs-target="#tab-1"
                                                         type="button"
@@ -65,7 +71,13 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <button
-                                                        class="nav-link"
+                                                        :class="[
+                                                            'nav-link',
+                                                            {
+                                                                active:
+                                                                    tab == 2,
+                                                            },
+                                                        ]"
                                                         data-bs-toggle="tab"
                                                         data-bs-target="#tab-2"
                                                         type="button"
@@ -75,7 +87,13 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <button
-                                                        class="nav-link"
+                                                        :class="[
+                                                            'nav-link',
+                                                            {
+                                                                active:
+                                                                    tab == 3,
+                                                            },
+                                                        ]"
                                                         data-bs-toggle="tab"
                                                         data-bs-target="#tab-3"
                                                         type="button"
@@ -113,7 +131,12 @@
                                 <div class="nk-block">
                                     <div class="tab-content" id="myTabContent">
                                         <div
-                                            class="tab-pane show active"
+                                            :class="[
+                                                'tab-pane',
+                                                {
+                                                    'show active': tab == 1,
+                                                },
+                                            ]"
                                             id="tab-1"
                                             tabindex="0"
                                         >
@@ -608,9 +631,13 @@
                                             </div>
                                             <!-- .card -->
                                         </div>
-                                        <!-- .tab-pane -->
                                         <div
-                                            class="tab-pane"
+                                            :class="[
+                                                'tab-pane',
+                                                {
+                                                    'show active': tab == 2,
+                                                },
+                                            ]"
                                             id="tab-2"
                                             tabindex="1"
                                         >
@@ -628,7 +655,12 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="tab-pane"
+                                            :class="[
+                                                'tab-pane',
+                                                {
+                                                    'show active': tab == 3,
+                                                },
+                                            ]"
                                             id="tab-3"
                                             tabindex="2"
                                         >
@@ -679,6 +711,7 @@ import {
     useMouApprovalRejectionMemo,
 } from "@/hooks/useAPI";
 import TableLite from "@/components/TableLite.vue";
+import { LIMIT_TEXT } from "@/utils/constants";
 
 export default {
     name: "MemoDetailsView",
@@ -704,6 +737,7 @@ export default {
         const params = new URLSearchParams(window.location.search);
         const noMemo = params.get("memo") || "";
 
+        const tab = ref(params.get("tab") || 1);
         const isAdmin = ref(false);
         const isPUU = ref(false);
         const isPTJ = ref(false);
@@ -828,9 +862,17 @@ export default {
                                     } else if (isNilai) {
                                         priceUnit = `RM ${nilai}`;
                                     }
+                                    const isDescMore =
+                                        kpi.penerangan?.length > LIMIT_TEXT;
+                                    const desc = kpi.penerangan?.substring(
+                                        0,
+                                        LIMIT_TEXT
+                                    );
                                     return {
                                         KPI: `<a href="${publicPath.value}kpi-view?kpi=${kpi.kpI_ID}">${kpi.kpi} (${kpi.kod})</a>`,
-                                        Description: kpi.penerangan,
+                                        Description: `${desc}${
+                                            isDescMore ? "..." : ""
+                                        }`,
                                         // Notes: kpi.komen,
                                         "Price (RM) / Unit": priceUnit,
                                         "Date From": kpi.tarikhMulaDate,
@@ -942,6 +984,7 @@ export default {
             dataStaffProfile,
             errorStaffProfile,
             loadingStaffProfile,
+            tab,
             isAdmin,
             isPUU,
             isPTJ,
