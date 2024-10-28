@@ -11,5 +11,5 @@ public class PUU_SubPTj
     public string? Nama { get; set; }
 
     // Navigation property for the memorandums
-    public ICollection<MOU01_Memorandum>? Memorandums { get; set; }
+    // public ICollection<MOU01_Memorandum>? Memorandums { get; set; }
 }

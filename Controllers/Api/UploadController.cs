@@ -25,6 +25,11 @@ public class UploadController : ControllerBase
     [Route("upload")]
     public async Task<IActionResult> UploadFile(IFormFile file)
     {
+        var staffId = GetStaffID();
+        if (staffId == null) {
+            return NotFound("Unauthorized!");
+        }
+
         if (file == null || file.Length == 0)
         {
             return BadRequest("No file uploaded.");
@@ -32,15 +37,16 @@ public class UploadController : ControllerBase
 
         try
         {
+            var staffDirectory = Path.Combine(_uploadDirectory, staffId);
+
             // Ensure the upload directory exists
-            if (!Directory.Exists(_uploadDirectory))
-            {
-                Directory.CreateDirectory(_uploadDirectory);
+            if (!Directory.Exists(staffDirectory)) {
+                Directory.CreateDirectory(staffDirectory);
             }
 
             // Create a unique file name and save it
             var fileName = $"{Path.GetRandomFileName()}{Path.GetExtension(file.FileName)}";
-            var filePath = Path.Combine(_uploadDirectory, fileName);
+            var filePath = Path.Combine(staffDirectory, fileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -48,12 +54,23 @@ public class UploadController : ControllerBase
             }
 
             // Return the relative file path
-            var relativePath = $"uploads/{fileName}";
-            return Ok(new { filePath = relativePath });
+            var relativePath = Path.Combine("uploads", staffId, fileName).Replace("\\", "/");
+            return Ok(new { filePath = relativePath, fileName = file.FileName });
         }
         catch (Exception ex)
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
+    }
+
+    private string GetStaffID()
+    {
+        // Fetch the token from the Authorization header
+        var authHeader = Request.Headers["Authorization"].FirstOrDefault();
+        if (authHeader != null && authHeader.StartsWith("Bearer "))
+        {
+            return authHeader.Substring("Bearer ".Length).Trim();
+        }
+        return null;
     }
 }

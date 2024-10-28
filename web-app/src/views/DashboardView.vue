@@ -60,38 +60,13 @@
                                             roles.find((r) => r.role === 'PTJ')
                                         "
                                     >
-                                        <a
-                                            :href="`${publicPath}memo-list`"
-                                            v-if="
-                                                roles.find(
-                                                    (r) => r.role === 'PTJ'
-                                                )
-                                            "
-                                        >
+                                        <a :href="`${publicPath}memo-list`">
                                             <div class="card">
                                                 <div
                                                     class="card-body dashboard-card"
                                                 >
                                                     <h4 class="mb-3">
-                                                        Approval
-                                                    </h4>
-                                                    <font-awesome-icon
-                                                        icon="fa-solid fa-check-to-slot"
-                                                        size="2x"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a
-                                            :href="`${publicPath}memo-list`"
-                                            v-else
-                                        >
-                                            <div class="card">
-                                                <div
-                                                    class="card-body dashboard-card"
-                                                >
-                                                    <h4 class="mb-3">
-                                                        Manage Memorandum
+                                                        Memorandums
                                                     </h4>
                                                     <font-awesome-icon
                                                         icon="fa-solid fa-file"

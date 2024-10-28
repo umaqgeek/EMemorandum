@@ -10,6 +10,7 @@ import MemoEditView from "@/views/MemoEditView.vue";
 import MemoEditMemberView from "@/views/MemoEditMemberView.vue";
 import MemoEditKPIView from "@/views/MemoEditKPIView.vue";
 import MemoDetailsView from "@/views/MemoDetailsView.vue";
+import MemoKPIDetailsView from "@/views/MemoKPIDetailsView.vue";
 import ApprovalListView from "@/views/ApprovalListView.vue";
 import ApprovalDetailsView from "@/views/ApprovalDetailsView.vue";
 import UserListView from "@/views/UserList.vue";
@@ -50,6 +51,10 @@ const routes = [
     {
         path: "/memo-detail",
         component: MemoDetailsView,
+    },
+    {
+        path: "/kpi-view",
+        component: MemoKPIDetailsView,
     },
     {
         path: "/report",

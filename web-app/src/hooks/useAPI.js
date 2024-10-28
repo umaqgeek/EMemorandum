@@ -150,10 +150,25 @@ export function useGetOneMOU(noMemo = "-") {
     });
 }
 
+export function useGetOneMOUKPI(kpiId = "-") {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/mou/kpi/${kpiId}`,
+    });
+}
+
 export function useMouCommentMemo(payload) {
     return useApi({
         method: "post",
         url: `${API_URL}/mou/comment`,
+        data: JSON.stringify(payload),
+    });
+}
+
+export function useMouEvidenceMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/mou/kpi-progress`,
         data: JSON.stringify(payload),
     });
 }

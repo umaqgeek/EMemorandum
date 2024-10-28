@@ -55,7 +55,13 @@
                                             >
                                                 <li class="nav-item">
                                                     <button
-                                                        class="nav-link active"
+                                                        :class="[
+                                                            'nav-link',
+                                                            {
+                                                                active:
+                                                                    tab == 1,
+                                                            },
+                                                        ]"
                                                         data-bs-toggle="tab"
                                                         data-bs-target="#tab-1"
                                                         type="button"
@@ -65,7 +71,13 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <button
-                                                        class="nav-link"
+                                                        :class="[
+                                                            'nav-link',
+                                                            {
+                                                                active:
+                                                                    tab == 2,
+                                                            },
+                                                        ]"
                                                         data-bs-toggle="tab"
                                                         data-bs-target="#tab-2"
                                                         type="button"
@@ -75,7 +87,13 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <button
-                                                        class="nav-link"
+                                                        :class="[
+                                                            'nav-link',
+                                                            {
+                                                                active:
+                                                                    tab == 3,
+                                                            },
+                                                        ]"
                                                         data-bs-toggle="tab"
                                                         data-bs-target="#tab-3"
                                                         type="button"
@@ -87,7 +105,7 @@
                                         </div>
                                         <div
                                             class="gap-col"
-                                            v-if="isPIC || isAdmin"
+                                            v-if="isPIC || isAdmin || isPUU"
                                         >
                                             <ul class="d-flex gap g-2">
                                                 <li class="d-none d-md-block">
@@ -113,7 +131,12 @@
                                 <div class="nk-block">
                                     <div class="tab-content" id="myTabContent">
                                         <div
-                                            class="tab-pane show active"
+                                            :class="[
+                                                'tab-pane',
+                                                {
+                                                    'show active': tab == 1,
+                                                },
+                                            ]"
                                             id="tab-1"
                                             tabindex="0"
                                         >
@@ -298,6 +321,20 @@
                                                                     </li>
                                                                     <li
                                                                         class="list-group-item"
+                                                                    >
+                                                                        <span
+                                                                            class="title fw-medium w-100 d-inline-block"
+                                                                            >PBU:</span
+                                                                        >
+                                                                        <span
+                                                                            class="text"
+                                                                            >{{
+                                                                                dataTheMOU?.subPTJNama
+                                                                            }}</span
+                                                                        >
+                                                                    </li>
+                                                                    <li
+                                                                        class="list-group-item"
                                                                         v-if="
                                                                             dataTheMOU?.path
                                                                         "
@@ -310,7 +347,7 @@
                                                                             :href="`${publicPath}${dataTheMOU?.path}`"
                                                                             target="_blank"
                                                                             >{{
-                                                                                dataTheMOU?.path
+                                                                                dataTheMOU?.namaDok
                                                                             }}</a
                                                                         >
                                                                         <div
@@ -388,14 +425,7 @@
                                                                             class="nk-schedule-item-inner"
                                                                         >
                                                                             <div
-                                                                                :class="[
-                                                                                    'nk-schedule-symbol',
-                                                                                    {
-                                                                                        active:
-                                                                                            hIndex ===
-                                                                                            0,
-                                                                                    },
-                                                                                ]"
+                                                                                class="nk-schedule-symbol active"
                                                                             ></div>
                                                                             <div
                                                                                 :class="[
@@ -515,13 +545,50 @@
                                                                         class="d-flex gap g-2 justify-content-end"
                                                                         v-if="
                                                                             isAdmin ||
-                                                                            isPTJ
+                                                                            isPTJ ||
+                                                                            isPUU ||
+                                                                            isPIC
                                                                         "
                                                                     >
                                                                         <li
                                                                             class="d-none d-md-block"
                                                                             v-if="
-                                                                                isPTJ
+                                                                                (isPUU &&
+                                                                                    dataTheMOU
+                                                                                        ?.status
+                                                                                        ?.kod ==
+                                                                                        '01') ||
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod ==
+                                                                                    '00'
+                                                                            "
+                                                                            @click="
+                                                                                onApproval(
+                                                                                    '02'
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-success"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-done"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Mark
+                                                                                as
+                                                                                Reviewed
+                                                                            </div>
+                                                                        </li>
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPTJ &&
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod ==
+                                                                                    '02'
                                                                             "
                                                                             @click="
                                                                                 onApproval(
@@ -542,7 +609,11 @@
                                                                         <li
                                                                             class="d-none d-md-block"
                                                                             v-if="
-                                                                                isPTJ
+                                                                                isPTJ &&
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod ==
+                                                                                    '02'
                                                                             "
                                                                             @click="
                                                                                 onApproval(
@@ -563,7 +634,11 @@
                                                                         <li
                                                                             class="d-none d-md-block"
                                                                             v-if="
-                                                                                isPTJ
+                                                                                isPTJ &&
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod ==
+                                                                                    '02'
                                                                             "
                                                                             @click="
                                                                                 onApproval(
@@ -583,6 +658,31 @@
                                                                                 PIC
                                                                             </div>
                                                                         </li>
+                                                                        <li
+                                                                            class="d-none d-md-block"
+                                                                            v-if="
+                                                                                isPIC &&
+                                                                                dataTheMOU
+                                                                                    ?.status
+                                                                                    ?.kod ==
+                                                                                    '04'
+                                                                            "
+                                                                            @click="
+                                                                                onApproval(
+                                                                                    '00'
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            <div
+                                                                                class="btn btn-success"
+                                                                            >
+                                                                                <em
+                                                                                    class="icon ni ni-edit-fill"
+                                                                                ></em
+                                                                                >&nbsp;
+                                                                                Ready
+                                                                            </div>
+                                                                        </li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -594,9 +694,13 @@
                                             </div>
                                             <!-- .card -->
                                         </div>
-                                        <!-- .tab-pane -->
                                         <div
-                                            class="tab-pane"
+                                            :class="[
+                                                'tab-pane',
+                                                {
+                                                    'show active': tab == 2,
+                                                },
+                                            ]"
                                             id="tab-2"
                                             tabindex="1"
                                         >
@@ -614,7 +718,12 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="tab-pane"
+                                            :class="[
+                                                'tab-pane',
+                                                {
+                                                    'show active': tab == 3,
+                                                },
+                                            ]"
                                             id="tab-3"
                                             tabindex="2"
                                         >
@@ -665,6 +774,7 @@ import {
     useMouApprovalRejectionMemo,
 } from "@/hooks/useAPI";
 import TableLite from "@/components/TableLite.vue";
+import { LIMIT_TEXT } from "@/utils/constants";
 
 export default {
     name: "MemoDetailsView",
@@ -690,6 +800,7 @@ export default {
         const params = new URLSearchParams(window.location.search);
         const noMemo = params.get("memo") || "";
 
+        const tab = ref(params.get("tab") || 1);
         const isAdmin = ref(false);
         const isPUU = ref(false);
         const isPTJ = ref(false);
@@ -708,8 +819,8 @@ export default {
         const kpisCols = ref([
             "KPI",
             "Description",
-            "Notes",
-            "Amount (RM)",
+            // "Notes",
+            "Price (RM) / Unit",
             "Date From",
             "Date To",
         ]);
@@ -802,11 +913,31 @@ export default {
                             kpisTitle.value = `<div class="flex-div mb-2"><div class="me-2">Memorandum No.:</div><h4 class="text">${newDataMOU?.noMemo}</h4></div><h5>KPIs of Memorandum</h5>`;
                             kpis.value = [
                                 ...newDataMOU?.kpIs?.map((kpi) => {
+                                    const isUnit = kpi.amaun != 0;
+                                    const unit = isUnit ? kpi.amaun : 0;
+                                    const isNilai = kpi.nilai != 0;
+                                    const nilai = isNilai ? kpi.nilai : 0;
+                                    var priceUnit = "-";
+                                    if (isUnit) {
+                                        priceUnit = `${unit} unit${
+                                            unit > 1 ? "s" : ""
+                                        }`;
+                                    } else if (isNilai) {
+                                        priceUnit = `RM ${nilai}`;
+                                    }
+                                    const isDescMore =
+                                        kpi.penerangan?.length > LIMIT_TEXT;
+                                    const desc = kpi.penerangan?.substring(
+                                        0,
+                                        LIMIT_TEXT
+                                    );
                                     return {
-                                        KPI: kpi.nama,
-                                        Description: kpi.penerangan,
-                                        Notes: kpi.komen,
-                                        "Amount (RM)": kpi.amaun,
+                                        KPI: `<a href="${publicPath.value}kpi-view?kpi=${kpi.kpI_ID}">${kpi.kpi} (${kpi.kod})</a>`,
+                                        Description: `${desc}${
+                                            isDescMore ? "..." : ""
+                                        }`,
+                                        // Notes: kpi.komen,
+                                        "Price (RM) / Unit": priceUnit,
                                         "Date From": kpi.tarikhMulaDate,
                                         "Date To": kpi.tarikhTamatDate,
                                     };
@@ -916,6 +1047,7 @@ export default {
             dataStaffProfile,
             errorStaffProfile,
             loadingStaffProfile,
+            tab,
             isAdmin,
             isPUU,
             isPTJ,

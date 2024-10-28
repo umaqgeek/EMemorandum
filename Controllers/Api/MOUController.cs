@@ -34,12 +34,45 @@ public class MOUController : ControllerBase
     }
 
     [HttpGet("all")]
-    [Authorize(Policy = "AdminOrPUUOrPTJPolicy")]
     public ActionResult<IEnumerable<object>> GetAllMemorandums([FromQuery] string? q)
     {
         var staffId = GetStaffID();
 
         var query = GetMemorandumBaseQuery(q);
+
+        var roles = _context.EMO_Roles
+            .Where(r => r.NoStaf == staffId)
+            .Select(r => r.Role)
+            .ToList();
+
+        if (roles.Contains("Admin")) {
+            query = query.Where(m =>
+                m.Status == "00" ||
+                m.Status == "01" ||
+                m.Status == "02" ||
+                m.Status == "03" ||
+                m.Status == "04" ||
+                m.Status == "05"
+            );
+        } else if (roles.Contains("PUU")) {
+            query = query.Where(m =>
+                m.Status == "00" ||
+                m.Status == "01" ||
+                m.Status == "03" ||
+                m.Status == "05"
+            );
+        } else if (roles.Contains("PTJ")) {
+            query = query.Where(m =>
+                m.Status == "02" ||
+                m.Status == "03" ||
+                m.Status == "05"
+            );
+        } else {
+            query = query.Where(m =>
+                m.MS01_NoStaf == staffId ||
+                m.Author == staffId
+            );
+        }
 
         var memorandums = query
             .Select(_entity => GetTransformedMOU(_entity, staffId))
@@ -71,7 +104,14 @@ public class MOUController : ControllerBase
             JenisMemo = _context.PUU_JenisMemo.ToList(),
             KategoriMemo = _context.PUU_KategoriMemo.ToList(),
             ScopeMemo = _context.PUU_ScopeMemo.ToList(),
-            SubPTJ = _context.PUU_SubPTj.ToList(),
+            PTJ = _context.EMO_Pejabat.Where(e => e.StatusPTJ == true).ToList(),
+            SubPTJ = _context.EMO_Pejabat.ToList(),
+            KPIs = _context.EMO_KPI.ToList(),
+            Countries = _context.EMO_Countries.Select(c => new
+            {
+                code = c.code,
+                name = c.name,
+            }).ToList(),
         });
     }
 
@@ -131,6 +171,7 @@ public class MOUController : ControllerBase
                 memo.MS01_NoStaf = entity.form1.MS01_NoStaf;
                 memo.Nilai = entity.form1.Nilai;
                 memo.Status = updatedStatus;
+                memo.Negara = entity.form1.Negara;
 
                 // update a memo's members
                 _context.MOU03_Ahli.RemoveRange(memo.MOU03_Ahli);
@@ -152,13 +193,15 @@ public class MOUController : ControllerBase
                     _context.MOU04_KPI.Add(new MOU04_KPI
                     {
                         NoMemo = entity.NoMemo,
-                        Amaun = kpi.Amaun,
+                        Amaun = kpi.isAmount == true ? kpi.Amaun : 0,
+                        Nilai = kpi.isAmount == false ? kpi.Amaun : 0,
                         MOU04_Number = kpi.MOU04_Number,
                         Penerangan = kpi.Penerangan,
                         TarikhMula = kpi.TarikhMula,
                         TarikhTamat = kpi.TarikhTamat,
                         Komen = kpi.Komen,
                         Nama = kpi.Nama,
+                        Kod = kpi.Kod,
                     });
                 }
 
@@ -241,6 +284,8 @@ public class MOUController : ControllerBase
             MS01_NoStaf = entity.form1.MS01_NoStaf,
             Status = initialStatus,
             Nilai = entity.form1.Nilai,
+            Author = staffId,
+            Negara = entity.form1.Negara,
         };
 
         var mouStatus = new MOU02_Status
@@ -273,6 +318,7 @@ public class MOUController : ControllerBase
 
                 // add members for added MOU
                 List<string> noStafList = new List<string>();
+                noStafList.Add(entity.form1.MS01_NoStaf);
                 foreach (var member in entity.form2.Members)
                 {
                     _context.MOU03_Ahli.Add(new MOU03_Ahli
@@ -292,13 +338,15 @@ public class MOUController : ControllerBase
                     _context.MOU04_KPI.Add(new MOU04_KPI
                     {
                         NoMemo = genNo.noMemo,
-                        Amaun = kpi.Amaun,
+                        Amaun = kpi.isAmount == true ? kpi.Amaun : 0,
+                        Nilai = kpi.isAmount == false ? kpi.Amaun : 0,
                         MOU04_Number = kpi.MOU04_Number,
                         Penerangan = kpi.Penerangan,
                         TarikhMula = kpi.TarikhMula,
                         TarikhTamat = kpi.TarikhTamat,
                         Komen = kpi.Komen,
                         Nama = kpi.Nama,
+                        Kod = kpi.Kod,
                     });
                 }
 
@@ -307,13 +355,15 @@ public class MOUController : ControllerBase
                     .Where(s => noStafList.Contains(s.NoStaf) && !string.IsNullOrEmpty(s.Email))
                     .ToList();
 
+                // TODO: Email all PUU for newly created Memo.
+
                 // Trigger sending emails in the background
                 foreach (var staff in staffs)
                 {
                     var EMOURL = _configuration.GetValue<string>("EMOURL");
-                    var subject = "Member of a Memorandum";
+                    var subject = "New Memorandum Created";
                     var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
-                    var body = $"<p>{gelaran} {staff.Nama}</p><p>You have been added as a member of a memorandum with Memo ID "
+                    var body = $"<p>{gelaran} {staff.Nama}</p><p>A new memorandum has been created with Memorandum No. "
                         + $"<strong>{genNo.noMemo}</strong>. Please click this link "
                         + $"<a target='_blank' href='{EMOURL}?UsrLogin={staff.NoStaf}&callback=memo-detail?memo={genNo.noMemo}'>{EMOURL}memo-detail?memo={genNo.noMemo}</a>"
                         + " for more info.</p>";
@@ -344,13 +394,18 @@ public class MOUController : ControllerBase
     }
 
     [HttpPost("approval")]
-    [Authorize(Policy = "PTJPolicy")]
     public ActionResult<object> ApprovalRejectionMemorandum([FromBody] ApprovalModel entity)
     {
         var staffId = GetStaffID();
 
-        var statusMsg = "has been reviewed";
+        var statusMsg = "is been viewed";
         switch (entity.Status) {
+            case "00":
+                statusMsg = "is ready to be reviewed";
+                break;
+            case "02":
+                statusMsg = "has been reviewed";
+                break;
             case "03":
                 statusMsg = "has been approved";
                 break;
@@ -402,7 +457,64 @@ public class MOUController : ControllerBase
                 transaction.Commit();
 
                 // send emails to all viewers (pic, members, author) of this memo after all transaction is done
-                sendEmailsAfterUpdate("1 New Comment", entity.NoMemo, statusMsg);
+                sendEmailsAfterUpdate("New Update", entity.NoMemo, statusMsg);
+            }
+            catch (Exception ex)
+            {
+                // Rollback the transaction if any command fails
+                transaction.Rollback();
+                // Log or rethrow the exception as needed
+                throw;
+            }
+        }
+
+        return Ok(new { Status = true });
+    }
+
+    [HttpPost("kpi-progress")]
+    public ActionResult<object> AddKPIProgress([FromBody] MOU05_KPI_Progress entity)
+    {
+        var staffId = GetStaffID();
+
+        var mouHistory = new MOU06_History
+        {
+            NoMemo = entity.NoMemo,
+            NoStaf = staffId,
+            Description = "New KPI Progress has been added",
+            Created_At = DateTime.Now,
+        };
+
+        var kpiProgress = new MOU05_KPI_Progress
+        {
+            KPI_ID = entity.KPI_ID,
+            NoMemo = entity.NoMemo,
+            Bukti = entity.Bukti,
+            Amaun = entity.Amaun,
+            Number = entity.Number,
+            Penerangan = entity.Penerangan,
+            TarikhKemaskini = DateTime.Now,
+            NoStaf = staffId,
+        };
+
+        using (var transaction = _context.Database.BeginTransaction())
+        {
+            try
+            {
+                var memo = _context.MOU01_Memorandum.FirstOrDefault(m => m.NoMemo == entity.NoMemo);
+                if (memo == null) {
+                    return NotFound();
+                }
+
+                // Save comments and add new history
+                _context.MOU06_History.Add(mouHistory);
+
+                // Add new kpi progress
+                _context.MOU05_KPI_Progress.Add(kpiProgress);
+
+                // Save changes to the database
+                _context.SaveChanges();
+                // Commit the transaction if all commands succeed
+                transaction.Commit();
             }
             catch (Exception ex)
             {
@@ -425,17 +537,9 @@ public class MOUController : ControllerBase
         {
             NoMemo = entity.NoMemo,
             NoStaf = staffId,
-            Description = "Memorandum has been reviewed",
+            Description = "Memorandum has been commented",
             Created_At = DateTime.Now,
             Comment = entity.Comment,
-        };
-
-        var statusReviewed = "02";
-        var mouStatus = new MOU02_Status
-        {
-            NoMemo = entity.NoMemo,
-            Status = statusReviewed,
-            Tarikh = DateTime.Now,
         };
 
         using (var transaction = _context.Database.BeginTransaction())
@@ -446,21 +550,15 @@ public class MOUController : ControllerBase
                 if (memo == null) {
                     return NotFound();
                 }
-                memo.Status = statusReviewed;
 
                 // Save comments and add new history
                 _context.MOU06_History.Add(mouHistory);
 
-                // add new status for existing MOU
-                _context.MOU02_Status.Add(mouStatus);
-
                 // Save changes to the database
                 _context.SaveChanges();
+
                 // Commit the transaction if all commands succeed
                 transaction.Commit();
-
-                // send emails to all viewers (pic, members, author) of this memo after all transaction is done
-                sendEmailsAfterUpdate("1 New Comment", entity.NoMemo, "has been commented");
             }
             catch (Exception ex)
             {
@@ -484,10 +582,12 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.MOU02_Statuses)
                 .ThenInclude(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.PUU_ScopeMemo)
-            .Include(_entity => _entity.PUU_SubPTj)
+            .Include(_entity => _entity.EMO_PejabatPTJ)
+            .Include(_entity => _entity.EMO_PejabatSubPTJ)
             .Include(_entity => _entity.PUU_JenisMemo)
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.EMO_StafAuthor)
             .Include(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.MOU06_History)
                 .ThenInclude(_entity => _entity.EMO_Staf)
@@ -495,6 +595,8 @@ public class MOUController : ControllerBase
                 .ThenInclude(_entity => _entity.EMO_Staf)
                     .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU04_KPI)
+                .ThenInclude(_entity => _entity.EMO_KPI)
+            .Include(_entity => _entity.EMO_Countries)
             .FirstOrDefault();
 
         if (_entity == null)
@@ -503,6 +605,101 @@ public class MOUController : ControllerBase
         }
 
         return Ok(GetTransformedMOU(_entity, staffId));
+    }
+
+    [HttpGet("kpi/{kpiId}")]
+    public ActionResult<MOU04_KPI> GetMemorandumKPI(long kpiId)
+    {
+        var staffId = GetStaffID();
+
+        var query = _context.MOU04_KPI
+            .Where(_entity => _entity.KPI_ID == kpiId)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.MOU02_Statuses)
+                    .ThenInclude(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.PUU_ScopeMemo)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.EMO_PejabatPTJ)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.EMO_PejabatSubPTJ)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.PUU_JenisMemo)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.PUU_KategoriMemo)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.EMO_StafAuthor)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.EMO_KPI)
+            .Include(_entity => _entity.MOU05_KPI_Progress)
+                .ThenInclude(_entity => _entity.EMO_Staf)
+            .FirstOrDefault();
+
+        if (query == null) {
+            return NotFound();
+        }
+
+        return Ok(new
+        {
+            KPI_ID = query.KPI_ID,
+            Kod = query.Kod,
+            KPI = query.EMO_KPI.KPI,
+            NoMemo = TransformToCode(query.NoMemo),
+            Amaun = query.Amaun,
+            isAmount = query.Amaun != 0 ? true : false,
+            MOU04_Number = query.MOU04_Number,
+            Penerangan = query.Penerangan,
+            TarikhMula = query.TarikhMula,
+            TarikhTamat = query.TarikhTamat,
+            Komen = query.Komen,
+            Nama = query.Nama,
+            Nilai = query.MOU01_Memorandum.Nilai,
+            PTJNama = query.MOU01_Memorandum.EMO_PejabatPTJ.NamaPBU,
+            ScopeButiran = query.MOU01_Memorandum.PUU_ScopeMemo.Butiran,
+            Jenis = query.MOU01_Memorandum.PUU_JenisMemo.Butiran,
+            Kategori = query.MOU01_Memorandum.PUU_KategoriMemo.Butiran,
+            SubPTJNama = query.MOU01_Memorandum.EMO_PejabatSubPTJ.NamaPBU,
+            MOUTarikhMula = query.MOU01_Memorandum.TarikhMula,
+            MOUTarikhMulaDate = GetDisplayDate(query.MOU01_Memorandum.TarikhMula),
+            MOUTarikhMulaDate2 = GetDisplayDate2(query.MOU01_Memorandum.TarikhMula),
+            MOUTarikhTamat = query.MOU01_Memorandum.TarikhTamat,
+            MOUTarikhTamatDate = GetDisplayDate(query.MOU01_Memorandum.TarikhTamat),
+            MOUTarikhTamatDate2 = GetDisplayDate2(query.MOU01_Memorandum.TarikhTamat),
+            TajukProjek = query.MOU01_Memorandum.TajukProjek,
+            Path = query.MOU01_Memorandum.Path,
+            NamaDok = query.MOU01_Memorandum.NamaDok,
+            IsPIC = query.MOU01_Memorandum.MS01_NoStaf == staffId,
+            PIC = query.MOU01_Memorandum.EMO_Staf.Nama,
+            PICGelaran = query.MOU01_Memorandum.EMO_Staf.Gelaran,
+            PICEmail = query.MOU01_Memorandum.EMO_Staf.Email,
+            noStafPIC = query.MOU01_Memorandum.EMO_Staf.NoStaf,
+            Author = query.MOU01_Memorandum.EMO_StafAuthor.Nama,
+            AuthorGelaran = query.MOU01_Memorandum.EMO_StafAuthor.Gelaran,
+            AuthorEmail = query.MOU01_Memorandum.EMO_StafAuthor.Email,
+            AuthorNoStaf = query.MOU01_Memorandum.EMO_StafAuthor.NoStaf,
+            Status = query.MOU01_Memorandum.MOU_Status,
+            Progress = query.MOU05_KPI_Progress.Select(mou05 => new
+            {
+                TarikhKemaskini = mou05.TarikhKemaskini?.ToString("dd MMM yyyy, h:mm tt") ?? "",
+                Amaun = mou05.Amaun,
+                Bukti = mou05.Bukti,
+                IsAmount = mou05.Amaun != 0 ? true : false,
+                KPI_ID = mou05.KPI_ID,
+                Number = mou05.Number,
+                Penerangan = mou05.Penerangan,
+                ProgressID = mou05.ProgressID,
+                Stafff = mou05?.EMO_Staf,
+                Author = new
+                {
+                    NoStaf = mou05?.EMO_Staf?.NoStaf,
+                    Nama = mou05?.EMO_Staf?.Nama,
+                    Gelaran = mou05?.EMO_Staf?.Gelaran,
+                }
+            })?.OrderByDescending(mou05 => mou05.TarikhKemaskini).ToList(),
+        });
     }
 
     private dynamic getGeneratedNo(MemorandumGenNo entity)
@@ -524,8 +721,8 @@ public class MOUController : ControllerBase
         {
             return (new { error = "KodJenis not found!" });
         }
-        var ptj = _context.PUU_SubPTj
-            .Where(j => j.KodPTJ == entity.KodPTJ)
+        var ptj = _context.EMO_Pejabat
+            .Where(j => j.KodPejPBU == entity.KodPTJ)
             .FirstOrDefault();
         if (ptj == null)
         {
@@ -568,7 +765,7 @@ public class MOUController : ControllerBase
             NoSiri = _entity.NoSiri,
             Tahun = _entity.Tahun,
             KodPTJ = _entity.KodPTJ,
-            PTJNama = _entity.PUU_SubPTj.Nama,
+            PTJNama = _entity.EMO_PejabatPTJ.NamaPBU,
             KodScope = _entity.KodScope,
             ScopeButiran = _entity.PUU_ScopeMemo.Butiran,
             KodJenis = _entity.KodJenis,
@@ -576,6 +773,7 @@ public class MOUController : ControllerBase
             KodKategori = _entity.KodKategori,
             Kategori = _entity.PUU_KategoriMemo.Butiran,
             KodPTJSub = _entity.KodPTJSub,
+            SubPTJNama = _entity.EMO_PejabatSubPTJ.NamaPBU,
             TarikhMula = _entity.TarikhMula,
             TarikhMulaDate = GetDisplayDate(_entity.TarikhMula),
             TarikhMulaDate2 = GetDisplayDate2(_entity.TarikhMula),
@@ -584,16 +782,26 @@ public class MOUController : ControllerBase
             TarikhTamatDate2 = GetDisplayDate2(_entity.TarikhTamat),
             TajukProjek = _entity.TajukProjek,
             Path = _entity.Path,
+            NamaDok = _entity.NamaDok,
             IsPIC = _entity.MS01_NoStaf == staffId,
             PIC = _entity.EMO_Staf.Nama,
             PICGelaran = _entity.EMO_Staf.Gelaran,
             PICEmail = _entity.EMO_Staf.Email,
             noStafPIC = _entity.EMO_Staf.NoStaf,
+            Author = _entity.EMO_StafAuthor.Nama,
+            AuthorGelaran = _entity.EMO_StafAuthor.Gelaran,
+            AuthorEmail = _entity.EMO_StafAuthor.Email,
+            AuthorNoStaf = _entity.EMO_StafAuthor.NoStaf,
             Nilai = _entity.Nilai,
+            Negara = new
+            {
+                code = _entity.EMO_Countries?.code,
+                name = _entity.EMO_Countries?.name,
+            },
             Status = new
             {
-                _entity.MOU_Status.Kod,
-                _entity.MOU_Status.Status,
+                Kod = _entity.MOU_Status?.Kod,
+                Status = _entity.MOU_Status?.Status,
             },
             Statuses = _entity.MOU02_Statuses.Select(mou02 => new
             {
@@ -602,8 +810,8 @@ public class MOUController : ControllerBase
                 Tarikh = mou02.Tarikh,
                 StatusInner = new
                 {
-                    mou02.MOU_Status.Kod,
-                    mou02.MOU_Status.Status
+                    Kod = mou02.MOU_Status?.Kod,
+                    Status = mou02.MOU_Status?.Status
                 },
             })?.OrderByDescending(_entity => _entity.Tarikh).ToList(),
             History = _entity.MOU06_History.Select(mou06 => new
@@ -627,7 +835,11 @@ public class MOUController : ControllerBase
             })?.ToList(),
             KPIs = _entity.MOU04_KPI.Select(mou04 => new
             {
+                KPI_ID = mou04.KPI_ID,
+                Kod = mou04.Kod,
+                Kpi = mou04.EMO_KPI.KPI,
                 Amaun = mou04.Amaun,
+                Nilai = mou04.Nilai,
                 Komen = mou04.Komen,
                 Nama = mou04.Nama,
                 Penerangan = mou04.Penerangan,
@@ -659,10 +871,12 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.MOU02_Statuses)
                 .ThenInclude(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.PUU_ScopeMemo)
-            .Include(_entity => _entity.PUU_SubPTj)
+            .Include(_entity => _entity.EMO_PejabatPTJ)
+            .Include(_entity => _entity.EMO_PejabatSubPTJ)
             .Include(_entity => _entity.PUU_JenisMemo)
             .Include(_entity => _entity.PUU_KategoriMemo)
             .Include(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.EMO_StafAuthor)
             .Include(_entity => _entity.MOU_Status)
             .Include(_entity => _entity.MOU06_History)
                 .ThenInclude(_entity => _entity.EMO_Staf)
@@ -670,6 +884,8 @@ public class MOUController : ControllerBase
                 .ThenInclude(_entity => _entity.EMO_Staf)
                     .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU04_KPI)
+                .ThenInclude(_entity => _entity.EMO_KPI)
+            .Include(_entity => _entity.EMO_Countries)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(q))
@@ -720,7 +936,7 @@ public class MOUController : ControllerBase
         {
             var EMOURL = _configuration.GetValue<string>("EMOURL");
             var gelaran = staff.Gelaran.Contains("TIADA DILAPORKAN", StringComparison.OrdinalIgnoreCase) ? "" : staff.Gelaran;
-            var body = $"<p>{gelaran} {staff.Nama}</p><p>Memorandum with Memo ID "
+            var body = $"<p>{gelaran} {staff.Nama}</p><p>Memorandum with Memorandum No. "
                 + $"<strong>{memo.NoMemo}</strong> {statusMsg}. Please click this link "
                 + $"<a target='_blank' href='{EMOURL}?UsrLogin={staff.NoStaf}&callback=memo-detail?memo={memo.NoMemo}'>{EMOURL}memo-detail?memo={memo.NoMemo}</a>"
                 + " for more info.</p>";
@@ -779,7 +995,7 @@ public class MemorandumGenNo
 
 public class MOUAddModel
 {
-    public string NoMemo { get; set; }
+    public string? NoMemo { get; set; }
     public MOU01_Memorandum form1 { get; set; }
     public MOUMembers form2 { get; set; }
     public MOUKPIs form3 { get; set; }

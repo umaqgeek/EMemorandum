@@ -114,7 +114,7 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import { useStaffProfile, useGetAllMOU, useGetMyMOU } from "@/hooks/useAPI";
+import { useStaffProfile, useGetAllMOU } from "@/hooks/useAPI";
 import TableLite from "@/components/TableLite.vue";
 
 export default {
@@ -177,90 +177,39 @@ export default {
                     newDataStaffProfile &&
                     newDataStaffProfile?.roles?.length > 0
                 ) {
-                    const isAdmin = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "Admin"
-                    )
-                        ? true
-                        : false;
-                    const isPUU = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "PUU"
-                    )
-                        ? true
-                        : false;
-                    const isPTJ = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "PTJ"
-                    )
-                        ? true
-                        : false;
-                    if (isAdmin || isPUU || isPTJ) {
-                        const { data: dataAllMOU, loading: loadingAllMOU } =
-                            useGetAllMOU(query);
-                        mouLoading.value = loadingAllMOU.value;
-                        watch(
-                            () => dataAllMOU.value,
-                            (dataAllMOUs) => {
-                                mouData.value = dataAllMOUs?.map((d) => {
-                                    return {
-                                        "Memorandum No.": `<a class="title" href="${publicPath}memo-detail?memo=${
-                                            d.noMemo
-                                        }">${
-                                            d.noMemo
-                                        }</a><br /><span class="badge text-bg-${color(
-                                            d.status?.kod
-                                        )}">${d.status?.status}</span>`,
-                                        Type: d.jenis,
-                                        Scope: d.scopeButiran,
-                                        Staff: `<a class="title" href="${publicPath}user-view?s=${d.noStafPIC}">${d.pic}</a>`,
-                                        "Start Date": d.tarikhMulaDate,
-                                        "End Date": d.tarikhTamatDate,
-                                        "Price (RM)": d.nilai?.toFixed(2),
-                                    };
-                                });
-                                // initDatatable();
-                            },
-                            { immediate: true }
-                        );
-                        watch(
-                            () => loadingAllMOU.value,
-                            (newLoadingAllMOU) => {
-                                mouLoading.value = newLoadingAllMOU;
-                            }
-                        );
-                    } else {
-                        const { data: dataMyMOU, loading: loadingMyMOU } =
-                            useGetMyMOU(query);
-                        mouLoading.value = loadingMyMOU.value;
-                        watch(
-                            () => dataMyMOU.value,
-                            (dataMyMOUs) => {
-                                mouData.value = dataMyMOUs?.map((d) => {
-                                    return {
-                                        "Memorandum No.": `<a class="title" href="${publicPath}memo-detail?memo=${
-                                            d.noMemo
-                                        }">${
-                                            d.noMemo
-                                        }</a><br /><span class="badge text-bg-${color(
-                                            d.status?.kod
-                                        )}">${d.status?.status}</span>`,
-                                        Type: d.jenis,
-                                        Scope: d.scopeButiran,
-                                        Staff: `<a class="title" href="${publicPath}user-view?s=${d.noStafPIC}">${d.pic}</a>`,
-                                        "Start Date": d.tarikhMulaDate,
-                                        "End Date": d.tarikhTamatDate,
-                                        "Price (RM)": d.nilai?.toFixed(2),
-                                    };
-                                });
-                                // initDatatable();
-                            },
-                            { immediate: true }
-                        );
-                        watch(
-                            () => loadingMyMOU.value,
-                            (newLoadingMyMOU) => {
-                                mouLoading.value = newLoadingMyMOU;
-                            }
-                        );
-                    }
+                    const { data: dataAllMOU, loading: loadingAllMOU } =
+                        useGetAllMOU(query);
+                    mouLoading.value = loadingAllMOU.value;
+                    watch(
+                        () => dataAllMOU.value,
+                        (dataAllMOUs) => {
+                            mouData.value = dataAllMOUs?.map((d) => {
+                                return {
+                                    "Memorandum No.": `<a class="title" href="${publicPath}memo-detail?memo=${
+                                        d.noMemo
+                                    }">${
+                                        d.noMemo
+                                    }</a><br /><span class="badge text-bg-${color(
+                                        d.status?.kod
+                                    )}">${d.status?.status}</span>`,
+                                    Type: d.jenis,
+                                    Scope: d.scopeButiran,
+                                    Staff: `<a class="title" href="${publicPath}user-view?s=${d.noStafPIC}">${d.pic}</a>`,
+                                    "Start Date": d.tarikhMulaDate,
+                                    "End Date": d.tarikhTamatDate,
+                                    "Price (RM)": d.nilai?.toFixed(2),
+                                };
+                            });
+                            // initDatatable();
+                        },
+                        { immediate: true }
+                    );
+                    watch(
+                        () => loadingAllMOU.value,
+                        (newLoadingAllMOU) => {
+                            mouLoading.value = newLoadingAllMOU;
+                        }
+                    );
                 }
             },
             { immediate: true } // Run the watcher immediately on component mount

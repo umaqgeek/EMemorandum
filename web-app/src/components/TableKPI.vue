@@ -15,11 +15,10 @@
                 <thead class="table-light">
                     <tr>
                         <th class="tb-col">No.</th>
-                        <th class="tb-col">KPI</th>
-                        <th class="tb-col">Description</th>
-                        <th class="tb-col">Notes</th>
-                        <th class="tb-col">Amount</th>
-                        <th class="tb-col">Date</th>
+                        <th class="tb-col">KPI & Description</th>
+                        <!-- <th class="tb-col">Notes</th> -->
+                        <th class="tb-col">Amount / Unit</th>
+                        <th class="tb-col">From & To</th>
                     </tr>
                 </thead>
                 <tbody v-if="kpis?.length > 0">
@@ -27,17 +26,22 @@
                         <td class="tb-col">{{ kpiIndex + 1 }}.</td>
                         <td class="tb-col">
                             <div class="form-control-wrap">
-                                <input
-                                    type="int"
+                                <select
                                     class="form-control"
-                                    id="Nama"
-                                    placeholder="Eg.: Reviewed by NC"
-                                    v-model="kpi.Nama"
-                                />
+                                    id="Kod"
+                                    v-model="kpi.Kod"
+                                >
+                                    <option value="">- Select KPI -</option>
+                                    <option
+                                        v-for="listKPI in listKPIs"
+                                        v-bind:key="listKPI.kod"
+                                        :value="listKPI.kod"
+                                    >
+                                        {{ listKPI.kpi }}
+                                    </option>
+                                </select>
                             </div>
-                        </td>
-                        <td class="tb-col">
-                            <div class="form-control-wrap">
+                            <div class="form-control-wrap mt-2">
                                 <textarea
                                     placeholder="Eg.: This KPI need to be reviewed by NC."
                                     class="form-control"
@@ -47,7 +51,7 @@
                                 ></textarea>
                             </div>
                         </td>
-                        <td class="tb-col">
+                        <!-- <td class="tb-col">
                             <div class="form-control-wrap">
                                 <textarea
                                     placeholder="Eg.: The amount shouldn't more than MYR 10,000."
@@ -57,46 +61,58 @@
                                     v-model="kpi.Komen"
                                 ></textarea>
                             </div>
-                        </td>
+                        </td> -->
                         <td class="tb-col">
                             <div class="form-control-wrap">
                                 <input
                                     type="number"
-                                    class="form-control"
+                                    class="form-control table-kpi-amount"
                                     id="Amaun"
                                     placeholder="Eg.: 9943"
                                     v-model="kpi.Amaun"
                                 />
+                                <div
+                                    class="table-kpi-amount-option-container mt-3"
+                                >
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            v-model="kpi.isAmount"
+                                            :value="false"
+                                            :name="`isAmount_${kpiIndex}`"
+                                        />
+                                        Price (RM)
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="radio"
+                                            v-model="kpi.isAmount"
+                                            :value="true"
+                                            :name="`isAmount_${kpiIndex}`"
+                                        />
+                                        Unit
+                                    </label>
+                                </div>
                             </div>
                         </td>
                         <td class="tb-col">
                             <div class="form-group">
-                                <div class="input-group">
-                                    <input
-                                        placeholder="dd/mm/yyyy"
-                                        type="date"
-                                        class="form-control"
-                                        name="TarikhMula"
-                                        v-model="kpi.TarikhMula"
-                                    />
-                                    <span class="input-group-text">to</span>
-                                    <input
-                                        placeholder="dd/mm/yyyy"
-                                        type="date"
-                                        class="form-control"
-                                        name="TarikhTamat"
-                                        v-model="kpi.TarikhTamat"
-                                    />
-                                </div>
+                                <input
+                                    placeholder="Start date"
+                                    type="date"
+                                    class="form-control"
+                                    name="TarikhMula"
+                                    v-model="kpi.TarikhMula"
+                                />
+                                <div class="table-kpi-to">To</div>
+                                <input
+                                    placeholder="dd/mm/yyyy"
+                                    type="date"
+                                    class="form-control"
+                                    name="TarikhTamat"
+                                    v-model="kpi.TarikhTamat"
+                                />
                                 <div class="mt-3">
-                                    <button
-                                        class="btn btn-outline-secondary"
-                                        type="button"
-                                        @click="clearKPI(kpiIndex)"
-                                    >
-                                        Clear
-                                    </button>
-                                    &nbsp;
                                     <button
                                         class="btn btn-outline-danger"
                                         type="button"
@@ -122,6 +138,10 @@ export default {
             type: Array,
             required: true,
         },
+        listKPIs: {
+            type: Array,
+            required: true,
+        },
     },
     methods: {
         // saveKPIs() {
@@ -130,10 +150,12 @@ export default {
         addKPI() {
             // eslint-disable-next-line
             this.kpis.push({
+                Kod: "",
                 Nama: "",
                 Penerangan: "",
                 Komen: "",
                 Amaun: 0,
+                isAmount: false,
                 TarikhMula: "",
                 TarikhTamat: "",
             });
@@ -144,10 +166,12 @@ export default {
             // eslint-disable-next-line
             this.kpis = [...this.kpis, newKpi].map((k, kIndex) => {
                 if (kpiIndex === kIndex) {
+                    k.Kod = "";
                     k.Nama = "";
                     k.Penerangan = "";
                     k.Komen = "";
-                    k.Amoun = 0;
+                    k.Amaun = 0;
+                    k.isAmount = false;
                     k.TarikhMula = "";
                     k.TarikhTamat = "";
                 }
@@ -155,14 +179,29 @@ export default {
             });
             // this.saveKPIs();
         },
-        // TODO: clear row throw mutable error for kpis
         removeKPI(kpiIndex) {
             // eslint-disable-next-line
-            this.kpis = [...this.kpis, newKpi].filter(
-                (_, kIndex) => kIndex !== kpiIndex
-            );
+            this.kpis.splice(kpiIndex, 1);
             // this.saveKPIs();
         },
     },
 };
 </script>
+
+<style scoped>
+.table-kpi-to {
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 4px 0px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.table-kpi-amount {
+    width: 40%;
+}
+.table-kpi-amount-option-container {
+    display: flex;
+    flex-direction: column;
+}
+</style>

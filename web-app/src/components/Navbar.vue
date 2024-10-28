@@ -94,22 +94,10 @@
                             <a
                                 :href="`${publicPath}memo-list`"
                                 class="nk-menu-link"
-                                v-if="roles.find((r) => r.role === 'PTJ')"
-                                ><span class="nk-menu-icon"
-                                    ><em class="icon ni ni-check-round-cut"></em
-                                ></span>
-                                <span class="nk-menu-text">Approval</span>
-                            </a>
-                            <a
-                                :href="`${publicPath}memo-list`"
-                                class="nk-menu-link"
-                                v-else
                                 ><span class="nk-menu-icon"
                                     ><em class="icon ni ni-note-add"></em
                                 ></span>
-                                <span class="nk-menu-text"
-                                    >Manage Memorandum</span
-                                >
+                                <span class="nk-menu-text">Memorandums</span>
                             </a>
                         </li>
                         <li
