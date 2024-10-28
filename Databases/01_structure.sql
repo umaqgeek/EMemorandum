@@ -197,7 +197,7 @@ CREATE TABLE DbEMO.dbo.MOU04_KPI (
 CREATE TABLE DbEMO.dbo.MOU05_KPI_Progress (
 	KPI_ID BIGINT NOT NULL,
 	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	ProgressID timestamp NOT NULL,
+	ProgressID BIGINT IDENTITY(1,1) NOT NULL,
 	Bukti nvarchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Amaun decimal(18,2) NULL,
 	Number numeric(18,0) NULL,

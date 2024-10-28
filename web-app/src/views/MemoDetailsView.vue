@@ -829,7 +829,7 @@ export default {
                                         priceUnit = `RM ${nilai}`;
                                     }
                                     return {
-                                        KPI: `${kpi.kpi} (${kpi.kod})`,
+                                        KPI: `<a href="${publicPath.value}kpi-view?kpi=${kpi.kpI_ID}">${kpi.kpi} (${kpi.kod})</a>`,
                                         Description: kpi.penerangan,
                                         // Notes: kpi.komen,
                                         "Price (RM) / Unit": priceUnit,

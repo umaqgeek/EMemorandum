@@ -34,7 +34,6 @@ public class MOUController : ControllerBase
     }
 
     [HttpGet("all")]
-    [Authorize(Policy = "AdminOrPUUOrPTJPolicy")]
     public ActionResult<IEnumerable<object>> GetAllMemorandums([FromQuery] string? q)
     {
         var staffId = GetStaffID();
@@ -523,6 +522,81 @@ public class MOUController : ControllerBase
         return Ok(GetTransformedMOU(_entity, staffId));
     }
 
+    [HttpGet("kpi/{kpiId}")]
+    public ActionResult<MOU04_KPI> GetMemorandumKPI(long kpiId)
+    {
+        var staffId = GetStaffID();
+
+        var query = _context.MOU04_KPI
+            .Where(_entity => _entity.KPI_ID == kpiId)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.MOU02_Statuses)
+                    .ThenInclude(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.PUU_ScopeMemo)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.EMO_PejabatPTJ)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.EMO_PejabatSubPTJ)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.PUU_JenisMemo)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.PUU_KategoriMemo)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.EMO_Staf)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.EMO_StafAuthor)
+            .Include(_entity => _entity.MOU01_Memorandum)
+                .ThenInclude(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.EMO_KPI)
+            .FirstOrDefault();
+
+        if (query == null) {
+            return NotFound();
+        }
+
+        return Ok(new
+        {
+            KPI_ID = query.KPI_ID,
+            Kod = query.Kod,
+            KPI = query.EMO_KPI.KPI,
+            NoMemo = TransformToCode(query.NoMemo),
+            Amaun = query.Amaun,
+            isAmount = query.isAmount,
+            MOU04_Number = query.MOU04_Number,
+            Penerangan = query.Penerangan,
+            TarikhMula = query.TarikhMula,
+            TarikhTamat = query.TarikhTamat,
+            Komen = query.Komen,
+            Nama = query.Nama,
+            Nilai = query.Nilai,
+            PTJNama = query.MOU01_Memorandum.EMO_PejabatPTJ.NamaPBU,
+            ScopeButiran = query.MOU01_Memorandum.PUU_ScopeMemo.Butiran,
+            Jenis = query.MOU01_Memorandum.PUU_JenisMemo.Butiran,
+            Kategori = query.MOU01_Memorandum.PUU_KategoriMemo.Butiran,
+            SubPTJNama = query.MOU01_Memorandum.EMO_PejabatSubPTJ.NamaPBU,
+            MOUTarikhMula = query.MOU01_Memorandum.TarikhMula,
+            MOUTarikhMulaDate = GetDisplayDate(query.MOU01_Memorandum.TarikhMula),
+            MOUTarikhMulaDate2 = GetDisplayDate2(query.MOU01_Memorandum.TarikhMula),
+            MOUTarikhTamat = query.MOU01_Memorandum.TarikhTamat,
+            MOUTarikhTamatDate = GetDisplayDate(query.MOU01_Memorandum.TarikhTamat),
+            MOUTarikhTamatDate2 = GetDisplayDate2(query.MOU01_Memorandum.TarikhTamat),
+            TajukProjek = query.MOU01_Memorandum.TajukProjek,
+            Path = query.MOU01_Memorandum.Path,
+            NamaDok = query.MOU01_Memorandum.NamaDok,
+            IsPIC = query.MOU01_Memorandum.MS01_NoStaf == staffId,
+            PIC = query.MOU01_Memorandum.EMO_Staf.Nama,
+            PICGelaran = query.MOU01_Memorandum.EMO_Staf.Gelaran,
+            PICEmail = query.MOU01_Memorandum.EMO_Staf.Email,
+            noStafPIC = query.MOU01_Memorandum.EMO_Staf.NoStaf,
+            Author = query.MOU01_Memorandum.EMO_StafAuthor.Nama,
+            AuthorGelaran = query.MOU01_Memorandum.EMO_StafAuthor.Gelaran,
+            AuthorEmail = query.MOU01_Memorandum.EMO_StafAuthor.Email,
+            AuthorNoStaf = query.MOU01_Memorandum.EMO_StafAuthor.NoStaf,
+            Status = query.MOU01_Memorandum.MOU_Status,
+        });
+    }
+
     private dynamic getGeneratedNo(MemorandumGenNo entity)
     {
         // Sample:
@@ -656,6 +730,7 @@ public class MOUController : ControllerBase
             })?.ToList(),
             KPIs = _entity.MOU04_KPI.Select(mou04 => new
             {
+                KPI_ID = mou04.KPI_ID,
                 Kod = mou04.Kod,
                 Kpi = mou04.EMO_KPI.KPI,
                 Amaun = mou04.Amaun,
