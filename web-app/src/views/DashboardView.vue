@@ -137,7 +137,9 @@
                                             </div>
                                         </a>
                                     </div> -->
-                                    <div class="col-md-6">
+                                </div>
+                                <div class="row g-gs mt-3">
+                                    <div class="col-md-4">
                                         <div class="card">
                                             <div class="card-body">
                                                 <h4>Memorandums by Category</h4>
@@ -156,7 +158,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="card">
                                             <div class="card-body">
                                                 <h4>
@@ -173,6 +175,21 @@
                                                     :labels="
                                                         reportDue1Year.labels
                                                     "
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4>Memorandums by PTJs</h4>
+                                                <ChartPieComponent
+                                                    v-if="
+                                                        reportPTJ.series
+                                                            ?.length > 0
+                                                    "
+                                                    :series="reportPTJ.series"
+                                                    :labels="reportPTJ.labels"
                                                 />
                                             </div>
                                         </div>
@@ -201,6 +218,7 @@ import {
     useStaffProfile,
     useReportByCategory,
     useReportByDue1Year,
+    useReportByPTJ,
 } from "@/hooks/useAPI";
 import ChartPieComponent from "@/components/ChartPie.vue";
 
@@ -259,16 +277,34 @@ export default {
             }
         );
 
+        const reportPTJ = ref({
+            labels: [],
+            series: [],
+        });
+        const { data: dataReportPTJ, loading: loadingReportPTJ } =
+            useReportByPTJ();
+        watch(
+            () => dataReportPTJ.value,
+            (newDataReportPTJ) => {
+                reportPTJ.value = {
+                    labels: [...newDataReportPTJ?.labels],
+                    series: [...newDataReportPTJ?.data],
+                };
+            }
+        );
+
         return {
             dataStaffProfile,
             errorStaffProfile,
             loading:
                 loadingStaffProfile ||
                 loadingReportCategory ||
-                loadingReportDue1Year,
+                loadingReportDue1Year ||
+                loadingReportPTJ,
             refetch,
             reportCategory,
             reportDue1Year,
+            reportPTJ,
         };
     },
     computed: {

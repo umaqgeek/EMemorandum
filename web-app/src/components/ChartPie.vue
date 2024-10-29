@@ -1,15 +1,15 @@
 <template>
-    <div id="chart">
-        <apexchart
-            type="pie"
-            width="380"
-            :options="chartOptions"
-            :series="series"
-        ></apexchart>
-    </div>
+    <apexchart
+        type="pie"
+        width="100%"
+        :options="chartOptions"
+        :series="series"
+    ></apexchart>
 </template>
 
 <script>
+import { LIMIT_LABEL } from "@/utils/constants";
+
 export default {
     name: "ChartPieComponent",
     props: {
@@ -20,10 +20,14 @@ export default {
         return {
             chartOptions: {
                 chart: {
-                    width: 380,
                     type: "pie",
                 },
-                labels: props.labels,
+                labels: props.labels?.map((l) => {
+                    return (
+                        l?.substring(0, LIMIT_LABEL) +
+                        (l?.length > LIMIT_LABEL ? "..." : "")
+                    );
+                }),
                 responsive: [
                     {
                         breakpoint: 480,
@@ -32,7 +36,7 @@ export default {
                                 width: 200,
                             },
                             legend: {
-                                position: "bottom",
+                                position: "right",
                             },
                         },
                     },

@@ -4,3 +4,5 @@ export const API_URL =
 export const EMO_TOKEN = "ssusrid";
 
 export const LIMIT_TEXT = 100;
+
+export const LIMIT_LABEL = 20;

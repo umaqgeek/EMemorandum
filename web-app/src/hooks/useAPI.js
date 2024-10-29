@@ -202,3 +202,10 @@ export function useReportByDue1Year() {
         url: `${API_URL}/report/by-due-a-year`,
     });
 }
+
+export function useReportByPTJ() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/by-ptj`,
+    });
+}

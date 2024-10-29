@@ -63,4 +63,26 @@ public class ReportController : ControllerBase
         };
         return Ok(result);
     }
+
+    [HttpGet("by-ptj")]
+    public ActionResult ByPTJ()
+    {
+        var categories = _context.EMO_Pejabat
+            .Select(p => new
+            {
+                KodPBU = p.KodPBU,
+                NamaPBU = p.NamaPBU,
+                Count = p.PTJMemorandums.Count(),
+            })
+            .OrderByDescending(p => p.Count)
+            .ToList();
+        var labels = categories.Select(x => x.NamaPBU).ToList();
+        var data = categories.Select(x => x.Count).ToList();
+        var result = new
+        {
+            labels = labels,
+            data = data,
+        };
+        return Ok(result);
+    }
 }
