@@ -195,3 +195,10 @@ export function useReportByCategory() {
         url: `${API_URL}/report/by-category`,
     });
 }
+
+export function useReportByDue1Year() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/by-due-a-year`,
+    });
+}

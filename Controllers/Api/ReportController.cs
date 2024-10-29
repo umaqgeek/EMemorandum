@@ -43,4 +43,24 @@ public class ReportController : ControllerBase
         };
         return Ok(result);
     }
+
+    [HttpGet("by-due-a-year")]
+    public ActionResult ByDueInAYear()
+    {
+        var currentDate = DateTime.Now;
+        var sixMonthsFromNow = currentDate.AddMonths(6);
+        var twelveMonthsFromNow = currentDate.AddMonths(12);
+        var dueWithin6Months = _context.MOU01_Memorandum
+            .Where(m => m.TarikhTamat <= sixMonthsFromNow)
+            .Count();
+        var dueWithin6To12Months = _context.MOU01_Memorandum
+            .Where(m => m.TarikhTamat > sixMonthsFromNow && m.TarikhTamat <= twelveMonthsFromNow)
+            .Count();
+        var result = new
+        {
+            labels = new[] { "Due in 6 months", "Due in 6-12 months" },
+            data = new[] { dueWithin6Months, dueWithin6To12Months },
+        };
+        return Ok(result);
+    }
 }

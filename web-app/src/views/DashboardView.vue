@@ -27,25 +27,6 @@
                                         <br />Please contact your administrator
                                         to activate your account.
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h4>Memorandums by Category</h4>
-                                                <ChartPieComponent
-                                                    v-if="
-                                                        reportCategory.series
-                                                            ?.length > 0
-                                                    "
-                                                    :series="
-                                                        reportCategory.series
-                                                    "
-                                                    :labels="
-                                                        reportCategory.labels
-                                                    "
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div
                                         class="col-md-3"
                                         v-if="
@@ -156,6 +137,46 @@
                                             </div>
                                         </a>
                                     </div> -->
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4>Memorandums by Category</h4>
+                                                <ChartPieComponent
+                                                    v-if="
+                                                        reportCategory.series
+                                                            ?.length > 0
+                                                    "
+                                                    :series="
+                                                        reportCategory.series
+                                                    "
+                                                    :labels="
+                                                        reportCategory.labels
+                                                    "
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4>
+                                                    Memorandums Due in 12 Months
+                                                </h4>
+                                                <ChartPieComponent
+                                                    v-if="
+                                                        reportDue1Year.series
+                                                            ?.length > 0
+                                                    "
+                                                    :series="
+                                                        reportDue1Year.series
+                                                    "
+                                                    :labels="
+                                                        reportDue1Year.labels
+                                                    "
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -176,7 +197,11 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import { useStaffProfile, useReportByCategory } from "@/hooks/useAPI";
+import {
+    useStaffProfile,
+    useReportByCategory,
+    useReportByDue1Year,
+} from "@/hooks/useAPI";
 import ChartPieComponent from "@/components/ChartPie.vue";
 
 export default {
@@ -206,10 +231,8 @@ export default {
             labels: [],
             series: [],
         });
-
         const { data: dataReportCategory, loading: loadingReportCategory } =
             useReportByCategory();
-
         watch(
             () => dataReportCategory.value,
             (newDataReportCategory) => {
@@ -220,12 +243,32 @@ export default {
             }
         );
 
+        const reportDue1Year = ref({
+            labels: [],
+            series: [],
+        });
+        const { data: dataReportDue1Year, loading: loadingReportDue1Year } =
+            useReportByDue1Year();
+        watch(
+            () => dataReportDue1Year.value,
+            (newDataReportDue1Year) => {
+                reportDue1Year.value = {
+                    labels: [...newDataReportDue1Year?.labels],
+                    series: [...newDataReportDue1Year?.data],
+                };
+            }
+        );
+
         return {
             dataStaffProfile,
             errorStaffProfile,
-            loading: loadingStaffProfile || loadingReportCategory,
+            loading:
+                loadingStaffProfile ||
+                loadingReportCategory ||
+                loadingReportDue1Year,
             refetch,
             reportCategory,
+            reportDue1Year,
         };
     },
     computed: {
