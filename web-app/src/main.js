@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import VueToast from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import VueApexCharts from "vue3-apexcharts";
 
 import App from "./App.vue";
 import router from "./router";
@@ -27,5 +28,6 @@ createApp(App)
     .use(store)
     .use(router)
     .use(VueToast)
+    .use(VueApexCharts)
     .component("font-awesome-icon", FontAwesomeIcon)
     .mount("#app");
