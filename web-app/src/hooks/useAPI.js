@@ -188,3 +188,10 @@ export function useMouUpdateMemo(payload) {
         data: JSON.stringify(payload),
     });
 }
+
+export function useReportByCategory() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/by-category`,
+    });
+}

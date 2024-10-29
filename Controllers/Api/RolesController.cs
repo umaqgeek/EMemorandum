@@ -10,25 +10,24 @@ using System.Collections.Generic;
 using System.Linq;
 using EMemorandum.Models;
 
-namespace EMemorandum.Controllers.Api
+namespace EMemorandum.Controllers.Api;
+
+[Route("api/[controller]")]
+[ApiController]
+[Authorize(Policy = "AdminPolicy")]
+public class RolesController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize(Policy = "AdminPolicy")]
-    public class RolesController : ControllerBase
+    private readonly ApplicationDbContext _context;
+
+    public RolesController(IConfiguration configuration, ApplicationDbContext context)
     {
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public RolesController(IConfiguration configuration, ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> GetAllRoles()
-        {
-            var roles = new List<string> { "Admin", "PUU", "PTJ", "Staff" };
-            return Ok(roles);
-        }
+    [HttpGet]
+    public ActionResult<IEnumerable<string>> GetAllRoles()
+    {
+        var roles = new List<string> { "Admin", "PUU", "PTJ", "Staff" };
+        return Ok(roles);
     }
 }

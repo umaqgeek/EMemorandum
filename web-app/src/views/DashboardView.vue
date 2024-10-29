@@ -27,6 +27,25 @@
                                         <br />Please contact your administrator
                                         to activate your account.
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4>Memorandums by Category</h4>
+                                                <ChartPieComponent
+                                                    v-if="
+                                                        reportCategory.series
+                                                            ?.length > 0
+                                                    "
+                                                    :series="
+                                                        reportCategory.series
+                                                    "
+                                                    :labels="
+                                                        reportCategory.labels
+                                                    "
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div
                                         class="col-md-3"
                                         v-if="
@@ -150,12 +169,15 @@
 
 <!-- JavaScript -->
 <script>
+import { ref, watch } from "vue";
+
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import { useStaffProfile } from "@/hooks/useAPI";
+import { useStaffProfile, useReportByCategory } from "@/hooks/useAPI";
+import ChartPieComponent from "@/components/ChartPie.vue";
 
 export default {
     name: "DashboardView",
@@ -170,6 +192,7 @@ export default {
         TopNavComponent,
         FooterComponent,
         InfoNotLoggedInComponent,
+        ChartPieComponent,
     },
     setup() {
         const {
@@ -178,11 +201,31 @@ export default {
             loading: loadingStaffProfile,
             refetch,
         } = useStaffProfile();
+
+        const reportCategory = ref({
+            labels: [],
+            series: [],
+        });
+
+        const { data: dataReportCategory, loading: loadingReportCategory } =
+            useReportByCategory();
+
+        watch(
+            () => dataReportCategory.value,
+            (newDataReportCategory) => {
+                reportCategory.value = {
+                    labels: [...newDataReportCategory?.labels],
+                    series: [...newDataReportCategory?.data],
+                };
+            }
+        );
+
         return {
             dataStaffProfile,
             errorStaffProfile,
-            loading: loadingStaffProfile,
+            loading: loadingStaffProfile || loadingReportCategory,
             refetch,
+            reportCategory,
         };
     },
     computed: {
