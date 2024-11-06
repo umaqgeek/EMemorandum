@@ -634,11 +634,20 @@
                                                                         <li
                                                                             class="d-none d-md-block"
                                                                             v-if="
-                                                                                isPTJ &&
-                                                                                dataTheMOU
-                                                                                    ?.status
-                                                                                    ?.kod ==
-                                                                                    '02'
+                                                                                (isPTJ &&
+                                                                                    dataTheMOU
+                                                                                        ?.status
+                                                                                        ?.kod ==
+                                                                                        '02') ||
+                                                                                (isPUU &&
+                                                                                    (dataTheMOU
+                                                                                        ?.status
+                                                                                        ?.kod ==
+                                                                                        '01' ||
+                                                                                        dataTheMOU
+                                                                                            ?.status
+                                                                                            ?.kod ==
+                                                                                            '00'))
                                                                             "
                                                                             @click="
                                                                                 onApproval(
@@ -812,7 +821,7 @@ export default {
         const loadingSaveComment = ref(false);
         const errorSaveComment = ref(null);
 
-        const membersCols = ref(["Name", "Roles", "Status"]);
+        const membersCols = ref(["Name"]);
         const members = ref([]);
         const membersTitle = ref("");
 
@@ -904,9 +913,15 @@ export default {
                                         member.nama
                                     );
                                     return {
-                                        Name: `<a href="${publicPath.value}user-view?s=${member.noStaf}">${memberName}</a>`,
-                                        Roles: getRolesStr(member.roles),
-                                        Status: getStatus(member.roles),
+                                        Name: `<a href="${
+                                            publicPath.value
+                                        }user-view?s=${
+                                            member.noStaf
+                                        }">${memberName}</a><div>${getRolesStr(
+                                            member.roles
+                                        )}</div><div>${getStatus(
+                                            member.roles
+                                        )}</div>`,
                                     };
                                 }),
                             ];

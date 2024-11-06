@@ -194,7 +194,7 @@ export default {
                                     )}">${d.status?.status}</span>`,
                                     Type: d.jenis,
                                     Scope: d.scopeButiran,
-                                    Staff: `<a class="title" href="${publicPath}user-view?s=${d.noStafPIC}">${d.pic}</a>`,
+                                    Staff: d.pic,
                                     "Start Date": d.tarikhMulaDate,
                                     "End Date": d.tarikhTamatDate,
                                     "Price (RM)": d.nilai?.toFixed(2),
