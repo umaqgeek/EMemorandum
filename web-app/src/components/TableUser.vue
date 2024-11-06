@@ -9,12 +9,12 @@
                     <th class="tb-col">
                         <span class="overline-title">Name</span>
                     </th>
-                    <th class="tb-col">
+                    <!-- <th class="tb-col">
                         <span class="overline-title">Roles</span>
                     </th>
                     <th class="tb-col">
                         <span class="overline-title">Status</span>
-                    </th>
+                    </th> -->
                     <th class="tb-col tb-col-end" data-sortable="false">
                         <span class="overline-title">Action</span>
                     </th>
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="tb-col">
+                    <!-- <td class="tb-col">
                         {{
                             user.roles?.length > 0
                                 ? user.roles?.map((r) => r.role)?.join(", ")
@@ -93,7 +93,7 @@
                             "
                             >Active</span
                         >
-                    </td>
+                    </td> -->
                     <td class="tb-col tb-col-end">
                         <div class="dropdown">
                             <a
