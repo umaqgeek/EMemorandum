@@ -29,7 +29,10 @@
                                                 Lists of Memorandum
                                             </h2>
                                         </div>
-                                        <div class="nk-block-head-content">
+                                        <div
+                                            class="nk-block-head-content"
+                                            v-if="isPUU"
+                                        >
                                             <ul class="d-flex">
                                                 <li>
                                                     <a
@@ -158,6 +161,12 @@ export default {
             return "dark";
         };
 
+        const isAdmin = ref(false);
+        const isPUU = ref(false);
+        const isPTJ = ref(false);
+        const isUS = ref(false);
+        const isPIC = ref(false);
+
         const mouData = ref([]);
         const mouError = ref(null);
         const mouLoading = ref(false);
@@ -177,6 +186,27 @@ export default {
                     newDataStaffProfile &&
                     newDataStaffProfile?.roles?.length > 0
                 ) {
+                    isAdmin.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "Admin"
+                    )
+                        ? true
+                        : false;
+                    isPUU.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "PUU"
+                    )
+                        ? true
+                        : false;
+                    isPTJ.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "PTJ"
+                    )
+                        ? true
+                        : false;
+                    isUS.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "US"
+                    )
+                        ? true
+                        : false;
+
                     const { data: dataAllMOU, loading: loadingAllMOU } =
                         useGetAllMOU(query);
                     mouLoading.value = loadingAllMOU.value;
@@ -231,6 +261,11 @@ export default {
             mouError,
             mouLoading,
             moucolumns,
+            isAdmin,
+            isPUU,
+            isPTJ,
+            isUS,
+            isPIC,
         };
     },
     computed: {},

@@ -70,7 +70,7 @@
                                 'nk-menu-item',
                                 { active: activeLabel === 'user-list' },
                             ]"
-                            v-if="roles.find((r) => r.role === 'Admin')"
+                            v-if="roles.find((r) => r.code === 'Admin')"
                         >
                             <a
                                 :href="`${publicPath}user-list`"
@@ -87,8 +87,8 @@
                                 { active: activeLabel === 'memo-list' },
                             ]"
                             v-if="
-                                roles.find((r) => r.role === 'Staff') ||
-                                roles.find((r) => r.role === 'PTJ')
+                                roles.find((r) => r.code === 'Staff') ||
+                                roles.find((r) => r.code === 'PTJ')
                             "
                         >
                             <a
@@ -120,7 +120,7 @@
                                 'nk-menu-item',
                                 { active: activeLabel === 'code-list' },
                             ]"
-                            v-if="roles.find((r) => r.role === 'Admin')"
+                            v-if="roles.find((r) => r.code === 'Admin')"
                         >
                             <a
                                 :href="`${publicPath}code-list`"
@@ -136,7 +136,7 @@
                                 'nk-menu-item',
                                 { active: activeLabel === 'approval-list' },
                             ]"
-                            v-if="roles.find((r) => r.role === 'PTJ')"
+                            v-if="roles.find((r) => r.code === 'PTJ')"
                         >
                             <a
                                 :href="`${publicPath}approval-list`"

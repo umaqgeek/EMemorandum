@@ -45,7 +45,11 @@ public class AuthController : ControllerBase
                 s.NoTelBimbit,
                 s.Gelaran,
                 s.JGiliran,
-                s.Roles,
+                Roles = s.Roles.Select(r => (new
+                {
+                    Code = r.MOU_Roles.Code,
+                    Role = r.MOU_Roles.Role,
+                })).ToList(),
                 s.NoStaf,
             })
             .FirstOrDefault();

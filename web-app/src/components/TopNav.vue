@@ -153,7 +153,13 @@ export default {
             return this.staffprofile?.roles?.length > 0;
         },
         rolesStr() {
-            return this.staffprofile?.roles?.map((r) => r.role).join(" | ");
+            if (this.staffprofile?.roles?.length > 1) {
+                return this.staffprofile?.roles
+                    ?.filter((r) => r.code != "Staff")
+                    ?.map((r) => r.role)
+                    .join(" | ");
+            }
+            return "Staff";
         },
     },
     methods: {
