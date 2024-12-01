@@ -261,6 +261,38 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-lg-12">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="KodInd"
+                                                                    class="form-label"
+                                                                    >Industry
+                                                                    Category</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <multiselect
+                                                                        :allow-empty="
+                                                                            false
+                                                                        "
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .KodInd
+                                                                        "
+                                                                        :options="
+                                                                            industryCategories
+                                                                        "
+                                                                        placeholder="Select a Industry Category"
+                                                                        label="industryCategory"
+                                                                        track-by="industryCategory"
+                                                                    ></multiselect>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div class="col-lg-6">
                                                             <div
                                                                 class="form-group"
@@ -803,6 +835,7 @@ export default {
         const PBUsOri = ref([]);
         const PBUs = ref([]);
         const KPIs = ref([]);
+        const industryCategories = ref([]);
         watch(
             () => dataMouSelectData.value,
             (dataMouSelectDataUpdated) => {
@@ -813,6 +846,8 @@ export default {
                 PTJs.value = dataMouSelectDataUpdated?.ptj || [];
                 PBUsOri.value = dataMouSelectDataUpdated?.subPTJ || [];
                 KPIs.value = dataMouSelectDataUpdated?.kpIs || [];
+                industryCategories.value =
+                    dataMouSelectDataUpdated?.industryCategories || [];
             }
         );
 
@@ -887,6 +922,7 @@ export default {
                 Path: "",
                 Nilai: "0",
                 MS01_NoStaf: "",
+                KodInd: "",
             },
             form2: {},
             form3: {
@@ -1037,6 +1073,7 @@ export default {
             staffPIC,
             members,
             form,
+            industryCategories,
         };
     },
     computed: {
@@ -1123,6 +1160,7 @@ export default {
                     MS01_NoStaf: this.form.form1.MS01_NoStaf,
                     Nilai: nilai,
                     Negara: this.Negara.code,
+                    KodInd: this.form.form1.KodInd.kodInd,
                 },
                 form2: {
                     Members: this.members.map((member) => {

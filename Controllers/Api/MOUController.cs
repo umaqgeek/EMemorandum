@@ -112,6 +112,7 @@ public class MOUController : ControllerBase
                 code = c.code,
                 name = c.name,
             }).ToList(),
+            IndustryCategories = _context.MOU_IndustryCat.ToList(),
         });
     }
 
@@ -172,6 +173,7 @@ public class MOUController : ControllerBase
                 memo.Nilai = entity.form1.Nilai;
                 memo.Status = updatedStatus;
                 memo.Negara = entity.form1.Negara;
+                memo.KodInd = entity.form1.KodInd;
 
                 // update a memo's members
                 _context.MOU03_Ahli.RemoveRange(memo.MOU03_Ahli);
@@ -286,6 +288,7 @@ public class MOUController : ControllerBase
             Nilai = entity.form1.Nilai,
             Author = staffId,
             Negara = entity.form1.Negara,
+            KodInd = entity.form1.KodInd,
         };
 
         var mouStatus = new MOU02_Status

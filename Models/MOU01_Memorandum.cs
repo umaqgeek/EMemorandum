@@ -43,6 +43,10 @@ public class MOU01_Memorandum
 
     [ForeignKey("MOU_Status")]
     public string? Status { get; set; }
+
+    [ForeignKey("MOU_IndustryCat")]
+    public string? KodInd { get; set; }
+
     public decimal? Nilai { get; set; }
 
     [JsonIgnore]  // This will prevent the EMO_Countries reference from being serialized
@@ -71,6 +75,9 @@ public class MOU01_Memorandum
 
     [JsonIgnore]  // This will prevent the MOU_Status reference from being serialized
     public MOU_Status? MOU_Status { get; set; }  // Navigation property back to MOU_Status
+
+    [JsonIgnore]  // This will prevent the MOU_IndustryCat reference from being serialized
+    public MOU_IndustryCat? MOU_IndustryCat { get; set; }  // Navigation property back to MOU_IndustryCat
 
     // Navigation property for the statuses
     public ICollection<MOU02_Status>? MOU02_Statuses { get; set; }
