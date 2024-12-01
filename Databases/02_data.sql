@@ -4,6 +4,88 @@ INSERT INTO DbEMO.dbo.EMO_KPI (Kod,KPI) VALUES
 	 (N'03',N'Bilangan Pelajar Pasca Siswazah'),
 	 (N'04',N'Scopus Journal'),
 	 (N'05',N'Pengkomersilan');
+INSERT INTO DbEMO.dbo.MOU_Roles (Code,[Role]) VALUES
+	 (N'Admin',N'System Administrator'),
+	 (N'PUU',N'PUU'),
+	 (N'PTJ',N'Ketua PTJ'),
+	 (N'Staff',N'Normal Active Staff'),
+	 (N'US',N'Urusetia / Secretariat');
+INSERT INTO DbEMO.dbo.MOU_Field (KodField,Field) VALUES
+	 (N'01',N'MATHEMATICAL SCIENCES'),
+	 (N'02',N'PHYSICAL SCIENCES'),
+	 (N'03',N'CHEMICAL SCIENCES'),
+	 (N'04',N'EARTH SCIENCES'),
+	 (N'05',N'INFORMATION, COMPUTER AND COMMUNICATION TECHNOLOGY (ICT)'),
+	 (N'06',N'APPLIED SCIENCES AND TECHNOLOGIES'),
+	 (N'07',N'ENGINEERING SCIENCES'),
+	 (N'08',N'BIOLOGICAL SCIENCES'),
+	 (N'09',N'GRICULTURAL SCIENCES'),
+	 (N'10',N'MEDICAL AND HEALTH SCIENCES');
+INSERT INTO DbEMO.dbo.MOU_Field (KodField,Field) VALUES
+	 (N'11',N'ENVIRONMENTAL SCIENCES'),
+	 (N'12',N'MATERIAL SCIENCES'),
+	 (N'13',N'MARINE SCIENCES'),
+	 (N'14',N'FORESTRY SCIENCES'),
+	 (N'15',N'BIOTECHNOLOGY'),
+	 (N'16',N'SOCIAL SCIENCES'),
+	 (N'17',N'HUMANITIES'),
+	 (N'18',N'ECONOMICS, BUSINESS AND MANAGEMENT'),
+	 (N'19',N'LIFE SCIENCES'),
+	 (N'20',N'ADVANCED MATERIALS SCIENCE');
+INSERT INTO DbEMO.dbo.MOU_Field (KodField,Field) VALUES
+	 (N'21',N'NANOTEKNOLOGI'),
+	 (N'22',N'AUTOMOTIF'),
+	 (N'23',N'AEROANGKASA'),
+	 (N'24',N'PURE SCIENCE'),
+	 (N'25',N'APPLIED SCIENCE'),
+	 (N'26',N'PURE SCIENCE & APPLIED SCIENCE'),
+	 (N'27',N'TECHNOLOGY AND ENGINEERING'),
+	 (N'28',N'MEDICAL SCIENCE'),
+	 (N'29',N'SOCIAL SCIENCE AND HUMANITIES'),
+	 (N'30',N'ARTS AND LITERATURE');
+INSERT INTO DbEMO.dbo.MOU_Field (KodField,Field) VALUES
+	 (N'31',N'NATURAL SCIENCE AND NATIONAL HERITAGE');
+INSERT INTO DbEMO.dbo.MOU_IndustryCat (KodInd,IndustryCategory) VALUES
+	 (N'01',N'Industri berasaskan kayu'),
+	 (N'02',N'Industri membuat perabut'),
+	 (N'03',N'Industri berasaskan besi'),
+	 (N'04',N'Industri elektronik / elektrik'),
+	 (N'05',N'Industri makanan / minuman'),
+	 (N'06',N'Industri berasaskan getah'),
+	 (N'07',N'Bengkel / depo kenderaan'),
+	 (N'08',N'Industri berasaskan aluminium'),
+	 (N'09',N'Industri berasaskan simen'),
+	 (N'10',N'Industri berasaskan kertas');
+INSERT INTO DbEMO.dbo.MOU_IndustryCat (KodInd,IndustryCategory) VALUES
+	 (N'11',N'Knitting / garment'),
+	 (N'12',N'Recondition vehicles'),
+	 (N'13',N'Gypsum powder / ceiling'),
+	 (N'14',N'Activated carbon / zeolite'),
+	 (N'15',N'Kelengkapan perubatan / kosmetik'),
+	 (N'16',N'Kraftangan'),
+	 (N'17',N'Fibreglass products'),
+	 (N'18',N'Industri berasaskan plastik'),
+	 (N'19',N'Gudang / stor simpanan'),
+	 (N'20',N'Industri agro chemical / baja');
+INSERT INTO DbEMO.dbo.MOU_IndustryCat (KodInd,IndustryCategory) VALUES
+	 (N'21',N'Industri computer'),
+	 (N'22',N'Industri muzik'),
+	 (N'23',N'Industri automotif'),
+	 (N'24',N'Industri media'),
+	 (N'25',N'Industri perikanan'),
+	 (N'26',N'Industri perkapalan'),
+	 (N'27',N'Industri perkapalan'),
+	 (N'28',N'Industri pembinaan'),
+	 (N'29',N'Industri perlombongan');
+INSERT INTO DbEMO.dbo.MOU_Status (Kod,Status) VALUES
+	 (N'00',N'APPLICATION'),
+	 (N'01',N'SUBMITTED'),
+	 (N'02',N'REVIEWED BY SECRETARIAT'),
+	 (N'03',N'REVIEWED BY HEAD OF PTJ'),
+	 (N'04',N'APPROVED'),
+	 (N'05',N'RETURN TO PIC'),
+	 (N'06',N'NOT APPROVED'),
+	 (N'07',N'CANCELED');
 INSERT INTO DbEMO.dbo.EMO_Countries (code,name) VALUES
 	 (N'AD',N'AndorrA'),
 	 (N'AE',N'United Arab Emirates'),
@@ -409,13 +491,6 @@ INSERT INTO DbEMO.dbo.EMO_Staf (NoStaf,Nama,NoTelBimbit,Email,NJawatan,JGiliran,
 	 (N'03033',N'MOHD NAZRIN BIN MUHAMMAD',N'',N'',N'-',N'PENSYARAH KANAN',N'65',NULL,N'FAKULTI TEKNOLOGI DAN KEJURUTERAAN INDUSTRI DAN PEMBUATAN',N'FTKIP',1,N'D0007',N'1004',1,N'02',1,N'820326105085',N'TETAP',N'70',N'DR.',N'L',N'01',N'M01',N'MALAYSIA',N'650000','2024-02-23 00:00:00.0','2010-06-01 00:00:00.0'),
 	 (N'03569',N'LIM KIM CHUAN',N'',N'',N'-',N'PROFESOR MADYA ',N'63',NULL,N'FAKULTI TEKNOLOGI DAN KEJURUTERAAN  ELEKTRONIK DAN KOMPUTER',N'FTKEK',1,N'D0009',N'1004',1,N'02',1,N'800925015761',N'TETAP',N'73',N'PROFESOR MADYA DR',N'L',N'01',N'M01',N'MALAYSIA',N'630000','2024-02-23 00:00:00.0','2006-09-21 00:00:00.0'),
 	 (N'03789',N'MAIZATUL ALICE BINTI MEOR SAID',N'',N'',N'-',N'PENSYARAH KANAN',N'63',NULL,N'FAKULTI TEKNOLOGI DAN KEJURUTERAAN  ELEKTRONIK DAN KOMPUTER',N'FTKEK',1,N'D0007',N'1004',1,N'02',1,N'821026086788',N'TETAP',N'115',N'TS. DR.',N'P',N'01',N'M01',N'MALAYSIA',N'630000','2024-02-23 00:00:00.0','2009-07-24 00:00:00.0');
-INSERT INTO DbEMO.dbo.MOU_Status (Kod,Status) VALUES
-	 (N'00',N'APPLICATION'),
-	 (N'01',N'SUBMITTED'),
-	 (N'02',N'REVIEWED'),
-	 (N'03',N'APPROVED'),
-	 (N'04',N'RETURN TO PIC'),
-	 (N'05',N'NOT APPROVED');
 INSERT INTO DbEMO.dbo.PUU_JenisMemo (ID,Kod,Butiran,KodPejabat,Pejabat) VALUES
 	 (1,1,N'Penyewaan',NULL,N'bendahari'),
 	 (2,2,N'Perkhidmatan',NULL,N'bendahari&ppf'),
@@ -430,10 +505,14 @@ INSERT INTO DbEMO.dbo.PUU_JenisMemo (ID,Kod,Butiran,KodPejabat,Pejabat) VALUES
 INSERT INTO DbEMO.dbo.PUU_JenisMemo (ID,Kod,Butiran,KodPejabat,Pejabat) VALUES
 	 (12,11,N'Penyelesaian',NULL,N'rice'),
 	 (13,12,N'Lain-lain',NULL,N'to be determine');
-INSERT INTO DbEMO.dbo.PUU_KategoriMemo (ID,Kod,Butiran) VALUES
-	 (2,1,N'MoA(P)'),
-	 (6,2,N'MoA(TP)'),
-	 (7,3,N'MoU');
+INSERT INTO DbEMO.dbo.PUU_KategoriMemo (Kod,Butiran) VALUES
+	 (1,N'MoA(P)'),
+	 (2,N'MoA(TP)'),
+	 (3,N'MoU'),
+	 (4,N'LoU'),
+	 (5,N'LoI'),
+	 (6,N'Ind'),
+	 (7,N'LoA');
 INSERT INTO DbEMO.dbo.PUU_ScopeMemo (ID,Kod,Butiran) VALUES
 	 (1,1,N'Antarabangsa'),
 	 (2,2,N'Dalaman');
