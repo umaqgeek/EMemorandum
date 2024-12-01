@@ -19,6 +19,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<PUU_KategoriMemo> PUU_KategoriMemo { get; set; }
     public DbSet<PUU_ScopeMemo> PUU_ScopeMemo { get; set; }
     public DbSet<PUU_SubPTj> PUU_SubPTj { get; set; }
+    public DbSet<MOU_Roles> MOU_Roles { get; set; }
     public DbSet<MOU01_Memorandum> MOU01_Memorandum { get; set; }
     public DbSet<MOU02_Status> MOU02_Status { get; set; }
     public DbSet<MOU03_Ahli> MOU03_Ahli { get; set; }
@@ -33,6 +34,12 @@ public class ApplicationDbContext : DbContext
             .WithMany(s => s.Roles)
             .HasForeignKey(r => r.NoStaf)
             .HasConstraintName("FK_EMO_Roles_EMO_Staf_NoStaf");
+
+        modelBuilder.Entity<EMO_Roles>()
+            .HasOne(r => r.MOU_Roles)
+            .WithMany(s => s.Roles)
+            .HasForeignKey(r => r.Role)
+            .HasPrincipalKey(s => s.Code);
 
         modelBuilder.Entity<MOU01_Memorandum>()
             .HasOne(c => c.EMO_PejabatPTJ)

@@ -72,13 +72,20 @@
                             </div>
                         </div>
                     </td>
-                    <td class="tb-col" v-if="isFull">
-                        {{
+                    <td
+                        class="tb-col"
+                        v-if="isFull"
+                        v-html="
                             user.roles?.length > 0
-                                ? user.roles?.map((r) => r.role)?.join(", ")
-                                : "-"
-                        }}
-                    </td>
+                                ? user.roles?.length > 1
+                                    ? user.roles
+                                          ?.filter((r) => r.code != 'Staff')
+                                          .map((r) => r.role)
+                                          ?.join(',<br />')
+                                    : 'Staff'
+                                : '-'
+                        "
+                    ></td>
                     <td class="tb-col" v-if="isFull">
                         <span
                             class="badge text-bg-danger-soft"
@@ -86,10 +93,10 @@
                             >Inactive</span
                         >
                         <span
-                            class="badge text-bg-success-soft"
+                            class="badge text-bg-success"
                             v-if="
                                 user.roles?.length > 0 &&
-                                user.roles?.find((r) => r.role === 'Staff')
+                                user.roles?.find((r) => r.code === 'Staff')
                             "
                             >Active</span
                         >

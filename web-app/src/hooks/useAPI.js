@@ -95,6 +95,13 @@ export function useAssignStaffRoles(noStaf, roles = []) {
     });
 }
 
+export function useGetAllRoles() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/roles`,
+    });
+}
+
 export function useGetAllMOU(query = "") {
     return useApi({
         method: "get",
