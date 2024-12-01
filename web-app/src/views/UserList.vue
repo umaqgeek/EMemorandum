@@ -30,7 +30,10 @@
                                     </div>
                                 </div>
                                 <div class="nk-block">
-                                    <TableUserComponent :users="users" />
+                                    <TableUserComponent
+                                        :users="users"
+                                        :isFull="true"
+                                    />
                                 </div>
                             </div>
                         </div>
