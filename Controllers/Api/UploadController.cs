@@ -22,8 +22,8 @@ public class UploadController : ControllerBase
     }
 
     [HttpPost]
-    [Route("upload")]
-    public async Task<IActionResult> UploadFile(IFormFile file)
+    [Route("file")]
+    public async Task<IActionResult> UploadFile(IFormFile file, [FromForm] string category)
     {
         var staffId = GetStaffID();
         if (staffId == null) {
@@ -35,18 +35,24 @@ public class UploadController : ControllerBase
             return BadRequest("No file uploaded.");
         }
 
+        if (string.IsNullOrWhiteSpace(category))
+        {
+            return BadRequest("Category is required.");
+        }
+
         try
         {
-            var staffDirectory = Path.Combine(_uploadDirectory, staffId);
+            var sanitizedCategory = SanitizeFileName(category);
+            var categoryDirectory = Path.Combine(_uploadDirectory, staffId, sanitizedCategory);
 
             // Ensure the upload directory exists
-            if (!Directory.Exists(staffDirectory)) {
-                Directory.CreateDirectory(staffDirectory);
+            if (!Directory.Exists(categoryDirectory)){
+                Directory.CreateDirectory(categoryDirectory);
             }
 
             // Create a unique file name and save it
             var fileName = $"{Path.GetRandomFileName()}{Path.GetExtension(file.FileName)}";
-            var filePath = Path.Combine(staffDirectory, fileName);
+            var filePath = Path.Combine(categoryDirectory, fileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -54,13 +60,23 @@ public class UploadController : ControllerBase
             }
 
             // Return the relative file path
-            var relativePath = Path.Combine("uploads", staffId, fileName).Replace("\\", "/");
+            var relativePath = Path.Combine("uploads", staffId, sanitizedCategory, fileName).Replace("\\", "/");
             return Ok(new { filePath = relativePath, fileName = file.FileName });
         }
         catch (Exception ex)
         {
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
+    }
+
+    // Helper method to sanitize file or folder names
+    private string SanitizeFileName(string name)
+    {
+        foreach (var invalidChar in Path.GetInvalidFileNameChars())
+        {
+            name = name.Replace(invalidChar.ToString(), "_");
+        }
+        return name.Trim();
     }
 
     private string GetStaffID()

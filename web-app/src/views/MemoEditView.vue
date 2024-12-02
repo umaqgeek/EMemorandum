@@ -151,6 +151,9 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <textarea
+                                                                        :readonly="
+                                                                            !isPUU
+                                                                        "
                                                                         class="form-control"
                                                                         :style="
                                                                             textareaStyle
@@ -569,14 +572,46 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6">
                                                             <div
                                                                 class="form-group"
                                                             >
                                                                 <label
                                                                     for="NamaDok"
                                                                     class="form-label"
-                                                                    >Document</label
+                                                                    >Upload a
+                                                                    Fair Copy
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        class="form-control"
+                                                                        type="file"
+                                                                        @change="
+                                                                            (
+                                                                                evt
+                                                                            ) =>
+                                                                                handleFileUpload(
+                                                                                    evt,
+                                                                                    'faircopy'
+                                                                                )
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="NamaDok"
+                                                                    class="form-label"
+                                                                    >Uploaded
+                                                                    Fair Copy
+                                                                    Document</label
                                                                 >
                                                                 <div
                                                                     class="form-control-wrap"
@@ -584,24 +619,48 @@
                                                                     <div
                                                                         class="btn btn-link"
                                                                         v-if="
-                                                                            filePath
+                                                                            filePath?.faircopy
                                                                         "
                                                                     >
                                                                         <a
-                                                                            :href="`${publicPath}${filePath}`"
+                                                                            :href="`${publicPath}${filePath?.faircopy}`"
                                                                             target="_blank"
                                                                             >{{
-                                                                                fileName
+                                                                                fileName?.faircopy
                                                                             }}</a
                                                                         >
                                                                     </div>
-                                                                    <input
-                                                                        class="form-control"
-                                                                        type="file"
-                                                                        @change="
-                                                                            handleFileUpload
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="KodInd"
+                                                                    class="form-label"
+                                                                    >Fields</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <multiselect
+                                                                        :multiple="
+                                                                            true
                                                                         "
-                                                                    />
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .KodFields
+                                                                        "
+                                                                        :options="
+                                                                            fields
+                                                                        "
+                                                                        placeholder="Select a Field"
+                                                                        label="field"
+                                                                        track-by="field"
+                                                                    ></multiselect>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -838,6 +897,7 @@ export default {
         const PBUs = ref([]);
         const KPIs = ref([]);
         const industryCategories = ref([]);
+        const fields = ref([]);
         watch(
             () => dataMouSelectData.value,
             (dataMouSelectDataUpdated) => {
@@ -850,6 +910,7 @@ export default {
                 KPIs.value = dataMouSelectDataUpdated?.kpIs || [];
                 industryCategories.value =
                     dataMouSelectDataUpdated?.industryCategories || [];
+                fields.value = dataMouSelectDataUpdated?.fields || [];
             }
         );
 
@@ -869,15 +930,26 @@ export default {
             }
         );
 
-        const filePath = ref("");
-        const fileName = ref("");
-        const handleFileUpload = async (event) => {
+        const filePath = ref({
+            faircopy: "",
+            approved: "",
+            minutes: "",
+            stamped: "",
+        });
+        const fileName = ref({
+            faircopy: "",
+            approved: "",
+            minutes: "",
+            stamped: "",
+        });
+        const handleFileUpload = async (event, category) => {
             const file = event.target.files[0]; // Get the selected file
             if (!file) return;
 
             // Use FormData to send the file to the server
             const formData = new FormData();
             formData.append("file", file);
+            formData.append("category", category);
 
             const {
                 data: dataHandleUpload,
@@ -892,10 +964,10 @@ export default {
                     newErrorHandleUpload,
                 ]) => {
                     if (newLoadingHandleUpload == false) {
-                        filePath.value =
+                        filePath.value[category] =
                             newDataHandleUpload?.filePath ??
                             newErrorHandleUpload;
-                        fileName.value =
+                        fileName.value[category] =
                             newDataHandleUpload?.fileName ??
                             newErrorHandleUpload;
                     }
@@ -927,6 +999,7 @@ export default {
                 Nilai: "0",
                 MS01_NoStaf: "",
                 KodInd: "",
+                KodFields: [],
             },
             form2: {},
             form3: {
@@ -993,6 +1066,7 @@ export default {
                                 kodPBU: newDataMOU?.kodPTJSub,
                                 namaPBU: newDataMOU?.subPTJNama,
                             };
+                            form.value.form1.KodFields = newDataMOU?.fields;
                             Negara.value = {
                                 code: newDataMOU?.negara?.code,
                                 name: newDataMOU?.negara?.name,
@@ -1009,8 +1083,8 @@ export default {
                                 newDataMOU?.tarikhTamatDate2;
                             form.value.form1.TajukProjek =
                                 newDataMOU?.tajukProjek;
-                            filePath.value = newDataMOU?.path;
-                            fileName.value = newDataMOU?.namaDok;
+                            filePath.value.faircopy = newDataMOU?.path;
+                            fileName.value.faircopy = newDataMOU?.namaDok;
                             form.value.form1.MS01_NoStaf =
                                 newDataMOU?.noStafPIC;
                             const gelaran = newDataMOU?.picGelaran
@@ -1091,6 +1165,7 @@ export default {
             members,
             form,
             industryCategories,
+            fields,
         };
     },
     computed: {
@@ -1172,8 +1247,8 @@ export default {
                     TarikhMula: this.form.form1.TarikhMula,
                     TarikhTamat: this.form.form1.TarikhTamat,
                     TajukProjek: this.form.form1.TajukProjek,
-                    NamaDok: this.fileName,
-                    Path: this.filePath,
+                    NamaDok: this.fileName?.faircopy,
+                    Path: this.filePath?.faircopy,
                     MS01_NoStaf: this.form.form1.MS01_NoStaf,
                     Nilai: nilai,
                     Negara: this.Negara.code,
@@ -1204,6 +1279,7 @@ export default {
                         };
                     }),
                 },
+                KodFields: this.form.form1.KodFields?.map((kf) => kf.kodField),
             };
 
             const {

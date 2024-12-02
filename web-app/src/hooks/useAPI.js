@@ -134,7 +134,7 @@ export function useMouGenerateNoMemo(payload) {
 export function useHandleFileUpload(formData) {
     return useApi({
         method: "post",
-        url: `${API_URL}/upload/upload`,
+        url: `${API_URL}/upload/file`,
         data: formData,
         headers: {
             "Content-Type": "multipart/form-data",

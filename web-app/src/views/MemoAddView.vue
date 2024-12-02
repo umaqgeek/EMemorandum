@@ -999,6 +999,7 @@ export default {
             // Use FormData to send the file to the server
             const formData = new FormData();
             formData.append("file", file);
+            formData.append("category", "faircopy");
 
             const {
                 data: dataHandleUpload,
