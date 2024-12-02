@@ -689,17 +689,17 @@ export default {
                     newDataStaffProfile?.roles?.length > 0
                 ) {
                     isAdmin.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "Admin"
+                        (r) => r.code === "Admin"
                     )
                         ? true
                         : false;
                     isPUU.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "PUU"
+                        (r) => r.code === "PUU"
                     )
                         ? true
                         : false;
                     isPTJ.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "PTJ"
+                        (r) => r.code === "PTJ"
                     )
                         ? true
                         : false;

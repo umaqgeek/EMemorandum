@@ -587,6 +587,9 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <input
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
                                                                         class="form-control"
                                                                         type="file"
                                                                         @change="
@@ -629,6 +632,210 @@
                                                                                 fileName?.faircopy
                                                                             }}</a
                                                                         >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokStamp"
+                                                                    class="form-label"
+                                                                    >Upload a
+                                                                    Stamped
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
+                                                                        class="form-control"
+                                                                        type="file"
+                                                                        @change="
+                                                                            (
+                                                                                evt
+                                                                            ) =>
+                                                                                handleFileUpload(
+                                                                                    evt,
+                                                                                    'stamped'
+                                                                                )
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokStamp"
+                                                                    class="form-label"
+                                                                    >Uploaded
+                                                                    Stamped
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <div
+                                                                        class="btn btn-link"
+                                                                        v-if="
+                                                                            filePath?.stamped
+                                                                        "
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${filePath?.stamped}`"
+                                                                            target="_blank"
+                                                                            >{{
+                                                                                fileName?.stamped
+                                                                            }}</a
+                                                                        >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokMinit"
+                                                                    class="form-label"
+                                                                    >Upload a
+                                                                    Minutes
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        :disabled="
+                                                                            !isUS
+                                                                        "
+                                                                        class="form-control"
+                                                                        type="file"
+                                                                        @change="
+                                                                            (
+                                                                                evt
+                                                                            ) =>
+                                                                                handleFileUpload(
+                                                                                    evt,
+                                                                                    'minutes'
+                                                                                )
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokMinit"
+                                                                    class="form-label"
+                                                                    >Uploaded
+                                                                    Minutes
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <div
+                                                                        class="btn btn-link"
+                                                                        v-if="
+                                                                            filePath?.minutes
+                                                                        "
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${filePath?.minutes}`"
+                                                                            target="_blank"
+                                                                            >{{
+                                                                                fileName?.minutes
+                                                                            }}</a
+                                                                        >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokLulus"
+                                                                    class="form-label"
+                                                                    >Upload an
+                                                                    Approved
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        :disabled="
+                                                                            !isPIC
+                                                                        "
+                                                                        class="form-control"
+                                                                        type="file"
+                                                                        @change="
+                                                                            (
+                                                                                evt
+                                                                            ) =>
+                                                                                handleFileUpload(
+                                                                                    evt,
+                                                                                    'approved'
+                                                                                )
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokLulus"
+                                                                    class="form-label"
+                                                                    >Uploaded
+                                                                    Approved
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <div
+                                                                        class="btn btn-link"
+                                                                        v-if="
+                                                                            filePath?.approved
+                                                                        "
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${filePath?.approved}`"
+                                                                            target="_blank"
+                                                                            >{{
+                                                                                fileName?.approved
+                                                                            }}</a
+                                                                        >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1015,22 +1222,22 @@ export default {
                     newDataStaffProfile?.roles?.length > 0
                 ) {
                     isAdmin.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "Admin"
+                        (r) => r.code === "Admin"
                     )
                         ? true
                         : false;
                     isPUU.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "PUU"
+                        (r) => r.code === "PUU"
                     )
                         ? true
                         : false;
                     isPTJ.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "PTJ"
+                        (r) => r.code === "PTJ"
                     )
                         ? true
                         : false;
                     isUS.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "US"
+                        (r) => r.code === "US"
                     )
                         ? true
                         : false;
@@ -1085,6 +1292,8 @@ export default {
                                 newDataMOU?.tajukProjek;
                             filePath.value.faircopy = newDataMOU?.path;
                             fileName.value.faircopy = newDataMOU?.namaDok;
+                            filePath.value.stamped = newDataMOU?.dokStampPath;
+                            fileName.value.stamped = newDataMOU?.dokStamp;
                             form.value.form1.MS01_NoStaf =
                                 newDataMOU?.noStafPIC;
                             const gelaran = newDataMOU?.picGelaran
@@ -1253,6 +1462,8 @@ export default {
                     Nilai: nilai,
                     Negara: this.Negara.code,
                     KodInd: this.IndustryCategory.kodInd,
+                    DokStamp: this.fileName?.stamped,
+                    DokStampPath: this.filePath?.stamped,
                 },
                 form2: {
                     Members: this.members.map((member) => {

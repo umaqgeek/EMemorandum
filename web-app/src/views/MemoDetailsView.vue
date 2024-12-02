@@ -105,7 +105,7 @@
                                         </div>
                                         <div
                                             class="gap-col"
-                                            v-if="isPIC || isAdmin || isPUU"
+                                            v-if="isPIC || isPUU || isUS"
                                         >
                                             <ul class="d-flex gap g-2">
                                                 <li class="d-none d-md-block">
@@ -816,6 +816,7 @@ export default {
         const isAdmin = ref(false);
         const isPUU = ref(false);
         const isPTJ = ref(false);
+        const isUS = ref(false);
         const isPIC = ref(false);
         const isMember = ref(false);
         const loadingTheMOU = ref(true);
@@ -871,17 +872,22 @@ export default {
                     newDataStaffProfile?.roles?.length > 0
                 ) {
                     isAdmin.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "Admin"
+                        (r) => r.code === "Admin"
                     )
                         ? true
                         : false;
                     isPUU.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "PUU"
+                        (r) => r.code === "PUU"
                     )
                         ? true
                         : false;
                     isPTJ.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "PTJ"
+                        (r) => r.code === "PTJ"
+                    )
+                        ? true
+                        : false;
+                    isUS.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.code === "US"
                     )
                         ? true
                         : false;
@@ -1021,8 +1027,8 @@ export default {
         const color = (kod) => {
             if (kod === "01") return "dark";
             if (kod === "02") return "info";
-            if (kod === "03") return "success";
-            if (kod === "04") return "warning";
+            if (kod === "03") return "warning";
+            if (kod === "04") return "success";
             if (kod === "05") return "danger";
             return "dark";
         };
@@ -1069,6 +1075,7 @@ export default {
             isAdmin,
             isPUU,
             isPTJ,
+            isUS,
             isPIC,
             isMember,
             loadingTheMOU,

@@ -155,12 +155,6 @@ public class MOUController : ControllerBase
         }
 
         var updatedStatus = "01";
-        if (isUS) {
-            updatedStatus = "02";
-        }
-        if (isPTJ) {
-            updatedStatus = "04";
-        }
         var msg = "has been updated";
 
         using (var transaction = _context.Database.BeginTransaction())
@@ -177,8 +171,17 @@ public class MOUController : ControllerBase
                 }
 
                 isPIC = memo.MS01_NoStaf == staffId ? true : false;
+                if (isPUU) {
+                    updatedStatus = memo.Status != updatedStatus ? memo.Status : updatedStatus;
+                }
+                if (isUS) {
+                    updatedStatus = "02";
+                }
                 if (isPIC) {
                     updatedStatus = "03";
+                }
+                if (isPTJ) {
+                    updatedStatus = "04";
                 }
 
                 // update a memo only for PUU
@@ -856,6 +859,12 @@ public class MOUController : ControllerBase
             TajukProjek = _entity.TajukProjek,
             Path = _entity.Path,
             NamaDok = _entity.NamaDok,
+            DokLulusPath = _entity.DokLulusPath,
+            DokLulus = _entity.DokLulus,
+            DokStampPath = _entity.DokStampPath,
+            DokStamp = _entity.DokStamp,
+            DokMinitPath = _entity.DokMinitPath,
+            DokMinit = _entity.DokMinit,
             IsPIC = _entity.MS01_NoStaf == staffId,
             PIC = _entity.EMO_Staf.Nama,
             PICGelaran = _entity.EMO_Staf.Gelaran,
