@@ -486,7 +486,10 @@
                                                             <!-- .bio-block -->
                                                         </div>
                                                         <!-- .card-body -->
-                                                        <div class="card-body">
+                                                        <div
+                                                            class="card-body"
+                                                            v-if="false"
+                                                        >
                                                             <div
                                                                 class="bio-block"
                                                             >

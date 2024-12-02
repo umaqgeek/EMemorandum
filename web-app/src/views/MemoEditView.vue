@@ -279,9 +279,7 @@
                                                                             false
                                                                         "
                                                                         v-model="
-                                                                            form
-                                                                                .form1
-                                                                                .KodInd
+                                                                            IndustryCategory
                                                                         "
                                                                         :options="
                                                                             industryCategories
@@ -316,6 +314,7 @@
                                                                                 .form1
                                                                                 .TarikhMula
                                                                         "
+                                                                        readonly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -343,6 +342,7 @@
                                                                                 .form1
                                                                                 .TarikhTamat
                                                                         "
+                                                                        readonly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -616,7 +616,7 @@
                                                                     : 'none',
                                                         }"
                                                     >
-                                                        <div>
+                                                        <div v-if="isPIC">
                                                             <button
                                                                 class="btn btn-outline-primary"
                                                                 type="button"
@@ -706,6 +706,7 @@
                                                         }"
                                                     >
                                                         <TableKPIComponent
+                                                            :isPIC="isPIC"
                                                             :kpis="
                                                                 form.form3.kpis
                                                             "
@@ -739,6 +740,7 @@
                                                             &nbsp;
                                                             <a
                                                                 v-if="
+                                                                    isPUU ||
                                                                     menuNo === 3
                                                                 "
                                                                 href="#"
@@ -856,6 +858,7 @@ export default {
         const KodPTJ = ref("");
         const NoMemo = ref("");
         const Negara = ref("");
+        const IndustryCategory = ref("");
 
         const { data: dataAllStaffSimple } = useGetAllStaffSimple();
         const allStaffSimple = ref([]);
@@ -906,6 +909,7 @@ export default {
         const isAdmin = ref(false);
         const isPUU = ref(false);
         const isPTJ = ref(false);
+        const isUS = ref(false);
         const isPIC = ref(false);
         const loadingTheMOU = ref(true);
         const dataTheMOU = ref(null);
@@ -952,6 +956,11 @@ export default {
                     )
                         ? true
                         : false;
+                    isUS.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "US"
+                    )
+                        ? true
+                        : false;
 
                     const {
                         data: dataMOU,
@@ -987,6 +996,12 @@ export default {
                             Negara.value = {
                                 code: newDataMOU?.negara?.code,
                                 name: newDataMOU?.negara?.name,
+                            };
+                            IndustryCategory.value = {
+                                kodInd: newDataMOU?.industryCategory?.kodInd,
+                                industryCategory:
+                                    newDataMOU?.industryCategory
+                                        ?.industryCategory,
                             };
                             form.value.form1.TarikhMula =
                                 newDataMOU?.tarikhMulaDate2;
@@ -1060,6 +1075,7 @@ export default {
             KodPTJ,
             NoMemo,
             Negara,
+            IndustryCategory,
             allStaffSimple,
             filePath,
             fileName,
@@ -1067,6 +1083,7 @@ export default {
             isAdmin,
             isPUU,
             isPTJ,
+            isUS,
             isPIC,
             loadingTheMOU,
             dataTheMOU,
@@ -1160,7 +1177,7 @@ export default {
                     MS01_NoStaf: this.form.form1.MS01_NoStaf,
                     Nilai: nilai,
                     Negara: this.Negara.code,
-                    KodInd: this.form.form1.KodInd.kodInd,
+                    KodInd: this.IndustryCategory.kodInd,
                 },
                 form2: {
                     Members: this.members.map((member) => {

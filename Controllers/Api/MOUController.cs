@@ -620,6 +620,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.EMO_StafAuthor)
             .Include(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.MOU_IndustryCat)
             .Include(_entity => _entity.MOU06_History)
                 .ThenInclude(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU03_Ahli)
@@ -834,6 +835,11 @@ public class MOUController : ControllerBase
                 Kod = _entity.MOU_Status?.Kod,
                 Status = _entity.MOU_Status?.Status,
             },
+            IndustryCategory = new
+            {
+                KodInd = _entity.MOU_IndustryCat?.KodInd,
+                IndustryCategory = _entity.MOU_IndustryCat?.IndustryCategory,
+            },
             Statuses = _entity.MOU02_Statuses.Select(mou02 => new
             {
                 Status_ID = mou02.Status_ID,
@@ -909,6 +915,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.EMO_StafAuthor)
             .Include(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.MOU_IndustryCat)
             .Include(_entity => _entity.MOU06_History)
                 .ThenInclude(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU03_Ahli)
