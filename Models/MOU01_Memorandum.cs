@@ -93,4 +93,7 @@ public class MOU01_Memorandum
 
     // Navigation property for the history
     public ICollection<MOU06_History>? MOU06_History { get; set; }
+
+    // Navigation property for the history
+    public ICollection<MOU07_Field>? MOU07_Field { get; set; }
 }

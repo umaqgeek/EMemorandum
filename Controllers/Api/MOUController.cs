@@ -45,32 +45,38 @@ public class MOUController : ControllerBase
             .Select(r => r.Role)
             .ToList();
 
-        if (roles.Contains("Admin")) {
+        if (roles.Contains("Admin") || roles.Contains("PUU")) {
             query = query.Where(m =>
                 m.Status == "00" ||
                 m.Status == "01" ||
                 m.Status == "02" ||
                 m.Status == "03" ||
                 m.Status == "04" ||
-                m.Status == "05"
+                m.Status == "05" ||
+                m.Status == "06" ||
+                m.Status == "07"
             );
-        } else if (roles.Contains("PUU")) {
+        } else if (roles.Contains("US")) {
             query = query.Where(m =>
-                m.Status == "00" ||
                 m.Status == "01" ||
-                m.Status == "03" ||
-                m.Status == "05"
+                m.Status == "02"
             );
         } else if (roles.Contains("PTJ")) {
             query = query.Where(m =>
-                m.Status == "02" ||
                 m.Status == "03" ||
+                m.Status == "04" ||
                 m.Status == "05"
             );
         } else {
             query = query.Where(m =>
-                m.MS01_NoStaf == staffId ||
-                m.Author == staffId
+                (
+                    m.MS01_NoStaf == staffId ||
+                    m.Author == staffId) &&
+                (
+                    m.Status == "02" ||
+                    m.Status == "03" ||
+                    m.Status == "05"
+                )
             );
         }
 
@@ -113,6 +119,7 @@ public class MOUController : ControllerBase
                 name = c.name,
             }).ToList(),
             IndustryCategories = _context.MOU_IndustryCat.ToList(),
+            Fields = _context.MOU_Field.ToList(),
         });
     }
 
@@ -204,6 +211,17 @@ public class MOUController : ControllerBase
                         Komen = kpi.Komen,
                         Nama = kpi.Nama,
                         Kod = kpi.Kod,
+                    });
+                }
+
+                // update a memo's fields
+                _context.MOU07_Field.RemoveRange(memo.MOU07_Field);
+                foreach (var field in entity.KodFields)
+                {
+                    _context.MOU07_Field.Add(new MOU07_Field
+                    {
+                        NoMemo = entity.NoMemo,
+                        KodField = field,
                     });
                 }
 
@@ -350,6 +368,16 @@ public class MOUController : ControllerBase
                         Komen = kpi.Komen,
                         Nama = kpi.Nama,
                         Kod = kpi.Kod,
+                    });
+                }
+
+                // add Fields for added MOU
+                foreach (var field in entity.KodFields)
+                {
+                    _context.MOU07_Field.Add(new MOU07_Field
+                    {
+                        NoMemo = genNo.noMemo,
+                        KodField = field,
                     });
                 }
 
@@ -822,12 +850,12 @@ public class MOUController : ControllerBase
                 Created_At = mou06.Created_At?.ToString("dd MMM yyyy, h:mm tt") ?? "",
                 Ori_Created_At = mou06.Created_At,
                 Description = mou06.Description,
-                Comment = mou06.Comment,
+                Comment = mou06?.Comment,
                 NoStaf = mou06.NoStaf,
                 Gelaran = mou06.EMO_Staf.Gelaran,
                 Nama = mou06.EMO_Staf.Nama,
             })?.OrderByDescending(_entity => _entity.Ori_Created_At).ToList(),
-            Members = _entity.MOU03_Ahli.Select(mou03 => new
+            Members = _entity.MOU03_Ahli?.Select(mou03 => new
             {
                 Peranan = mou03.Peranan,
                 Email = mou03.EMO_Staf.Email,
@@ -836,7 +864,7 @@ public class MOUController : ControllerBase
                 NoStaf = mou03.EMO_Staf.NoStaf,
                 Roles = mou03.EMO_Staf.Roles,
             })?.ToList(),
-            KPIs = _entity.MOU04_KPI.Select(mou04 => new
+            KPIs = _entity.MOU04_KPI?.Select(mou04 => new
             {
                 KPI_ID = mou04.KPI_ID,
                 Kod = mou04.Kod,
@@ -1002,6 +1030,7 @@ public class MOUAddModel
     public MOU01_Memorandum form1 { get; set; }
     public MOUMembers form2 { get; set; }
     public MOUKPIs form3 { get; set; }
+    public ICollection<string>? KodFields { get; set; }
 }
 
 public class MOUMembers

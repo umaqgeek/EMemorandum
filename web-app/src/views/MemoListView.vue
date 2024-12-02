@@ -174,10 +174,10 @@ export default {
             "Memorandum No.",
             "Type",
             "Scope",
-            "Staff",
+            "PIC",
             "Start Date",
             "End Date",
-            "Price (RM)",
+            // "Price (RM)",
         ]);
         watch(
             () => dataStaffProfile.value,
@@ -227,7 +227,7 @@ export default {
                                     Staff: d.pic,
                                     "Start Date": d.tarikhMulaDate,
                                     "End Date": d.tarikhTamatDate,
-                                    "Price (RM)": d.nilai?.toFixed(2),
+                                    // "Price (RM)": d.nilai?.toFixed(2),
                                 };
                             });
                             // initDatatable();

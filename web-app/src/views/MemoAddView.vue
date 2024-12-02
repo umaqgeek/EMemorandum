@@ -54,6 +54,7 @@
                                                 id="todoAside"
                                                 data-overlay="true"
                                                 data-break="xl"
+                                                v-if="false"
                                             >
                                                 <div
                                                     class="nk-todo-aside-header"
@@ -82,7 +83,7 @@
                                                             >
                                                         </a>
                                                     </li>
-                                                    <li
+                                                    <!-- <li
                                                         :class="[
                                                             {
                                                                 active:
@@ -121,11 +122,11 @@
                                                             ></em>
                                                             <span>KPI</span>
                                                         </a>
-                                                    </li>
+                                                    </li> -->
                                                 </ul>
                                             </div>
                                             <!-- .nk-todo-aside -->
-                                            <div class="nk-todo-body card-body">
+                                            <div class="card-body">
                                                 <form action="#">
                                                     <div
                                                         class="row g-3"
@@ -620,6 +621,37 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-lg-12">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="KodInd"
+                                                                    class="form-label"
+                                                                    >Fields</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <multiselect
+                                                                        :multiple="
+                                                                            true
+                                                                        "
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .KodFields
+                                                                        "
+                                                                        :options="
+                                                                            fields
+                                                                        "
+                                                                        placeholder="Select a Field"
+                                                                        label="field"
+                                                                        track-by="field"
+                                                                    ></multiselect>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     <div
@@ -732,6 +764,7 @@
                                                         <div class="col-lg-12">
                                                             <a
                                                                 v-if="
+                                                                    false &&
                                                                     menuNo !== 1
                                                                 "
                                                                 href="#"
@@ -743,6 +776,7 @@
                                                             &nbsp;
                                                             <a
                                                                 v-if="
+                                                                    false &&
                                                                     menuNo !== 3
                                                                 "
                                                                 href="#"
@@ -754,6 +788,7 @@
                                                             &nbsp;
                                                             <a
                                                                 v-if="
+                                                                    true ||
                                                                     menuNo === 3
                                                                 "
                                                                 href="#"
@@ -809,7 +844,6 @@ export default {
     name: "MemoAddView",
     data() {
         return {
-            publicPath: process.env.VUE_APP_PUBLIC_PATH,
             menuNo: 1,
             staffPIC: "",
             form: {
@@ -825,6 +859,7 @@ export default {
                     Nilai: "0",
                     MS01_NoStaf: "",
                     KodInd: "",
+                    KodFields: [],
                 },
                 form2: {},
                 form3: {
@@ -850,11 +885,33 @@ export default {
         Multiselect,
     },
     setup() {
+        const publicPath = ref(process.env.VUE_APP_PUBLIC_PATH);
+
         const {
             data: dataStaffProfile,
             error: errorStaffProfile,
             loading: loadingStaffProfile,
         } = useStaffProfile();
+
+        watch(
+            () => dataStaffProfile.value,
+            (newDataStaffProfile) => {
+                if (
+                    newDataStaffProfile &&
+                    newDataStaffProfile?.roles?.length > 0
+                ) {
+                    const isPUU = newDataStaffProfile?.roles?.find(
+                        (r) => r.role === "PUU"
+                    )
+                        ? true
+                        : false;
+                    if (!isPUU) {
+                        location.href = publicPath.value + "memo-list";
+                    }
+                }
+            },
+            { immediate: true } // Run the watcher immediately on component mount
+        );
 
         const {
             data: dataMouSelectData,
@@ -871,6 +928,7 @@ export default {
         const PBUs = ref([]);
         const KPIs = ref([]);
         const industryCategories = ref([]);
+        const fields = ref([]);
         watch(
             () => dataMouSelectData.value,
             (dataMouSelectDataUpdated) => {
@@ -883,6 +941,7 @@ export default {
                 KPIs.value = dataMouSelectDataUpdated?.kpIs || [];
                 industryCategories.value =
                     dataMouSelectDataUpdated?.industryCategories || [];
+                fields.value = dataMouSelectDataUpdated?.fields || [];
             }
         );
 
@@ -966,6 +1025,7 @@ export default {
         };
 
         return {
+            publicPath,
             dataStaffProfile,
             errorStaffProfile,
             loadingStaffProfile,
@@ -991,6 +1051,7 @@ export default {
             fileName,
             handleFileUpload,
             industryCategories,
+            fields,
         };
     },
     computed: {
@@ -1105,6 +1166,7 @@ export default {
                         };
                     }),
                 },
+                KodFields: this.form.form1.KodFields?.map((kf) => kf.kodField),
             };
 
             const {

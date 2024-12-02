@@ -20,6 +20,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<PUU_ScopeMemo> PUU_ScopeMemo { get; set; }
     public DbSet<PUU_SubPTj> PUU_SubPTj { get; set; }
     public DbSet<MOU_IndustryCat> MOU_IndustryCat { get; set; }
+    public DbSet<MOU_Field> MOU_Field { get; set; }
     public DbSet<MOU_Roles> MOU_Roles { get; set; }
     public DbSet<MOU01_Memorandum> MOU01_Memorandum { get; set; }
     public DbSet<MOU02_Status> MOU02_Status { get; set; }
@@ -27,6 +28,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<MOU04_KPI> MOU04_KPI { get; set; }
     public DbSet<MOU05_KPI_Progress> MOU05_KPI_Progress { get; set; }
     public DbSet<MOU06_History> MOU06_History { get; set; }
+    public DbSet<MOU07_Field> MOU07_Field { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -149,6 +151,19 @@ public class ApplicationDbContext : DbContext
             .HasOne(m => m.MOU01_Memorandum)
             .WithMany(s => s.MOU06_History)
             .HasForeignKey(m => m.NoMemo);
+
+        modelBuilder.Entity<MOU07_Field>()
+            .HasOne(m => m.MOU01_Memorandum)
+            .WithMany(s => s.MOU07_Field)
+            .HasForeignKey(m => m.NoMemo);
+
+        modelBuilder.Entity<MOU07_Field>()
+            .HasOne(m => m.MOU_Field)
+            .WithMany(s => s.MOU07_Fields)
+            .HasForeignKey(m => m.KodField);
+
+        modelBuilder.Entity<MOU07_Field>()
+            .HasKey(m => new { m.NoMemo, m.KodField });
 
         base.OnModelCreating(modelBuilder);
     }
