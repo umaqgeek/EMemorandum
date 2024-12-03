@@ -27,7 +27,14 @@ public class RolesController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<string>> GetAllRoles()
     {
-        var roles = new List<string> { "Admin", "PUU", "PTJ", "Staff" };
+        var roles = _context.MOU_Roles
+            .Where(r => r.Code != "Staff")
+            .Select(r => new
+            {
+                Code = r.Code,
+                Role = r.Role,
+            })
+            .ToList();;
         return Ok(roles);
     }
 }

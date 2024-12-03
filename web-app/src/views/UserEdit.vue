@@ -32,15 +32,6 @@
                                                     class="d-flex flex-column flex-md-row align-items-md-center"
                                                 >
                                                     <div
-                                                        class="media media-huge media-circle"
-                                                    >
-                                                        <img
-                                                            src="../assets/images/avatar/a.jpg"
-                                                            class="img-thumbnail"
-                                                            alt=""
-                                                        />
-                                                    </div>
-                                                    <div
                                                         class="mt-3 mt-md-0 ms-md-3"
                                                     >
                                                         <h3 class="title mb-1">
@@ -91,42 +82,26 @@
                                                                 >Full
                                                                 Name</label
                                                             >
-                                                            <div>
+                                                            <div class="mb-4">
                                                                 {{ nama }}
                                                             </div>
-                                                            <hr />
+                                                            <label
+                                                                for="firstname"
+                                                                class="form-label"
+                                                                >Position</label
+                                                            >
+                                                            <div class="mb-4">
+                                                                {{ position }}
+                                                            </div>
                                                             <label
                                                                 for="email"
                                                                 class="form-label"
                                                                 >Email
                                                                 address</label
                                                             >
-                                                            <div>
+                                                            <div class="mb-4">
                                                                 {{ email }}
                                                             </div>
-                                                            <hr />
-                                                            <label
-                                                                for="company"
-                                                                class="form-label"
-                                                                >Staff
-                                                                No.</label
-                                                            >
-                                                            <div>
-                                                                {{ noStaf }}
-                                                            </div>
-                                                            <hr />
-                                                            <label
-                                                                for="email"
-                                                                class="form-label"
-                                                                >Phone
-                                                                No.</label
-                                                            >
-                                                            <div>
-                                                                {{
-                                                                    noTelBimbit
-                                                                }}
-                                                            </div>
-                                                            <hr />
                                                             <label
                                                                 for="company"
                                                                 class="form-label"
@@ -195,6 +170,26 @@
                                                                         class="form-check-input"
                                                                         type="checkbox"
                                                                         v-model="
+                                                                            isEachRoles.US
+                                                                        "
+                                                                        id="flexCheckUS"
+                                                                    />
+                                                                    <label
+                                                                        class="form-check-label"
+                                                                        for="flexCheckUS"
+                                                                    >
+                                                                        Urusetia
+                                                                        /
+                                                                        Secretariat
+                                                                    </label>
+                                                                </div>
+                                                                <div
+                                                                    class="form-check"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        v-model="
                                                                             isEachRoles.PTJ
                                                                         "
                                                                         id="flexCheckPTJ"
@@ -203,6 +198,7 @@
                                                                         class="form-check-label"
                                                                         for="flexCheckPTJ"
                                                                     >
+                                                                        Ketua
                                                                         PTJ
                                                                     </label>
                                                                 </div>
@@ -317,6 +313,7 @@ export default {
             Admin: false,
             PUU: false,
             PTJ: false,
+            US: false,
         });
         watch(
             () => dataOneStaff.value, // Watch the `dataOneStaff` reactive property
@@ -339,6 +336,11 @@ export default {
                             : false,
                         PTJ: dataOneStaffUpdated?.roles?.find(
                             (r) => r.role === "PTJ"
+                        )
+                            ? true
+                            : false,
+                        US: dataOneStaffUpdated?.roles?.find(
+                            (r) => r.role === "US"
                         )
                             ? true
                             : false,
@@ -385,6 +387,9 @@ export default {
         nPejabat() {
             return this.dataOneStaff?.nPejabat;
         },
+        position() {
+            return this.dataOneStaff?.jGiliran;
+        },
     },
     methods: {
         updateRoles() {
@@ -395,6 +400,9 @@ export default {
             }
             if (this.isEachRoles.PUU) {
                 newRoles.push("PUU");
+            }
+            if (this.isEachRoles.US) {
+                newRoles.push("US");
             }
             if (this.isEachRoles.PTJ) {
                 newRoles.push("PTJ");

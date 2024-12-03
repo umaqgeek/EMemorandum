@@ -1,6 +1,7 @@
 <template>
     <div>
         <button
+            v-if="isPIC"
             class="btn btn-outline-primary mb-3"
             type="button"
             @click="addKPI"
@@ -141,6 +142,10 @@ export default {
         listKPIs: {
             type: Array,
             required: true,
+        },
+        isPIC: {
+            type: Boolean,
+            required: false,
         },
     },
     methods: {

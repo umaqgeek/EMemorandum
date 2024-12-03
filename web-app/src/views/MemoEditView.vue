@@ -151,6 +151,9 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <textarea
+                                                                        :readonly="
+                                                                            !isPUU
+                                                                        "
                                                                         class="form-control"
                                                                         :style="
                                                                             textareaStyle
@@ -243,6 +246,9 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <multiselect
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
                                                                         :allow-empty="
                                                                             false
                                                                         "
@@ -257,6 +263,39 @@
                                                                         placeholder="Select a Scope"
                                                                         label="butiran"
                                                                         track-by="butiran"
+                                                                    ></multiselect>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="KodInd"
+                                                                    class="form-label"
+                                                                    >Industry
+                                                                    Category</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <multiselect
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
+                                                                        :allow-empty="
+                                                                            false
+                                                                        "
+                                                                        v-model="
+                                                                            IndustryCategory
+                                                                        "
+                                                                        :options="
+                                                                            industryCategories
+                                                                        "
+                                                                        placeholder="Select a Industry Category"
+                                                                        label="industryCategory"
+                                                                        track-by="industryCategory"
                                                                     ></multiselect>
                                                                 </div>
                                                             </div>
@@ -284,6 +323,7 @@
                                                                                 .form1
                                                                                 .TarikhMula
                                                                         "
+                                                                        readonly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -311,6 +351,7 @@
                                                                                 .form1
                                                                                 .TarikhTamat
                                                                         "
+                                                                        readonly
                                                                     />
                                                                 </div>
                                                             </div>
@@ -351,6 +392,9 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <multiselect
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
                                                                         :allow-empty="
                                                                             false
                                                                         "
@@ -457,7 +501,7 @@
                                                                         "
                                                                         readonly
                                                                     />
-                                                                    <button
+                                                                    <!-- <button
                                                                         class="btn btn-outline-primary"
                                                                         type="button"
                                                                         id="button-addon2"
@@ -466,9 +510,9 @@
                                                                     >
                                                                         Search
                                                                         Members
-                                                                    </button>
+                                                                    </button> -->
                                                                 </div>
-                                                                <div
+                                                                <!-- <div
                                                                     class="btn btn-link"
                                                                     v-on:click="
                                                                         assignYourselfPIC
@@ -476,7 +520,7 @@
                                                                 >
                                                                     Assign
                                                                     yourself
-                                                                </div>
+                                                                </div> -->
                                                                 <div
                                                                     class="modal fade"
                                                                     id="searchPICsModal"
@@ -537,14 +581,49 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6">
                                                             <div
                                                                 class="form-group"
                                                             >
                                                                 <label
                                                                     for="NamaDok"
                                                                     class="form-label"
-                                                                    >Document</label
+                                                                    >Upload a
+                                                                    Fair Copy
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
+                                                                        class="form-control"
+                                                                        type="file"
+                                                                        @change="
+                                                                            (
+                                                                                evt
+                                                                            ) =>
+                                                                                handleFileUpload(
+                                                                                    evt,
+                                                                                    'faircopy'
+                                                                                )
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="NamaDok"
+                                                                    class="form-label"
+                                                                    >Uploaded
+                                                                    Fair Copy
+                                                                    Document</label
                                                                 >
                                                                 <div
                                                                     class="form-control-wrap"
@@ -552,24 +631,255 @@
                                                                     <div
                                                                         class="btn btn-link"
                                                                         v-if="
-                                                                            filePath
+                                                                            filePath?.faircopy
                                                                         "
                                                                     >
                                                                         <a
-                                                                            :href="`${publicPath}${filePath}`"
+                                                                            :href="`${publicPath}${filePath?.faircopy}`"
                                                                             target="_blank"
                                                                             >{{
-                                                                                fileName
+                                                                                fileName?.faircopy
                                                                             }}</a
                                                                         >
                                                                     </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokStamp"
+                                                                    class="form-label"
+                                                                    >Upload a
+                                                                    Stamped
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
                                                                     <input
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
                                                                         class="form-control"
                                                                         type="file"
                                                                         @change="
-                                                                            handleFileUpload
+                                                                            (
+                                                                                evt
+                                                                            ) =>
+                                                                                handleFileUpload(
+                                                                                    evt,
+                                                                                    'stamped'
+                                                                                )
                                                                         "
                                                                     />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokStamp"
+                                                                    class="form-label"
+                                                                    >Uploaded
+                                                                    Stamped
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <div
+                                                                        class="btn btn-link"
+                                                                        v-if="
+                                                                            filePath?.stamped
+                                                                        "
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${filePath?.stamped}`"
+                                                                            target="_blank"
+                                                                            >{{
+                                                                                fileName?.stamped
+                                                                            }}</a
+                                                                        >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokMinit"
+                                                                    class="form-label"
+                                                                    >Upload a
+                                                                    Minutes
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        :disabled="
+                                                                            !isUS
+                                                                        "
+                                                                        class="form-control"
+                                                                        type="file"
+                                                                        @change="
+                                                                            (
+                                                                                evt
+                                                                            ) =>
+                                                                                handleFileUpload(
+                                                                                    evt,
+                                                                                    'minutes'
+                                                                                )
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokMinit"
+                                                                    class="form-label"
+                                                                    >Uploaded
+                                                                    Minutes
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <div
+                                                                        class="btn btn-link"
+                                                                        v-if="
+                                                                            filePath?.minutes
+                                                                        "
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${filePath?.minutes}`"
+                                                                            target="_blank"
+                                                                            >{{
+                                                                                fileName?.minutes
+                                                                            }}</a
+                                                                        >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokLulus"
+                                                                    class="form-label"
+                                                                    >Upload an
+                                                                    Approved
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        :disabled="
+                                                                            !isPIC
+                                                                        "
+                                                                        class="form-control"
+                                                                        type="file"
+                                                                        @change="
+                                                                            (
+                                                                                evt
+                                                                            ) =>
+                                                                                handleFileUpload(
+                                                                                    evt,
+                                                                                    'approved'
+                                                                                )
+                                                                        "
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="DokLulus"
+                                                                    class="form-label"
+                                                                    >Uploaded
+                                                                    Approved
+                                                                    Document</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <div
+                                                                        class="btn btn-link"
+                                                                        v-if="
+                                                                            filePath?.approved
+                                                                        "
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${filePath?.approved}`"
+                                                                            target="_blank"
+                                                                            >{{
+                                                                                fileName?.approved
+                                                                            }}</a
+                                                                        >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="KodInd"
+                                                                    class="form-label"
+                                                                    >Fields</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <multiselect
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
+                                                                        :multiple="
+                                                                            true
+                                                                        "
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .KodFields
+                                                                        "
+                                                                        :options="
+                                                                            fields
+                                                                        "
+                                                                        placeholder="Select a Field"
+                                                                        label="field"
+                                                                        track-by="field"
+                                                                    ></multiselect>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -584,7 +894,7 @@
                                                                     : 'none',
                                                         }"
                                                     >
-                                                        <div>
+                                                        <div v-if="isPIC">
                                                             <button
                                                                 class="btn btn-outline-primary"
                                                                 type="button"
@@ -674,6 +984,7 @@
                                                         }"
                                                     >
                                                         <TableKPIComponent
+                                                            :isPIC="isPIC"
                                                             :kpis="
                                                                 form.form3.kpis
                                                             "
@@ -707,6 +1018,8 @@
                                                             &nbsp;
                                                             <a
                                                                 v-if="
+                                                                    isPUU ||
+                                                                    isUS ||
                                                                     menuNo === 3
                                                                 "
                                                                 href="#"
@@ -803,6 +1116,8 @@ export default {
         const PBUsOri = ref([]);
         const PBUs = ref([]);
         const KPIs = ref([]);
+        const industryCategories = ref([]);
+        const fields = ref([]);
         watch(
             () => dataMouSelectData.value,
             (dataMouSelectDataUpdated) => {
@@ -813,6 +1128,9 @@ export default {
                 PTJs.value = dataMouSelectDataUpdated?.ptj || [];
                 PBUsOri.value = dataMouSelectDataUpdated?.subPTJ || [];
                 KPIs.value = dataMouSelectDataUpdated?.kpIs || [];
+                industryCategories.value =
+                    dataMouSelectDataUpdated?.industryCategories || [];
+                fields.value = dataMouSelectDataUpdated?.fields || [];
             }
         );
 
@@ -821,6 +1139,7 @@ export default {
         const KodPTJ = ref("");
         const NoMemo = ref("");
         const Negara = ref("");
+        const IndustryCategory = ref("");
 
         const { data: dataAllStaffSimple } = useGetAllStaffSimple();
         const allStaffSimple = ref([]);
@@ -831,15 +1150,26 @@ export default {
             }
         );
 
-        const filePath = ref("");
-        const fileName = ref("");
-        const handleFileUpload = async (event) => {
+        const filePath = ref({
+            faircopy: "",
+            approved: "",
+            minutes: "",
+            stamped: "",
+        });
+        const fileName = ref({
+            faircopy: "",
+            approved: "",
+            minutes: "",
+            stamped: "",
+        });
+        const handleFileUpload = async (event, category) => {
             const file = event.target.files[0]; // Get the selected file
             if (!file) return;
 
             // Use FormData to send the file to the server
             const formData = new FormData();
             formData.append("file", file);
+            formData.append("category", category);
 
             const {
                 data: dataHandleUpload,
@@ -854,10 +1184,10 @@ export default {
                     newErrorHandleUpload,
                 ]) => {
                     if (newLoadingHandleUpload == false) {
-                        filePath.value =
+                        filePath.value[category] =
                             newDataHandleUpload?.filePath ??
                             newErrorHandleUpload;
-                        fileName.value =
+                        fileName.value[category] =
                             newDataHandleUpload?.fileName ??
                             newErrorHandleUpload;
                     }
@@ -871,6 +1201,7 @@ export default {
         const isAdmin = ref(false);
         const isPUU = ref(false);
         const isPTJ = ref(false);
+        const isUS = ref(false);
         const isPIC = ref(false);
         const loadingTheMOU = ref(true);
         const dataTheMOU = ref(null);
@@ -887,6 +1218,8 @@ export default {
                 Path: "",
                 Nilai: "0",
                 MS01_NoStaf: "",
+                KodInd: "",
+                KodFields: [],
             },
             form2: {},
             form3: {
@@ -902,17 +1235,22 @@ export default {
                     newDataStaffProfile?.roles?.length > 0
                 ) {
                     isAdmin.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "Admin"
+                        (r) => r.code === "Admin"
                     )
                         ? true
                         : false;
                     isPUU.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "PUU"
+                        (r) => r.code === "PUU"
                     )
                         ? true
                         : false;
                     isPTJ.value = newDataStaffProfile?.roles?.find(
-                        (r) => r.role === "PTJ"
+                        (r) => r.code === "PTJ"
+                    )
+                        ? true
+                        : false;
+                    isUS.value = newDataStaffProfile?.roles?.find(
+                        (r) => r.code === "US"
                     )
                         ? true
                         : false;
@@ -948,9 +1286,16 @@ export default {
                                 kodPBU: newDataMOU?.kodPTJSub,
                                 namaPBU: newDataMOU?.subPTJNama,
                             };
+                            form.value.form1.KodFields = newDataMOU?.fields;
                             Negara.value = {
                                 code: newDataMOU?.negara?.code,
                                 name: newDataMOU?.negara?.name,
+                            };
+                            IndustryCategory.value = {
+                                kodInd: newDataMOU?.industryCategory?.kodInd,
+                                industryCategory:
+                                    newDataMOU?.industryCategory
+                                        ?.industryCategory,
                             };
                             form.value.form1.TarikhMula =
                                 newDataMOU?.tarikhMulaDate2;
@@ -958,8 +1303,14 @@ export default {
                                 newDataMOU?.tarikhTamatDate2;
                             form.value.form1.TajukProjek =
                                 newDataMOU?.tajukProjek;
-                            filePath.value = newDataMOU?.path;
-                            fileName.value = newDataMOU?.namaDok;
+                            filePath.value.faircopy = newDataMOU?.path;
+                            fileName.value.faircopy = newDataMOU?.namaDok;
+                            filePath.value.stamped = newDataMOU?.dokStampPath;
+                            fileName.value.stamped = newDataMOU?.dokStamp;
+                            filePath.value.minutes = newDataMOU?.dokMinitPath;
+                            fileName.value.minutes = newDataMOU?.dokMinit;
+                            filePath.value.approved = newDataMOU?.dokLulusPath;
+                            fileName.value.approved = newDataMOU?.dokLulus;
                             form.value.form1.MS01_NoStaf =
                                 newDataMOU?.noStafPIC;
                             const gelaran = newDataMOU?.picGelaran
@@ -1024,6 +1375,7 @@ export default {
             KodPTJ,
             NoMemo,
             Negara,
+            IndustryCategory,
             allStaffSimple,
             filePath,
             fileName,
@@ -1031,12 +1383,15 @@ export default {
             isAdmin,
             isPUU,
             isPTJ,
+            isUS,
             isPIC,
             loadingTheMOU,
             dataTheMOU,
             staffPIC,
             members,
             form,
+            industryCategories,
+            fields,
         };
     },
     computed: {
@@ -1118,11 +1473,18 @@ export default {
                     TarikhMula: this.form.form1.TarikhMula,
                     TarikhTamat: this.form.form1.TarikhTamat,
                     TajukProjek: this.form.form1.TajukProjek,
-                    NamaDok: this.fileName,
-                    Path: this.filePath,
+                    NamaDok: this.fileName?.faircopy,
+                    Path: this.filePath?.faircopy,
                     MS01_NoStaf: this.form.form1.MS01_NoStaf,
                     Nilai: nilai,
                     Negara: this.Negara.code,
+                    KodInd: this.IndustryCategory.kodInd,
+                    DokStamp: this.fileName?.stamped,
+                    DokStampPath: this.filePath?.stamped,
+                    DokMinit: this.fileName?.minutes,
+                    DokMinitPath: this.filePath?.minutes,
+                    DokLulus: this.fileName?.approved,
+                    DokLulusPath: this.filePath?.approved,
                 },
                 form2: {
                     Members: this.members.map((member) => {
@@ -1149,6 +1511,7 @@ export default {
                         };
                     }),
                 },
+                KodFields: this.form.form1.KodFields?.map((kf) => kf.kodField),
             };
 
             const {

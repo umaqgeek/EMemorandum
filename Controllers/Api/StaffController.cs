@@ -32,31 +32,54 @@ public class StaffController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = "AdminPolicy")]
-    public ActionResult<IEnumerable<EMO_Staf>> GetAllStaff()
+    public ActionResult<List<Dictionary<string, object>>> GetAllStaff()
     {
-        // var staffId = GetStaffID();
-
         return _context.EMO_Staf
-            // .Where(s => s.NoStaf != staffId)
             .Include(s => s.Roles)
+                .ThenInclude(r => r.MOU_Roles)
+            .AsEnumerable()
+            .Select(s =>
+            {
+                var properties = s.GetType().GetProperties();
+                var dictionary = properties.ToDictionary(
+                    prop => char.ToLower(prop.Name[0]) + prop.Name.Substring(1),
+                    prop => prop.GetValue(s)
+                );
+
+                // Transform specific columns
+                if (dictionary.ContainsKey("roles"))
+                {
+                    dictionary["roles"] = s.Roles
+                        .Select(r => (new
+                        {
+                            Code = r.MOU_Roles.Code,
+                            Role = r.MOU_Roles.Role,
+                        })).ToList();
+                }
+
+                return dictionary;
+            })
             .ToList();
     }
 
     [HttpGet("less")]
     public ActionResult<IEnumerable<object>> GetAllStaffSimple()
     {
-        // var staffId = GetStaffID();
-
         return _context.EMO_Staf
-            // .Where(s => s.NoStaf != staffId)
             .Include(s => s.Roles)
             .Select(s => (new
             {
+                NoStaf = s.NoStaf,
+                Nama = s.Nama,
                 Email = s.Email,
                 Gelaran = s.Gelaran,
-                Nama = s.Nama,
-                NoStaf = s.NoStaf,
-                Roles = s.Roles,
+                JGiliran = s.JGiliran,
+                Roles = s.Roles
+                    .Select(r => (new
+                    {
+                        Code = r.MOU_Roles.Code,
+                        Role = r.MOU_Roles.Role,
+                    })).ToList(),
             }))
             .ToList();
     }
@@ -75,7 +98,12 @@ public class StaffController : ControllerBase
                 NoStaf = s.NoStaf,
                 NoTelBimbit = s.NoTelBimbit,
                 NPejabat = s.NPejabat,
-                Roles = s.Roles,
+                JGiliran = s.JGiliran,
+                Roles = s.Roles.Select(r => (new
+                {
+                    Code = r.MOU_Roles.Code,
+                    Role = r.MOU_Roles.Role,
+                })).ToList(),
             })
             .FirstOrDefault();
 

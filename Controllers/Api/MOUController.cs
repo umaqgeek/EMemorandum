@@ -45,32 +45,39 @@ public class MOUController : ControllerBase
             .Select(r => r.Role)
             .ToList();
 
-        if (roles.Contains("Admin")) {
+        if (roles.Contains("Admin") || roles.Contains("PUU")) {
             query = query.Where(m =>
                 m.Status == "00" ||
                 m.Status == "01" ||
                 m.Status == "02" ||
                 m.Status == "03" ||
                 m.Status == "04" ||
-                m.Status == "05"
+                m.Status == "05" ||
+                m.Status == "06" ||
+                m.Status == "07"
             );
-        } else if (roles.Contains("PUU")) {
+        } else if (roles.Contains("US")) {
             query = query.Where(m =>
-                m.Status == "00" ||
                 m.Status == "01" ||
-                m.Status == "03" ||
-                m.Status == "05"
+                m.Status == "02"
             );
         } else if (roles.Contains("PTJ")) {
             query = query.Where(m =>
-                m.Status == "02" ||
                 m.Status == "03" ||
+                m.Status == "04" ||
                 m.Status == "05"
             );
         } else {
             query = query.Where(m =>
-                m.MS01_NoStaf == staffId ||
-                m.Author == staffId
+                (
+                    m.MS01_NoStaf == staffId ||
+                    m.Author == staffId) &&
+                (
+                    m.Status == "02" ||
+                    m.Status == "03" ||
+                    m.Status == "04" ||
+                    m.Status == "05"
+                )
             );
         }
 
@@ -112,6 +119,8 @@ public class MOUController : ControllerBase
                 code = c.code,
                 name = c.name,
             }).ToList(),
+            IndustryCategories = _context.MOU_IndustryCat.ToList(),
+            Fields = _context.MOU_Field.ToList(),
         });
     }
 
@@ -137,12 +146,16 @@ public class MOUController : ControllerBase
     public ActionResult<object> UpdateMemo([FromBody] MOUAddModel entity)
     {
         var staffId = GetStaffID();
+        var isPUU = IsStaffRole("PUU");
+        var isUS = IsStaffRole("US");
+        var isPTJ = IsStaffRole("PTJ");
+        var isPIC = false;
 
         if (!ModelState.IsValid) {
             return BadRequest(ModelState);
         }
 
-        var updatedStatus = "02";
+        var updatedStatus = "01";
         var msg = "has been updated";
 
         using (var transaction = _context.Database.BeginTransaction())
@@ -152,57 +165,101 @@ public class MOUController : ControllerBase
                 var memo = _context.MOU01_Memorandum
                     .Include(m => m.MOU03_Ahli)
                     .Include(m => m.MOU04_KPI)
+                    .Include(m => m.MOU07_Field)
                     .FirstOrDefault(m => m.NoMemo == entity.NoMemo);
                 if (memo == null) {
                     return NotFound($"Memorandum with number = {entity.NoMemo} not found");
                 }
 
-                // update a memo
-                memo.KodKategori = entity.form1.KodKategori;
-                memo.KodJenis = entity.form1.KodJenis;
-                memo.KodPTJ = entity.form1.KodPTJ;
-                memo.KodScope = entity.form1.KodScope;
-                memo.KodPTJSub = entity.form1.KodPTJSub;
-                memo.TarikhMula = entity.form1.TarikhMula;
-                memo.TarikhTamat = entity.form1.TarikhTamat;
-                memo.TajukProjek = entity.form1.TajukProjek;
-                memo.NamaDok = entity.form1.NamaDok;
-                memo.Path = entity.form1.Path;
-                memo.MS01_NoStaf = entity.form1.MS01_NoStaf;
-                memo.Nilai = entity.form1.Nilai;
-                memo.Status = updatedStatus;
-                memo.Negara = entity.form1.Negara;
-
-                // update a memo's members
-                _context.MOU03_Ahli.RemoveRange(memo.MOU03_Ahli);
-                foreach (var member in entity.form2.Members) {
-                    _context.MOU03_Ahli.Add(new MOU03_Ahli
-                    {
-                        NoMemo = entity.NoMemo,
-                        NoStaf = member.NoStaf,
-                        Peranan = member.Peranan,
-                        TkhMula = entity.form1.TarikhMula,
-                        TkhTamat = entity.form1.TarikhTamat,
-                    });
+                isPIC = memo.MS01_NoStaf == staffId ? true : false;
+                if (isPUU) {
+                    updatedStatus = memo.Status != updatedStatus ? memo.Status : updatedStatus;
+                }
+                if (isUS) {
+                    updatedStatus = "02";
+                }
+                if (isPIC) {
+                    updatedStatus = "03";
+                }
+                if (isPTJ) {
+                    updatedStatus = "04";
                 }
 
-                // update a memo's KPIs
-                _context.MOU04_KPI.RemoveRange(memo.MOU04_KPI);
-                foreach (var kpi in entity.form3.KPIs)
-                {
-                    _context.MOU04_KPI.Add(new MOU04_KPI
+                memo.Status = updatedStatus;
+
+                // update a memo only for PUU
+                if (isPUU) {
+                    memo.KodKategori = entity.form1.KodKategori;
+                    memo.KodJenis = entity.form1.KodJenis;
+                    memo.KodPTJ = entity.form1?.KodPTJ;
+                    memo.KodScope = entity.form1.KodScope;
+                    memo.KodPTJSub = entity.form1?.KodPTJSub;
+                    memo.TarikhMula = entity.form1?.TarikhMula;
+                    memo.TarikhTamat = entity.form1?.TarikhTamat;
+                    memo.TajukProjek = entity.form1?.TajukProjek;
+                    memo.NamaDok = entity.form1?.NamaDok;
+                    memo.Path = entity.form1?.Path;
+                    memo.MS01_NoStaf = entity.form1?.MS01_NoStaf;
+                    memo.Nilai = entity.form1?.Nilai;
+                    memo.Negara = entity.form1?.Negara;
+                    memo.KodInd = entity.form1?.KodInd;
+                    memo.DokStamp = entity.form1?.DokStamp;
+                    memo.DokStampPath = entity.form1?.DokStampPath;
+
+                    // update a memo's fields
+                    _context.MOU07_Field.RemoveRange(memo.MOU07_Field);
+                    foreach (var field in entity.KodFields)
                     {
-                        NoMemo = entity.NoMemo,
-                        Amaun = kpi.isAmount == true ? kpi.Amaun : 0,
-                        Nilai = kpi.isAmount == false ? kpi.Amaun : 0,
-                        MOU04_Number = kpi.MOU04_Number,
-                        Penerangan = kpi.Penerangan,
-                        TarikhMula = kpi.TarikhMula,
-                        TarikhTamat = kpi.TarikhTamat,
-                        Komen = kpi.Komen,
-                        Nama = kpi.Nama,
-                        Kod = kpi.Kod,
-                    });
+                        _context.MOU07_Field.Add(new MOU07_Field
+                        {
+                            NoMemo = entity.NoMemo,
+                            KodField = field,
+                        });
+                    }
+                }
+
+                // update a memo only for US
+                if (isUS) {
+                    memo.DokMinit = entity.form1?.DokMinit;
+                    memo.DokMinitPath = entity.form1?.DokMinitPath;
+                }
+
+                // update a memo only for PIC
+                if (isPIC) {
+                    memo.DokLulus = entity.form1?.DokLulus;
+                    memo.DokLulusPath = entity.form1?.DokLulusPath;
+
+                    // update a memo's members
+                    _context.MOU03_Ahli.RemoveRange(memo.MOU03_Ahli);
+                    foreach (var member in entity.form2.Members) {
+                        _context.MOU03_Ahli.Add(new MOU03_Ahli
+                        {
+                            NoMemo = entity.NoMemo,
+                            NoStaf = member.NoStaf,
+                            Peranan = member.Peranan,
+                            TkhMula = entity.form1.TarikhMula,
+                            TkhTamat = entity.form1.TarikhTamat,
+                        });
+                    }
+
+                    // update a memo's KPIs
+                    _context.MOU04_KPI.RemoveRange(memo.MOU04_KPI);
+                    foreach (var kpi in entity.form3.KPIs)
+                    {
+                        _context.MOU04_KPI.Add(new MOU04_KPI
+                        {
+                            NoMemo = entity.NoMemo,
+                            Amaun = kpi.isAmount == true ? kpi.Amaun : 0,
+                            Nilai = kpi.isAmount == false ? kpi.Amaun : 0,
+                            MOU04_Number = kpi.MOU04_Number,
+                            Penerangan = kpi.Penerangan,
+                            TarikhMula = kpi.TarikhMula,
+                            TarikhTamat = kpi.TarikhTamat,
+                            Komen = kpi.Komen,
+                            Nama = kpi.Nama,
+                            Kod = kpi.Kod,
+                        });
+                    }
                 }
 
                 var mouStatus = new MOU02_Status
@@ -286,6 +343,7 @@ public class MOUController : ControllerBase
             Nilai = entity.form1.Nilai,
             Author = staffId,
             Negara = entity.form1.Negara,
+            KodInd = entity.form1.KodInd,
         };
 
         var mouStatus = new MOU02_Status
@@ -347,6 +405,16 @@ public class MOUController : ControllerBase
                         Komen = kpi.Komen,
                         Nama = kpi.Nama,
                         Kod = kpi.Kod,
+                    });
+                }
+
+                // add Fields for added MOU
+                foreach (var field in entity.KodFields)
+                {
+                    _context.MOU07_Field.Add(new MOU07_Field
+                    {
+                        NoMemo = genNo.noMemo,
+                        KodField = field,
                     });
                 }
 
@@ -589,6 +657,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.EMO_StafAuthor)
             .Include(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.MOU_IndustryCat)
             .Include(_entity => _entity.MOU06_History)
                 .ThenInclude(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU03_Ahli)
@@ -597,6 +666,8 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.MOU04_KPI)
                 .ThenInclude(_entity => _entity.EMO_KPI)
             .Include(_entity => _entity.EMO_Countries)
+            .Include(_entity => _entity.MOU07_Field)
+                .ThenInclude(_entity => _entity.MOU_Field)
             .FirstOrDefault();
 
         if (_entity == null)
@@ -757,6 +828,13 @@ public class MOUController : ControllerBase
         return null;
     }
 
+    private bool IsStaffRole(string role)
+    {
+        var staffId = GetStaffID();
+        return _context.EMO_Roles
+            .Any(r => r.NoStaf == staffId && r.Role == role);
+    }
+
     private static object GetTransformedMOU(MOU01_Memorandum _entity, string staffId)
     {
         return (new
@@ -783,6 +861,12 @@ public class MOUController : ControllerBase
             TajukProjek = _entity.TajukProjek,
             Path = _entity.Path,
             NamaDok = _entity.NamaDok,
+            DokLulusPath = _entity.DokLulusPath,
+            DokLulus = _entity.DokLulus,
+            DokStampPath = _entity.DokStampPath,
+            DokStamp = _entity.DokStamp,
+            DokMinitPath = _entity.DokMinitPath,
+            DokMinit = _entity.DokMinit,
             IsPIC = _entity.MS01_NoStaf == staffId,
             PIC = _entity.EMO_Staf.Nama,
             PICGelaran = _entity.EMO_Staf.Gelaran,
@@ -803,6 +887,16 @@ public class MOUController : ControllerBase
                 Kod = _entity.MOU_Status?.Kod,
                 Status = _entity.MOU_Status?.Status,
             },
+            IndustryCategory = new
+            {
+                KodInd = _entity.MOU_IndustryCat?.KodInd,
+                IndustryCategory = _entity.MOU_IndustryCat?.IndustryCategory,
+            },
+            Fields = _entity.MOU07_Field.Select(mou07 => new
+            {
+                KodField = mou07.KodField,
+                Field = mou07.MOU_Field.Field,
+            }).ToList(),
             Statuses = _entity.MOU02_Statuses.Select(mou02 => new
             {
                 Status_ID = mou02.Status_ID,
@@ -819,12 +913,12 @@ public class MOUController : ControllerBase
                 Created_At = mou06.Created_At?.ToString("dd MMM yyyy, h:mm tt") ?? "",
                 Ori_Created_At = mou06.Created_At,
                 Description = mou06.Description,
-                Comment = mou06.Comment,
+                Comment = mou06?.Comment,
                 NoStaf = mou06.NoStaf,
                 Gelaran = mou06.EMO_Staf.Gelaran,
                 Nama = mou06.EMO_Staf.Nama,
             })?.OrderByDescending(_entity => _entity.Ori_Created_At).ToList(),
-            Members = _entity.MOU03_Ahli.Select(mou03 => new
+            Members = _entity.MOU03_Ahli?.Select(mou03 => new
             {
                 Peranan = mou03.Peranan,
                 Email = mou03.EMO_Staf.Email,
@@ -833,7 +927,7 @@ public class MOUController : ControllerBase
                 NoStaf = mou03.EMO_Staf.NoStaf,
                 Roles = mou03.EMO_Staf.Roles,
             })?.ToList(),
-            KPIs = _entity.MOU04_KPI.Select(mou04 => new
+            KPIs = _entity.MOU04_KPI?.Select(mou04 => new
             {
                 KPI_ID = mou04.KPI_ID,
                 Kod = mou04.Kod,
@@ -878,6 +972,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.EMO_StafAuthor)
             .Include(_entity => _entity.MOU_Status)
+            .Include(_entity => _entity.MOU_IndustryCat)
             .Include(_entity => _entity.MOU06_History)
                 .ThenInclude(_entity => _entity.EMO_Staf)
             .Include(_entity => _entity.MOU03_Ahli)
@@ -886,6 +981,8 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.MOU04_KPI)
                 .ThenInclude(_entity => _entity.EMO_KPI)
             .Include(_entity => _entity.EMO_Countries)
+            .Include(_entity => _entity.MOU07_Field)
+                .ThenInclude(_entity => _entity.MOU_Field)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(q))
@@ -999,6 +1096,7 @@ public class MOUAddModel
     public MOU01_Memorandum form1 { get; set; }
     public MOUMembers form2 { get; set; }
     public MOUKPIs form3 { get; set; }
+    public ICollection<string>? KodFields { get; set; }
 }
 
 public class MOUMembers

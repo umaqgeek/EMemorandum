@@ -31,6 +31,12 @@ public class MOU01_Memorandum
     public string? TajukProjek { get; set; }
     public string? NamaDok { get; set; }
     public string? Path { get; set; }
+    public string? DokLulus { get; set; }
+    public string? DokLulusPath { get; set; }
+    public string? DokStamp { get; set; }
+    public string? DokStampPath { get; set; }
+    public string? DokMinit { get; set; }
+    public string? DokMinitPath { get; set; }
 
     [ForeignKey("EMO_StafAuthor")]
     public string? Author { get; set; }
@@ -43,6 +49,10 @@ public class MOU01_Memorandum
 
     [ForeignKey("MOU_Status")]
     public string? Status { get; set; }
+
+    [ForeignKey("MOU_IndustryCat")]
+    public string? KodInd { get; set; }
+
     public decimal? Nilai { get; set; }
 
     [JsonIgnore]  // This will prevent the EMO_Countries reference from being serialized
@@ -72,6 +82,9 @@ public class MOU01_Memorandum
     [JsonIgnore]  // This will prevent the MOU_Status reference from being serialized
     public MOU_Status? MOU_Status { get; set; }  // Navigation property back to MOU_Status
 
+    [JsonIgnore]  // This will prevent the MOU_IndustryCat reference from being serialized
+    public MOU_IndustryCat? MOU_IndustryCat { get; set; }  // Navigation property back to MOU_IndustryCat
+
     // Navigation property for the statuses
     public ICollection<MOU02_Status>? MOU02_Statuses { get; set; }
 
@@ -86,4 +99,7 @@ public class MOU01_Memorandum
 
     // Navigation property for the history
     public ICollection<MOU06_History>? MOU06_History { get; set; }
+
+    // Navigation property for the history
+    public ICollection<MOU07_Field>? MOU07_Field { get; set; }
 }

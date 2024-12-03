@@ -95,6 +95,13 @@ export function useAssignStaffRoles(noStaf, roles = []) {
     });
 }
 
+export function useGetAllRoles() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/roles`,
+    });
+}
+
 export function useGetAllMOU(query = "") {
     return useApi({
         method: "get",
@@ -127,7 +134,7 @@ export function useMouGenerateNoMemo(payload) {
 export function useHandleFileUpload(formData) {
     return useApi({
         method: "post",
-        url: `${API_URL}/upload/upload`,
+        url: `${API_URL}/upload/file`,
         data: formData,
         headers: {
             "Content-Type": "multipart/form-data",

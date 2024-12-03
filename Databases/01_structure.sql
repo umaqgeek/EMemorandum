@@ -24,6 +24,18 @@ CREATE TABLE DbEMO.dbo.EMO_Countries (
 	CONSTRAINT EMO_Countries_PK PRIMARY KEY (code)
 );
 
+-- DbEMO.dbo.EMO_KPI definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.EMO_KPI;
+
+CREATE TABLE DbEMO.dbo.EMO_KPI (
+	Kod varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	KPI varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT EMO_KPI_PK PRIMARY KEY (Kod)
+);
+
 -- DbEMO.dbo.EMO_Pejabat definition
 
 -- Drop table
@@ -37,18 +49,6 @@ CREATE TABLE DbEMO.dbo.EMO_Pejabat (
 	NamaPBU nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	StatusPTJ bit NULL,
 	CONSTRAINT EMO_Pejabat_PK PRIMARY KEY (KodPBU)
-);
-
--- DbEMO.dbo.EMO_KPI definition
-
--- Drop table
-
--- DROP TABLE DbEMO.dbo.EMO_KPI;
-
-CREATE TABLE DbEMO.dbo.EMO_KPI (
-	Kod varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	KPI varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT EMO_KPI_PK PRIMARY KEY (Kod)
 );
 
 -- DbEMO.dbo.EMO_Staf definition
@@ -127,6 +127,14 @@ CREATE TABLE DbEMO.dbo.MOU01_Memorandum (
 	Nilai decimal(18,2) NULL,
 	Author nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Negara nvarchar(3) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	DokLulus varchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	DokLulusPath varchar(300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	DokStamp varchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	DokStampPath varchar(300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	DokMinit varchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	DokMinitPath varchar(300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	KodInd varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	KodField varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CONSTRAINT PK_MOU01_Memorandum PRIMARY KEY (NoMemo),
 	CONSTRAINT FK_MOU01_Memorandum_EMO_Staf FOREIGN KEY (MS01_NoStaf) REFERENCES DbEMO.dbo.EMO_Staf(NoStaf)
 );
@@ -138,7 +146,7 @@ CREATE TABLE DbEMO.dbo.MOU01_Memorandum (
 -- DROP TABLE DbEMO.dbo.MOU02_Status;
 
 CREATE TABLE DbEMO.dbo.MOU02_Status (
-	Status_ID BIGINT IDENTITY(1,1) NOT NULL,
+	Status_ID bigint IDENTITY(1,1) NOT NULL,
 	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	Status varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	Tarikh smalldatetime NULL,
@@ -162,7 +170,7 @@ CREATE TABLE DbEMO.dbo.MOU03_Ahli (
 	Status varchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	SuratLantikan varchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	[Path] varchar(300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT PK_MOU03_Ahli PRIMARY KEY (NoMemo, NoStaf),
+	CONSTRAINT PK_MOU03_Ahli PRIMARY KEY (NoMemo,NoStaf),
 	CONSTRAINT FK_MOU03_Ahli_MOU01_Memorandum FOREIGN KEY (NoMemo) REFERENCES DbEMO.dbo.MOU01_Memorandum(NoMemo)
 );
 
@@ -173,7 +181,7 @@ CREATE TABLE DbEMO.dbo.MOU03_Ahli (
 -- DROP TABLE DbEMO.dbo.MOU04_KPI;
 
 CREATE TABLE DbEMO.dbo.MOU04_KPI (
-	KPI_ID BIGINT IDENTITY(1,1) NOT NULL,
+	KPI_ID bigint IDENTITY(1,1) NOT NULL,
 	Kod varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	Amaun decimal(18,2) NULL,
@@ -195,10 +203,10 @@ CREATE TABLE DbEMO.dbo.MOU04_KPI (
 -- DROP TABLE DbEMO.dbo.MOU05_KPI_Progress;
 
 CREATE TABLE DbEMO.dbo.MOU05_KPI_Progress (
-	KPI_ID BIGINT NOT NULL,
+	KPI_ID bigint NOT NULL,
 	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	ProgressID BIGINT IDENTITY(1,1) NOT NULL,
-	Bukti nvarchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	ProgressID bigint IDENTITY(1,1) NOT NULL,
+	Bukti varchar(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Amaun decimal(18,2) NULL,
 	Number numeric(18,0) NULL,
 	Penerangan varchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -206,6 +214,33 @@ CREATE TABLE DbEMO.dbo.MOU05_KPI_Progress (
 	NoStaf nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	CONSTRAINT PK_MOU05_KPI_Progress_1 PRIMARY KEY (ProgressID),
 	CONSTRAINT FK_MOU05_KPI_Progress_MOU04_KPI FOREIGN KEY (KPI_ID) REFERENCES DbEMO.dbo.MOU04_KPI(KPI_ID)
+);
+
+-- DbEMO.dbo.MOU06_History definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.MOU06_History;
+
+CREATE TABLE DbEMO.dbo.MOU06_History (
+	id bigint IDENTITY(0,1) NOT NULL,
+	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	NoStaf nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Description varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Created_At datetime NOT NULL,
+	Comment varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT MOU06_History_PK PRIMARY KEY (id)
+);
+
+-- DbEMO.dbo.MOU07_Field definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.MOU07_Field;
+
+CREATE TABLE DbEMO.dbo.MOU07_Field (
+	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	KodField varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 );
 
 -- DbEMO.dbo.MOU_AuditLog definition
@@ -225,6 +260,40 @@ CREATE TABLE DbEMO.dbo.MOU_AuditLog (
 	Medan varchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Info_Lama varchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CONSTRAINT MOU_AuditLog_PK PRIMARY KEY (ID)
+);
+
+-- DbEMO.dbo.MOU_Field definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.MOU_Field;
+
+CREATE TABLE DbEMO.dbo.MOU_Field (
+	KodField varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	Field varchar(150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+);
+
+-- DbEMO.dbo.MOU_IndustryCat definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.MOU_IndustryCat;
+
+CREATE TABLE DbEMO.dbo.MOU_IndustryCat (
+	KodInd varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	IndustryCategory varchar(350) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+);
+
+-- DbEMO.dbo.MOU_Roles definition
+
+-- Drop table
+
+-- DROP TABLE DbEMO.dbo.MOU_Roles;
+
+CREATE TABLE DbEMO.dbo.MOU_Roles (
+	id int IDENTITY(0,1) NOT NULL,
+	Code varchar(10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[Role] varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 );
 
 -- DbEMO.dbo.MOU_Status definition
@@ -261,7 +330,7 @@ CREATE TABLE DbEMO.dbo.PUU_JenisMemo (
 -- DROP TABLE DbEMO.dbo.PUU_KategoriMemo;
 
 CREATE TABLE DbEMO.dbo.PUU_KategoriMemo (
-	ID bigint NOT NULL,
+	ID bigint IDENTITY(1,1) NOT NULL,
 	Kod int NULL,
 	Butiran varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CONSTRAINT PUU_KategoriMemo_PK PRIMARY KEY (ID)
@@ -292,20 +361,4 @@ CREATE TABLE DbEMO.dbo.PUU_SubPTj (
 	KodSubPTJ varchar(6) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Nama varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CONSTRAINT PUU_SubPTj_PK PRIMARY KEY (ID)
-);
-
--- DbEMO.dbo.MOU06_History definition
-
--- Drop table
-
--- DROP TABLE DbEMO.dbo.MOU06_History;
-
-CREATE TABLE DbEMO.dbo.MOU06_History (
-	id bigint IDENTITY(0,1) NOT NULL,
-	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	NoStaf nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	Description varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	Created_At datetime NOT NULL,
-	Comment varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT MOU06_History_PK PRIMARY KEY (id)
 );

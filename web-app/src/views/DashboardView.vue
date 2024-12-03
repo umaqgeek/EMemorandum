@@ -31,7 +31,7 @@
                                         class="col-md-3"
                                         v-if="
                                             roles.find(
-                                                (r) => r.role === 'Admin'
+                                                (r) => r.code === 'Admin'
                                             )
                                         "
                                     >
@@ -55,9 +55,9 @@
                                         class="col-md-3"
                                         v-if="
                                             roles.find(
-                                                (r) => r.role === 'Staff'
+                                                (r) => r.code === 'Staff'
                                             ) ||
-                                            roles.find((r) => r.role === 'PTJ')
+                                            roles.find((r) => r.code === 'PTJ')
                                         "
                                     >
                                         <a :href="`${publicPath}memo-list`">
@@ -95,7 +95,7 @@
                                         class="col-md-3"
                                         v-if="
                                             roles.find(
-                                                (r) => r.role === 'Admin'
+                                                (r) => r.code === 'Admin'
                                             )
                                         "
                                     >
@@ -118,7 +118,7 @@
                                     <!-- <div
                                         class="col-md-3"
                                         v-if="
-                                            roles.find((r) => r.role === 'PTJ')
+                                            roles.find((r) => r.code === 'PTJ')
                                         "
                                     >
                                         <a :href="`${publicPath}approval-list`">
@@ -179,7 +179,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="card">
                                             <div class="card-body">
                                                 <h4>Memorandums by PTJs</h4>

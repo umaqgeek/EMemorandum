@@ -9,12 +9,12 @@
                     <th class="tb-col">
                         <span class="overline-title">Name</span>
                     </th>
-                    <!-- <th class="tb-col">
+                    <th class="tb-col" v-if="isFull">
                         <span class="overline-title">Roles</span>
                     </th>
-                    <th class="tb-col">
+                    <th class="tb-col" v-if="isFull">
                         <span class="overline-title">Status</span>
-                    </th> -->
+                    </th>
                     <th class="tb-col tb-col-end" data-sortable="false">
                         <span class="overline-title">Action</span>
                     </th>
@@ -72,28 +72,35 @@
                             </div>
                         </div>
                     </td>
-                    <!-- <td class="tb-col">
-                        {{
+                    <td
+                        class="tb-col"
+                        v-if="isFull"
+                        v-html="
                             user.roles?.length > 0
-                                ? user.roles?.map((r) => r.role)?.join(", ")
-                                : "-"
-                        }}
-                    </td>
-                    <td class="tb-col">
+                                ? user.roles?.length > 1
+                                    ? user.roles
+                                          ?.filter((r) => r.code != 'Staff')
+                                          .map((r) => r.role)
+                                          ?.join(',<br />')
+                                    : 'Staff'
+                                : '-'
+                        "
+                    ></td>
+                    <td class="tb-col" v-if="isFull">
                         <span
                             class="badge text-bg-danger-soft"
                             v-if="user.roles?.length <= 0"
                             >Inactive</span
                         >
                         <span
-                            class="badge text-bg-success-soft"
+                            class="badge text-bg-success"
                             v-if="
                                 user.roles?.length > 0 &&
-                                user.roles?.find((r) => r.role === 'Staff')
+                                user.roles?.find((r) => r.code === 'Staff')
                             "
                             >Active</span
                         >
-                    </td> -->
+                    </td>
                     <td class="tb-col tb-col-end">
                         <div class="dropdown">
                             <a
@@ -196,6 +203,10 @@ export default {
             required: false,
         },
         isNotDatatable: {
+            type: Boolean,
+            required: false,
+        },
+        isFull: {
             type: Boolean,
             required: false,
         },
