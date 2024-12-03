@@ -333,39 +333,6 @@
                                                                             }}</span
                                                                         >
                                                                     </li>
-                                                                    <li
-                                                                        class="list-group-item"
-                                                                        v-if="
-                                                                            dataTheMOU?.path
-                                                                        "
-                                                                    >
-                                                                        <span
-                                                                            class="title fw-medium w-100 d-inline-block"
-                                                                            >Document:</span
-                                                                        >
-                                                                        <a
-                                                                            :href="`${publicPath}${dataTheMOU?.path}`"
-                                                                            target="_blank"
-                                                                            >{{
-                                                                                dataTheMOU?.namaDok
-                                                                            }}</a
-                                                                        >
-                                                                        <div
-                                                                            class="d-block mt-1"
-                                                                        >
-                                                                            <a
-                                                                                :href="`${publicPath}${dataTheMOU?.path}`"
-                                                                                target="_blank"
-                                                                                class="btn btn-md btn-info"
-                                                                                ><em
-                                                                                    class="icon ni ni-download"
-                                                                                ></em
-                                                                                ><span
-                                                                                    >Download</span
-                                                                                ></a
-                                                                            >
-                                                                        </div>
-                                                                    </li>
                                                                 </ul>
                                                             </div>
                                                             <!-- .bio-block -->
@@ -390,6 +357,180 @@
                                                                         dataTheMOU?.tajukProjek
                                                                     }}
                                                                 </p>
+                                                                <hr />
+                                                            </div>
+                                                            <div class="row">
+                                                                <div
+                                                                    class="col-lg-6"
+                                                                >
+                                                                    <span
+                                                                        class="title fw-medium w-100 d-inline-block"
+                                                                        >Fair
+                                                                        Copy
+                                                                        Document:</span
+                                                                    >
+                                                                    <a
+                                                                        v-if="
+                                                                            dataTheMOU?.path
+                                                                        "
+                                                                        :href="`${publicPath}${dataTheMOU?.path}`"
+                                                                        target="_blank"
+                                                                        >{{
+                                                                            dataTheMOU?.namaDok
+                                                                        }}</a
+                                                                    >
+                                                                    <div
+                                                                        v-if="
+                                                                            dataTheMOU?.path
+                                                                        "
+                                                                        class="d-block mt-1"
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${dataTheMOU?.path}`"
+                                                                            target="_blank"
+                                                                            class="btn btn-md btn-info"
+                                                                            ><em
+                                                                                class="icon ni ni-download"
+                                                                            ></em
+                                                                            ><span
+                                                                                >View
+                                                                                /
+                                                                                Download</span
+                                                                            ></a
+                                                                        >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    class="col-lg-6"
+                                                                >
+                                                                    <span
+                                                                        class="title fw-medium w-100 d-inline-block"
+                                                                        >Stamped
+                                                                        Document:</span
+                                                                    >
+                                                                    <a
+                                                                        v-if="
+                                                                            dataTheMOU?.dokStampPath
+                                                                        "
+                                                                        :href="`${publicPath}${dataTheMOU?.dokStampPath}`"
+                                                                        target="_blank"
+                                                                        >{{
+                                                                            dataTheMOU?.dokStamp
+                                                                        }}</a
+                                                                    >
+                                                                    <div
+                                                                        class="d-block mt-1"
+                                                                        v-if="
+                                                                            dataTheMOU?.dokStampPath
+                                                                        "
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${dataTheMOU?.dokStampPath}`"
+                                                                            target="_blank"
+                                                                            class="btn btn-md btn-info"
+                                                                            ><em
+                                                                                class="icon ni ni-download"
+                                                                            ></em
+                                                                            ><span
+                                                                                >View
+                                                                                /
+                                                                                Download</span
+                                                                            ></a
+                                                                        >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    class="col-lg-6"
+                                                                >
+                                                                    <hr />
+                                                                    <span
+                                                                        class="title fw-medium w-100 d-inline-block"
+                                                                        >Minutes
+                                                                        Document:</span
+                                                                    >
+                                                                    <a
+                                                                        v-if="
+                                                                            dataTheMOU?.dokMinitPath
+                                                                        "
+                                                                        :href="`${publicPath}${dataTheMOU?.dokMinitPath}`"
+                                                                        target="_blank"
+                                                                        >{{
+                                                                            dataTheMOU?.dokMinit
+                                                                        }}</a
+                                                                    >
+                                                                    <div
+                                                                        class="d-block mt-1"
+                                                                        v-if="
+                                                                            dataTheMOU?.dokMinitPath
+                                                                        "
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${dataTheMOU?.dokMinitPath}`"
+                                                                            target="_blank"
+                                                                            class="btn btn-md btn-info"
+                                                                            ><em
+                                                                                class="icon ni ni-download"
+                                                                            ></em
+                                                                            ><span
+                                                                                >View
+                                                                                /
+                                                                                Download</span
+                                                                            ></a
+                                                                        >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    class="col-lg-6"
+                                                                >
+                                                                    <hr />
+                                                                    <span
+                                                                        class="title fw-medium w-100 d-inline-block"
+                                                                        >Approved
+                                                                        Document:</span
+                                                                    >
+                                                                    <a
+                                                                        v-if="
+                                                                            dataTheMOU?.dokLulusPath
+                                                                        "
+                                                                        :href="`${publicPath}${dataTheMOU?.dokLulusPath}`"
+                                                                        target="_blank"
+                                                                        >{{
+                                                                            dataTheMOU?.dokLulus
+                                                                        }}</a
+                                                                    >
+                                                                    <div
+                                                                        class="d-block mt-1"
+                                                                        v-if="
+                                                                            dataTheMOU?.dokLulusPath
+                                                                        "
+                                                                    >
+                                                                        <a
+                                                                            :href="`${publicPath}${dataTheMOU?.dokLulusPath}`"
+                                                                            target="_blank"
+                                                                            class="btn btn-md btn-info"
+                                                                            ><em
+                                                                                class="icon ni ni-download"
+                                                                            ></em
+                                                                            ><span
+                                                                                >View
+                                                                                /
+                                                                                Download</span
+                                                                            ></a
+                                                                        >
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        N/A
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <!-- .bio-block -->
                                                         </div>

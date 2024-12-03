@@ -246,6 +246,9 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <multiselect
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
                                                                         :allow-empty="
                                                                             false
                                                                         "
@@ -278,6 +281,9 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <multiselect
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
                                                                         :allow-empty="
                                                                             false
                                                                         "
@@ -386,6 +392,9 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <multiselect
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
                                                                         :allow-empty="
                                                                             false
                                                                         "
@@ -492,7 +501,7 @@
                                                                         "
                                                                         readonly
                                                                     />
-                                                                    <button
+                                                                    <!-- <button
                                                                         class="btn btn-outline-primary"
                                                                         type="button"
                                                                         id="button-addon2"
@@ -501,9 +510,9 @@
                                                                     >
                                                                         Search
                                                                         Members
-                                                                    </button>
+                                                                    </button> -->
                                                                 </div>
-                                                                <div
+                                                                <!-- <div
                                                                     class="btn btn-link"
                                                                     v-on:click="
                                                                         assignYourselfPIC
@@ -511,7 +520,7 @@
                                                                 >
                                                                     Assign
                                                                     yourself
-                                                                </div>
+                                                                </div> -->
                                                                 <div
                                                                     class="modal fade"
                                                                     id="searchPICsModal"
@@ -853,6 +862,9 @@
                                                                     class="form-control-wrap"
                                                                 >
                                                                     <multiselect
+                                                                        :disabled="
+                                                                            !isPUU
+                                                                        "
                                                                         :multiple="
                                                                             true
                                                                         "
@@ -1007,6 +1019,7 @@
                                                             <a
                                                                 v-if="
                                                                     isPUU ||
+                                                                    isUS ||
                                                                     menuNo === 3
                                                                 "
                                                                 href="#"
@@ -1294,6 +1307,10 @@ export default {
                             fileName.value.faircopy = newDataMOU?.namaDok;
                             filePath.value.stamped = newDataMOU?.dokStampPath;
                             fileName.value.stamped = newDataMOU?.dokStamp;
+                            filePath.value.minutes = newDataMOU?.dokMinitPath;
+                            fileName.value.minutes = newDataMOU?.dokMinit;
+                            filePath.value.approved = newDataMOU?.dokLulusPath;
+                            fileName.value.approved = newDataMOU?.dokLulus;
                             form.value.form1.MS01_NoStaf =
                                 newDataMOU?.noStafPIC;
                             const gelaran = newDataMOU?.picGelaran
@@ -1464,6 +1481,10 @@ export default {
                     KodInd: this.IndustryCategory.kodInd,
                     DokStamp: this.fileName?.stamped,
                     DokStampPath: this.filePath?.stamped,
+                    DokMinit: this.fileName?.minutes,
+                    DokMinitPath: this.filePath?.minutes,
+                    DokLulus: this.fileName?.approved,
+                    DokLulusPath: this.filePath?.approved,
                 },
                 form2: {
                     Members: this.members.map((member) => {

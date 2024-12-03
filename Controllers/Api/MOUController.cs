@@ -184,6 +184,8 @@ public class MOUController : ControllerBase
                     updatedStatus = "04";
                 }
 
+                memo.Status = updatedStatus;
+
                 // update a memo only for PUU
                 if (isPUU) {
                     memo.KodKategori = entity.form1.KodKategori;
@@ -198,7 +200,6 @@ public class MOUController : ControllerBase
                     memo.Path = entity.form1?.Path;
                     memo.MS01_NoStaf = entity.form1?.MS01_NoStaf;
                     memo.Nilai = entity.form1?.Nilai;
-                    memo.Status = updatedStatus;
                     memo.Negara = entity.form1?.Negara;
                     memo.KodInd = entity.form1?.KodInd;
                     memo.DokStamp = entity.form1?.DokStamp;
