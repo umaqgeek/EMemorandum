@@ -388,7 +388,6 @@ export default {
             return this.dataOneStaff?.nPejabat;
         },
         position() {
-            console.log(this.dataOneStaff);
             return this.dataOneStaff?.jGiliran;
         },
     },

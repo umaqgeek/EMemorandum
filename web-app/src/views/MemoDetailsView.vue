@@ -124,6 +124,24 @@
                                                 </li>
                                             </ul>
                                         </div>
+                                        <div
+                                            class="gap-col"
+                                            v-if="isPIC || isAdmin"
+                                        >
+                                            <ul class="d-flex gap g-2">
+                                                <li class="d-none d-md-block">
+                                                    <a
+                                                        href="#"
+                                                        class="btn btn-danger"
+                                                    >
+                                                        <em
+                                                            class="icon ni ni-cross"
+                                                        ></em
+                                                        ><span>Cancel</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     <!-- .nk-block-head-between -->
                                 </div>
@@ -629,7 +647,7 @@
                                                         <!-- .card-body -->
                                                         <div
                                                             class="card-body"
-                                                            v-if="false"
+                                                            v-if="isPTJ"
                                                         >
                                                             <div
                                                                 class="bio-block"
@@ -732,11 +750,11 @@
                                                                                 dataTheMOU
                                                                                     ?.status
                                                                                     ?.kod ==
-                                                                                    '02'
+                                                                                    '03'
                                                                             "
                                                                             @click="
                                                                                 onApproval(
-                                                                                    '03'
+                                                                                    '04'
                                                                                 )
                                                                             "
                                                                         >

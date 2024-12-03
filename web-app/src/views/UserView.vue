@@ -40,9 +40,6 @@
                                                                 dataOneStaff?.nama
                                                             }}
                                                         </h3>
-                                                        <span class="small">{{
-                                                            rolesStr
-                                                        }}</span>
                                                     </div>
                                                 </div>
                                             </div>

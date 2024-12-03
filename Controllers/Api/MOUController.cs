@@ -75,6 +75,7 @@ public class MOUController : ControllerBase
                 (
                     m.Status == "02" ||
                     m.Status == "03" ||
+                    m.Status == "04" ||
                     m.Status == "05"
                 )
             );
