@@ -32,15 +32,6 @@
                                                     class="d-flex flex-column flex-md-row align-items-md-center"
                                                 >
                                                     <div
-                                                        class="media media-huge media-circle"
-                                                    >
-                                                        <img
-                                                            src="../assets/images/avatar/a.jpg"
-                                                            class="img-thumbnail"
-                                                            alt=""
-                                                        />
-                                                    </div>
-                                                    <div
                                                         class="mt-3 mt-md-0 ms-md-3"
                                                     >
                                                         <h3 class="title mb-1">
@@ -49,10 +40,9 @@
                                                                 dataOneStaff?.nama
                                                             }}
                                                         </h3>
-                                                        <span class="small"
-                                                            >{{ noStaf }} |
-                                                            {{ rolesStr }}</span
-                                                        >
+                                                        <span class="small">{{
+                                                            rolesStr
+                                                        }}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -96,6 +86,15 @@
                                                             </div>
                                                             <hr />
                                                             <label
+                                                                for="firstname"
+                                                                class="form-label"
+                                                                >Position</label
+                                                            >
+                                                            <div>
+                                                                {{ position }}
+                                                            </div>
+                                                            <hr />
+                                                            <label
                                                                 for="email"
                                                                 class="form-label"
                                                                 >Email
@@ -103,28 +102,6 @@
                                                             >
                                                             <div>
                                                                 {{ email }}
-                                                            </div>
-                                                            <hr />
-                                                            <label
-                                                                for="company"
-                                                                class="form-label"
-                                                                >Staff
-                                                                No.</label
-                                                            >
-                                                            <div>
-                                                                {{ noStaf }}
-                                                            </div>
-                                                            <hr />
-                                                            <label
-                                                                for="email"
-                                                                class="form-label"
-                                                                >Phone
-                                                                No.</label
-                                                            >
-                                                            <div>
-                                                                {{
-                                                                    noTelBimbit
-                                                                }}
                                                             </div>
                                                             <hr />
                                                             <label
@@ -193,6 +170,28 @@
                                                                     <em
                                                                         class="icon ni ni-check-round"
                                                                         v-if="
+                                                                            isEachRoles.US
+                                                                        "
+                                                                    ></em>
+                                                                    <em
+                                                                        class="icon ni ni-na"
+                                                                        v-else
+                                                                    ></em>
+                                                                    <label
+                                                                        class="form-check-label"
+                                                                        for="flexCheckUS"
+                                                                    >
+                                                                        Urusetia
+                                                                        /
+                                                                        Secretariat
+                                                                    </label>
+                                                                </div>
+                                                                <div
+                                                                    class="form-check"
+                                                                >
+                                                                    <em
+                                                                        class="icon ni ni-check-round"
+                                                                        v-if="
                                                                             isEachRoles.PTJ
                                                                         "
                                                                     ></em>
@@ -204,6 +203,7 @@
                                                                         class="form-check-label"
                                                                         for="flexCheckPTJ"
                                                                     >
+                                                                        Ketua
                                                                         PTJ
                                                                     </label>
                                                                 </div>
@@ -304,6 +304,7 @@ export default {
             Admin: false,
             PUU: false,
             PTJ: false,
+            US: false,
         });
         watch(
             () => dataOneStaff.value, // Watch the `dataOneStaff` reactive property
@@ -315,17 +316,22 @@ export default {
                     isActive.value = dataOneStaffUpdated?.roles?.length > 0; // Set `isActive` based on API data
                     isEachRoles.value = {
                         Admin: dataOneStaffUpdated?.roles?.find(
-                            (r) => r.role === "Admin"
+                            (r) => r.code === "Admin"
                         )
                             ? true
                             : false,
                         PUU: dataOneStaffUpdated?.roles?.find(
-                            (r) => r.role === "PUU"
+                            (r) => r.code === "PUU"
                         )
                             ? true
                             : false,
                         PTJ: dataOneStaffUpdated?.roles?.find(
-                            (r) => r.role === "PTJ"
+                            (r) => r.code === "PTJ"
+                        )
+                            ? true
+                            : false,
+                        US: dataOneStaffUpdated?.roles?.find(
+                            (r) => r.code === "US"
                         )
                             ? true
                             : false,
@@ -371,6 +377,9 @@ export default {
         },
         nPejabat() {
             return this.dataOneStaff?.nPejabat;
+        },
+        position() {
+            return this.dataOneStaff?.jGiliran;
         },
     },
     methods: {},

@@ -32,15 +32,6 @@
                                                     class="d-flex flex-column flex-md-row align-items-md-center"
                                                 >
                                                     <div
-                                                        class="media media-huge media-circle"
-                                                    >
-                                                        <img
-                                                            src="../assets/images/avatar/a.jpg"
-                                                            class="img-thumbnail"
-                                                            alt=""
-                                                        />
-                                                    </div>
-                                                    <div
                                                         class="mt-3 mt-md-0 ms-md-3"
                                                     >
                                                         <h3 class="title mb-1">
@@ -91,8 +82,16 @@
                                                                 >Full
                                                                 Name</label
                                                             >
-                                                            <div class="mb-3">
+                                                            <div class="mb-4">
                                                                 {{ nama }}
+                                                            </div>
+                                                            <label
+                                                                for="firstname"
+                                                                class="form-label"
+                                                                >Position</label
+                                                            >
+                                                            <div class="mb-4">
+                                                                {{ position }}
                                                             </div>
                                                             <label
                                                                 for="email"
@@ -100,28 +99,8 @@
                                                                 >Email
                                                                 address</label
                                                             >
-                                                            <div class="mb-3">
+                                                            <div class="mb-4">
                                                                 {{ email }}
-                                                            </div>
-                                                            <label
-                                                                for="company"
-                                                                class="form-label"
-                                                                >Staff
-                                                                No.</label
-                                                            >
-                                                            <div class="mb-3">
-                                                                {{ noStaf }}
-                                                            </div>
-                                                            <label
-                                                                for="email"
-                                                                class="form-label"
-                                                                >Phone
-                                                                No.</label
-                                                            >
-                                                            <div class="mb-3">
-                                                                {{
-                                                                    noTelBimbit
-                                                                }}
                                                             </div>
                                                             <label
                                                                 for="company"
@@ -407,6 +386,10 @@ export default {
         },
         nPejabat() {
             return this.dataOneStaff?.nPejabat;
+        },
+        position() {
+            console.log(this.dataOneStaff);
+            return this.dataOneStaff?.jGiliran;
         },
     },
     methods: {

@@ -73,6 +73,7 @@ public class StaffController : ControllerBase
                 Nama = s.Nama,
                 Email = s.Email,
                 Gelaran = s.Gelaran,
+                JGiliran = s.JGiliran,
                 Roles = s.Roles
                     .Select(r => (new
                     {
@@ -97,7 +98,12 @@ public class StaffController : ControllerBase
                 NoStaf = s.NoStaf,
                 NoTelBimbit = s.NoTelBimbit,
                 NPejabat = s.NPejabat,
-                Roles = s.Roles,
+                JGiliran = s.JGiliran,
+                Roles = s.Roles.Select(r => (new
+                {
+                    Code = r.MOU_Roles.Code,
+                    Role = r.MOU_Roles.Role,
+                })).ToList(),
             })
             .FirstOrDefault();
 
