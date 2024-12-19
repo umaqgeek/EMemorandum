@@ -27,6 +27,7 @@ public class ReportController : ControllerBase
     public ActionResult ByCategory()
     {
         var categories = _context.PUU_KategoriMemo
+            .Where(k => k.Memorandums.Count() > 0)
             .Select(k => new
             {
                 Kod = k.Kod,
@@ -36,6 +37,50 @@ public class ReportController : ControllerBase
             .ToList();
         var labels = categories.Select(x => x.Butiran).ToList();
         var data = categories.Select(x => x.Count).ToList();
+        var result = new
+        {
+            labels = labels,
+            data = data,
+        };
+        return Ok(result);
+    }
+
+    [HttpGet("by-country")]
+    public ActionResult ByCountry()
+    {
+        var countries = _context.EMO_Countries
+            .Where(k => k.Memorandums.Count() > 0)
+            .Select(k => new
+            {
+                Code = k.code,
+                Name = k.name,
+                Count = k.Memorandums.Count(),
+            })
+            .ToList();
+        var labels = countries.Select(x => x.Name).ToList();
+        var data = countries.Select(x => x.Count).ToList();
+        var result = new
+        {
+            labels = labels,
+            data = data,
+        };
+        return Ok(result);
+    }
+
+    [HttpGet("by-status")]
+    public ActionResult ByStatus()
+    {
+        var countries = _context.MOU_Status
+            .Where(k => k.Memorandums.Count() > 0)
+            .Select(k => new
+            {
+                Kod = k.Kod,
+                Status = k.Status,
+                Count = k.Memorandums.Count(),
+            })
+            .ToList();
+        var labels = countries.Select(x => x.Status).ToList();
+        var data = countries.Select(x => x.Count).ToList();
         var result = new
         {
             labels = labels,
@@ -68,6 +113,7 @@ public class ReportController : ControllerBase
     public ActionResult ByPTJ()
     {
         var categories = _context.EMO_Pejabat
+            .Where(k => k.PTJMemorandums.Count() > 0)
             .Select(p => new
             {
                 KodPBU = p.KodPBU,
