@@ -18,9 +18,9 @@ namespace EMemorandum.Controllers.Api;
 [Authorize(Policy = "TokenPolicy")]
 public class AuthController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DbContext_EMO _context;
 
-    public AuthController(IConfiguration configuration, ApplicationDbContext context)
+    public AuthController(IConfiguration configuration, DbContext_EMO context)
     {
         _context = context;
     }

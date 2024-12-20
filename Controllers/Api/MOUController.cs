@@ -20,12 +20,12 @@ namespace EMemorandum.Controllers.Api;
 [Authorize(Policy = "StaffPolicy")]
 public class MOUController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DbContext_EMO _context;
     private readonly string _delimeter;
     private readonly IConfiguration _configuration;
     private readonly IEmailQueueService _emailQueueService;
 
-    public MOUController(IConfiguration configuration, ApplicationDbContext context, IEmailQueueService emailQueueService)
+    public MOUController(IConfiguration configuration, DbContext_EMO context, IEmailQueueService emailQueueService)
     {
         _context = context;
         _delimeter = ".";

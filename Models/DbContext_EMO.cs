@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EMemorandum.Models;
 
-public class ApplicationDbContext : DbContext
+public class DbContext_EMO : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public DbContext_EMO(DbContextOptions<DbContext_EMO> options)
         : base(options)
     {
     }

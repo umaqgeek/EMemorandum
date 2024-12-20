@@ -10,9 +10,9 @@ namespace EMemorandum.Authorization
     public class TokenHandlerAuth : AuthorizationHandler<TokenRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ApplicationDbContext _context;
+        private readonly DbContext_EMO _context;
 
-        public TokenHandlerAuth(IHttpContextAccessor httpContextAccessor, ApplicationDbContext context)
+        public TokenHandlerAuth(IHttpContextAccessor httpContextAccessor, DbContext_EMO context)
         {
             _httpContextAccessor = httpContextAccessor;
             _context = context;

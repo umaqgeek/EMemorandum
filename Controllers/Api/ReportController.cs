@@ -16,9 +16,9 @@ namespace EMemorandum.Controllers.Api;
 [Authorize(Policy = "StaffPolicy")]
 public class ReportController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DbContext_EMO _context;
 
-    public ReportController(IConfiguration configuration, ApplicationDbContext context)
+    public ReportController(IConfiguration configuration, DbContext_EMO context)
     {
         _context = context;
     }

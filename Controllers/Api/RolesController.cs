@@ -17,9 +17,9 @@ namespace EMemorandum.Controllers.Api;
 [Authorize(Policy = "AdminPolicy")]
 public class RolesController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DbContext_EMO _context;
 
-    public RolesController(IConfiguration configuration, ApplicationDbContext context)
+    public RolesController(IConfiguration configuration, DbContext_EMO context)
     {
         _context = context;
     }

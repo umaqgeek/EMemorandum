@@ -20,10 +20,10 @@ namespace EMemorandum.Controllers.Api;
 public class StaffController : ControllerBase
 {
     private readonly IConfiguration _configuration;
-    private readonly ApplicationDbContext _context;
+    private readonly DbContext_EMO _context;
     private readonly IEmailService _emailService;
 
-    public StaffController(IConfiguration configuration, ApplicationDbContext context, IEmailService emailService)
+    public StaffController(IConfiguration configuration, DbContext_EMO context, IEmailService emailService)
     {
         _configuration = configuration;
         _context = context;

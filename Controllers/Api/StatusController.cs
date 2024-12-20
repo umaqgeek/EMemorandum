@@ -18,9 +18,9 @@ namespace EMemorandum.Controllers.Api;
 [Authorize(Policy = "AdminOrPUUPolicy")]
 public class StatusController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DbContext_EMO _context;
 
-    public StatusController(ApplicationDbContext context)
+    public StatusController(DbContext_EMO context)
     {
         _context = context;
     }
