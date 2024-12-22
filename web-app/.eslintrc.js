@@ -15,6 +15,7 @@ module.exports = {
         "dist/", // Ignore built files
         "build/", // Ignore built files
         "src/assets/js/**", // Ignore JS files
+        "src/**/topology.js", // Ignore topology file
     ],
     rules: {
         "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",

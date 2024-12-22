@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -27,22 +28,31 @@ public class ReportController : ControllerBase
     public ActionResult ByCategory()
     {
         var categories = _context.PUU_KategoriMemo
-            .Where(k => k.Memorandums.Count() > 0)
+            // .Where(k => k.Memorandums.Count() > 0)
             .Select(k => new
             {
                 Kod = k.Kod,
-                Butiran = k.Butiran,
-                Count = k.Memorandums.Count(),
+                name = k.Butiran,
+                value = k.Memorandums.Count(),
+            })
+            .OrderByDescending(k => k.value)
+            .ToList();
+        return Ok(categories);
+    }
+
+    [HttpGet("by-country-map")]
+    public ActionResult ByCountryMap()
+    {
+        var countries = _context.EMO_Countries
+            .Include(k => k.Memorandums)
+            .Where(k => k.Memorandums != null && k.Memorandums.Count() > 0)
+            .Select(k => new
+            {
+                name = k.name,
+                value = k.Memorandums.Count(),
             })
             .ToList();
-        var labels = categories.Select(x => x.Butiran).ToList();
-        var data = categories.Select(x => x.Count).ToList();
-        var result = new
-        {
-            labels = labels,
-            data = data,
-        };
-        return Ok(result);
+        return Ok(countries);
     }
 
     [HttpGet("by-country")]

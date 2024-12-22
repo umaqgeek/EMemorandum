@@ -20,604 +20,70 @@
                             <div class="nk-content-body">
                                 <div class="row g-gs">
                                     <div class="col-xxl-12">
-                                        <div class="row g-gs">
-                                            <div class="col-md-3">
-                                                <div class="card h-100">
-                                                    <div class="card-body">
-                                                        <div
-                                                            class="d-flex flex-column flex-sm-row-reverse align-items-sm-center justify-content-sm-between"
-                                                        >
-                                                            <div
-                                                                class="card-title mb-0 mt-4 mt-sm-0"
-                                                            >
-                                                                <h5
-                                                                    class="title mb-3 mb-xl-5"
-                                                                >
-                                                                    Memorandum
-                                                                    Created
-                                                                </h5>
-                                                                <div
-                                                                    class="amount h1"
-                                                                >
-                                                                    284
-                                                                </div>
-                                                                <div
-                                                                    class="d-flex align-items-center smaller flex-wrap"
-                                                                >
-                                                                    <div
-                                                                        class="change up"
-                                                                    >
-                                                                        <em
-                                                                            class="icon ni ni-upword-alt-fill"
-                                                                        ></em>
-                                                                        +2.7%
-                                                                    </div>
-                                                                    <span
-                                                                        class="text-light"
-                                                                    >
-                                                                        Projects
-                                                                        this
-                                                                        month</span
-                                                                    >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- .row -->
-                                                    </div>
-                                                    <!-- .card-body -->
-                                                </div>
-                                                <!-- .card -->
-                                            </div>
-                                            <!-- .col -->
-                                            <div class="col-md-3">
-                                                <div class="card h-100">
-                                                    <div class="card-body">
-                                                        <div
-                                                            class="d-flex flex-column align-items-sm-flex-start justify-content-sm-between gx-xl-5"
-                                                        >
-                                                            <div
-                                                                class="card-title mb-0 mt-4 mt-sm-0"
-                                                            >
-                                                                <h5
-                                                                    class="title mb-3 mb-xl-5"
-                                                                >
-                                                                    Total
-                                                                    Memorandum
-                                                                </h5>
-                                                                <div
-                                                                    class="amount h1"
-                                                                >
-                                                                    169
-                                                                </div>
-                                                                <div
-                                                                    class="d-flex align-items-center smaller flex-wrap"
-                                                                >
-                                                                    <div
-                                                                        class="change up"
-                                                                    >
-                                                                        <em
-                                                                            class="icon ni ni-upword-alt-fill"
-                                                                        ></em>
-                                                                        10.5%
-                                                                    </div>
-                                                                    <span
-                                                                        class="text-light"
-                                                                        >From
-                                                                        last
-                                                                        Week</span
-                                                                    >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- .row -->
-                                                    </div>
-                                                    <!-- .card-body -->
-                                                </div>
-                                                <!-- .card -->
-                                            </div>
-                                            <!-- .col -->
-                                            <div class="col-md-3">
-                                                <div class="card h-100">
-                                                    <div class="card-body">
-                                                        <div
-                                                            class="d-flex flex-column align-items-sm-flex-start justify-content-sm-between gx-xl-5"
-                                                        >
-                                                            <div
-                                                                class="card-title mb-0 mt-4 mt-sm-0"
-                                                            >
-                                                                <h5
-                                                                    class="title mb-3 mb-xl-5"
-                                                                >
-                                                                    Pending
-                                                                    Approvals
-                                                                </h5>
-                                                                <div
-                                                                    class="amount h1"
-                                                                >
-                                                                    970
-                                                                </div>
-                                                                <div
-                                                                    class="d-flex align-items-center smaller flex-wrap"
-                                                                >
-                                                                    <div
-                                                                        class="change up"
-                                                                    >
-                                                                        <em
-                                                                            class="icon ni ni-upword-alt-fill"
-                                                                        ></em>
-                                                                        2%
-                                                                    </div>
-                                                                    <span
-                                                                        class="text-light"
-                                                                        >Than
-                                                                        last
-                                                                        month</span
-                                                                    >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- .row -->
-                                                    </div>
-                                                    <!-- .card-body -->
-                                                </div>
-                                                <!-- .card -->
-                                            </div>
-                                            <!-- .col -->
-                                            <div class="col-md-3">
-                                                <div class="card h-100">
-                                                    <div class="card-body">
-                                                        <div
-                                                            class="d-flex flex-column align-items-sm-flex-start justify-content-sm-between gx-xl-5"
-                                                        >
-                                                            <div
-                                                                class="card-title mb-0 mt-4 mt-sm-0"
-                                                            >
-                                                                <h5
-                                                                    class="title mb-3 mb-xl-5"
-                                                                >
-                                                                    Total Users
-                                                                </h5>
-                                                                <div
-                                                                    class="amount h1"
-                                                                >
-                                                                    768
-                                                                </div>
-                                                                <div
-                                                                    class="d-flex align-items-center smaller flex-wrap"
-                                                                >
-                                                                    <div
-                                                                        class="change up"
-                                                                    >
-                                                                        <em
-                                                                            class="icon ni ni-upword-alt-fill"
-                                                                        ></em>
-                                                                        14.2%
-                                                                    </div>
-                                                                    <span
-                                                                        class="text-light"
-                                                                        >From
-                                                                        last
-                                                                        week</span
-                                                                    >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- .row -->
-                                                    </div>
-                                                    <!-- .card-body -->
-                                                </div>
-                                                <!-- .card -->
-                                            </div>
-                                            <!-- .col -->
+                                        <div>
+                                            <img
+                                                class="mb-3"
+                                                src="assets/images/LogoJawiUTeM_blue-02.png"
+                                                width="300px"
+                                            />
                                         </div>
-                                        <!-- .row -->
-                                    </div>
-                                    <div class="col-md-8 col-xxl-8">
-                                        <div class="card h-100">
-                                            <div class="card-body">
-                                                <div class="card-title-group">
-                                                    <div class="card-title">
-                                                        <h5 class="title">
-                                                            Report &amp; Data
-                                                            Summarization
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                                <div
-                                                    class="nk-timeline nk-timeline-center mt-4"
-                                                >
-                                                    <div
-                                                        class="nk-timeline-group"
-                                                    >
-                                                        <div
-                                                            class="nk-timeline-heading"
-                                                        >
-                                                            <h6
-                                                                class="overline-title"
-                                                            >
-                                                                today
-                                                            </h6>
-                                                        </div>
-                                                        <ul
-                                                            class="nk-timeline-list"
-                                                        >
-                                                            <li
-                                                                class="nk-timeline-item"
-                                                            >
-                                                                <div
-                                                                    class="nk-timeline-item-inner"
-                                                                >
-                                                                    <div
-                                                                        class="nk-timeline-symbol"
-                                                                    >
-                                                                        <div
-                                                                            class="media media-md media-middle media-circle text-bg-info"
-                                                                        >
-                                                                            <em
-                                                                                class="icon ni ni-user"
-                                                                            ></em>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div
-                                                                        class="nk-timeline-content"
-                                                                    >
-                                                                        <p
-                                                                            class="small"
-                                                                        >
-                                                                            <strong
-                                                                                >Nick
-                                                                                Mark</strong
-                                                                            >
-                                                                            mentioned
-                                                                            <strong
-                                                                                >Sara
-                                                                                Smith</strong
-                                                                            >
-                                                                            in a
-                                                                            new
-                                                                            post
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                            <li
-                                                                class="nk-timeline-item"
-                                                            >
-                                                                <div
-                                                                    class="nk-timeline-item-inner"
-                                                                >
-                                                                    <div
-                                                                        class="nk-timeline-symbol"
-                                                                    >
-                                                                        <div
-                                                                            class="media media-md media-middle media-circle text-bg-warning"
-                                                                        >
-                                                                            <em
-                                                                                class="icon ni ni-signout"
-                                                                            ></em>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div
-                                                                        class="nk-timeline-content"
-                                                                    >
-                                                                        <p
-                                                                            class="small"
-                                                                        >
-                                                                            The
-                                                                            post
-                                                                            <strong
-                                                                                >Post
-                                                                                Name</strong
-                                                                            >
-                                                                            was
-                                                                            removed
-                                                                            by
-                                                                            <strong
-                                                                                >Nick
-                                                                                Mark</strong
-                                                                            >
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                            <li
-                                                                class="nk-timeline-item"
-                                                            >
-                                                                <div
-                                                                    class="nk-timeline-item-inner"
-                                                                >
-                                                                    <div
-                                                                        class="nk-timeline-symbol"
-                                                                    >
-                                                                        <div
-                                                                            class="media media-md media-middle media-circle text-bg-success"
-                                                                        >
-                                                                            <em
-                                                                                class="icon ni ni-file-text"
-                                                                            ></em>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div
-                                                                        class="nk-timeline-content"
-                                                                    >
-                                                                        <p
-                                                                            class="small"
-                                                                        >
-                                                                            <strong
-                                                                                >Patrick
-                                                                                Sullivan</strong
-                                                                            >
-                                                                            published
-                                                                            a
-                                                                            new
-                                                                            <strong
-                                                                                >post</strong
-                                                                            >
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div
-                                                        class="nk-timeline-group"
-                                                    >
-                                                        <div
-                                                            class="nk-timeline-heading"
-                                                        >
-                                                            <h6
-                                                                class="overline-title"
-                                                            >
-                                                                yesterday
-                                                            </h6>
-                                                        </div>
-                                                        <ul
-                                                            class="nk-timeline-list"
-                                                        >
-                                                            <li
-                                                                class="nk-timeline-item"
-                                                            >
-                                                                <div
-                                                                    class="nk-timeline-item-inner"
-                                                                >
-                                                                    <div
-                                                                        class="nk-timeline-symbol"
-                                                                    >
-                                                                        <div
-                                                                            class="media media-md media-middle media-circle text-bg-info"
-                                                                        >
-                                                                            <em
-                                                                                class="icon ni ni-shuffle"
-                                                                            ></em>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div
-                                                                        class="nk-timeline-content"
-                                                                    >
-                                                                        <p
-                                                                            class="small"
-                                                                        >
-                                                                            <strong
-                                                                                >240+</strong
-                                                                            >
-                                                                            users
-                                                                            have
-                                                                            subscribed
-                                                                            to
-                                                                            Newsletter
-                                                                            #1
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                            <li
-                                                                class="nk-timeline-item"
-                                                            >
-                                                                <div
-                                                                    class="nk-timeline-item-inner"
-                                                                >
-                                                                    <div
-                                                                        class="nk-timeline-symbol"
-                                                                    >
-                                                                        <div
-                                                                            class="media media-md media-middle media-circle text-bg-success"
-                                                                        >
-                                                                            <em
-                                                                                class="icon ni ni-signout"
-                                                                            ></em>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div
-                                                                        class="nk-timeline-content"
-                                                                    >
-                                                                        <p
-                                                                            class="small"
-                                                                        >
-                                                                            The
-                                                                            post
-                                                                            <strong
-                                                                                >Post
-                                                                                Name</strong
-                                                                            >
-                                                                            was
-                                                                            suspended
-                                                                            by
-                                                                            <strong
-                                                                                >Nick
-                                                                                Mark</strong
-                                                                            >
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- .card-body -->
-                                        </div>
-                                        <!-- .card -->
-                                    </div>
-                                    <div class="col-sm-4 col-xxl-4">
-                                        <div class="card h-100 overflow-hidden">
-                                            <div class="col-sep">
-                                                <div class="card-body">
-                                                    <div
-                                                        class="card-title-group align-items-start"
-                                                    >
-                                                        <div class="card-title">
-                                                            <h4
-                                                                class="title mb-0"
-                                                            >
-                                                                Quick Links
-                                                            </h4>
-                                                            <span class="small"
-                                                                >Most used
-                                                                resources</span
-                                                            >
-                                                        </div>
-                                                        <div class="card-tools">
-                                                            <div
-                                                                class="dropdown"
-                                                            >
-                                                                <a
-                                                                    href="#"
-                                                                    class="btn btn-sm btn-icon btn-zoom me-n1"
-                                                                    data-bs-toggle="dropdown"
-                                                                >
-                                                                    <em
-                                                                        class="icon ni ni-more-v"
-                                                                    ></em>
-                                                                </a>
-                                                                <ul
-                                                                    class="dropdown-menu dropdown-menu-end"
-                                                                >
-                                                                    <li>
-                                                                        <div
-                                                                            class="dropdown-header pt-2 pb-0"
-                                                                        >
-                                                                            <h6
-                                                                                class="mb-0"
-                                                                            >
-                                                                                Quick
-                                                                                Actions
-                                                                            </h6>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li>
-                                                                        <hr
-                                                                            class="dropdown-divider"
-                                                                        />
-                                                                    </li>
-                                                                    <li>
-                                                                        <a
-                                                                            href="#"
-                                                                            class="dropdown-item"
-                                                                            >Create
-                                                                            Invoice</a
-                                                                        >
-                                                                    </li>
-                                                                    <li>
-                                                                        <a
-                                                                            href="#"
-                                                                            class="dropdown-item"
-                                                                            >Create
-                                                                            Payment</a
-                                                                        >
-                                                                    </li>
-                                                                    <li>
-                                                                        <a
-                                                                            href="#"
-                                                                            class="dropdown-item"
-                                                                            >Generate
-                                                                            Bill</a
-                                                                        >
-                                                                    </li>
-                                                                    <li>
-                                                                        <a
-                                                                            href="#"
-                                                                            class="dropdown-item"
-                                                                            >Settings</a
-                                                                        >
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <!-- dropdown -->
-                                                        </div>
-                                                    </div>
-                                                    <!-- .card-title-group -->
-                                                </div>
-                                                <!-- .card-body -->
-                                                <ul
-                                                    class="list-group list-group-flush"
-                                                >
-                                                    <li
-                                                        class="list-group-item py-3 d-flex justify-content-between align-items-center"
-                                                    >
-                                                        <div
-                                                            class="d-flex align-items-center"
-                                                        >
-                                                            <span
-                                                                class="nk-menu-icon"
-                                                            >
-                                                                <em
-                                                                    class="icon icon-lg ni ni-note-add"
-                                                                ></em>
-                                                            </span>
-                                                            <a
-                                                                :href="`${publicPath}memo-add`"
-                                                                class="h6"
-                                                                >Create
-                                                                Memorandum</a
-                                                            >
-                                                        </div>
-                                                    </li>
-                                                    <li
-                                                        class="list-group-item py-3 d-flex justify-content-between align-items-center"
-                                                    >
-                                                        <div
-                                                            class="d-flex align-items-center"
-                                                        >
-                                                            <span
-                                                                class="nk-menu-icon"
-                                                            >
-                                                                <em
-                                                                    class="icon icon-lg ni ni-check-round-cut"
-                                                                ></em>
-                                                            </span>
-
-                                                            <a
-                                                                :href="`${publicPath}memo-list`"
-                                                                class="h6"
-                                                                >Reviews
-                                                                Memorandum</a
-                                                            >
-                                                        </div>
-                                                    </li>
-                                                    <li
-                                                        class="list-group-item py-3 d-flex justify-content-between align-items-center"
-                                                    >
-                                                        <div
-                                                            class="d-flex align-items-center"
-                                                        >
-                                                            <span
-                                                                class="nk-menu-icon"
-                                                            >
-                                                                <em
-                                                                    class="icon icon-lg ni ni-users"
-                                                                ></em>
-                                                            </span>
-                                                            <a
-                                                                :href="`${publicPath}user-list`"
-                                                                class="h6"
-                                                                >Manage User</a
-                                                            >
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <!-- .card -->
+                                        <button
+                                            class="btn-print btn btn-success mb-3"
+                                            @click="onPrint"
+                                        >
+                                            PRINT
+                                        </button>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>NO.</th>
+                                                    <th>COUNTRY</th>
+                                                    <th>INDUSTRY CATEGORY</th>
+                                                    <th>FACULTY/PTJ</th>
+                                                    <th>PIC</th>
+                                                    <th>CATEGORY</th>
+                                                    <th>TYPE</th>
+                                                    <th>START DATE</th>
+                                                    <th>END DATE</th>
+                                                    <th>DURATION</th>
+                                                    <th>STATUS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1.</td>
+                                                    <td>MALAYSIA</td>
+                                                    <td>INDUSTRY COMPUTER</td>
+                                                    <td>FTKM</td>
+                                                    <td>
+                                                        PROFESSOR MADYA DR. LIEW
+                                                        PAY JUN
+                                                    </td>
+                                                    <td>MoU</td>
+                                                    <td>Kerahsian</td>
+                                                    <td>31/12/2024</td>
+                                                    <td>31/12/2025</td>
+                                                    <td>1 YEAR</td>
+                                                    <td>ACTIVE</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2.</td>
+                                                    <td>MALAYSIA</td>
+                                                    <td>INDUSTRY AUTOMOTIF</td>
+                                                    <td>FKP</td>
+                                                    <td>
+                                                        TS. DR. MAIZATUL ALICE
+                                                        BINTI MEOR SAID
+                                                    </td>
+                                                    <td>MoA(TP)</td>
+                                                    <td>Akademik</td>
+                                                    <td>10/12/2024</td>
+                                                    <td>5/5/2025</td>
+                                                    <td>6 MONTHS</td>
+                                                    <td>ACTIVE</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -632,6 +98,8 @@
 
 <!-- JavaScript -->
 <script>
+// import { watch } from "vue";
+
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
@@ -674,6 +142,49 @@ export default {
                 : [];
         },
     },
-    methods: {},
+    methods: {
+        onPrint() {
+            window.print();
+        },
+    },
 };
 </script>
+
+<style>
+@media print {
+    /* Hide everything except the table */
+    .nk-main .nk-sidebar,
+    .nk-main .nk-footer,
+    .nk-main .nk-header,
+    .btn-print {
+        display: none !important;
+        width: 0px;
+        visibility: hidden !important;
+    }
+
+    .nk-main .nk-content-body {
+        display: block !important;
+        position: relative;
+    }
+
+    table {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table th {
+        background-color: grey;
+        color: white;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 10px;
+        text-align: left;
+    }
+}
+</style>

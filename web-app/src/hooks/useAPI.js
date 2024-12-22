@@ -203,6 +203,27 @@ export function useReportByCategory() {
     });
 }
 
+export function useReportByCountry() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/by-country`,
+    });
+}
+
+export function useReportByCountryMap() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/by-country-map`,
+    });
+}
+
+export function useReportByStatus() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/by-status`,
+    });
+}
+
 export function useReportByDue1Year() {
     return useApi({
         method: "get",

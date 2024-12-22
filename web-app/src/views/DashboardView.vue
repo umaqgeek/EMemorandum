@@ -19,7 +19,7 @@
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
                                 <div class="row g-gs">
-                                    <div
+                                    <!-- <div
                                         class="alert alert-danger"
                                         v-if="roles.length <= 0"
                                     >
@@ -90,7 +90,7 @@
                                                 </div>
                                             </div>
                                         </a>
-                                    </div>
+                                    </div> -->
                                     <!-- <div
                                         class="col-md-3"
                                         v-if="
@@ -138,27 +138,99 @@
                                         </a>
                                     </div> -->
                                 </div>
-                                <div class="row g-gs mt-3">
-                                    <div class="col-md-4">
+                                <div class="row g-gt mb-3">
+                                    <div class="col-md-8">
                                         <div class="card">
-                                            <div class="card-body">
-                                                <h4>Memorandums by Category</h4>
-                                                <ChartPieComponent
-                                                    v-if="
-                                                        reportCategory.series
-                                                            ?.length > 0
-                                                    "
-                                                    :series="
-                                                        reportCategory.series
-                                                    "
-                                                    :labels="
-                                                        reportCategory.labels
+                                            <div
+                                                class="card-body"
+                                                v-if="
+                                                    reportCountryMap.data
+                                                        .length > 0 && !loading
+                                                "
+                                            >
+                                                <h4>Memorandums by Country</h4>
+                                                <VueAGMap
+                                                    :data="
+                                                        reportCountryMap.data
                                                     "
                                                 />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4>Memorandums by Country</h4>
+                                                <ChartPieComponent
+                                                    v-if="
+                                                        reportCountry.series
+                                                            ?.length > 0
+                                                    "
+                                                    :series="
+                                                        reportCountry.series
+                                                    "
+                                                    :labels="
+                                                        reportCountry.labels
+                                                    "
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-gt mb-3">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4>Memorandums by Category</h4>
+                                                <VueAGBar
+                                                    v-if="
+                                                        reportCategory.data
+                                                            ?.length > 0
+                                                    "
+                                                    :data="reportCategory.data"
+                                                    title=""
+                                                    subtitle=""
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4>Memorandums by PTJs</h4>
+                                                <ChartPieComponent
+                                                    v-if="
+                                                        reportPTJ.series
+                                                            ?.length > 0
+                                                    "
+                                                    :series="reportPTJ.series"
+                                                    :labels="reportPTJ.labels"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-gt mb-3">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4>Memorandums by Status</h4>
+                                                <ChartPieComponent
+                                                    v-if="
+                                                        reportStatus.series
+                                                            ?.length > 0
+                                                    "
+                                                    :series="
+                                                        reportStatus.series
+                                                    "
+                                                    :labels="
+                                                        reportStatus.labels
+                                                    "
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="card">
                                             <div class="card-body">
                                                 <h4>
@@ -175,21 +247,6 @@
                                                     :labels="
                                                         reportDue1Year.labels
                                                     "
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h4>Memorandums by PTJs</h4>
-                                                <ChartPieComponent
-                                                    v-if="
-                                                        reportPTJ.series
-                                                            ?.length > 0
-                                                    "
-                                                    :series="reportPTJ.series"
-                                                    :labels="reportPTJ.labels"
                                                 />
                                             </div>
                                         </div>
@@ -219,8 +276,13 @@ import {
     useReportByCategory,
     useReportByDue1Year,
     useReportByPTJ,
+    useReportByCountryMap,
+    useReportByCountry,
+    useReportByStatus,
 } from "@/hooks/useAPI";
 import ChartPieComponent from "@/components/ChartPie.vue";
+import VueAGMap from "@/components/ChartAGMap.vue";
+import VueAGBar from "@/components/ChartAGBar.vue";
 
 export default {
     name: "DashboardView",
@@ -236,6 +298,8 @@ export default {
         FooterComponent,
         InfoNotLoggedInComponent,
         ChartPieComponent,
+        VueAGMap,
+        VueAGBar,
     },
     setup() {
         const {
@@ -246,8 +310,7 @@ export default {
         } = useStaffProfile();
 
         const reportCategory = ref({
-            labels: [],
-            series: [],
+            data: [],
         });
         const { data: dataReportCategory, loading: loadingReportCategory } =
             useReportByCategory();
@@ -255,8 +318,53 @@ export default {
             () => dataReportCategory.value,
             (newDataReportCategory) => {
                 reportCategory.value = {
-                    labels: [...newDataReportCategory?.labels],
-                    series: [...newDataReportCategory?.data],
+                    data: [...newDataReportCategory],
+                };
+            }
+        );
+
+        const reportCountry = ref({
+            labels: [],
+            series: [],
+        });
+        const { data: dataReportCountry, loading: loadingReportCountry } =
+            useReportByCountry();
+        watch(
+            () => dataReportCountry.value,
+            (newDataReportCountry) => {
+                reportCountry.value = {
+                    labels: [...newDataReportCountry?.labels],
+                    series: [...newDataReportCountry?.data],
+                };
+            }
+        );
+
+        const reportCountryMap = ref({
+            data: [],
+        });
+        const { data: dataReportCountryMap, loading: loadingReportCountryMap } =
+            useReportByCountryMap();
+        watch(
+            () => dataReportCountryMap.value,
+            (newDataReportCountryMap) => {
+                reportCountryMap.value = {
+                    data: [...newDataReportCountryMap],
+                };
+            }
+        );
+
+        const reportStatus = ref({
+            labels: [],
+            series: [],
+        });
+        const { data: dataReportStatus, loading: loadingReportStatus } =
+            useReportByStatus();
+        watch(
+            () => dataReportStatus.value,
+            (newDataReportStatus) => {
+                reportStatus.value = {
+                    labels: [...newDataReportStatus?.labels],
+                    series: [...newDataReportStatus?.data],
                 };
             }
         );
@@ -300,11 +408,17 @@ export default {
                 loadingStaffProfile ||
                 loadingReportCategory ||
                 loadingReportDue1Year ||
-                loadingReportPTJ,
+                loadingReportPTJ ||
+                loadingReportCountry ||
+                loadingReportCountryMap ||
+                loadingReportStatus,
             refetch,
             reportCategory,
             reportDue1Year,
             reportPTJ,
+            reportCountry,
+            reportCountryMap,
+            reportStatus,
         };
     },
     computed: {
