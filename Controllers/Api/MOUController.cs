@@ -469,19 +469,26 @@ public class MOUController : ControllerBase
         var statusMsg = "is been viewed";
         switch (entity.Status) {
             case "00":
+            case "01":
                 statusMsg = "is ready to be reviewed";
                 break;
             case "02":
-                statusMsg = "has been reviewed";
+                statusMsg = "has been reviewed by Secretariat";
                 break;
             case "03":
-                statusMsg = "has been approved";
+                statusMsg = "has been reviewed by PIC";
                 break;
             case "04":
-                statusMsg = "has been sent back to the PIC";
+                statusMsg = "has been approved";
                 break;
             case "05":
+                statusMsg = "has been returned back to PIC";
+                break;
+            case "06":
                 statusMsg = "has been rejected";
+                break;
+            case "07":
+                statusMsg = "has been cancelled";
                 break;
             default:
                 return NotFound(new { Error = "Status not found" });

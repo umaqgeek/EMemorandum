@@ -70,7 +70,7 @@ public class ReportController : ControllerBase
     [HttpGet("dashboard")]
     public ActionResult Dashboard()
     {
-        var mouCount = _context.MOU01_Memorandum.Count();
+        var mouCount = _context.MOU01_Memorandum.Where(m => m.Status != "07").Count();
         var mouNewCount = _context.MOU01_Memorandum.Where(m => m.Status == "00" || m.Status == "01").Count();
         var mouPendingCount = _context.MOU01_Memorandum.Where(m => m.Status == "03").Count();
         var staffCount = _context.EMO_Staf.Where(r => r.Roles.Any() && r.Roles != null).Count();
@@ -93,7 +93,7 @@ public class ReportController : ControllerBase
             {
                 Kod = k.Kod,
                 name = k.Butiran,
-                value = k.Memorandums.Count(),
+                value = k.Memorandums.Where(m => m.Status != "07").Count(),
             })
             .OrderByDescending(k => k.value)
             .ToList();
@@ -105,11 +105,11 @@ public class ReportController : ControllerBase
     {
         var countries = _context.EMO_Countries
             .Include(k => k.Memorandums)
-            .Where(k => k.Memorandums != null && k.Memorandums.Count() > 0)
+            .Where(k => k.Memorandums != null && k.Memorandums.Where(m => m.Status != "07").Count() > 0)
             .Select(k => new
             {
                 name = k.name,
-                value = k.Memorandums.Count(),
+                value = k.Memorandums.Where(m => m.Status != "07").Count(),
             })
             .ToList();
         return Ok(countries);
@@ -119,12 +119,12 @@ public class ReportController : ControllerBase
     public ActionResult ByCountry()
     {
         var countries = _context.EMO_Countries
-            .Where(k => k.Memorandums.Count() > 0)
+            .Where(k => k.Memorandums.Where(m => m.Status != "07").Count() > 0)
             .Select(k => new
             {
                 Code = k.code,
                 Name = k.name,
-                Count = k.Memorandums.Count(),
+                Count = k.Memorandums.Where(m => m.Status != "07").Count(),
             })
             .ToList();
         var labels = countries.Select(x => x.Name).ToList();
@@ -146,7 +146,7 @@ public class ReportController : ControllerBase
             {
                 Kod = k.Kod,
                 name = k.Status,
-                value = k.Memorandums.Count(),
+                value = k.Memorandums.Where(m => m.Status != "07").Count(),
             })
             .ToList();
         // var labels = statuses.Select(x => x.Status).ToList();
@@ -166,9 +166,11 @@ public class ReportController : ControllerBase
         var sixMonthsFromNow = currentDate.AddMonths(6);
         var twelveMonthsFromNow = currentDate.AddMonths(12);
         var dueWithin6Months = _context.MOU01_Memorandum
+            .Where(m => m.Status != "07")
             .Where(m => m.TarikhTamat <= sixMonthsFromNow)
             .Count();
         var dueWithin6To12Months = _context.MOU01_Memorandum
+            .Where(m => m.Status != "07")
             .Where(m => m.TarikhTamat > sixMonthsFromNow && m.TarikhTamat <= twelveMonthsFromNow)
             .Count();
         // var result = new
@@ -196,12 +198,12 @@ public class ReportController : ControllerBase
     public ActionResult ByPTJ()
     {
         var categories = _context.EMO_Pejabat
-            .Where(k => k.PTJMemorandums.Count() > 0)
+            .Where(k => k.PTJMemorandums.Where(m => m.Status != "07").Count() > 0)
             .Select(p => new
             {
                 KodPBU = p.KodPBU,
                 NamaPBU = p.NamaPBU,
-                Count = p.PTJMemorandums.Count(),
+                Count = p.PTJMemorandums.Where(m => m.Status != "07").Count(),
             })
             .OrderByDescending(p => p.Count)
             .ToList();
