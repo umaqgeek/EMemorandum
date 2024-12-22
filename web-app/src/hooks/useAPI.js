@@ -237,3 +237,10 @@ export function useReportByPTJ() {
         url: `${API_URL}/report/by-ptj`,
     });
 }
+
+export function useReportDashboardCounts() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/dashboard`,
+    });
+}

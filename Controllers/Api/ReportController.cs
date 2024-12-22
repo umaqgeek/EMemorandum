@@ -24,6 +24,23 @@ public class ReportController : ControllerBase
         _context = context;
     }
 
+    [HttpGet("dashboard")]
+    public ActionResult Dashboard()
+    {
+        var mouCount = _context.MOU01_Memorandum.Count();
+        var mouNewCount = _context.MOU01_Memorandum.Where(m => m.Status == "00" || m.Status == "01").Count();
+        var mouPendingCount = _context.MOU01_Memorandum.Where(m => m.Status == "03").Count();
+        var staffCount = _context.EMO_Staf.Where(r => r.Roles.Any() && r.Roles != null).Count();
+        var dashboard = new
+        {
+            mou = mouCount,
+            mouNew = mouNewCount,
+            mouPending = mouPendingCount,
+            staff = staffCount,
+        };
+        return Ok(dashboard);
+    }
+
     [HttpGet("by-category")]
     public ActionResult ByCategory()
     {
@@ -80,23 +97,23 @@ public class ReportController : ControllerBase
     [HttpGet("by-status")]
     public ActionResult ByStatus()
     {
-        var countries = _context.MOU_Status
-            .Where(k => k.Memorandums.Count() > 0)
+        var statuses = _context.MOU_Status
+            // .Where(k => k.Memorandums.Count() > 0)
             .Select(k => new
             {
                 Kod = k.Kod,
-                Status = k.Status,
-                Count = k.Memorandums.Count(),
+                name = k.Status,
+                value = k.Memorandums.Count(),
             })
             .ToList();
-        var labels = countries.Select(x => x.Status).ToList();
-        var data = countries.Select(x => x.Count).ToList();
-        var result = new
-        {
-            labels = labels,
-            data = data,
-        };
-        return Ok(result);
+        // var labels = statuses.Select(x => x.Status).ToList();
+        // var data = statuses.Select(x => x.Count).ToList();
+        // var result = new
+        // {
+        //     labels = labels,
+        //     data = data,
+        // };
+        return Ok(statuses);
     }
 
     [HttpGet("by-due-a-year")]
@@ -111,10 +128,23 @@ public class ReportController : ControllerBase
         var dueWithin6To12Months = _context.MOU01_Memorandum
             .Where(m => m.TarikhTamat > sixMonthsFromNow && m.TarikhTamat <= twelveMonthsFromNow)
             .Count();
-        var result = new
+        // var result = new
+        // {
+        //     labels = new[] { "Due in 6 months", "Due in 6-12 months" },
+        //     data = new[] { dueWithin6Months, dueWithin6To12Months },
+        // };
+        var result = new[]
         {
-            labels = new[] { "Due in 6 months", "Due in 6-12 months" },
-            data = new[] { dueWithin6Months, dueWithin6To12Months },
+            new
+            {
+                name = "Due in 6 months",
+                value = dueWithin6Months,
+            },
+            new
+            {
+                name = "Due in 6-12 months",
+                value = dueWithin6To12Months,
+            }
         };
         return Ok(result);
     }

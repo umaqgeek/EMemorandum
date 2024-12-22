@@ -139,6 +139,105 @@
                                     </div> -->
                                 </div>
                                 <div class="row g-gt mb-3">
+                                    <div class="col-md-3">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div
+                                                    class="d-flex flex-column align-items-sm-flex-start justify-content-sm-between gx-xl-5"
+                                                >
+                                                    <div
+                                                        class="card-title mb-0 mt-4 mt-sm-0"
+                                                    >
+                                                        <h5
+                                                            class="title mb-3 mb-xl-5"
+                                                        >
+                                                            Total All
+                                                            Memorandums
+                                                        </h5>
+                                                        <div class="amount h1">
+                                                            {{
+                                                                dashboardCounts.mou
+                                                            }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div
+                                                    class="d-flex flex-column align-items-sm-flex-start justify-content-sm-between gx-xl-5"
+                                                >
+                                                    <div
+                                                        class="card-title mb-0 mt-4 mt-sm-0"
+                                                    >
+                                                        <h5
+                                                            class="title mb-3 mb-xl-5"
+                                                        >
+                                                            Newly Created
+                                                        </h5>
+                                                        <div class="amount h1">
+                                                            {{
+                                                                dashboardCounts.mouNew
+                                                            }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div
+                                                    class="d-flex flex-column align-items-sm-flex-start justify-content-sm-between gx-xl-5"
+                                                >
+                                                    <div
+                                                        class="card-title mb-0 mt-4 mt-sm-0"
+                                                    >
+                                                        <h5
+                                                            class="title mb-3 mb-xl-5"
+                                                        >
+                                                            Pending Approvals
+                                                        </h5>
+                                                        <div class="amount h1">
+                                                            {{
+                                                                dashboardCounts.mouPending
+                                                            }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div
+                                                    class="d-flex flex-column align-items-sm-flex-start justify-content-sm-between gx-xl-5"
+                                                >
+                                                    <div
+                                                        class="card-title mb-0 mt-4 mt-sm-0"
+                                                    >
+                                                        <h5
+                                                            class="title mb-3 mb-xl-5"
+                                                        >
+                                                            Total Active Staff
+                                                        </h5>
+                                                        <div class="amount h1">
+                                                            {{
+                                                                dashboardCounts.staff
+                                                            }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-gt mb-3">
                                     <div class="col-md-8">
                                         <div class="card">
                                             <div
@@ -215,17 +314,14 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <h4>Memorandums by Status</h4>
-                                                <ChartPieComponent
+                                                <VueAGBar
                                                     v-if="
-                                                        reportStatus.series
+                                                        reportStatus.data
                                                             ?.length > 0
                                                     "
-                                                    :series="
-                                                        reportStatus.series
-                                                    "
-                                                    :labels="
-                                                        reportStatus.labels
-                                                    "
+                                                    :data="reportStatus.data"
+                                                    title=""
+                                                    subtitle=""
                                                 />
                                             </div>
                                         </div>
@@ -236,17 +332,14 @@
                                                 <h4>
                                                     Memorandums Due in 12 Months
                                                 </h4>
-                                                <ChartPieComponent
+                                                <VueAGBar
                                                     v-if="
-                                                        reportDue1Year.series
+                                                        reportDue1Year.data
                                                             ?.length > 0
                                                     "
-                                                    :series="
-                                                        reportDue1Year.series
-                                                    "
-                                                    :labels="
-                                                        reportDue1Year.labels
-                                                    "
+                                                    :data="reportDue1Year.data"
+                                                    title=""
+                                                    subtitle=""
                                                 />
                                             </div>
                                         </div>
@@ -279,6 +372,7 @@ import {
     useReportByCountryMap,
     useReportByCountry,
     useReportByStatus,
+    useReportDashboardCounts,
 } from "@/hooks/useAPI";
 import ChartPieComponent from "@/components/ChartPie.vue";
 import VueAGMap from "@/components/ChartAGMap.vue";
@@ -354,8 +448,7 @@ export default {
         );
 
         const reportStatus = ref({
-            labels: [],
-            series: [],
+            data: [],
         });
         const { data: dataReportStatus, loading: loadingReportStatus } =
             useReportByStatus();
@@ -363,15 +456,13 @@ export default {
             () => dataReportStatus.value,
             (newDataReportStatus) => {
                 reportStatus.value = {
-                    labels: [...newDataReportStatus?.labels],
-                    series: [...newDataReportStatus?.data],
+                    data: [...newDataReportStatus],
                 };
             }
         );
 
         const reportDue1Year = ref({
-            labels: [],
-            series: [],
+            data: [],
         });
         const { data: dataReportDue1Year, loading: loadingReportDue1Year } =
             useReportByDue1Year();
@@ -379,8 +470,7 @@ export default {
             () => dataReportDue1Year.value,
             (newDataReportDue1Year) => {
                 reportDue1Year.value = {
-                    labels: [...newDataReportDue1Year?.labels],
-                    series: [...newDataReportDue1Year?.data],
+                    data: [...newDataReportDue1Year],
                 };
             }
         );
@@ -401,6 +491,26 @@ export default {
             }
         );
 
+        const dashboardCounts = ref({
+            mou: 0,
+            mouNew: 0,
+            mouPending: 0,
+            staff: 0,
+        });
+        const { data: dataDashboardCounts, loading: loadingDashboardCounts } =
+            useReportDashboardCounts();
+        watch(
+            () => dataDashboardCounts.value,
+            (newDataDashboardCounts) => {
+                dashboardCounts.value = {
+                    mou: newDataDashboardCounts?.mou,
+                    mouNew: newDataDashboardCounts?.mouNew,
+                    mouPending: newDataDashboardCounts?.mouPending,
+                    staff: newDataDashboardCounts?.staff,
+                };
+            }
+        );
+
         return {
             dataStaffProfile,
             errorStaffProfile,
@@ -411,7 +521,8 @@ export default {
                 loadingReportPTJ ||
                 loadingReportCountry ||
                 loadingReportCountryMap ||
-                loadingReportStatus,
+                loadingReportStatus ||
+                loadingDashboardCounts,
             refetch,
             reportCategory,
             reportDue1Year,
@@ -419,6 +530,7 @@ export default {
             reportCountry,
             reportCountryMap,
             reportStatus,
+            dashboardCounts,
         };
     },
     computed: {
