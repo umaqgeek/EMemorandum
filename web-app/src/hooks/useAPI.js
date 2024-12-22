@@ -244,3 +244,10 @@ export function useReportDashboardCounts() {
         url: `${API_URL}/report/dashboard`,
     });
 }
+
+export function useReportDetails() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/details`,
+    });
+}

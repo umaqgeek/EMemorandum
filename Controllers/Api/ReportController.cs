@@ -24,6 +24,49 @@ public class ReportController : ControllerBase
         _context = context;
     }
 
+    [HttpGet("details")]
+    public ActionResult<IEnumerable<DetailsItemDto>> GetDetailsData()
+    {
+        // Fetch raw data from the database
+        var rawData = _context.MOU01_Memorandum
+            .Include(m => m.MOU_IndustryCat)
+            .Include(m => m.EMO_PejabatPTJ)
+            .Include(m => m.EMO_Staf)
+            .Include(m => m.PUU_KategoriMemo)
+            .Include(m => m.PUU_JenisMemo)
+            .Include(m => m.EMO_Countries)
+            .ToList(); // Materialize data into memory to avoid LINQ translation issues
+
+        // Transform data in memory
+        var detailsData = rawData.Select((m, index) => new DetailsItemDto
+        {
+            No = index + 1,
+            Country = new
+            {
+                code = m.EMO_Countries?.code,
+                name = m.EMO_Countries?.name,
+            },
+            IndustryCategory = new
+            {
+                KodInd = m.MOU_IndustryCat?.KodInd,
+                IndustryCategory = m.MOU_IndustryCat?.IndustryCategory,
+            },
+            FacultyPTJ = m.EMO_PejabatPTJ?.NamaPBU ?? "N/A",
+            PIC = m.EMO_Staf?.Nama ?? "N/A",
+            PICGelaran = m.EMO_Staf?.Gelaran ?? "",
+            Category = m.PUU_KategoriMemo?.Butiran ?? "N/A",
+            Type = m.PUU_JenisMemo?.Butiran ?? "N/A",
+            StartDate = GetDisplayDate(m.TarikhMula),
+            EndDate = GetDisplayDate(m.TarikhTamat),
+            Duration = m.TarikhMula.HasValue && m.TarikhTamat.HasValue
+                ? GetDuration(m.TarikhMula.Value, m.TarikhTamat.Value)
+                : "N/A",
+            Status = "ACTIVE"
+        });
+
+        return Ok(detailsData);
+    }
+
     [HttpGet("dashboard")]
     public ActionResult Dashboard()
     {
@@ -171,4 +214,36 @@ public class ReportController : ControllerBase
         };
         return Ok(result);
     }
+
+    private string GetDuration(DateTime startDate, DateTime endDate)
+    {
+        var duration = endDate - startDate;
+        if (duration.Days >= 365)
+            return $"{duration.Days / 365} YEAR(S)";
+        if (duration.Days >= 30)
+            return $"{duration.Days / 30} MONTH(S)";
+        return $"{duration.Days} DAY(S)";
+    }
+
+    private static string GetDisplayDate(DateTime? nullableDateTime)
+    {
+        DateTime dateTime = nullableDateTime ?? DateTime.MinValue;
+        return dateTime.ToString("dd/MM/yyyy");
+    }
+}
+
+public class DetailsItemDto
+{
+    public int No { get; set; }
+    public object Country { get; set; }
+    public object IndustryCategory { get; set; }
+    public string FacultyPTJ { get; set; }
+    public string PIC { get; set; }
+    public string PICGelaran { get; set; }
+    public string Category { get; set; }
+    public string Type { get; set; }
+    public string StartDate { get; set; }
+    public string EndDate { get; set; }
+    public string Duration { get; set; }
+    public string Status { get; set; }
 }
