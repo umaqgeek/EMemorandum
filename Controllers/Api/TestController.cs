@@ -14,10 +14,10 @@ namespace EMemorandum.Controllers.Api
     [ApiController]
     public class TestController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DbContext_EMO _context;
         private readonly string _test;
 
-        public TestController(IConfiguration configuration, ApplicationDbContext context)
+        public TestController(IConfiguration configuration, DbContext_EMO context)
         {
             _context = context;
             _test = configuration.GetValue<string>("test:haha");

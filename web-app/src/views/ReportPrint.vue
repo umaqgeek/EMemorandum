@@ -1,15 +1,7 @@
 <template>
     <div class="nk-app-root">
         <div class="nk-main">
-            <NavbarComponent
-                :staffprofile="dataStaffProfile"
-                :activeLabel="`dashboard`"
-            />
             <div class="nk-wrap">
-                <TopNavComponent
-                    :staffprofile="dataStaffProfile"
-                    :errorStaffProfile="errorStaffProfile"
-                />
                 <LoadingComponent :loading="loading" />
                 <div class="nk-content" v-if="errorStaffProfile">
                     <InfoNotLoggedInComponent />
@@ -19,25 +11,6 @@
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
                                 <div class="row g-gs">
-                                    <div class="offset-9 col-md-3">
-                                        <a
-                                            class="btn-print btn btn-primary me-3"
-                                            :href="`${publicPath}?UsrLogin=${userId}&callback=report-print`"
-                                            target="_blank"
-                                        >
-                                            <em class="icon ni ni-printer"></em>
-                                            &nbsp;PRINT
-                                        </a>
-                                        <button
-                                            class="btn-print btn btn-secondary"
-                                            disabled="true"
-                                        >
-                                            <em
-                                                class="icon ni ni-download"
-                                            ></em>
-                                            &nbsp;EXPORT
-                                        </button>
-                                    </div>
                                     <div class="col-md-12">
                                         <div
                                             class="report-print-title-container"
@@ -150,7 +123,6 @@
                         </div>
                     </div>
                 </div>
-                <FooterComponent />
             </div>
         </div>
     </div>
@@ -160,27 +132,19 @@
 <script>
 import { ref, watch } from "vue";
 
-import NavbarComponent from "@/components/Navbar.vue";
-import TopNavComponent from "@/components/TopNav.vue";
-import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import { useStaffProfile, useReportDetails } from "@/hooks/useAPI";
-import { getBearerToken } from "@/utils/tokenManagement";
 
 export default {
-    name: "ReportView",
+    name: "ReportPrint",
     data() {
         return {
             publicPath: process.env.VUE_APP_PUBLIC_PATH,
-            userId: getBearerToken(),
         };
     },
     components: {
         LoadingComponent,
-        NavbarComponent,
-        TopNavComponent,
-        FooterComponent,
         InfoNotLoggedInComponent,
     },
     setup() {
@@ -188,7 +152,6 @@ export default {
             data: dataStaffProfile,
             error: errorStaffProfile,
             loading: loadingStaffProfile,
-            refetch,
         } = useStaffProfile();
 
         const reportDetails = ref([]);
@@ -198,6 +161,10 @@ export default {
             () => dataReportDetails.value,
             (newDataReportDetails) => {
                 reportDetails.value = newDataReportDetails;
+
+                setTimeout(() => {
+                    window.print();
+                }, 500);
             }
         );
 
@@ -213,7 +180,6 @@ export default {
             dataStaffProfile,
             errorStaffProfile,
             loading: loadingStaffProfile || loadingReportDetails,
-            refetch,
             reportDetails,
             getNama,
         };
@@ -223,11 +189,6 @@ export default {
             return this.dataStaffProfile?.roles?.length > 0
                 ? this.dataStaffProfile?.roles
                 : [];
-        },
-    },
-    methods: {
-        onPrint() {
-            window.print();
         },
     },
 };

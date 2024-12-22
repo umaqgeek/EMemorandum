@@ -17,9 +17,9 @@ namespace EMemorandum.Controllers.Api;
 [Authorize(Policy = "AdminOrPUUPolicy")]
 public class JenisMemoController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DbContext_EMO _context;
 
-    public JenisMemoController(IConfiguration configuration, ApplicationDbContext context)
+    public JenisMemoController(IConfiguration configuration, DbContext_EMO context)
     {
         _context = context;
     }

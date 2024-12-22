@@ -59,8 +59,8 @@ builder.Services.AddCors(options =>
 });
 
 // Configure the DbContext with the connection string
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<DbContext_EMO>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EMOConnection")));
 
 // In production, the Vue files will be served from this directory
 builder.Services.AddSpaStaticFiles(configuration =>

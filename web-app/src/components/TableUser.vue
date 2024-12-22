@@ -66,9 +66,9 @@
                                 >
                                     {{ getNama(user) }}
                                 </a>
-                                <span class="small text"
-                                    >{{ user.noStaf }} | {{ user.email }}</span
-                                >
+                                <span class="small text">{{
+                                    user.nPejabat
+                                }}</span>
                             </div>
                         </div>
                     </td>

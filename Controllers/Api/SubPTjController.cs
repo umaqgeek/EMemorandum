@@ -17,9 +17,9 @@ namespace EMemorandum.Controllers.Api;
 [Authorize(Policy = "AdminOrPUUPolicy")]
 public class SubPTjController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DbContext_EMO _context;
 
-    public SubPTjController(IConfiguration configuration, ApplicationDbContext context)
+    public SubPTjController(IConfiguration configuration, DbContext_EMO context)
     {
         _context = context;
     }

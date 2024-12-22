@@ -17,9 +17,9 @@ namespace EMemorandum.Controllers.Api;
 [Authorize(Policy = "AdminOrPUUPolicy")]
 public class KategoriMemoController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DbContext_EMO _context;
 
-    public KategoriMemoController(IConfiguration configuration, ApplicationDbContext context)
+    public KategoriMemoController(IConfiguration configuration, DbContext_EMO context)
     {
         _context = context;
     }

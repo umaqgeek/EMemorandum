@@ -129,7 +129,7 @@ $ dotnet publish -c Release -o ./publish
 
 ### 3.1. Add new migration script
 1. Create a new model. Eg.: `./Models/User.cs`.
-2. Update the DB Context in `./Models/ApplicationDbContext.cs`.
+2. Update the DB Context in `./Models/DbContext_EMO.cs`.
 3. Run migration script. Eg.:
 ```
 $ dotnet ef migrations add AddUserTable

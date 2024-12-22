@@ -126,13 +126,19 @@
                                         </div>
                                         <div
                                             class="gap-col"
-                                            v-if="isPIC || isAdmin"
+                                            v-if="
+                                                (isPIC || isAdmin) &&
+                                                dataTheMOU?.status?.kod != '07'
+                                            "
                                         >
                                             <ul class="d-flex gap g-2">
                                                 <li class="d-none d-md-block">
                                                     <a
                                                         href="#"
                                                         class="btn btn-danger"
+                                                        @click="
+                                                            showModalCancel = true
+                                                        "
                                                     >
                                                         <em
                                                             class="icon ni ni-cross"
@@ -923,6 +929,13 @@
             </div>
         </div>
         <ValidateMeComponent />
+        <ModalYesNo
+            :visible="showModalCancel"
+            title="Cancel Confirmation"
+            message="Are you sure you want to cancel this memorandum?"
+            @confirm="onApproval('07')"
+            @cancel="showModalCancel = false"
+        />
     </div>
 </template>
 
@@ -946,6 +959,7 @@ import {
 } from "@/hooks/useAPI";
 import TableLite from "@/components/TableLite.vue";
 import { LIMIT_TEXT } from "@/utils/constants";
+import ModalYesNo from "@/components/ModalYesNo.vue";
 
 export default {
     name: "MemoDetailsView",
@@ -957,6 +971,7 @@ export default {
         LoadingComponent,
         InfoNotLoggedInComponent,
         TableLite,
+        ModalYesNo,
     },
     setup() {
         const $toast = useToast();
@@ -1188,7 +1203,7 @@ export default {
             if (kod === "02") return "info";
             if (kod === "03") return "warning";
             if (kod === "04") return "success";
-            if (kod === "05") return "danger";
+            if (kod === "05" || kod === "06" || kod === "07") return "danger";
             return "dark";
         };
 
@@ -1225,6 +1240,8 @@ export default {
             );
         };
 
+        const showModalCancel = ref(false);
+
         return {
             publicPath,
             dataStaffProfile,
@@ -1253,6 +1270,7 @@ export default {
             errorSaveComment,
             color,
             onApproval,
+            showModalCancel,
         };
     },
 };

@@ -2,6 +2,7 @@
     <apexchart
         type="pie"
         width="100%"
+        height="100%"
         :options="chartOptions"
         :series="series"
     ></apexchart>

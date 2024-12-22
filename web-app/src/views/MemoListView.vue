@@ -155,9 +155,9 @@ export default {
         const color = (kod) => {
             if (kod === "01") return "dark";
             if (kod === "02") return "info";
-            if (kod === "03") return "success";
-            if (kod === "04") return "warning";
-            if (kod === "05") return "danger";
+            if (kod === "03") return "warning";
+            if (kod === "04") return "success";
+            if (kod === "05" || kod === "06" || kod === "07") return "danger";
             return "dark";
         };
 
