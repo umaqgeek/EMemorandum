@@ -212,6 +212,7 @@ CREATE TABLE DbEMO.dbo.MOU05_KPI_Progress (
 	Penerangan varchar(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	TarikhKemaskini smalldatetime NULL,
 	NoStaf nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	BuktiPath varchar(300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CONSTRAINT PK_MOU05_KPI_Progress_1 PRIMARY KEY (ProgressID),
 	CONSTRAINT FK_MOU05_KPI_Progress_MOU04_KPI FOREIGN KEY (KPI_ID) REFERENCES DbEMO.dbo.MOU04_KPI(KPI_ID)
 );

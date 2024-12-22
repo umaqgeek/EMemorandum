@@ -17,6 +17,8 @@ public class MOU05_KPI_Progress
 
     public string? Bukti { get; set; }
 
+    public string? BuktiPath { get; set; }
+
     public decimal? Amaun { get; set; }
 
     public decimal? Number { get; set; }
