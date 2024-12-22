@@ -414,9 +414,14 @@
                                                                                     role="alert"
                                                                                 >
                                                                                     <p>
-                                                                                        {{
-                                                                                            prog.bukti
-                                                                                        }}
+                                                                                        Evidence:
+                                                                                        <a
+                                                                                            :href="`${publicPath}${prog.buktiPath}`"
+                                                                                            target="_blank"
+                                                                                            >{{
+                                                                                                prog.bukti
+                                                                                            }}</a
+                                                                                        >
                                                                                     </p>
                                                                                 </div>
                                                                                 <div
@@ -487,7 +492,7 @@
                                                                             <div
                                                                                 class="form-control-wrap"
                                                                             >
-                                                                                <input
+                                                                                <!-- <input
                                                                                     type="text"
                                                                                     placeholder="Write the KPI's progress evidence in here"
                                                                                     class="form-control"
@@ -495,7 +500,34 @@
                                                                                     v-model="
                                                                                         evidence
                                                                                     "
+                                                                                /> -->
+                                                                                <input
+                                                                                    class="form-control"
+                                                                                    type="file"
+                                                                                    @change="
+                                                                                        (
+                                                                                            evt
+                                                                                        ) =>
+                                                                                            handleFileUpload(
+                                                                                                evt,
+                                                                                                'kpievidence'
+                                                                                            )
+                                                                                    "
                                                                                 />
+                                                                                <div
+                                                                                    class="btn btn-link"
+                                                                                    v-if="
+                                                                                        filePath?.kpievidence
+                                                                                    "
+                                                                                >
+                                                                                    <a
+                                                                                        :href="`${publicPath}${filePath?.kpievidence}`"
+                                                                                        target="_blank"
+                                                                                        >{{
+                                                                                            fileName?.kpievidence
+                                                                                        }}</a
+                                                                                    >
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -638,6 +670,7 @@ import {
     useStaffProfile,
     useGetOneMOUKPI,
     useMouEvidenceMemo,
+    useHandleFileUpload,
 } from "@/hooks/useAPI";
 
 export default {
@@ -747,14 +780,14 @@ export default {
             return "dark";
         };
 
-        const evidence = ref("");
+        // const evidence = ref("");
         const evidenceDescription = ref("");
         const amount = ref(0);
         const isAmount = ref(false);
         const onSave = () => {
-            if (!(evidence.value?.length > 0)) {
+            if (!(fileName.value?.kpievidence?.length > 0)) {
                 $toast.open({
-                    message: "Please fill in the evidence!",
+                    message: "Please upload the evidence!",
                     type: "error",
                     position: "top-right",
                 });
@@ -766,7 +799,9 @@ export default {
                 loading: loadingEvidence,
                 error: errorEvidence,
             } = useMouEvidenceMemo({
-                Bukti: evidence.value,
+                // Bukti: evidence.value,
+                Bukti: fileName.value?.kpievidence,
+                BuktiPath: filePath.value?.kpievidence,
                 Penerangan: evidenceDescription.value,
                 KPI_ID: dataTheMOUKPI.value?.kpI_ID,
                 NoMemo: dataTheMOUKPI.value?.noMemo,
@@ -796,6 +831,45 @@ export default {
             );
         };
 
+        const filePath = ref({
+            kpievidence: "",
+        });
+        const fileName = ref({
+            kpievidence: "",
+        });
+        const handleFileUpload = async (event, category) => {
+            const file = event.target.files[0]; // Get the selected file
+            if (!file) return;
+
+            // Use FormData to send the file to the server
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("category", category);
+
+            const {
+                data: dataHandleUpload,
+                loading: loadingHandleUpload,
+                error: errorHandleUpload,
+            } = useHandleFileUpload(formData);
+            watch(
+                [dataHandleUpload, loadingHandleUpload, errorHandleUpload],
+                ([
+                    newDataHandleUpload,
+                    newLoadingHandleUpload,
+                    newErrorHandleUpload,
+                ]) => {
+                    if (newLoadingHandleUpload == false) {
+                        filePath.value[category] =
+                            newDataHandleUpload?.filePath ??
+                            newErrorHandleUpload;
+                        fileName.value[category] =
+                            newDataHandleUpload?.fileName ??
+                            newErrorHandleUpload;
+                    }
+                }
+            );
+        };
+
         return {
             publicPath,
             dataStaffProfile,
@@ -812,11 +886,14 @@ export default {
             loadingSaveEvidence,
             errorSaveEvidence,
             color,
-            evidence,
+            // evidence,
             evidenceDescription,
             amount,
             isAmount,
             onSave,
+            filePath,
+            fileName,
+            handleFileUpload,
         };
     },
 };
