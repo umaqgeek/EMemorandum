@@ -103,8 +103,25 @@
                         <li
                             :class="[
                                 'nk-menu-item',
+                                { active: activeLabel === 'codes' },
+                            ]"
+                            v-if="roles.find((r) => r.code === 'Admin')"
+                        >
+                            <a :href="`${publicPath}codes`" class="nk-menu-link"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-setting"></em
+                                ></span>
+                                <span class="nk-menu-text"
+                                    >Codes/Utilities</span
+                                >
+                            </a>
+                        </li>
+                        <li
+                            :class="[
+                                'nk-menu-item',
                                 { active: activeLabel === 'report' },
                             ]"
+                            v-if="roles.find((r) => r.code === 'Staff')"
                         >
                             <a
                                 :href="`${publicPath}report`"

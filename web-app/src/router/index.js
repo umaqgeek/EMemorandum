@@ -19,6 +19,7 @@ import UserEditView from "@/views/UserEdit.vue";
 import UserViewView from "@/views/UserView.vue";
 import CodeListView from "@/views/CodeListView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
+import CodesDashboardView from "@/views/CodesDashboardView.vue";
 
 const routes = [
     {
@@ -56,6 +57,10 @@ const routes = [
     {
         path: "/kpi-view",
         component: MemoKPIDetailsView,
+    },
+    {
+        path: "/codes",
+        component: CodesDashboardView,
     },
     {
         path: "/report",
