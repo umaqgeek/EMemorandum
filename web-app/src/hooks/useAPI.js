@@ -251,3 +251,34 @@ export function useReportDetails() {
         url: `${API_URL}/report/details`,
     });
 }
+
+export function useFetchMOUFields(params = {}) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/MOUField`,
+        params,
+    });
+}
+
+export function useCreateMOUField(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/MOUField`,
+        data: payload,
+    });
+}
+
+export function useUpdateMOUField(kodField, payload) {
+    return useApi({
+        method: "put",
+        url: `${API_URL}/MOUField/${kodField}`,
+        data: payload,
+    });
+}
+
+export function useDeleteMOUField(kodField) {
+    return useApi({
+        method: "delete",
+        url: `${API_URL}/MOUField/${kodField}`,
+    });
+}
