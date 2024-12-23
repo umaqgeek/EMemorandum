@@ -20,6 +20,7 @@ import UserViewView from "@/views/UserView.vue";
 import CodeListView from "@/views/CodeListView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import CodesDashboardView from "@/views/CodesDashboardView.vue";
+import ManageFieldsView from "@/views/ManageFieldsView.vue";
 
 const routes = [
     {
@@ -61,6 +62,10 @@ const routes = [
     {
         path: "/codes",
         component: CodesDashboardView,
+    },
+    {
+        path: "/manage-fields",
+        component: ManageFieldsView,
     },
     {
         path: "/report",
