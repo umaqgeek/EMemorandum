@@ -21,6 +21,7 @@ import CodeListView from "@/views/CodeListView.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
 import CodesDashboardView from "@/views/CodesDashboardView.vue";
 import ManageFieldsView from "@/views/ManageFieldsView.vue";
+import ManageIndustryCategoriesView from "@/views/ManageIndustryCategoriesView.vue";
 
 const routes = [
     {
@@ -66,6 +67,10 @@ const routes = [
     {
         path: "/manage-fields",
         component: ManageFieldsView,
+    },
+    {
+        path: "/manage-ind-cats",
+        component: ManageIndustryCategoriesView,
     },
     {
         path: "/report",

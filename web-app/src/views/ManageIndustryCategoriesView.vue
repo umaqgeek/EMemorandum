@@ -27,19 +27,19 @@
                                     class="breadcrumb-item active"
                                     aria-current="page"
                                 >
-                                    Manage Fields
+                                    Manage Industry Categories
                                 </li>
                             </ol>
                         </nav>
 
-                        <h1 class="mb-3">Manage Fields</h1>
+                        <h1 class="mb-3">Manage Industry Categories</h1>
 
                         <!-- Filter Input -->
                         <div class="mb-3">
                             <input
                                 v-model="filterText"
                                 class="form-control"
-                                placeholder="Filter by Field"
+                                placeholder="Filter by Industry Category"
                             />
                         </div>
 
@@ -48,25 +48,27 @@
                             class="btn btn-primary mb-3"
                             @click="openCreateModal"
                         >
-                            Add New Field
+                            Add New Industry Category
                         </button>
 
                         <!-- Table -->
                         <table class="table table-bordered">
                             <thead>
                                 <tr class="alert alert-secondary">
-                                    <th @click="sortList('kodField')">Kod</th>
-                                    <th @click="sortList('field')">Field</th>
+                                    <th @click="sortList('kodInd')">Kod</th>
+                                    <th @click="sortList('industryCategory')">
+                                        Industry Category
+                                    </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr
                                     v-for="item in paginatedList"
-                                    :key="item?.kodField"
+                                    :key="item?.kodInd"
                                 >
-                                    <td>{{ item?.kodField }}</td>
-                                    <td>{{ item?.field }}</td>
+                                    <td>{{ item?.kodInd }}</td>
+                                    <td>{{ item?.industryCategory }}</td>
                                     <td>
                                         <button
                                             class="btn btn-sm btn-warning me-2"
@@ -134,8 +136,8 @@
                                         <h5 class="modal-title">
                                             {{
                                                 isEdit
-                                                    ? "Update Field"
-                                                    : "Create Field"
+                                                    ? "Update Industry Category"
+                                                    : "Create Industry Category"
                                             }}
                                         </h5>
                                         <button
@@ -147,13 +149,13 @@
                                     <div class="modal-body">
                                         <div class="mb-3">
                                             <label
-                                                for="kodField"
+                                                for="kodInd"
                                                 class="form-label"
                                                 >Kod</label
                                             >
                                             <input
-                                                id="kodField"
-                                                v-model="form.kodField"
+                                                id="kodInd"
+                                                v-model="form.kodInd"
                                                 :disabled="isEdit"
                                                 class="form-control"
                                                 maxlength="2"
@@ -161,13 +163,13 @@
                                         </div>
                                         <div class="mb-3">
                                             <label
-                                                for="field"
+                                                for="industryCategory"
                                                 class="form-label"
-                                                >Field</label
+                                                >Industry Category</label
                                             >
                                             <input
-                                                id="field"
-                                                v-model="form.field"
+                                                id="industryCategory"
+                                                v-model="form.industryCategory"
                                                 class="form-control"
                                                 maxlength="150"
                                             />
@@ -214,8 +216,8 @@
                                     <div class="modal-body">
                                         <p>
                                             Are you sure you want to delete the
-                                            field with Kod:
-                                            {{ fieldToDelete?.kodField }}?
+                                            industry category with Kod:
+                                            {{ indCatToDelete?.kodInd }}?
                                         </p>
                                     </div>
                                     <div class="modal-footer">
@@ -254,14 +256,14 @@ import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import {
     useStaffProfile,
-    useFetchMOUFields,
-    useCreateMOUField,
-    useUpdateMOUField,
-    useDeleteMOUField,
+    useFetchMOUIndustryCats,
+    useCreateMOUIndustryCat,
+    useUpdateMOUIndustryCat,
+    useDeleteMOUIndustryCat,
 } from "@/hooks/useAPI";
 
 export default {
-    name: "ManageFieldsView",
+    name: "ManageIndustryCategoriesView",
     components: {
         LoadingComponent,
         NavbarComponent,
@@ -278,10 +280,10 @@ export default {
             loading: loadingStaffProfile,
         } = useStaffProfile();
         const {
-            data: fields = ref([]),
-            loading: loadingFields,
+            data: industryCategories = ref([]),
+            loading: loadingIndustryCategories,
             refetch,
-        } = useFetchMOUFields();
+        } = useFetchMOUIndustryCats();
 
         const filterText = ref("");
         const currentPage = ref(1);
@@ -290,19 +292,19 @@ export default {
         const isModalVisible = ref(false);
         const isDeleteModalVisible = ref(false);
         const isEdit = ref(false);
-        const form = ref({ kodField: "", field: "" });
-        const fieldToDelete = ref(null);
+        const form = ref({ kodInd: "", industryCategory: "" });
+        const indCatToDelete = ref(null);
 
         const filteredList = ref([]);
         const paginatedList = ref([]);
         const totalPages = ref(0);
 
         watch(
-            [fields, filterText],
-            ([newFields, newFilterText]) => {
+            [industryCategories, filterText],
+            ([newIndustryCategories, newFilterText]) => {
                 const filtered =
-                    newFields?.filter((item) =>
-                        item?.field
+                    newIndustryCategories?.filter((item) =>
+                        item?.industryCategory
                             ?.toLowerCase()
                             .includes(newFilterText.toLowerCase())
                     ) || [];
@@ -342,32 +344,32 @@ export default {
             setTimeout(() => refetch(), ms);
         };
 
-        const createField = async () => {
-            await useCreateMOUField(form.value);
+        const createIndustryCategory = async () => {
+            await useCreateMOUIndustryCat(form.value);
             delayRefetch();
             closeModal();
         };
 
-        const updateField = async () => {
-            await useUpdateMOUField(form.value.kodField, form.value);
+        const updateIndustryCategory = async () => {
+            await useUpdateMOUIndustryCat(form.value.kodInd, form.value);
             delayRefetch();
             closeModal();
         };
 
         const openCreateModal = () => {
             isEdit.value = false;
-            form.value = { kodField: "", field: "" };
+            form.value = { kodInd: "", industryCategory: "" };
             isModalVisible.value = true;
         };
 
-        const openUpdateModal = (field) => {
+        const openUpdateModal = (industryCategory) => {
             isEdit.value = true;
-            form.value = { ...field };
+            form.value = { ...industryCategory };
             isModalVisible.value = true;
         };
 
-        const openDeleteModal = (field) => {
-            fieldToDelete.value = field;
+        const openDeleteModal = (industryCategory) => {
+            indCatToDelete.value = industryCategory;
             isDeleteModalVisible.value = true;
         };
 
@@ -380,16 +382,16 @@ export default {
         };
 
         const confirmDelete = async () => {
-            if (fieldToDelete.value) {
-                await useDeleteMOUField(fieldToDelete.value.kodField);
+            if (indCatToDelete.value) {
+                await useDeleteMOUIndustryCat(indCatToDelete.value.kodInd);
                 delayRefetch();
                 closeDeleteModal();
             }
         };
 
         const submitForm = () => {
-            if (isEdit.value) updateField();
-            else createField();
+            if (isEdit.value) updateIndustryCategory();
+            else createIndustryCategory();
         };
 
         const sortColumn = ref(null);
@@ -407,9 +409,9 @@ export default {
             publicPath,
             dataStaffProfile,
             errorStaffProfile,
-            loading: loadingStaffProfile || loadingFields,
+            loading: loadingStaffProfile || loadingIndustryCategories,
             filterText,
-            fields,
+            industryCategories,
             filteredList,
             paginatedList,
             totalPages,
@@ -421,7 +423,7 @@ export default {
             isDeleteModalVisible,
             isEdit,
             form,
-            fieldToDelete,
+            indCatToDelete,
             openCreateModal,
             openUpdateModal,
             openDeleteModal,
