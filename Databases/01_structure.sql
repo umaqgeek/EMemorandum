@@ -271,7 +271,8 @@ CREATE TABLE DbEMO.dbo.MOU_AuditLog (
 
 CREATE TABLE DbEMO.dbo.MOU_Field (
 	KodField varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	Field varchar(150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	Field varchar(150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT MOU_Field_PK PRIMARY KEY (KodField)
 );
 
 -- DbEMO.dbo.MOU_IndustryCat definition
@@ -282,7 +283,8 @@ CREATE TABLE DbEMO.dbo.MOU_Field (
 
 CREATE TABLE DbEMO.dbo.MOU_IndustryCat (
 	KodInd varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	IndustryCategory varchar(350) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	IndustryCategory varchar(350) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	CONSTRAINT MOU_IndustryCat_PK PRIMARY KEY (KodInd)
 );
 
 -- DbEMO.dbo.MOU_Roles definition
