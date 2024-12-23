@@ -313,3 +313,34 @@ export function useDeleteMOUIndustryCat(id) {
         url: `${API_URL}/MOUIndustryCat/${id}`,
     });
 }
+
+export function useFetchPUUJenisMemos(params = {}) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/PUUJenisMemo`,
+        params,
+    });
+}
+
+export function useCreatePUUJenisMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/PUUJenisMemo`,
+        data: payload,
+    });
+}
+
+export function useUpdatePUUJenisMemo(id, payload) {
+    return useApi({
+        method: "put",
+        url: `${API_URL}/PUUJenisMemo/${id}`,
+        data: payload,
+    });
+}
+
+export function useDeletePUUJenisMemo(id) {
+    return useApi({
+        method: "delete",
+        url: `${API_URL}/PUUJenisMemo/${id}`,
+    });
+}

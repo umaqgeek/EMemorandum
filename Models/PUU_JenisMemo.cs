@@ -5,7 +5,6 @@ namespace EMemorandum.Models;
 public class PUU_JenisMemo
 {
     [Key]
-    public long? ID { get; set; }
     public int? Kod { get; set; }
     public string? Butiran { get; set; }
     public string? KodPejabat { get; set; }

@@ -318,12 +318,11 @@ CREATE TABLE DbEMO.dbo.MOU_Status (
 -- DROP TABLE DbEMO.dbo.PUU_JenisMemo;
 
 CREATE TABLE DbEMO.dbo.PUU_JenisMemo (
-	ID bigint NOT NULL,
 	Kod int NOT NULL,
 	Butiran varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	KodPejabat nvarchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	Pejabat nvarchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT PUU_JenisMemo_PK PRIMARY KEY (ID)
+	CONSTRAINT PUU_JenisMemo_PK PRIMARY KEY (Kod)
 );
 
 -- DbEMO.dbo.PUU_KategoriMemo definition
