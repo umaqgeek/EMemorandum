@@ -3,7 +3,7 @@
         <div class="nk-main">
             <NavbarComponent
                 :staffprofile="dataStaffProfile"
-                :activeLabel="`dashboard`"
+                :activeLabel="`report`"
             />
             <div class="nk-wrap">
                 <TopNavComponent

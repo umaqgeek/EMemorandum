@@ -42,6 +42,13 @@ export default {
                         },
                     },
                 ],
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        var total = props.series.reduce((a, v) => a + v, 0);
+                        return `${(val / 100) * total} memo`;
+                    },
+                },
             },
         };
     },
