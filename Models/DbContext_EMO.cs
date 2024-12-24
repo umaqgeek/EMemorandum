@@ -13,6 +13,7 @@ public class DbContext_EMO : DbContext
     public DbSet<EMO_KPI> EMO_KPI { get; set; }
     public DbSet<EMO_Staf> EMO_Staf { get; set; }
     public DbSet<EMO_Roles> EMO_Roles { get; set; }
+    public DbSet<EMO_Roles_Secretariat> EMO_Roles_Secretariat { get; set; }
     public DbSet<EMO_Pejabat> EMO_Pejabat { get; set; }
     public DbSet<MOU_Status> MOU_Status { get; set; }
     public DbSet<PUU_JenisMemo> PUU_JenisMemo { get; set; }
@@ -32,6 +33,15 @@ public class DbContext_EMO : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<EMO_Roles_Secretariat>()
+            .HasKey(e => new { e.NoStaf, e.PUU_JenisMemoKod });
+
+        modelBuilder.Entity<EMO_Roles_Secretariat>()
+            .HasOne(r => r.EMO_Staf)
+            .WithMany(s => s.EMO_Roles_Secretariats)
+            .HasForeignKey(r => r.NoStaf)
+            .HasConstraintName("FK_EMO_Roles_Secretariat_EMO_Staf_NoStaf");
+
         modelBuilder.Entity<EMO_Roles>()
             .HasOne(r => r.EMO_Staf)
             .WithMany(s => s.Roles)

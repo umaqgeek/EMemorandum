@@ -12,7 +12,10 @@
                 />
                 <LoadingComponent
                     :loading="
-                        loadingStaffProfile || loadingOneStaff || loadingUpdate
+                        loadingStaffProfile ||
+                        loadingOneStaff ||
+                        loadingUpdate ||
+                        loadingMouSelectData
                     "
                 />
                 <div class="nk-content" v-if="errorStaffProfile">
@@ -182,6 +185,20 @@
                                                                         /
                                                                         Secretariat
                                                                     </label>
+                                                                    <multiselect
+                                                                        :multiple="
+                                                                            true
+                                                                        "
+                                                                        v-model="
+                                                                            PUU_JenisMemoKods
+                                                                        "
+                                                                        :options="
+                                                                            types
+                                                                        "
+                                                                        placeholder="Select a Type"
+                                                                        label="butiran"
+                                                                        track-by="butiran"
+                                                                    ></multiselect>
                                                                 </div>
                                                                 <div
                                                                     class="form-check"
@@ -261,6 +278,8 @@
 <script>
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.min.css";
 
 import ValidateMeComponent from "@/components/ValidateMe.vue";
 import NavbarComponent from "@/components/Navbar.vue";
@@ -272,6 +291,7 @@ import {
     useStaffProfile,
     useGetOneStaff,
     useAssignStaffRoles,
+    useGetMOUSelectData,
 } from "@/hooks/useAPI";
 
 export default {
@@ -288,6 +308,7 @@ export default {
         FooterComponent,
         LoadingComponent,
         InfoNotLoggedInComponent,
+        Multiselect,
     },
     setup() {
         const {
@@ -296,6 +317,18 @@ export default {
             loading: loadingStaffProfile,
             refetch: refetchStaffProfile,
         } = useStaffProfile();
+
+        const { data: dataMouSelectData, loading: loadingMouSelectData } =
+            useGetMOUSelectData();
+
+        const types = ref([]);
+        const PUU_JenisMemoKods = ref([]);
+        watch(
+            () => dataMouSelectData.value,
+            (dataMouSelectDataUpdated) => {
+                types.value = dataMouSelectDataUpdated?.jenisMemo || [];
+            }
+        );
 
         const route = useRoute();
         const noStaf = route?.query?.s;
@@ -345,6 +378,8 @@ export default {
                             ? true
                             : false,
                     };
+                    PUU_JenisMemoKods.value =
+                        dataOneStaffUpdated?.roles_Secretariats;
                 }
             }
         );
@@ -362,6 +397,9 @@ export default {
             roles,
             isActive,
             isEachRoles,
+            loadingMouSelectData,
+            types,
+            PUU_JenisMemoKods,
         };
     },
     computed: {
@@ -412,7 +450,12 @@ export default {
             } else {
                 newRoles = [];
             }
-            const { loading } = useAssignStaffRoles(this.noStaf, newRoles);
+            const rolesSecretariats = this.PUU_JenisMemoKods?.map((k) => k.kod);
+            const { loading } = useAssignStaffRoles(
+                this.noStaf,
+                newRoles,
+                rolesSecretariats
+            );
             this.loadingUpdate = loading.value;
 
             var self = this;

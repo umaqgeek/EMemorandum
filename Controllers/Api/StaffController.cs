@@ -122,6 +122,8 @@ public class StaffController : ControllerBase
         var _entity = _context.EMO_Staf
             .Where(s => s.NoStaf == noStaf)
             .Include(s => s.Roles)
+            .Include(s => s.EMO_Roles_Secretariats)
+                .ThenInclude(s => s.PUU_JenisMemo)
             .FirstOrDefault();
 
         if (_entity == null)
@@ -129,7 +131,27 @@ public class StaffController : ControllerBase
             return NotFound();
         }
 
-        return Ok(_entity);
+        return Ok(new
+        {
+            Roles_Secretariats = _entity.EMO_Roles_Secretariats.Select(rs => new {
+                Kod = rs.PUU_JenisMemo.Kod,
+                Butiran = rs.PUU_JenisMemo.Butiran,
+            }).ToList(),
+            Gelaran = _entity.Gelaran,
+            JGiliran = _entity.JGiliran,
+            KodPTJSub = _entity.KodPTJSub,
+            KodPejabat = _entity.KodPejabat,
+            MS01_Jantina = _entity.MS01_Jantina,
+            MS01_KpB = _entity.MS01_KpB,
+            NJawatan = _entity.NJawatan,
+            NPejabat = _entity.NPejabat,
+            Nama = _entity.Nama,
+            NoStaf = _entity.NoStaf,
+            NoTelBimbit = _entity.NoTelBimbit,
+            Roles = _entity.Roles,
+            Singkat = _entity.Singkat,
+            Warganegara = _entity.Warganegara,
+        });
     }
 
     [HttpPost("assign-role/{noStaf}")]
@@ -140,6 +162,7 @@ public class StaffController : ControllerBase
         var _entity = _context.EMO_Staf
             .Where(s => s.NoStaf == noStaf)
             .Include(s => s.Roles)
+            .Include(s => s.EMO_Roles_Secretariats)
             .FirstOrDefault();
 
         // Check if the staff exists
@@ -150,6 +173,7 @@ public class StaffController : ControllerBase
 
         // Clear existing roles if necessary (optional)
         _entity.Roles.Clear();
+        _entity.EMO_Roles_Secretariats.Clear();
 
         // Assign new roles to the staff
         foreach (var role in request.Roles)
@@ -159,8 +183,19 @@ public class StaffController : ControllerBase
                 NoStaf = noStaf,
                 Role = role
             };
-
             _entity.Roles.Add(staffRole);
+
+            if (role == "US") {
+                foreach (var us in request.Roles_Secretariats)
+                {
+                    var rolesSecretariat = new EMO_Roles_Secretariat
+                    {
+                        NoStaf = noStaf,
+                        PUU_JenisMemoKod = us
+                    };
+                    _entity.EMO_Roles_Secretariats.Add(rolesSecretariat);
+                }
+            }
         }
 
         // Save changes to the database
@@ -206,5 +241,6 @@ public class StaffController : ControllerBase
 public class AssignRolesRequest
 {
     public List<string> Roles { get; set; }
+    public List<int> Roles_Secretariats { get; set; }
 }
 
