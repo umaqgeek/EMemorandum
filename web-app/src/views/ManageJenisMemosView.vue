@@ -27,19 +27,19 @@
                                     class="breadcrumb-item active"
                                     aria-current="page"
                                 >
-                                    Manage Fields
+                                    Manage Types
                                 </li>
                             </ol>
                         </nav>
 
-                        <h1 class="mb-3">Manage Fields</h1>
+                        <h1 class="mb-3">Manage Types</h1>
 
                         <!-- Filter Input -->
                         <div class="mb-3">
                             <input
                                 v-model="filterText"
                                 class="form-control"
-                                placeholder="Filter by Field"
+                                placeholder="Filter by Type"
                             />
                         </div>
 
@@ -48,25 +48,25 @@
                             class="btn btn-primary mb-3"
                             @click="openCreateModal"
                         >
-                            Add New Field
+                            Add New Type
                         </button>
 
                         <!-- Table -->
                         <table class="table table-bordered">
                             <thead>
                                 <tr class="alert alert-secondary">
-                                    <th @click="sortList('kodField')">Kod</th>
-                                    <th @click="sortList('field')">Field</th>
+                                    <th @click="sortList('kod')">Kod</th>
+                                    <th @click="sortList('butiran')">Type</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr
                                     v-for="item in paginatedList"
-                                    :key="item?.kodField"
+                                    :key="item?.kod"
                                 >
-                                    <td>{{ item?.kodField }}</td>
-                                    <td>{{ item?.field }}</td>
+                                    <td>{{ item?.kod }}</td>
+                                    <td>{{ item?.butiran }}</td>
                                     <td>
                                         <button
                                             class="btn btn-sm btn-warning me-2"
@@ -134,8 +134,8 @@
                                         <h5 class="modal-title">
                                             {{
                                                 isEdit
-                                                    ? "Update Field"
-                                                    : "Create Field"
+                                                    ? "Update Type"
+                                                    : "Create Type"
                                             }}
                                         </h5>
                                         <button
@@ -146,14 +146,12 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label
-                                                for="kodField"
-                                                class="form-label"
+                                            <label for="kod" class="form-label"
                                                 >Kod</label
                                             >
                                             <input
-                                                id="kodField"
-                                                v-model="form.kodField"
+                                                id="kod"
+                                                v-model="form.kod"
                                                 :disabled="isEdit"
                                                 class="form-control"
                                                 maxlength="2"
@@ -161,13 +159,13 @@
                                         </div>
                                         <div class="mb-3">
                                             <label
-                                                for="field"
+                                                for="butiran"
                                                 class="form-label"
-                                                >Field</label
+                                                >Type</label
                                             >
                                             <input
-                                                id="field"
-                                                v-model="form.field"
+                                                id="butiran"
+                                                v-model="form.butiran"
                                                 class="form-control"
                                                 maxlength="150"
                                             />
@@ -214,8 +212,8 @@
                                     <div class="modal-body">
                                         <p>
                                             Are you sure you want to delete the
-                                            field with Kod:
-                                            {{ fieldToDelete?.kodField }}?
+                                            Type with Kod:
+                                            {{ IdToDelete?.kod }}?
                                         </p>
                                     </div>
                                     <div class="modal-footer">
@@ -254,14 +252,14 @@ import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import {
     useStaffProfile,
-    useFetchMOUFields,
-    useCreateMOUField,
-    useUpdateMOUField,
-    useDeleteMOUField,
+    useFetchPUUJenisMemos,
+    useCreatePUUJenisMemo,
+    useUpdatePUUJenisMemo,
+    useDeletePUUJenisMemo,
 } from "@/hooks/useAPI";
 
 export default {
-    name: "ManageFieldsView",
+    name: "ManageJenisMemosView",
     components: {
         LoadingComponent,
         NavbarComponent,
@@ -278,10 +276,10 @@ export default {
             loading: loadingStaffProfile,
         } = useStaffProfile();
         const {
-            data: fields = ref([]),
-            loading: loadingFields,
+            data: types = ref([]),
+            loading: loadingIndustryCategories,
             refetch,
-        } = useFetchMOUFields();
+        } = useFetchPUUJenisMemos();
 
         const filterText = ref("");
         const currentPage = ref(1);
@@ -290,19 +288,19 @@ export default {
         const isModalVisible = ref(false);
         const isDeleteModalVisible = ref(false);
         const isEdit = ref(false);
-        const form = ref({ kodField: "", field: "" });
-        const fieldToDelete = ref(null);
+        const form = ref({ kod: "", butiran: "" });
+        const IdToDelete = ref(null);
 
         const filteredList = ref([]);
         const paginatedList = ref([]);
         const totalPages = ref(0);
 
         watch(
-            [fields, filterText],
-            ([newFields, newFilterText]) => {
+            [types, filterText],
+            ([newIndustryCategories, newFilterText]) => {
                 const filtered =
-                    newFields?.filter((item) =>
-                        item?.field
+                    newIndustryCategories?.filter((item) =>
+                        item?.butiran
                             ?.toLowerCase()
                             .includes(newFilterText.toLowerCase())
                     ) || [];
@@ -342,32 +340,33 @@ export default {
             setTimeout(() => refetch(), ms);
         };
 
-        const createField = async () => {
-            await useCreateMOUField(form.value);
+        const createJenisMemo = async () => {
+            console.log(form.value);
+            await useCreatePUUJenisMemo(form.value);
             delayRefetch();
             closeModal();
         };
 
-        const updateField = async () => {
-            await useUpdateMOUField(form.value.kodField, form.value);
+        const updateJenisMemo = async () => {
+            await useUpdatePUUJenisMemo(form.value.kod, form.value);
             delayRefetch();
             closeModal();
         };
 
         const openCreateModal = () => {
             isEdit.value = false;
-            form.value = { kodField: "", field: "" };
+            form.value = { kod: "", butiran: "" };
             isModalVisible.value = true;
         };
 
-        const openUpdateModal = (field) => {
+        const openUpdateModal = (butiran) => {
             isEdit.value = true;
-            form.value = { ...field };
+            form.value = { ...butiran };
             isModalVisible.value = true;
         };
 
-        const openDeleteModal = (field) => {
-            fieldToDelete.value = field;
+        const openDeleteModal = (butiran) => {
+            IdToDelete.value = butiran;
             isDeleteModalVisible.value = true;
         };
 
@@ -380,16 +379,16 @@ export default {
         };
 
         const confirmDelete = async () => {
-            if (fieldToDelete.value) {
-                await useDeleteMOUField(fieldToDelete.value.kodField);
+            if (IdToDelete.value) {
+                await useDeletePUUJenisMemo(IdToDelete.value.kod);
                 delayRefetch();
                 closeDeleteModal();
             }
         };
 
         const submitForm = () => {
-            if (isEdit.value) updateField();
-            else createField();
+            if (isEdit.value) updateJenisMemo();
+            else createJenisMemo();
         };
 
         const sortColumn = ref(null);
@@ -407,9 +406,9 @@ export default {
             publicPath,
             dataStaffProfile,
             errorStaffProfile,
-            loading: loadingStaffProfile || loadingFields,
+            loading: loadingStaffProfile || loadingIndustryCategories,
             filterText,
-            fields,
+            types,
             filteredList,
             paginatedList,
             totalPages,
@@ -421,7 +420,7 @@ export default {
             isDeleteModalVisible,
             isEdit,
             form,
-            fieldToDelete,
+            IdToDelete,
             openCreateModal,
             openUpdateModal,
             openDeleteModal,

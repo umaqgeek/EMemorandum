@@ -34,4 +34,7 @@ public class EMO_Staf
 
     // Navigation property for the mou06_history
     public ICollection<MOU06_History> Histories { get; set; }
+
+    // Navigation property for the mou06_history
+    public ICollection<EMO_Roles_Secretariat> EMO_Roles_Secretariats { get; set; }
 }

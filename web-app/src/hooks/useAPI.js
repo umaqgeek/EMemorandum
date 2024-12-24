@@ -85,12 +85,17 @@ export function useGetOneStaffSimple(noStaf) {
     });
 }
 
-export function useAssignStaffRoles(noStaf, roles = []) {
+export function useAssignStaffRoles(
+    noStaf,
+    roles = [],
+    roles_Secretariats = []
+) {
     return useApi({
         method: "post",
         url: `${API_URL}/staff/assign-role/${noStaf}`,
         data: JSON.stringify({
             roles,
+            roles_Secretariats,
         }),
     });
 }
@@ -280,5 +285,67 @@ export function useDeleteMOUField(kodField) {
     return useApi({
         method: "delete",
         url: `${API_URL}/MOUField/${kodField}`,
+    });
+}
+
+export function useFetchMOUIndustryCats(params = {}) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/MOUIndustryCat`,
+        params,
+    });
+}
+
+export function useCreateMOUIndustryCat(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/MOUIndustryCat`,
+        data: payload,
+    });
+}
+
+export function useUpdateMOUIndustryCat(id, payload) {
+    return useApi({
+        method: "put",
+        url: `${API_URL}/MOUIndustryCat/${id}`,
+        data: payload,
+    });
+}
+
+export function useDeleteMOUIndustryCat(id) {
+    return useApi({
+        method: "delete",
+        url: `${API_URL}/MOUIndustryCat/${id}`,
+    });
+}
+
+export function useFetchPUUJenisMemos(params = {}) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/PUUJenisMemo`,
+        params,
+    });
+}
+
+export function useCreatePUUJenisMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/PUUJenisMemo`,
+        data: payload,
+    });
+}
+
+export function useUpdatePUUJenisMemo(id, payload) {
+    return useApi({
+        method: "put",
+        url: `${API_URL}/PUUJenisMemo/${id}`,
+        data: payload,
+    });
+}
+
+export function useDeletePUUJenisMemo(id) {
+    return useApi({
+        method: "delete",
+        url: `${API_URL}/PUUJenisMemo/${id}`,
     });
 }
