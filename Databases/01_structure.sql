@@ -240,7 +240,8 @@ CREATE TABLE DbEMO.dbo.MOU06_History (
 
 CREATE TABLE DbEMO.dbo.MOU07_Field (
 	NoMemo varchar(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	KodField varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+	KodField varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	CONSTRAINT MOU07_Field_PK PRIMARY KEY (NoMemo,KodField)
 );
 
 -- DbEMO.dbo.MOU_AuditLog definition
