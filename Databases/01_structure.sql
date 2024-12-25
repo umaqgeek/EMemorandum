@@ -98,8 +98,7 @@ CREATE TABLE DbEMO.dbo.EMO_Roles (
 	id bigint IDENTITY(0,1) NOT NULL,
 	NoStaf nvarchar(5) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[Role] nvarchar(10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT EMO_Roles_PK PRIMARY KEY (id),
-	CONSTRAINT EMO_Roles_FK FOREIGN KEY (NoStaf) REFERENCES DbEMO.dbo.EMO_Staf(NoStaf) ON DELETE CASCADE
+	CONSTRAINT EMO_Roles_PK PRIMARY KEY (id)
 );
 
 -- DbEMO.dbo.MOU01_Memorandum definition
@@ -364,3 +363,20 @@ CREATE TABLE DbEMO.dbo.PUU_SubPTj (
 	Nama varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	CONSTRAINT PUU_SubPTj_PK PRIMARY KEY (ID)
 );
+
+-- Create VIEW to VPeribadi12 (real EMO_Staf)
+USE DbEMO;
+CREATE VIEW dbo.VEMO_Staf AS
+SELECT
+    s.NoStaf,
+    s.Nama,
+    s.Email,
+    s.NoTelBimbit,
+    s.NJawatan,
+    s.JGiliran,
+    s.KodPejabat,
+    s.NPejabat,
+    s.Gelaran,
+    s.MS01_Jantina,
+    s.Warganegara
+FROM [DEVMIS11].[DbStaf].[dbo].[VPeribadi12] s;

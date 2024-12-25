@@ -90,7 +90,18 @@ export default {
     },
     computed: {
         users() {
-            return this.dataAllStaff?.length > 0 ? this.dataAllStaff : [];
+            if (this.dataAllStaff?.length > 0) {
+                return [...this.dataAllStaff].sort((a, b) => {
+                    if (a.roles.length > b.roles.length) {
+                        return -1;
+                    }
+                    if (a.roles.length < b.roles.length) {
+                        return 1;
+                    }
+                    return 0;
+                });
+            }
+            return [];
         },
     },
     methods: {},

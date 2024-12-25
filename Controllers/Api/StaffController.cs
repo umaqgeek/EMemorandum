@@ -139,18 +139,16 @@ public class StaffController : ControllerBase
             }).ToList(),
             Gelaran = _entity.Gelaran,
             JGiliran = _entity.JGiliran,
-            KodPTJSub = _entity.KodPTJSub,
             KodPejabat = _entity.KodPejabat,
             MS01_Jantina = _entity.MS01_Jantina,
-            MS01_KpB = _entity.MS01_KpB,
             NJawatan = _entity.NJawatan,
             NPejabat = _entity.NPejabat,
             Nama = _entity.Nama,
             NoStaf = _entity.NoStaf,
             NoTelBimbit = _entity.NoTelBimbit,
             Roles = _entity.Roles,
-            Singkat = _entity.Singkat,
             Warganegara = _entity.Warganegara,
+            Email = _entity.Email,
         });
     }
 
