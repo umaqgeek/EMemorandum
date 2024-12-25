@@ -36,6 +36,9 @@ public class DbContext_EMO : DbContext
         modelBuilder.Entity<EMO_Roles_Secretariat>()
             .HasKey(e => new { e.NoStaf, e.PUU_JenisMemoKod });
 
+        modelBuilder.Entity<EMO_Staf>()
+            .HasKey(e => e.NoStaf);
+
         modelBuilder.Entity<EMO_Roles_Secretariat>()
             .HasOne(r => r.EMO_Staf)
             .WithMany(s => s.EMO_Roles_Secretariats)
