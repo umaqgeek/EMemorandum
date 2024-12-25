@@ -134,8 +134,7 @@ CREATE TABLE DbEMO.dbo.MOU01_Memorandum (
 	DokMinitPath varchar(300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	KodInd varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 	KodField varchar(2) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT PK_MOU01_Memorandum PRIMARY KEY (NoMemo),
-	CONSTRAINT FK_MOU01_Memorandum_EMO_Staf FOREIGN KEY (MS01_NoStaf) REFERENCES DbEMO.dbo.EMO_Staf(NoStaf)
+	CONSTRAINT PK_MOU01_Memorandum PRIMARY KEY (NoMemo)
 );
 
 -- DbEMO.dbo.MOU02_Status definition
