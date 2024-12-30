@@ -117,7 +117,7 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import { useStaffProfile, useGetAllMOU } from "@/hooks/useAPI";
+import { useStaffProfile, useGetAllMOU, useLogPageView } from "@/hooks/useAPI";
 import TableLite from "@/components/TableLite.vue";
 
 export default {
@@ -133,6 +133,7 @@ export default {
     },
     setup() {
         const publicPath = process.env.VUE_APP_PUBLIC_PATH;
+        useLogPageView("Memo List");
 
         const {
             data: dataStaffProfile,

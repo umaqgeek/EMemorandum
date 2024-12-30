@@ -98,6 +98,9 @@ builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddHostedService<EmailBackgroundService>();
 builder.Services.AddSingleton<IEmailQueueService, EmailQueueService>();
 
+// Register Audit Log service
+builder.Services.AddSingleton<AuditLogService>();
+
 // Configure Authorization with custom policy
 builder.Services.AddAuthorization(options =>
 {

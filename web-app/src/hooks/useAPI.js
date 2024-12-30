@@ -40,6 +40,34 @@ export function useApi(requestConfig) {
     };
 }
 
+export function useSetToken(newEmoToken) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/test/set-token`,
+        data: JSON.stringify({
+            NoStaf: newEmoToken,
+        }),
+    });
+}
+
+export function useLogPageView(page) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/test/log-page-view`,
+        data: JSON.stringify({
+            NoStaf: getBearerToken(),
+            Page: page,
+        }),
+    });
+}
+
+export function useUnsetToken() {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/auth/unset-token`,
+    });
+}
+
 export function useStaffProfile() {
     return useApi({
         method: "get",
@@ -415,5 +443,13 @@ export function useDeletePUUScopeMemo(id) {
     return useApi({
         method: "delete",
         url: `${API_URL}/PUUScopeMemo/${id}`,
+    });
+}
+
+export function useFetchAuditLogs(params = {}) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/AuditLog`,
+        params,
     });
 }

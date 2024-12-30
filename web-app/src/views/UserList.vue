@@ -54,7 +54,11 @@ import FooterComponent from "@/components/Footer.vue";
 import TableUserComponent from "@/components/TableUser.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import { useStaffProfile, useGetAllStaff } from "@/hooks/useAPI";
+import {
+    useStaffProfile,
+    useGetAllStaff,
+    useLogPageView,
+} from "@/hooks/useAPI";
 
 export default {
     name: "UserListView",
@@ -68,6 +72,7 @@ export default {
         InfoNotLoggedInComponent,
     },
     setup() {
+        useLogPageView("User List");
         const {
             data: dataAllStaff,
             loading: loadingAllStaff,

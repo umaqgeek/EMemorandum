@@ -260,7 +260,11 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import { useStaffProfile, useGetOneStaffSimple } from "@/hooks/useAPI";
+import {
+    useStaffProfile,
+    useGetOneStaffSimple,
+    useLogPageView,
+} from "@/hooks/useAPI";
 
 export default {
     name: "UserViewView",
@@ -278,6 +282,7 @@ export default {
         InfoNotLoggedInComponent,
     },
     setup() {
+        useLogPageView("User View");
         const {
             data: dataStaffProfile,
             error: errorStaffProfile,

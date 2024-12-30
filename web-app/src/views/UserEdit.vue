@@ -292,6 +292,7 @@ import {
     useGetOneStaff,
     useAssignStaffRoles,
     useGetMOUSelectData,
+    useLogPageView,
 } from "@/hooks/useAPI";
 
 export default {
@@ -311,6 +312,7 @@ export default {
         Multiselect,
     },
     setup() {
+        useLogPageView("User Edit");
         const {
             data: dataStaffProfile,
             error: errorStaffProfile,

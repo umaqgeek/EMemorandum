@@ -9,6 +9,7 @@ public class DbContext_EMO : DbContext
     {
     }
 
+    public DbSet<MOU_AuditLog> MOU_AuditLog { get; set; }
     public DbSet<EMO_Countries> EMO_Countries { get; set; }
     public DbSet<EMO_KPI> EMO_KPI { get; set; }
     public DbSet<EMO_Staf> EMO_Staf { get; set; }
@@ -92,6 +93,12 @@ public class DbContext_EMO : DbContext
             .WithMany(p => p.Memorandums)
             .HasForeignKey(c => c.KodKategori)
             .HasPrincipalKey(p => p.Kod);
+
+        modelBuilder.Entity<MOU_AuditLog>()
+            .HasOne(c => c.EMO_Staf)
+            .WithMany(p => p.MOU_AuditLogs)
+            .HasForeignKey(c => c.User_ID)
+            .HasPrincipalKey(p => p.NoStaf);
 
         modelBuilder.Entity<MOU01_Memorandum>()
             .HasOne(c => c.EMO_Staf)

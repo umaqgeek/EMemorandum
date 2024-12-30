@@ -859,6 +859,7 @@ import TableUserComponent from "@/components/TableUser.vue";
 import TableKPIComponent from "@/components/TableKPI.vue";
 import { getBearerToken } from "@/utils/tokenManagement";
 import {
+    useLogPageView,
     useStaffProfile,
     useGetMOUSelectData,
     useMouGenerateNoMemo,
@@ -913,6 +914,7 @@ export default {
     },
     setup() {
         const publicPath = ref(process.env.VUE_APP_PUBLIC_PATH);
+        useLogPageView("Memo Add");
 
         const {
             data: dataStaffProfile,

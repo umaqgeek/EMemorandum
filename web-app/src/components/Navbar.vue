@@ -132,6 +132,22 @@
                                 <span class="nk-menu-text">Reports</span>
                             </a>
                         </li>
+                        <li
+                            :class="[
+                                'nk-menu-item',
+                                { active: activeLabel === 'audit-logs' },
+                            ]"
+                            v-if="roles.find((r) => r.code === 'Admin')"
+                        >
+                            <a
+                                :href="`${publicPath}audit-logs`"
+                                class="nk-menu-link"
+                                ><span class="nk-menu-icon"
+                                    ><em class="icon ni ni-notes-alt"></em
+                                ></span>
+                                <span class="nk-menu-text">Audit Logs</span>
+                            </a>
+                        </li>
                         <!-- <li
                             :class="[
                                 'nk-menu-item',
