@@ -273,7 +273,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-8">
                                                             <div
                                                                 class="form-group"
                                                             >
@@ -302,6 +302,33 @@
                                                                         label="industryCategory"
                                                                         track-by="industryCategory"
                                                                     ></multiselect>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div
+                                                                class="form-group"
+                                                            >
+                                                                <label
+                                                                    for="Nilai"
+                                                                    class="form-label"
+                                                                    >Price Value
+                                                                    (RM)</label
+                                                                >
+                                                                <div
+                                                                    class="form-control-wrap"
+                                                                >
+                                                                    <input
+                                                                        type="integer"
+                                                                        class="form-control"
+                                                                        id="Nilai"
+                                                                        placeholder="Eg.: 1500.50"
+                                                                        v-model="
+                                                                            form
+                                                                                .form1
+                                                                                .Nilai
+                                                                        "
+                                                                    />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1104,9 +1131,6 @@ export default {
             } (${getBearerToken()} | ${this.dataStaffProfile?.email})`;
             this.form.form1.MS01_NoStaf = getBearerToken();
         },
-        // saveKPIs(kpis) {
-        //     this.form.form3.kpis = kpis;
-        // },
         onMenu(mNo) {
             this.menuNo = mNo;
         },
@@ -1117,12 +1141,12 @@ export default {
             this.menuNo = this.menuNo - 1 <= 0 ? 3 : this.menuNo - 1;
         },
         onSave() {
-            var nilai = 0;
-            this.form.form3.kpis.map((kpi) => {
-                nilai =
-                    kpi.isAmount == false ? parseInt(kpi.Amaun) + nilai : nilai;
-                return kpi;
-            });
+            // var nilai = 0;
+            // this.form.form3.kpis.map((kpi) => {
+            //     nilai =
+            //         kpi.isAmount == false ? parseInt(kpi.Amaun) + nilai : nilai;
+            //     return kpi;
+            // });
             const finalForm = {
                 ...this.form,
                 form1: {
@@ -1138,7 +1162,7 @@ export default {
                     NamaDok: this.fileName,
                     Path: this.filePath,
                     MS01_NoStaf: this.form.form1.MS01_NoStaf,
-                    Nilai: nilai,
+                    Nilai: this.form.form1.Nilai, // nilai,
                     Negara: this.Negara.code,
                     KodInd: this.form.form1.KodInd.kodInd,
                 },
