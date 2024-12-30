@@ -94,6 +94,12 @@ public class DbContext_EMO : DbContext
             .HasForeignKey(c => c.KodKategori)
             .HasPrincipalKey(p => p.Kod);
 
+        modelBuilder.Entity<MOU_AuditLog>()
+            .HasOne(c => c.EMO_Staf)
+            .WithMany(p => p.MOU_AuditLogs)
+            .HasForeignKey(c => c.User_ID)
+            .HasPrincipalKey(p => p.NoStaf);
+
         modelBuilder.Entity<MOU01_Memorandum>()
             .HasOne(c => c.EMO_Staf)
             .WithMany(p => p.Memorandums)

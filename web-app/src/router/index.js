@@ -25,6 +25,7 @@ import ManageIndustryCategoriesView from "@/views/ManageIndustryCategoriesView.v
 import ManageJenisMemosView from "@/views/ManageJenisMemosView.vue";
 import ManageKategoriMemosView from "@/views/ManageKategoriMemosView.vue";
 import ManageScopeMemosView from "@/views/ManageScopeMemosView.vue";
+import AuditLogsView from "@/views/AuditLogsView.vue";
 
 const routes = [
     {
@@ -94,6 +95,10 @@ const routes = [
     {
         path: "/report-print",
         component: ReportPrint,
+    },
+    {
+        path: "/audit-logs",
+        component: AuditLogsView,
     },
     {
         path: "/:pathMatch(.*)*",

@@ -445,3 +445,11 @@ export function useDeletePUUScopeMemo(id) {
         url: `${API_URL}/PUUScopeMemo/${id}`,
     });
 }
+
+export function useFetchAuditLogs(params = {}) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/AuditLog`,
+        params,
+    });
+}
