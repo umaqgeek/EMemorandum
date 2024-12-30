@@ -349,3 +349,34 @@ export function useDeletePUUJenisMemo(id) {
         url: `${API_URL}/PUUJenisMemo/${id}`,
     });
 }
+
+export function useFetchPUUKategoriMemos(params = {}) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/PUUKategoriMemo`,
+        params,
+    });
+}
+
+export function useCreatePUUKategoriMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/PUUKategoriMemo`,
+        data: payload,
+    });
+}
+
+export function useUpdatePUUKategoriMemo(id, payload) {
+    return useApi({
+        method: "put",
+        url: `${API_URL}/PUUKategoriMemo/${id}`,
+        data: payload,
+    });
+}
+
+export function useDeletePUUKategoriMemo(id) {
+    return useApi({
+        method: "delete",
+        url: `${API_URL}/PUUKategoriMemo/${id}`,
+    });
+}
