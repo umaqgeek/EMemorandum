@@ -380,3 +380,34 @@ export function useDeletePUUKategoriMemo(id) {
         url: `${API_URL}/PUUKategoriMemo/${id}`,
     });
 }
+
+export function useFetchPUUScopeMemos(params = {}) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/PUUScopeMemo`,
+        params,
+    });
+}
+
+export function useCreatePUUScopeMemo(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/PUUScopeMemo`,
+        data: payload,
+    });
+}
+
+export function useUpdatePUUScopeMemo(id, payload) {
+    return useApi({
+        method: "put",
+        url: `${API_URL}/PUUScopeMemo/${id}`,
+        data: payload,
+    });
+}
+
+export function useDeletePUUScopeMemo(id) {
+    return useApi({
+        method: "delete",
+        url: `${API_URL}/PUUScopeMemo/${id}`,
+    });
+}

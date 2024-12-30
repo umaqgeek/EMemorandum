@@ -24,6 +24,7 @@ import ManageFieldsView from "@/views/ManageFieldsView.vue";
 import ManageIndustryCategoriesView from "@/views/ManageIndustryCategoriesView.vue";
 import ManageJenisMemosView from "@/views/ManageJenisMemosView.vue";
 import ManageKategoriMemosView from "@/views/ManageKategoriMemosView.vue";
+import ManageScopeMemosView from "@/views/ManageScopeMemosView.vue";
 
 const routes = [
     {
@@ -81,6 +82,10 @@ const routes = [
     {
         path: "/manage-categories",
         component: ManageKategoriMemosView,
+    },
+    {
+        path: "/manage-scopes",
+        component: ManageScopeMemosView,
     },
     {
         path: "/report",

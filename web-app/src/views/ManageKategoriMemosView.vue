@@ -279,7 +279,7 @@ export default {
         } = useStaffProfile();
         const {
             data: types = ref([]),
-            loading: loadingIndustryCategories,
+            loading: loadingCategories,
             refetch,
         } = useFetchPUUKategoriMemos();
 
@@ -299,9 +299,9 @@ export default {
 
         watch(
             [types, filterText],
-            ([newIndustryCategories, newFilterText]) => {
+            ([newCategories, newFilterText]) => {
                 const filtered =
-                    newIndustryCategories?.filter((item) =>
+                    newCategories?.filter((item) =>
                         item?.butiran
                             ?.toLowerCase()
                             .includes(newFilterText.toLowerCase())
@@ -408,7 +408,7 @@ export default {
             publicPath,
             dataStaffProfile,
             errorStaffProfile,
-            loading: loadingStaffProfile || loadingIndustryCategories,
+            loading: loadingStaffProfile || loadingCategories,
             filterText,
             types,
             filteredList,
