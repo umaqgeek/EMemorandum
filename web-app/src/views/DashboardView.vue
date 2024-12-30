@@ -251,6 +251,7 @@ import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import {
+    useLogPageView,
     useStaffProfile,
     useReportByCategory,
     useReportByDue1Year,
@@ -282,6 +283,7 @@ export default {
         VueAGBar,
     },
     setup() {
+        useLogPageView("Dashboard");
         const {
             data: dataStaffProfile,
             error: errorStaffProfile,

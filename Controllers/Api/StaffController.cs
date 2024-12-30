@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -22,12 +23,14 @@ public class StaffController : ControllerBase
     private readonly IConfiguration _configuration;
     private readonly DbContext_EMO _context;
     private readonly IEmailService _emailService;
+    private readonly AuditLogService _auditLogService;
 
-    public StaffController(IConfiguration configuration, DbContext_EMO context, IEmailService emailService)
+    public StaffController(IConfiguration configuration, DbContext_EMO context, IEmailService emailService, AuditLogService auditLogService)
     {
         _configuration = configuration;
         _context = context;
         _emailService = emailService;
+        _auditLogService = auditLogService;
     }
 
     [HttpGet]
@@ -117,7 +120,7 @@ public class StaffController : ControllerBase
 
     [HttpGet("{noStaf}")]
     [Authorize(Policy = "AdminPolicy")]
-    public ActionResult<EMO_Staf> GetStaffProfile(string noStaf)
+    public async Task<ActionResult<EMO_Staf>> GetStaffProfile(string noStaf)
     {
         var _entity = _context.EMO_Staf
             .Where(s => s.NoStaf == noStaf)
@@ -131,7 +134,7 @@ public class StaffController : ControllerBase
             return NotFound();
         }
 
-        return Ok(new
+        var response = new
         {
             Roles_Secretariats = _entity.EMO_Roles_Secretariats.Select(rs => new {
                 Kod = rs.PUU_JenisMemo.Kod,
@@ -149,12 +152,30 @@ public class StaffController : ControllerBase
             Roles = _entity.Roles,
             Warganegara = _entity.Warganegara,
             Email = _entity.Email,
+        };
+
+        var staffID = GetStaffID();
+        var msg = new { message = $"View profile {noStaf}", staffId = staffID };
+        // Log the action
+        await _auditLogService.AddAuditLogAsync(new MOU_AuditLog
+        {
+            ID = DateTime.UtcNow,
+            User_ID = staffID,
+            Tarikh_Transaksi = DateTime.UtcNow,
+            Proses = msg.message,
+            Value = Newtonsoft.Json.JsonConvert.SerializeObject(msg),
+            Nama_Table = "VEMO_Staf",
+            Sub_Menu = "GET",
+            Medan = "*",
+            Info_Lama = null
         });
+
+        return Ok(response);
     }
 
     [HttpPost("assign-role/{noStaf}")]
     [Authorize(Policy = "AdminPolicy")]
-    public ActionResult AssignStaffRoles(string noStaf, [FromBody] AssignRolesRequest request)
+    public async Task<ActionResult> AssignStaffRoles(string noStaf, [FromBody] AssignRolesRequest request)
     {
         // Retrieve the staff entity including its roles
         var _entity = _context.EMO_Staf
@@ -195,6 +216,22 @@ public class StaffController : ControllerBase
                 }
             }
         }
+
+        var staffID = GetStaffID();
+        var msg = new { message = $"Assign roles to profile {noStaf}", staffId = staffID };
+        // Log the action
+        await _auditLogService.AddAuditLogAsync(new MOU_AuditLog
+        {
+            ID = DateTime.UtcNow,
+            User_ID = staffID,
+            Tarikh_Transaksi = DateTime.UtcNow,
+            Proses = msg.message,
+            Value = Newtonsoft.Json.JsonConvert.SerializeObject(msg),
+            Nama_Table = "EMO_Roles",
+            Sub_Menu = "POST",
+            Medan = "*",
+            Info_Lama = null
+        });
 
         // Save changes to the database
         _context.SaveChanges();

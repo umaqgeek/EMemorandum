@@ -50,6 +50,17 @@ export function useSetToken(newEmoToken) {
     });
 }
 
+export function useLogPageView(page) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/test/log-page-view`,
+        data: JSON.stringify({
+            NoStaf: getBearerToken(),
+            Page: page,
+        }),
+    });
+}
+
 export function useUnsetToken() {
     return useApi({
         method: "post",

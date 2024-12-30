@@ -34,7 +34,7 @@ public class TestController : ControllerBase
     }
 
     [HttpPost("set-token")]
-    public async Task<ActionResult> SetToken([FromBody] LoginModel entity)
+    public async Task<ActionResult> SetToken([FromBody] AuditLogModel entity)
     {
         var user = _context.EMO_Staf.FirstOrDefault(s => s.NoStaf == entity.NoStaf);
         if (user == null) {
@@ -52,6 +52,31 @@ public class TestController : ControllerBase
             Nama_Table = "VEMO_Staf",
             Sub_Menu = "POST",
             Medan = "NoStaf",
+            Info_Lama = null
+        });
+
+        return Ok(_entity);
+    }
+
+    [HttpPost("log-page-view")]
+    public async Task<ActionResult> LogPageView([FromBody] AuditLogModel entity)
+    {
+        var user = _context.EMO_Staf.FirstOrDefault(s => s.NoStaf == entity.NoStaf);
+        if (user == null) {
+            return NotFound();
+        }
+        var _entity = new { message = $"View {entity.Page}", staffId = entity.NoStaf };
+        // Log the action
+        await _auditLogService.AddAuditLogAsync(new MOU_AuditLog
+        {
+            ID = DateTime.UtcNow,
+            User_ID = entity.NoStaf,
+            Tarikh_Transaksi = DateTime.UtcNow,
+            Proses = _entity.message,
+            Value = Newtonsoft.Json.JsonConvert.SerializeObject(_entity),
+            Nama_Table = "",
+            Sub_Menu = "POST",
+            Medan = "",
             Info_Lama = null
         });
 
@@ -116,7 +141,8 @@ public class TestController : ControllerBase
     // }
 }
 
-public class LoginModel
+public class AuditLogModel
 {
     public string NoStaf { get; set; }
+    public string? Page { get; set; }
 }
