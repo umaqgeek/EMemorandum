@@ -35,6 +35,9 @@
                                                     HANG TUAH JAYA, 76100 DURIAN
                                                     TUNGGAL, MELAKA, MALAYSIA
                                                 </div>
+                                                <div class="mt-4">
+                                                    <h2>MEMORANDUM REPORTS</h2>
+                                                </div>
                                             </div>
                                         </div>
                                         <table class="table table-bordered">
@@ -154,9 +157,17 @@ export default {
             loading: loadingStaffProfile,
         } = useStaffProfile();
 
+        const params = new URLSearchParams(window.location.search);
+
         const reportDetails = ref([]);
         const { data: dataReportDetails, loading: loadingReportDetails } =
-            useReportDetails();
+            useReportDetails(
+                params.get("country") || "",
+                params.get("industry") || "",
+                params.get("ptj") || "",
+                params.get("category") || "",
+                params.get("type") || ""
+            );
         watch(
             () => dataReportDetails.value,
             (newDataReportDetails) => {
