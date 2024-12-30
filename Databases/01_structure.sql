@@ -331,10 +331,9 @@ CREATE TABLE DbEMO.dbo.PUU_JenisMemo (
 -- DROP TABLE DbEMO.dbo.PUU_KategoriMemo;
 
 CREATE TABLE DbEMO.dbo.PUU_KategoriMemo (
-	ID bigint IDENTITY(1,1) NOT NULL,
-	Kod int NULL,
+	Kod int NOT NULL,
 	Butiran varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-	CONSTRAINT PUU_KategoriMemo_PK PRIMARY KEY (ID)
+	CONSTRAINT PUU_KategoriMemo_PK PRIMARY KEY (Kod)
 );
 
 -- DbEMO.dbo.PUU_ScopeMemo definition
@@ -344,10 +343,9 @@ CREATE TABLE DbEMO.dbo.PUU_KategoriMemo (
 -- DROP TABLE DbEMO.dbo.PUU_ScopeMemo;
 
 CREATE TABLE DbEMO.dbo.PUU_ScopeMemo (
-	ID int NOT NULL,
 	Kod int NOT NULL,
 	Butiran varchar(100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-	CONSTRAINT PUU_ScopeMemo_PK PRIMARY KEY (ID)
+	CONSTRAINT PUU_ScopeMemo_PK PRIMARY KEY (Kod)
 );
 
 -- DbEMO.dbo.PUU_SubPTj definition

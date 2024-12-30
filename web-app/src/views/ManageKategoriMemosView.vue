@@ -27,19 +27,19 @@
                                     class="breadcrumb-item active"
                                     aria-current="page"
                                 >
-                                    Manage Types
+                                    Manage Categories
                                 </li>
                             </ol>
                         </nav>
 
-                        <h1 class="mb-3">Manage Types</h1>
+                        <h1 class="mb-3">Manage Categories</h1>
 
                         <!-- Filter Input -->
                         <div class="mb-3">
                             <input
                                 v-model="filterText"
                                 class="form-control"
-                                placeholder="Filter by Type"
+                                placeholder="Filter by Category"
                             />
                         </div>
 
@@ -48,7 +48,7 @@
                             class="btn btn-primary mb-3"
                             @click="openCreateModal"
                         >
-                            Add New Type
+                            Add New Category
                         </button>
 
                         <!-- Table -->
@@ -56,7 +56,9 @@
                             <thead>
                                 <tr class="alert alert-secondary">
                                     <th @click="sortList('kod')">Kod</th>
-                                    <th @click="sortList('butiran')">Type</th>
+                                    <th @click="sortList('butiran')">
+                                        Category
+                                    </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -134,8 +136,8 @@
                                         <h5 class="modal-title">
                                             {{
                                                 isEdit
-                                                    ? "Update Type"
-                                                    : "Create Type"
+                                                    ? "Update Category"
+                                                    : "Create Category"
                                             }}
                                         </h5>
                                         <button
@@ -161,7 +163,7 @@
                                             <label
                                                 for="butiran"
                                                 class="form-label"
-                                                >Type</label
+                                                >Category</label
                                             >
                                             <input
                                                 id="butiran"
@@ -212,7 +214,7 @@
                                     <div class="modal-body">
                                         <p>
                                             Are you sure you want to delete the
-                                            Type with Kod:
+                                            Category with Kod:
                                             {{ IdToDelete?.kod }}?
                                         </p>
                                     </div>
@@ -252,14 +254,14 @@ import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import {
     useStaffProfile,
-    useFetchPUUJenisMemos,
-    useCreatePUUJenisMemo,
-    useUpdatePUUJenisMemo,
-    useDeletePUUJenisMemo,
+    useFetchPUUKategoriMemos,
+    useCreatePUUKategoriMemo,
+    useUpdatePUUKategoriMemo,
+    useDeletePUUKategoriMemo,
 } from "@/hooks/useAPI";
 
 export default {
-    name: "ManageJenisMemosView",
+    name: "ManageKategoriMemosView",
     components: {
         LoadingComponent,
         NavbarComponent,
@@ -277,9 +279,9 @@ export default {
         } = useStaffProfile();
         const {
             data: types = ref([]),
-            loading: loadingJenisMemos,
+            loading: loadingCategories,
             refetch,
-        } = useFetchPUUJenisMemos();
+        } = useFetchPUUKategoriMemos();
 
         const filterText = ref("");
         const currentPage = ref(1);
@@ -297,9 +299,9 @@ export default {
 
         watch(
             [types, filterText],
-            ([newJenisMemos, newFilterText]) => {
+            ([newCategories, newFilterText]) => {
                 const filtered =
-                    newJenisMemos?.filter((item) =>
+                    newCategories?.filter((item) =>
                         item?.butiran
                             ?.toLowerCase()
                             .includes(newFilterText.toLowerCase())
@@ -340,15 +342,15 @@ export default {
             setTimeout(() => refetch(), ms);
         };
 
-        const createJenisMemo = async () => {
+        const createKategoriMemo = async () => {
             console.log(form.value);
-            await useCreatePUUJenisMemo(form.value);
+            await useCreatePUUKategoriMemo(form.value);
             delayRefetch();
             closeModal();
         };
 
-        const updateJenisMemo = async () => {
-            await useUpdatePUUJenisMemo(form.value.kod, form.value);
+        const updateKategoriMemo = async () => {
+            await useUpdatePUUKategoriMemo(form.value.kod, form.value);
             delayRefetch();
             closeModal();
         };
@@ -380,15 +382,15 @@ export default {
 
         const confirmDelete = async () => {
             if (IdToDelete.value) {
-                await useDeletePUUJenisMemo(IdToDelete.value.kod);
+                await useDeletePUUKategoriMemo(IdToDelete.value.kod);
                 delayRefetch();
                 closeDeleteModal();
             }
         };
 
         const submitForm = () => {
-            if (isEdit.value) updateJenisMemo();
-            else createJenisMemo();
+            if (isEdit.value) updateKategoriMemo();
+            else createKategoriMemo();
         };
 
         const sortColumn = ref(null);
@@ -406,7 +408,7 @@ export default {
             publicPath,
             dataStaffProfile,
             errorStaffProfile,
-            loading: loadingStaffProfile || loadingJenisMemos,
+            loading: loadingStaffProfile || loadingCategories,
             filterText,
             types,
             filteredList,

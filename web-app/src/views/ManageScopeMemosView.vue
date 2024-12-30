@@ -27,19 +27,19 @@
                                     class="breadcrumb-item active"
                                     aria-current="page"
                                 >
-                                    Manage Types
+                                    Manage Scopes
                                 </li>
                             </ol>
                         </nav>
 
-                        <h1 class="mb-3">Manage Types</h1>
+                        <h1 class="mb-3">Manage Scopes</h1>
 
                         <!-- Filter Input -->
                         <div class="mb-3">
                             <input
                                 v-model="filterText"
                                 class="form-control"
-                                placeholder="Filter by Type"
+                                placeholder="Filter by Scope"
                             />
                         </div>
 
@@ -48,7 +48,7 @@
                             class="btn btn-primary mb-3"
                             @click="openCreateModal"
                         >
-                            Add New Type
+                            Add New Scope
                         </button>
 
                         <!-- Table -->
@@ -56,7 +56,7 @@
                             <thead>
                                 <tr class="alert alert-secondary">
                                     <th @click="sortList('kod')">Kod</th>
-                                    <th @click="sortList('butiran')">Type</th>
+                                    <th @click="sortList('butiran')">Scope</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -134,8 +134,8 @@
                                         <h5 class="modal-title">
                                             {{
                                                 isEdit
-                                                    ? "Update Type"
-                                                    : "Create Type"
+                                                    ? "Update Scope"
+                                                    : "Create Scope"
                                             }}
                                         </h5>
                                         <button
@@ -161,7 +161,7 @@
                                             <label
                                                 for="butiran"
                                                 class="form-label"
-                                                >Type</label
+                                                >Scope</label
                                             >
                                             <input
                                                 id="butiran"
@@ -212,7 +212,7 @@
                                     <div class="modal-body">
                                         <p>
                                             Are you sure you want to delete the
-                                            Type with Kod:
+                                            Scope with Kod:
                                             {{ IdToDelete?.kod }}?
                                         </p>
                                     </div>
@@ -252,14 +252,14 @@ import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import {
     useStaffProfile,
-    useFetchPUUJenisMemos,
-    useCreatePUUJenisMemo,
-    useUpdatePUUJenisMemo,
-    useDeletePUUJenisMemo,
+    useFetchPUUScopeMemos,
+    useCreatePUUScopeMemo,
+    useUpdatePUUScopeMemo,
+    useDeletePUUScopeMemo,
 } from "@/hooks/useAPI";
 
 export default {
-    name: "ManageJenisMemosView",
+    name: "ManageScopeMemosView",
     components: {
         LoadingComponent,
         NavbarComponent,
@@ -277,9 +277,9 @@ export default {
         } = useStaffProfile();
         const {
             data: types = ref([]),
-            loading: loadingJenisMemos,
+            loading: loadingScopes,
             refetch,
-        } = useFetchPUUJenisMemos();
+        } = useFetchPUUScopeMemos();
 
         const filterText = ref("");
         const currentPage = ref(1);
@@ -297,9 +297,9 @@ export default {
 
         watch(
             [types, filterText],
-            ([newJenisMemos, newFilterText]) => {
+            ([newScopes, newFilterText]) => {
                 const filtered =
-                    newJenisMemos?.filter((item) =>
+                    newScopes?.filter((item) =>
                         item?.butiran
                             ?.toLowerCase()
                             .includes(newFilterText.toLowerCase())
@@ -340,15 +340,14 @@ export default {
             setTimeout(() => refetch(), ms);
         };
 
-        const createJenisMemo = async () => {
-            console.log(form.value);
-            await useCreatePUUJenisMemo(form.value);
+        const createScopeMemo = async () => {
+            await useCreatePUUScopeMemo(form.value);
             delayRefetch();
             closeModal();
         };
 
-        const updateJenisMemo = async () => {
-            await useUpdatePUUJenisMemo(form.value.kod, form.value);
+        const updateScopeMemo = async () => {
+            await useUpdatePUUScopeMemo(form.value.kod, form.value);
             delayRefetch();
             closeModal();
         };
@@ -380,15 +379,15 @@ export default {
 
         const confirmDelete = async () => {
             if (IdToDelete.value) {
-                await useDeletePUUJenisMemo(IdToDelete.value.kod);
+                await useDeletePUUScopeMemo(IdToDelete.value.kod);
                 delayRefetch();
                 closeDeleteModal();
             }
         };
 
         const submitForm = () => {
-            if (isEdit.value) updateJenisMemo();
-            else createJenisMemo();
+            if (isEdit.value) updateScopeMemo();
+            else createScopeMemo();
         };
 
         const sortColumn = ref(null);
@@ -406,7 +405,7 @@ export default {
             publicPath,
             dataStaffProfile,
             errorStaffProfile,
-            loading: loadingStaffProfile || loadingJenisMemos,
+            loading: loadingStaffProfile || loadingScopes,
             filterText,
             types,
             filteredList,

@@ -5,7 +5,6 @@ namespace EMemorandum.Models;
 public class PUU_KategoriMemo
 {
     [Key]
-    public long? ID { get; set; }
     public int? Kod { get; set; }
     public string? Butiran { get; set; }
 
