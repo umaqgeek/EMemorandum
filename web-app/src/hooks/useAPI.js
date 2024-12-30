@@ -250,10 +250,16 @@ export function useReportDashboardCounts() {
     });
 }
 
-export function useReportDetails() {
+export function useReportDetails(
+    country = "",
+    industry = "",
+    ptj = "",
+    category = "",
+    type = ""
+) {
     return useApi({
         method: "get",
-        url: `${API_URL}/report/details`,
+        url: `${API_URL}/report/details?country=${country}&industry=${industry}&ptj=${ptj}&category=${category}&type=${type}`,
     });
 }
 

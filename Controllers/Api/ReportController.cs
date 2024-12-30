@@ -25,17 +25,43 @@ public class ReportController : ControllerBase
     }
 
     [HttpGet("details")]
-    public ActionResult<IEnumerable<DetailsItemDto>> GetDetailsData()
+    public ActionResult<IEnumerable<DetailsItemDto>> GetDetailsData(
+        [FromQuery] string? country = null,
+        [FromQuery] string? industry = null,
+        [FromQuery] string? ptj = null,
+        [FromQuery] int? category = null,
+        [FromQuery] int? type = null
+    )
     {
         // Fetch raw data from the database
-        var rawData = _context.MOU01_Memorandum
+        var query = _context.MOU01_Memorandum
             .Include(m => m.MOU_IndustryCat)
             .Include(m => m.EMO_PejabatPTJ)
             .Include(m => m.EMO_Staf)
             .Include(m => m.PUU_KategoriMemo)
             .Include(m => m.PUU_JenisMemo)
             .Include(m => m.EMO_Countries)
-            .ToList(); // Materialize data into memory to avoid LINQ translation issues
+            .Include(m => m.MOU05_KPI_Progress)
+            .AsQueryable(); // Use IQueryable to allow further filtering
+
+        if (!string.IsNullOrEmpty(country)) {
+            query = query.Where(m => m.EMO_Countries != null && m.EMO_Countries.code == country);
+        }
+        if (!string.IsNullOrEmpty(industry)) {
+            query = query.Where(m => m.MOU_IndustryCat != null && m.MOU_IndustryCat.KodInd == industry);
+        }
+        if (!string.IsNullOrEmpty(ptj)) {
+            query = query.Where(m => m.EMO_PejabatPTJ != null && m.EMO_PejabatPTJ.KodPBU == ptj);
+        }
+        if (category.HasValue) {
+            query = query.Where(m => m.PUU_KategoriMemo != null && m.PUU_KategoriMemo.Kod == category);
+        }
+        if (type.HasValue) {
+            query = query.Where(m => m.PUU_JenisMemo != null && m.PUU_JenisMemo.Kod == type);
+        }
+
+        // Materialize data into memory
+        var rawData = query.ToList();
 
         // Transform data in memory
         var detailsData = rawData.Select((m, index) => new DetailsItemDto
@@ -61,7 +87,7 @@ public class ReportController : ControllerBase
             Duration = m.TarikhMula.HasValue && m.TarikhTamat.HasValue
                 ? GetDuration(m.TarikhMula.Value, m.TarikhTamat.Value)
                 : "N/A",
-            Status = "ACTIVE"
+            Status = m.MOU05_KPI_Progress != null && m.MOU05_KPI_Progress.Count() > 0 ? "ACTIVE" : "NO PROGRESS"
         });
 
         return Ok(detailsData);
