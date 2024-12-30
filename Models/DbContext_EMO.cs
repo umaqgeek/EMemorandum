@@ -9,6 +9,7 @@ public class DbContext_EMO : DbContext
     {
     }
 
+    public DbSet<MOU_AuditLog> MOU_AuditLog { get; set; }
     public DbSet<EMO_Countries> EMO_Countries { get; set; }
     public DbSet<EMO_KPI> EMO_KPI { get; set; }
     public DbSet<EMO_Staf> EMO_Staf { get; set; }

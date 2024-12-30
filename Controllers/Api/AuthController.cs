@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EMemorandum.Models;
+using EMemorandum.Services;
 
 namespace EMemorandum.Controllers.Api;
 
@@ -19,16 +20,40 @@ namespace EMemorandum.Controllers.Api;
 public class AuthController : ControllerBase
 {
     private readonly DbContext_EMO _context;
+    private readonly AuditLogService _auditLogService;
 
-    public AuthController(IConfiguration configuration, DbContext_EMO context)
+    public AuthController(IConfiguration configuration, DbContext_EMO context, AuditLogService auditLogService)
     {
         _context = context;
+        _auditLogService = auditLogService;
     }
 
     [HttpPost("validate-me")]
     public ActionResult ValidateMe()
     {
         return Ok(new { message = "Authorized" });
+    }
+
+    [HttpPost("unset-token")]
+    public async Task<ActionResult> UnsetToken()
+    {
+        var staffID = GetStaffID();
+        var _entity = new { message = "Logout successful", staffId = staffID };
+        // Log the action
+        await _auditLogService.AddAuditLogAsync(new MOU_AuditLog
+        {
+            ID = DateTime.UtcNow,
+            User_ID = staffID,
+            Tarikh_Transaksi = DateTime.UtcNow,
+            Proses = "Logout",
+            Value = Newtonsoft.Json.JsonConvert.SerializeObject(_entity),
+            Nama_Table = "VEMO_Staf",
+            Sub_Menu = "POST",
+            Medan = "NoStaf",
+            Info_Lama = null
+        });
+
+        return Ok(_entity);
     }
 
     [HttpGet("staff-profile")]

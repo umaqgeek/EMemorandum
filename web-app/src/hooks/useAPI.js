@@ -40,6 +40,23 @@ export function useApi(requestConfig) {
     };
 }
 
+export function useSetToken(newEmoToken) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/test/set-token`,
+        data: JSON.stringify({
+            NoStaf: newEmoToken,
+        }),
+    });
+}
+
+export function useUnsetToken() {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/auth/unset-token`,
+    });
+}
+
 export function useStaffProfile() {
     return useApi({
         method: "get",

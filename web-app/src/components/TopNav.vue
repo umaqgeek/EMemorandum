@@ -139,7 +139,9 @@ export default {
 
             if (newSsusrid) {
                 setBearerToken(newSsusrid);
-                location.href = `${process.env.VUE_APP_PUBLIC_PATH}${callbackRoute}`;
+                setTimeout(() => {
+                    location.href = `${process.env.VUE_APP_PUBLIC_PATH}${callbackRoute}`;
+                }, 500);
             }
         });
     },
