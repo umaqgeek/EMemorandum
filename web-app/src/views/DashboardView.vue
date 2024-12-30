@@ -18,126 +18,6 @@
                     <div class="container-fluid">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
-                                <div class="row g-gs">
-                                    <!-- <div
-                                        class="alert alert-danger"
-                                        v-if="roles.length <= 0"
-                                    >
-                                        You are not activated yet!
-                                        <br />Please contact your administrator
-                                        to activate your account.
-                                    </div>
-                                    <div
-                                        class="col-md-3"
-                                        v-if="
-                                            roles.find(
-                                                (r) => r.code === 'Admin'
-                                            )
-                                        "
-                                    >
-                                        <a :href="`${publicPath}user-list`">
-                                            <div class="card">
-                                                <div
-                                                    class="card-body dashboard-card"
-                                                >
-                                                    <h4 class="mb-3">
-                                                        Manage User
-                                                    </h4>
-                                                    <font-awesome-icon
-                                                        icon="fa-solid fa-users"
-                                                        size="2x"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div
-                                        class="col-md-3"
-                                        v-if="
-                                            roles.find(
-                                                (r) => r.code === 'Staff'
-                                            ) ||
-                                            roles.find((r) => r.code === 'PTJ')
-                                        "
-                                    >
-                                        <a :href="`${publicPath}memo-list`">
-                                            <div class="card">
-                                                <div
-                                                    class="card-body dashboard-card"
-                                                >
-                                                    <h4 class="mb-3">
-                                                        Memorandums
-                                                    </h4>
-                                                    <font-awesome-icon
-                                                        icon="fa-solid fa-file"
-                                                        size="2x"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a :href="`${publicPath}report`">
-                                            <div class="card">
-                                                <div
-                                                    class="card-body dashboard-card"
-                                                >
-                                                    <h4 class="mb-3">Report</h4>
-                                                    <font-awesome-icon
-                                                        icon="fa-solid fa-pie-chart"
-                                                        size="2x"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div> -->
-                                    <!-- <div
-                                        class="col-md-3"
-                                        v-if="
-                                            roles.find(
-                                                (r) => r.code === 'Admin'
-                                            )
-                                        "
-                                    >
-                                        <a :href="`${publicPath}code-list`">
-                                            <div class="card">
-                                                <div
-                                                    class="card-body dashboard-card"
-                                                >
-                                                    <h4 class="mb-3">
-                                                        Manage Code
-                                                    </h4>
-                                                    <font-awesome-icon
-                                                        icon="fa-solid fa-gear"
-                                                        size="2x"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div> -->
-                                    <!-- <div
-                                        class="col-md-3"
-                                        v-if="
-                                            roles.find((r) => r.code === 'PTJ')
-                                        "
-                                    >
-                                        <a :href="`${publicPath}approval-list`">
-                                            <div class="card">
-                                                <div
-                                                    class="card-body dashboard-card"
-                                                >
-                                                    <h4 class="mb-3">
-                                                        Approval
-                                                    </h4>
-                                                    <font-awesome-icon
-                                                        icon="fa-solid fa-check-to-slot"
-                                                        size="2x"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div> -->
-                                </div>
                                 <div class="row g-gt mb-3">
                                     <div class="col-md-3">
                                         <div class="card h-100">
@@ -151,8 +31,7 @@
                                                         <h5
                                                             class="title mb-3 mb-xl-5"
                                                         >
-                                                            Total All
-                                                            Memorandums
+                                                            Total of Memorandum
                                                         </h5>
                                                         <div class="amount h1">
                                                             {{
@@ -176,11 +55,13 @@
                                                         <h5
                                                             class="title mb-3 mb-xl-5"
                                                         >
-                                                            Newly Created
+                                                            Memorandum will
+                                                            expired within 6
+                                                            months
                                                         </h5>
                                                         <div class="amount h1">
                                                             {{
-                                                                dashboardCounts.mouNew
+                                                                dashboardCounts.dueWithin6Months
                                                             }}
                                                         </div>
                                                     </div>
@@ -200,11 +81,11 @@
                                                         <h5
                                                             class="title mb-3 mb-xl-5"
                                                         >
-                                                            Pending Approvals
+                                                            Active Memorandum
                                                         </h5>
                                                         <div class="amount h1">
                                                             {{
-                                                                dashboardCounts.mouPending
+                                                                dashboardCounts.mouActive
                                                             }}
                                                         </div>
                                                     </div>
@@ -224,11 +105,12 @@
                                                         <h5
                                                             class="title mb-3 mb-xl-5"
                                                         >
-                                                            Total Active Staff
+                                                            Non-Active
+                                                            Memorandum
                                                         </h5>
                                                         <div class="amount h1">
                                                             {{
-                                                                dashboardCounts.staff
+                                                                dashboardCounts.mouNotActive
                                                             }}
                                                         </div>
                                                     </div>
@@ -239,7 +121,7 @@
                                 </div>
                                 <div class="row g-gt mb-3">
                                     <div class="col-md-8">
-                                        <div class="card">
+                                        <div class="card dashboard-container">
                                             <div
                                                 class="card-body"
                                                 v-if="
@@ -257,7 +139,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="card">
+                                        <div class="card dashboard-container">
                                             <div class="card-body">
                                                 <h4>Memorandums by Country</h4>
                                                 <ChartPieComponent
@@ -278,32 +160,36 @@
                                 </div>
                                 <div class="row g-gt mb-3">
                                     <div class="col-md-6">
-                                        <div class="card">
+                                        <div class="card dashboard-container">
                                             <div class="card-body">
                                                 <h4>Memorandums by Category</h4>
-                                                <VueAGBar
+                                                <ChartPieComponent
                                                     v-if="
-                                                        reportCategory.data
+                                                        reportCategory.series
                                                             ?.length > 0
                                                     "
-                                                    :data="reportCategory.data"
-                                                    title=""
-                                                    subtitle=""
+                                                    :series="
+                                                        reportCategory.series
+                                                    "
+                                                    :labels="
+                                                        reportCategory.labels
+                                                    "
                                                 />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="card">
+                                        <div class="card dashboard-container">
                                             <div class="card-body">
                                                 <h4>Memorandums by PTJs</h4>
-                                                <ChartPieComponent
+                                                <VueAGBar
                                                     v-if="
-                                                        reportPTJ.series
-                                                            ?.length > 0
+                                                        reportPTJ.data?.length >
+                                                        0
                                                     "
-                                                    :series="reportPTJ.series"
-                                                    :labels="reportPTJ.labels"
+                                                    :data="reportPTJ.data"
+                                                    title=""
+                                                    subtitle=""
                                                 />
                                             </div>
                                         </div>
@@ -311,7 +197,7 @@
                                 </div>
                                 <div class="row g-gt mb-3">
                                     <div class="col-md-6">
-                                        <div class="card">
+                                        <div class="card dashboard-container">
                                             <div class="card-body">
                                                 <h4>Memorandums by Status</h4>
                                                 <VueAGBar
@@ -327,7 +213,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="card">
+                                        <div class="card dashboard-container">
                                             <div class="card-body">
                                                 <h4>
                                                     Memorandums Due in 12 Months
@@ -404,7 +290,8 @@ export default {
         } = useStaffProfile();
 
         const reportCategory = ref({
-            data: [],
+            labels: [],
+            series: [],
         });
         const { data: dataReportCategory, loading: loadingReportCategory } =
             useReportByCategory();
@@ -412,7 +299,8 @@ export default {
             () => dataReportCategory.value,
             (newDataReportCategory) => {
                 reportCategory.value = {
-                    data: [...newDataReportCategory],
+                    labels: [...newDataReportCategory?.labels],
+                    series: [...newDataReportCategory?.data],
                 };
             }
         );
@@ -476,8 +364,7 @@ export default {
         );
 
         const reportPTJ = ref({
-            labels: [],
-            series: [],
+            data: [],
         });
         const { data: dataReportPTJ, loading: loadingReportPTJ } =
             useReportByPTJ();
@@ -485,17 +372,19 @@ export default {
             () => dataReportPTJ.value,
             (newDataReportPTJ) => {
                 reportPTJ.value = {
-                    labels: [...newDataReportPTJ?.labels],
-                    series: [...newDataReportPTJ?.data],
+                    data: [...newDataReportPTJ],
                 };
             }
         );
 
         const dashboardCounts = ref({
             mou: 0,
-            mouNew: 0,
-            mouPending: 0,
-            staff: 0,
+            // mouNew: 0,
+            // mouPending: 0,
+            // staff: 0,
+            dueWithin6Months: 0,
+            mouActive: 0,
+            mouNotActive: 0,
         });
         const { data: dataDashboardCounts, loading: loadingDashboardCounts } =
             useReportDashboardCounts();
@@ -504,9 +393,12 @@ export default {
             (newDataDashboardCounts) => {
                 dashboardCounts.value = {
                     mou: newDataDashboardCounts?.mou,
-                    mouNew: newDataDashboardCounts?.mouNew,
-                    mouPending: newDataDashboardCounts?.mouPending,
-                    staff: newDataDashboardCounts?.staff,
+                    // mouNew: newDataDashboardCounts?.mouNew,
+                    // mouPending: newDataDashboardCounts?.mouPending,
+                    // staff: newDataDashboardCounts?.staff,
+                    dueWithin6Months: newDataDashboardCounts?.dueWithin6Months,
+                    mouActive: newDataDashboardCounts?.mouActive,
+                    mouNotActive: newDataDashboardCounts?.mouNotActive,
                 };
             }
         );
@@ -543,3 +435,9 @@ export default {
     methods: {},
 };
 </script>
+
+<style scoped>
+.dashboard-container {
+    height: 100%;
+}
+</style>

@@ -71,15 +71,32 @@ public class ReportController : ControllerBase
     public ActionResult Dashboard()
     {
         var mouCount = _context.MOU01_Memorandum.Where(m => m.Status != "07").Count();
-        var mouNewCount = _context.MOU01_Memorandum.Where(m => m.Status == "00" || m.Status == "01").Count();
-        var mouPendingCount = _context.MOU01_Memorandum.Where(m => m.Status == "03").Count();
-        var staffCount = _context.EMO_Staf.Where(r => r.Roles.Any() && r.Roles != null).Count();
+        // var mouNewCount = _context.MOU01_Memorandum.Where(m => m.Status == "00" || m.Status == "01").Count();
+        // var mouPendingCount = _context.MOU01_Memorandum.Where(m => m.Status == "03").Count();
+        // var staffCount = _context.EMO_Staf.Where(r => r.Roles.Any() && r.Roles != null).Count();
+        var currentDate = DateTime.Now;
+        var sixMonthsFromNow = currentDate.AddMonths(6);
+        var dueWithin6Months = _context.MOU01_Memorandum
+            .Where(m => m.Status != "07")
+            .Where(m => m.TarikhTamat <= sixMonthsFromNow)
+            .Count();
+        var mouActive = _context.MOU01_Memorandum
+            .Include(m => m.MOU05_KPI_Progress)
+            .Where(k => k.MOU05_KPI_Progress != null && k.MOU05_KPI_Progress.Count() > 0)
+            .Count();
+        var mouNotActive = _context.MOU01_Memorandum
+            .Include(m => m.MOU05_KPI_Progress)
+            .Where(k => k.MOU05_KPI_Progress == null || k.MOU05_KPI_Progress.Count() <= 0)
+            .Count();
         var dashboard = new
         {
             mou = mouCount,
-            mouNew = mouNewCount,
-            mouPending = mouPendingCount,
-            staff = staffCount,
+            // mouNew = mouNewCount,
+            // mouPending = mouPendingCount,
+            // staff = staffCount,
+            dueWithin6Months = dueWithin6Months,
+            mouActive = mouActive,
+            mouNotActive = mouNotActive,
         };
         return Ok(dashboard);
     }
@@ -97,7 +114,14 @@ public class ReportController : ControllerBase
             })
             .OrderByDescending(k => k.value)
             .ToList();
-        return Ok(categories);
+        var labels = categories.Select(x => x.name).ToList();
+        var data = categories.Select(x => x.value).ToList();
+        var result = new
+        {
+            labels = labels,
+            data = data,
+        };
+        return Ok(result);
     }
 
     [HttpGet("by-country-map")]
@@ -202,19 +226,19 @@ public class ReportController : ControllerBase
             .Select(p => new
             {
                 KodPBU = p.KodPBU,
-                NamaPBU = p.NamaPBU,
-                Count = p.PTJMemorandums.Where(m => m.Status != "07").Count(),
+                name = p.NamaPBU,
+                value = p.PTJMemorandums.Where(m => m.Status != "07").Count(),
             })
-            .OrderByDescending(p => p.Count)
+            .OrderByDescending(p => p.value)
             .ToList();
-        var labels = categories.Select(x => x.NamaPBU).ToList();
-        var data = categories.Select(x => x.Count).ToList();
-        var result = new
-        {
-            labels = labels,
-            data = data,
-        };
-        return Ok(result);
+        // var labels = categories.Select(x => x.NamaPBU).ToList();
+        // var data = categories.Select(x => x.Count).ToList();
+        // var result = new
+        // {
+        //     labels = labels,
+        //     data = data,
+        // };
+        return Ok(categories);
     }
 
     private string GetDuration(DateTime startDate, DateTime endDate)
