@@ -40,6 +40,7 @@ public class StaffController : ControllerBase
         return _context.EMO_Staf
             .Include(s => s.Roles)
                 .ThenInclude(r => r.MOU_Roles)
+            .OrderByDescending(s => s.Roles.Count())
             .AsEnumerable()
             .Select(s =>
             {

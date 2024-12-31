@@ -45,6 +45,11 @@ public class MOUController : ControllerBase
             .Select(r => r.Role)
             .ToList();
 
+        var rolesSecretariats = _context.EMO_Roles_Secretariat
+            .Where(r => r.NoStaf == staffId)
+            .Select(r => r.PUU_JenisMemoKod)
+            .ToList();
+
         if (roles.Contains("Admin") || roles.Contains("PUU")) {
             query = query.Where(m =>
                 m.Status == "00" ||
@@ -58,8 +63,10 @@ public class MOUController : ControllerBase
             );
         } else if (roles.Contains("US")) {
             query = query.Where(m =>
-                m.Status == "01" ||
-                m.Status == "02"
+                (
+                    m.Status == "01" ||
+                    m.Status == "02"
+                ) && rolesSecretariats.Contains(m.KodJenis)
             );
         } else if (roles.Contains("PTJ")) {
             query = query.Where(m =>
