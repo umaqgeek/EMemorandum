@@ -484,3 +484,24 @@ export function useDeleteEMOKPI(id) {
         url: `${API_URL}/EMOKPI/${id}`,
     });
 }
+
+export function useReportProgressKPIsUnitAll() {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/progress-kpis-unit/all`,
+    });
+}
+
+export function useReportKPIProgressUnit(kpiId) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/kpi-progress-unit/${kpiId}`,
+    });
+}
+
+export function useReportKPIProgressPrice(kpiId) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/report/kpi-progress-price/${kpiId}`,
+    });
+}

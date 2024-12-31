@@ -120,7 +120,7 @@
                                     </div>
                                 </div>
                                 <div class="row g-gt mb-3">
-                                    <div class="col-md-8">
+                                    <div class="col-md-12">
                                         <div class="card dashboard-container">
                                             <div
                                                 class="card-body"
@@ -138,7 +138,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <!-- <div class="col-md-4">
                                         <div class="card dashboard-container">
                                             <div class="card-body">
                                                 <h4>Memorandums by Country</h4>
@@ -156,7 +156,7 @@
                                                 />
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="row g-gt mb-3">
                                     <div class="col-md-6">
@@ -215,6 +215,21 @@
                                     <div class="col-md-6">
                                         <div class="card dashboard-container">
                                             <div class="card-body">
+                                                <ChartLineComponent
+                                                    :series="
+                                                        reportKPIsAll.series
+                                                    "
+                                                    :labels="
+                                                        reportKPIsAll.labels
+                                                    "
+                                                    title="Progress of KPIs"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-md-6">
+                                        <div class="card dashboard-container">
+                                            <div class="card-body">
                                                 <h4>
                                                     Memorandums Due in 12 Months
                                                 </h4>
@@ -229,7 +244,7 @@
                                                 />
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -260,10 +275,12 @@ import {
     useReportByCountry,
     useReportByStatus,
     useReportDashboardCounts,
+    useReportProgressKPIsUnitAll,
 } from "@/hooks/useAPI";
 import ChartPieComponent from "@/components/ChartPie.vue";
 import VueAGMap from "@/components/ChartAGMap.vue";
 import VueAGBar from "@/components/ChartAGBar.vue";
+import ChartLineComponent from "@/components/ChartLine.vue";
 
 export default {
     name: "DashboardView",
@@ -281,6 +298,7 @@ export default {
         ChartPieComponent,
         VueAGMap,
         VueAGBar,
+        ChartLineComponent,
     },
     setup() {
         useLogPageView("Dashboard");
@@ -290,6 +308,22 @@ export default {
             loading: loadingStaffProfile,
             refetch,
         } = useStaffProfile();
+
+        const reportKPIsAll = ref({
+            labels: [],
+            series: [],
+        });
+        const { data: dataReportKPIsAll, loading: loadingReportKPIsAll } =
+            useReportProgressKPIsUnitAll();
+        watch(
+            () => dataReportKPIsAll.value,
+            (newDataReportKPIsAll) => {
+                reportKPIsAll.value = {
+                    labels: [...newDataReportKPIsAll?.labels],
+                    series: [...newDataReportKPIsAll?.series],
+                };
+            }
+        );
 
         const reportCategory = ref({
             labels: [],
@@ -416,7 +450,8 @@ export default {
                 loadingReportCountry ||
                 loadingReportCountryMap ||
                 loadingReportStatus ||
-                loadingDashboardCounts,
+                loadingDashboardCounts ||
+                loadingReportKPIsAll,
             refetch,
             reportCategory,
             reportDue1Year,
@@ -425,6 +460,7 @@ export default {
             reportCountryMap,
             reportStatus,
             dashboardCounts,
+            reportKPIsAll,
         };
     },
     computed: {

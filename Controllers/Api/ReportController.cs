@@ -24,6 +24,195 @@ public class ReportController : ControllerBase
         _context = context;
     }
 
+    [HttpGet("kpi-progress-unit/{kpiId}")]
+    public async Task<IActionResult> GetKPIProgressUnit(long kpiId)
+    {
+        // Fetch the specific KPI data from MOU04_KPI
+        var kpi = await _context.Set<MOU04_KPI>()
+            .FirstOrDefaultAsync(k => k.KPI_ID == kpiId);
+
+        if (kpi == null)
+        {
+            return NotFound(new { message = $"KPI with ID {kpiId} not found." });
+        }
+
+        // Fetch progress data for the specified KPI_ID
+        var progress = await _context.Set<MOU05_KPI_Progress>()
+            .Where(p => p.KPI_ID == kpiId)
+            .ToListAsync();
+
+        // Determine the date range based on TarikhMula and TarikhTamat
+        var startDate = kpi.TarikhMula ?? DateTime.Now;
+        var endDate = kpi.TarikhTamat ?? DateTime.Now;
+
+        // Generate monthly labels from startDate to endDate
+        var labels = Enumerable.Range(0, (int)((endDate - startDate).TotalDays / 30) + 1)
+            .Select(i => startDate.AddMonths(i).ToString("MMM yyyy"))
+            .ToArray();
+
+        // Initialize cumulative totals for achieved KPIs
+        decimal cumulativeAchievedUnits = 0;
+
+        var achievedUnits = labels.Select(label =>
+        {
+            var monthStart = DateTime.ParseExact(label, "MMM yyyy", null);
+            var monthEnd = monthStart.AddMonths(1).AddSeconds(-1);
+
+            // Add current month's progress to cumulative total
+            var monthlyProgress = progress
+                .Where(p => p.TarikhKemaskini >= monthStart && p.TarikhKemaskini <= monthEnd)
+                .Sum(p => p.Amaun ?? 0);
+            cumulativeAchievedUnits += monthlyProgress;
+
+            return cumulativeAchievedUnits;
+        }).ToArray();
+
+        // Prepare graph data
+        var series = new[]
+        {
+            new { name = "Achieved Units", data = achievedUnits },
+            new { name = "Target Units", data = Enumerable.Repeat(kpi.Amaun ?? 0, labels.Length).ToArray() }
+        };
+
+        // Return JSON response
+        return Ok(new { series, labels });
+    }
+
+    [HttpGet("kpi-progress-price/{kpiId}")]
+    public async Task<IActionResult> GetKPIProgressPrce(long kpiId)
+    {
+        // Fetch the specific KPI data from MOU04_KPI
+        var kpi = await _context.Set<MOU04_KPI>()
+            .FirstOrDefaultAsync(k => k.KPI_ID == kpiId);
+
+        if (kpi == null)
+        {
+            return NotFound(new { message = $"KPI with ID {kpiId} not found." });
+        }
+
+        // Fetch progress data for the specified KPI_ID
+        var progress = await _context.Set<MOU05_KPI_Progress>()
+            .Where(p => p.KPI_ID == kpiId)
+            .ToListAsync();
+
+        // Determine the date range based on TarikhMula and TarikhTamat
+        var startDate = kpi.TarikhMula ?? DateTime.Now;
+        var endDate = kpi.TarikhTamat ?? DateTime.Now;
+
+        // Generate monthly labels from startDate to endDate
+        var labels = Enumerable.Range(0, (int)((endDate - startDate).TotalDays / 30) + 1)
+            .Select(i => startDate.AddMonths(i).ToString("MMM yyyy"))
+            .ToArray();
+
+        // Initialize cumulative totals for achieved KPIs
+        decimal cumulativeAchievedPrices = 0;
+
+        var achievedPrices = labels.Select(label =>
+        {
+            var monthStart = DateTime.ParseExact(label, "MMM yyyy", null);
+            var monthEnd = monthStart.AddMonths(1).AddSeconds(-1);
+
+            // Add current month's progress to cumulative total
+            var monthlyProgress = progress
+                .Where(p => p.TarikhKemaskini >= monthStart && p.TarikhKemaskini <= monthEnd)
+                .Sum(p => p.Number ?? 0);
+            cumulativeAchievedPrices += monthlyProgress;
+
+            return cumulativeAchievedPrices;
+        }).ToArray();
+
+        // Prepare graph data
+        var series = new[]
+        {
+            new { name = "Achieved Prices", data = achievedPrices },
+            new { name = "Target Prices", data = Enumerable.Repeat(kpi.Nilai ?? 0, labels.Length).ToArray() }
+        };
+
+        // Return JSON response
+        return Ok(new { series, labels });
+    }
+
+    [HttpGet("progress-kpis-unit/all")]
+    public async Task<IActionResult> GetProgressKPIsUnitAll()
+    {
+        // Fetch data from the database
+        var kpis = await _context.Set<MOU04_KPI>().ToListAsync();
+        var progress = await _context.Set<MOU05_KPI_Progress>().ToListAsync();
+
+        // Find the earliest TarikhMula and latest TarikhTamat
+        var earliestDate = kpis.Min(k => k.TarikhMula) ?? DateTime.Now;
+        var latestDate = kpis.Max(k => k.TarikhTamat) ?? DateTime.Now;
+
+        // Generate monthly labels from earliestDate to latestDate
+        var labels = Enumerable.Range(0, (int)((latestDate - earliestDate).TotalDays / 30) + 1)
+            .Select(i => earliestDate.AddMonths(i).ToString("MMM yyyy"))
+            .ToArray();
+
+        // Compute target KPI values
+        var targetUnits = kpis.Sum(k => k.Amaun ?? 0);  // Total target units
+
+        // Compute achieved KPIs for units and prices
+        var achievedUnits = labels.Select(label =>
+        {
+            var monthStart = DateTime.ParseExact(label, "MMM yyyy", null);
+            var monthEnd = monthStart.AddMonths(1).AddSeconds(-1);
+
+            return progress
+                .Where(p => p.TarikhKemaskini >= monthStart && p.TarikhKemaskini <= monthEnd)
+                .Sum(p => p.Amaun ?? 0);
+        }).ToArray();
+
+        // Prepare graph data
+        var series = new[]
+        {
+            new { name = "Achieved Units", data = achievedUnits },
+            new { name = "Target Units", data = Enumerable.Repeat(targetUnits, labels.Length).ToArray() }
+        };
+
+        // Return JSON response
+        return Ok(new { series, labels });
+    }
+
+    [HttpGet("progress-kpis-price/all")]
+    public async Task<IActionResult> GetProgressKPIsPriceAll()
+    {
+        // Fetch data from the database
+        var kpis = await _context.Set<MOU04_KPI>().ToListAsync();
+        var progress = await _context.Set<MOU05_KPI_Progress>().ToListAsync();
+
+        // Find the earliest TarikhMula and latest TarikhTamat
+        var earliestDate = kpis.Min(k => k.TarikhMula) ?? DateTime.Now;
+        var latestDate = kpis.Max(k => k.TarikhTamat) ?? DateTime.Now;
+
+        // Generate monthly labels from earliestDate to latestDate
+        var labels = Enumerable.Range(0, (int)((latestDate - earliestDate).TotalDays / 30) + 1)
+            .Select(i => earliestDate.AddMonths(i).ToString("MMM yyyy"))
+            .ToArray();
+
+        // Compute target KPI values
+        var targetPrices = kpis.Sum(k => k.Nilai ?? 0); // Total target prices
+
+        var achievedPrices = labels.Select(label =>
+        {
+            var monthStart = DateTime.ParseExact(label, "MMM yyyy", null);
+            var monthEnd = monthStart.AddMonths(1).AddSeconds(-1);
+
+            return progress
+                .Where(p => p.TarikhKemaskini >= monthStart && p.TarikhKemaskini <= monthEnd)
+                .Sum(p => p.Number ?? 0);
+        }).ToArray();
+
+        // Prepare graph data
+        var series = new[]
+        {
+            new { name = "Achieved Prices", data = achievedPrices },
+            new { name = "Target Prices", data = Enumerable.Repeat(targetPrices, labels.Length).ToArray() }
+        };
+
+        // Return JSON response
+        return Ok(new { series, labels });
+    }
+
     [HttpGet("details")]
     public ActionResult<IEnumerable<DetailsItemDto>> GetDetailsData(
         [FromQuery] string? country = null,
