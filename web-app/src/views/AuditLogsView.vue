@@ -96,6 +96,7 @@
 
 <script>
 import { ref, watch } from "vue";
+
 import NavbarComponent from "@/components/Navbar.vue";
 import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
@@ -120,7 +121,7 @@ export default {
             error: errorStaffProfile,
             loading: loadingStaffProfile,
         } = useStaffProfile();
-        const { data: types = ref([]), loading: loadingAuditLogs } =
+        const { data: auditLogs = ref([]), loading: loadingAuditLogs } =
             useFetchAuditLogs();
 
         const filterText = ref("");
@@ -132,7 +133,7 @@ export default {
         const totalPages = ref(0);
 
         watch(
-            [types, filterText],
+            [auditLogs, filterText],
             ([newAuditLogs, newFilterText]) => {
                 const filtered =
                     newAuditLogs?.filter(
@@ -196,7 +197,7 @@ export default {
             errorStaffProfile,
             loading: loadingStaffProfile || loadingAuditLogs,
             filterText,
-            types,
+            auditLogs,
             filteredList,
             paginatedList,
             totalPages,
