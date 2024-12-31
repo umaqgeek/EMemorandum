@@ -38,12 +38,15 @@ export default {
                 position: "right",
                 gradient: {
                     preferredLength: 200,
-                    thickness: 2,
+                    thickness: 5,
                 },
                 scale: {
                     label: {
                         fontSize: 16,
                         formatter: (p) => p.value + " Memo",
+                    },
+                    interval: {
+                        step: 1,
                     },
                 },
             },

@@ -16,7 +16,8 @@
                     :loading="
                         loadingStaffProfile ||
                         loadingTheMOUKPI ||
-                        loadingSaveEvidence
+                        loadingSaveEvidence ||
+                        loadingKPIsAll
                     "
                 />
                 <div class="nk-content" v-if="errorStaffProfile">
@@ -351,6 +352,15 @@
                                                                         "-"
                                                                     }}
                                                                 </p>
+                                                                <ChartLineComponent
+                                                                    :series="
+                                                                        reportKPIsAll.series
+                                                                    "
+                                                                    :labels="
+                                                                        reportKPIsAll.labels
+                                                                    "
+                                                                    title="Progress of KPIs"
+                                                                />
                                                             </div>
                                                             <!-- .bio-block -->
                                                         </div>
@@ -428,10 +438,13 @@
                                                                                     role="alert"
                                                                                 >
                                                                                     <p>
-                                                                                        Price
-                                                                                        (RM)
-                                                                                        /
-                                                                                        Unit:
+                                                                                        {{
+                                                                                            dataTheMOUKPI?.isAmount ==
+                                                                                            true
+                                                                                                ? "Unit"
+                                                                                                : "Price (RM)"
+                                                                                        }}
+                                                                                        :
                                                                                         {{
                                                                                             prog.isAmount
                                                                                                 ? `${
@@ -537,10 +550,12 @@
                                                                         <h4
                                                                             class="bio-block-title"
                                                                         >
-                                                                            Price
-                                                                            (RM)
-                                                                            /
-                                                                            Unit
+                                                                            {{
+                                                                                dataTheMOUKPI?.isAmount ==
+                                                                                true
+                                                                                    ? "Unit"
+                                                                                    : "Price (RM)"
+                                                                            }}
                                                                         </h4>
                                                                         <input
                                                                             type="number"
@@ -551,35 +566,6 @@
                                                                                 amount
                                                                             "
                                                                         />
-                                                                        <div
-                                                                            class="mou-kpi-option-container mt-3"
-                                                                        >
-                                                                            <label>
-                                                                                <input
-                                                                                    type="radio"
-                                                                                    v-model="
-                                                                                        isAmount
-                                                                                    "
-                                                                                    :value="
-                                                                                        false
-                                                                                    "
-                                                                                />
-                                                                                Price
-                                                                                (RM)
-                                                                            </label>
-                                                                            <label>
-                                                                                <input
-                                                                                    type="radio"
-                                                                                    v-model="
-                                                                                        isAmount
-                                                                                    "
-                                                                                    :value="
-                                                                                        true
-                                                                                    "
-                                                                                />
-                                                                                Unit
-                                                                            </label>
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <h4
@@ -666,11 +652,14 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
+import ChartLineComponent from "@/components/ChartLine.vue";
 import {
     useStaffProfile,
     useGetOneMOUKPI,
     useMouEvidenceMemo,
     useHandleFileUpload,
+    useReportKPIProgressUnit,
+    useReportKPIProgressPrice,
 } from "@/hooks/useAPI";
 
 export default {
@@ -682,6 +671,7 @@ export default {
         FooterComponent,
         LoadingComponent,
         InfoNotLoggedInComponent,
+        ChartLineComponent,
     },
     setup() {
         const $toast = useToast();
@@ -713,6 +703,12 @@ export default {
                 nama
             );
         };
+
+        const reportKPIsAll = ref({
+            labels: [],
+            series: [],
+        });
+        const loadingKPIsAll = ref(true);
 
         watch(
             () => dataStaffProfile.value,
@@ -754,6 +750,39 @@ export default {
                         (newDataMOU) => {
                             dataTheMOUKPI.value = newDataMOU;
                             isPIC.value = newDataMOU?.isPIC;
+
+                            var funcUseReportKPIProgress =
+                                useReportKPIProgressPrice;
+                            if (dataTheMOUKPI.value?.isAmount == true) {
+                                funcUseReportKPIProgress =
+                                    useReportKPIProgressUnit;
+                            }
+                            const {
+                                data: dataReportKPIsAll,
+                                loading: loadingReportKPIsAll,
+                            } = funcUseReportKPIProgress(
+                                dataTheMOUKPI.value?.kpI_ID
+                            );
+                            watch(
+                                () => dataReportKPIsAll.value,
+                                (newDataReportKPIsAll) => {
+                                    reportKPIsAll.value = {
+                                        labels: [
+                                            ...newDataReportKPIsAll?.labels,
+                                        ],
+                                        series: [
+                                            ...newDataReportKPIsAll?.series,
+                                        ],
+                                    };
+                                }
+                            );
+                            watch(
+                                () => loadingReportKPIsAll.value,
+                                (newLoadingReportKPIsAll) => {
+                                    loadingKPIsAll.value =
+                                        newLoadingReportKPIsAll;
+                                }
+                            );
                         }
                     );
                     watch(
@@ -783,7 +812,6 @@ export default {
         // const evidence = ref("");
         const evidenceDescription = ref("");
         const amount = ref(0);
-        const isAmount = ref(false);
         const onSave = () => {
             if (!(fileName.value?.kpievidence?.length > 0)) {
                 $toast.open({
@@ -805,9 +833,10 @@ export default {
                 Penerangan: evidenceDescription.value,
                 KPI_ID: dataTheMOUKPI.value?.kpI_ID,
                 NoMemo: dataTheMOUKPI.value?.noMemo,
-                Amaun: isAmount.value == true ? amount.value : 0,
-                Number: isAmount.value == false ? amount.value : 0,
-                isAmount: isAmount.value,
+                Amaun: dataTheMOUKPI.value?.isAmount == true ? amount.value : 0,
+                Number:
+                    dataTheMOUKPI.value?.isAmount == false ? amount.value : 0,
+                isAmount: dataTheMOUKPI.value?.isAmount,
             });
             watch(
                 () => loadingEvidence.value,
@@ -889,11 +918,12 @@ export default {
             // evidence,
             evidenceDescription,
             amount,
-            isAmount,
             onSave,
             filePath,
             fileName,
             handleFileUpload,
+            reportKPIsAll,
+            loadingKPIsAll,
         };
     },
 };
