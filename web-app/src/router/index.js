@@ -25,6 +25,7 @@ import ManageIndustryCategoriesView from "@/views/ManageIndustryCategoriesView.v
 import ManageJenisMemosView from "@/views/ManageJenisMemosView.vue";
 import ManageKategoriMemosView from "@/views/ManageKategoriMemosView.vue";
 import ManageScopeMemosView from "@/views/ManageScopeMemosView.vue";
+import ManageKPIsView from "@/views/ManageKPIsView.vue";
 import AuditLogsView from "@/views/AuditLogsView.vue";
 
 const routes = [
@@ -87,6 +88,10 @@ const routes = [
     {
         path: "/manage-scopes",
         component: ManageScopeMemosView,
+    },
+    {
+        path: "/manage-kpis",
+        component: ManageKPIsView,
     },
     {
         path: "/report",
