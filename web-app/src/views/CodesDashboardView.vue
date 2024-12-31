@@ -107,6 +107,22 @@
                                             </div>
                                         </a>
                                     </div>
+                                    <div class="col-md-3">
+                                        <a :href="`${publicPath}manage-kpis`">
+                                            <div class="card">
+                                                <div
+                                                    class="card-body dashboard-card"
+                                                >
+                                                    <h4 class="mb-3">
+                                                        Manage KPIs
+                                                    </h4>
+                                                    <em
+                                                        class="icon ni ni-setting"
+                                                    ></em>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

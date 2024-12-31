@@ -453,3 +453,34 @@ export function useFetchAuditLogs(params = {}) {
         params,
     });
 }
+
+export function useFetchEMOKPIs(params = {}) {
+    return useApi({
+        method: "get",
+        url: `${API_URL}/EMOKPI`,
+        params,
+    });
+}
+
+export function useCreateEMOKPI(payload) {
+    return useApi({
+        method: "post",
+        url: `${API_URL}/EMOKPI`,
+        data: payload,
+    });
+}
+
+export function useUpdateEMOKPI(id, payload) {
+    return useApi({
+        method: "put",
+        url: `${API_URL}/EMOKPI/${id}`,
+        data: payload,
+    });
+}
+
+export function useDeleteEMOKPI(id) {
+    return useApi({
+        method: "delete",
+        url: `${API_URL}/EMOKPI/${id}`,
+    });
+}
