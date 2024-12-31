@@ -212,7 +212,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <!-- <div class="col-md-6">
                                         <div class="card dashboard-container">
                                             <div class="card-body">
                                                 <ChartLineComponent
@@ -226,8 +226,8 @@
                                                 />
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- <div class="col-md-6">
+                                    </div> -->
+                                    <div class="col-md-6">
                                         <div class="card dashboard-container">
                                             <div class="card-body">
                                                 <h4>
@@ -244,7 +244,7 @@
                                                 />
                                             </div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -280,7 +280,7 @@ import {
 import ChartPieComponent from "@/components/ChartPie.vue";
 import VueAGMap from "@/components/ChartAGMap.vue";
 import VueAGBar from "@/components/ChartAGBar.vue";
-import ChartLineComponent from "@/components/ChartLine.vue";
+// import ChartLineComponent from "@/components/ChartLine.vue";
 
 export default {
     name: "DashboardView",
@@ -298,7 +298,7 @@ export default {
         ChartPieComponent,
         VueAGMap,
         VueAGBar,
-        ChartLineComponent,
+        // ChartLineComponent,
     },
     setup() {
         useLogPageView("Dashboard");

@@ -1324,6 +1324,7 @@ export default {
                                 (kpi) => {
                                     return {
                                         ...kpi,
+                                        KPI_ID: kpi.kpI_ID,
                                         Amaun:
                                             kpi.amaun > 0
                                                 ? kpi.amaun
@@ -1499,6 +1500,7 @@ export default {
                 form3: {
                     KPIs: this.form.form3.kpis.map((kpi, kpiIndex) => {
                         return {
+                            KPI_ID: kpi?.kpI_ID || 0,
                             Amaun: kpi.Amaun,
                             isAmount: kpi.isAmount,
                             MOU04_Number: kpiIndex,

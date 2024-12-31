@@ -250,23 +250,44 @@ public class MOUController : ControllerBase
                     }
 
                     // update a memo's KPIs
-                    _context.MOU04_KPI.RemoveRange(memo.MOU04_KPI);
+                    var existingKpis = _context.MOU04_KPI.Where(k => k.NoMemo == entity.NoMemo).ToList();
                     foreach (var kpi in entity.form3.KPIs)
                     {
-                        _context.MOU04_KPI.Add(new MOU04_KPI
+                        var existingKpi = existingKpis.FirstOrDefault(e => e.KPI_ID == kpi.KPI_ID);
+                        if (existingKpi != null)
                         {
-                            NoMemo = entity.NoMemo,
-                            Amaun = kpi.isAmount == true ? kpi.Amaun : 0,
-                            Nilai = kpi.isAmount == false ? kpi.Amaun : 0,
-                            MOU04_Number = kpi.MOU04_Number,
-                            Penerangan = kpi.Penerangan,
-                            TarikhMula = kpi.TarikhMula,
-                            TarikhTamat = kpi.TarikhTamat,
-                            Komen = kpi.Komen,
-                            Nama = kpi.Nama,
-                            Kod = kpi.Kod,
-                        });
+                            // Update existing KPI
+                            existingKpi.Amaun = kpi.isAmount == true ? kpi.Amaun : 0;
+                            existingKpi.Nilai = kpi.isAmount == false ? kpi.Amaun : 0;
+                            existingKpi.MOU04_Number = kpi.MOU04_Number;
+                            existingKpi.Penerangan = kpi.Penerangan;
+                            existingKpi.TarikhMula = kpi.TarikhMula;
+                            existingKpi.TarikhTamat = kpi.TarikhTamat;
+                            existingKpi.Komen = kpi.Komen;
+                            existingKpi.Nama = kpi.Nama;
+                            existingKpi.Kod = kpi.Kod;
+                            _context.MOU04_KPI.Update(existingKpi);
+                        }
+                        else
+                        {
+                            _context.MOU04_KPI.Add(new MOU04_KPI
+                            {
+                                NoMemo = entity.NoMemo,
+                                Amaun = kpi.isAmount == true ? kpi.Amaun : 0,
+                                Nilai = kpi.isAmount == false ? kpi.Amaun : 0,
+                                MOU04_Number = kpi.MOU04_Number,
+                                Penerangan = kpi.Penerangan,
+                                TarikhMula = kpi.TarikhMula,
+                                TarikhTamat = kpi.TarikhTamat,
+                                Komen = kpi.Komen,
+                                Nama = kpi.Nama,
+                                Kod = kpi.Kod,
+                            });
+                        }
                     }
+                    var incomingKpiIds = entity.form3.KPIs.Select(k => k.KPI_ID).ToList();
+                    var kpisToRemove = existingKpis.Where(e => !incomingKpiIds.Contains(e.KPI_ID));
+                    _context.MOU04_KPI.RemoveRange(kpisToRemove);
                 }
 
                 var mouStatus = new MOU02_Status

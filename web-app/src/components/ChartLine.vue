@@ -44,6 +44,9 @@ export default {
                 },
                 xaxis: {
                     categories: props.labels,
+                    title: {
+                        text: "Month",
+                    },
                 },
             },
         };
