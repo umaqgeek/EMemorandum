@@ -643,6 +643,22 @@
                                                                                         )
                                                                                     }}</a
                                                                                 >
+                                                                                <div>
+                                                                                    <span
+                                                                                        :class="`badge text-bg-${color(
+                                                                                            getRole(
+                                                                                                hist
+                                                                                            )
+                                                                                                ?.kod
+                                                                                        )}`"
+                                                                                        >{{
+                                                                                            getRole(
+                                                                                                hist
+                                                                                            )
+                                                                                                ?.label
+                                                                                        }}</span
+                                                                                    >
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </li>
@@ -1207,6 +1223,53 @@ export default {
             return "dark";
         };
 
+        const getRole = (history) => {
+            var status = "UPDATED";
+            var kod = "01";
+            if (history?.roles.find((r) => r.role == "PUU")) {
+                status = history?.description?.toLowerCase()?.includes("update")
+                    ? "UPDATED"
+                    : "CREATED";
+                return {
+                    label: `${status} BY PUU`,
+                    kod: "01",
+                };
+            }
+            if (history?.roles.find((r) => r.role == "US")) {
+                return {
+                    label: "REVIEWED BY SECRETARIAT",
+                    kod: "02",
+                };
+            }
+            if (history?.isPIC) {
+                return {
+                    label: "REVIEWED BY PIC",
+                    kod: "03",
+                };
+            }
+            if (history?.roles.find((r) => r.role == "PTJ")) {
+                status = history?.description
+                    ?.toLowerCase()
+                    ?.includes("approve")
+                    ? "APPROVED"
+                    : "REJECTED";
+                kod = history?.description?.toLowerCase()?.includes("approve")
+                    ? "04"
+                    : "06";
+                return {
+                    label: `${status} BY PTJ`,
+                    kod: kod,
+                };
+            }
+            if (history?.description?.toLowerCase()?.includes("cancel")) {
+                return {
+                    label: `CANCELLED`,
+                    kod: "07",
+                };
+            }
+            return "-";
+        };
+
         const onApproval = (status) => {
             loadingSaveComment.value = true;
             const {
@@ -1271,6 +1334,7 @@ export default {
             color,
             onApproval,
             showModalCancel,
+            getRole,
         };
     },
 };

@@ -586,7 +586,7 @@
                                                                             <div
                                                                                 class="modal-body"
                                                                             >
-                                                                                <TableUserComponent
+                                                                                <TableUserSimpleComponent
                                                                                     :users="
                                                                                         allStaffSimple
                                                                                     "
@@ -705,14 +705,11 @@
                                                                 Add Members
                                                             </button>
                                                         </div>
-                                                        <TableUserComponent
+                                                        <TableUserSimpleComponent
                                                             :users="members"
                                                             tableType="memoMOUMembers"
                                                             @removeMembers="
                                                                 removeMembers
-                                                            "
-                                                            :isNotDatatable="
-                                                                true
                                                             "
                                                         />
                                                         <div
@@ -747,7 +744,7 @@
                                                                     <div
                                                                         class="modal-body"
                                                                     >
-                                                                        <TableUserComponent
+                                                                        <TableUserSimpleComponent
                                                                             :users="
                                                                                 allStaffSimple
                                                                             "
@@ -859,7 +856,7 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import TableUserComponent from "@/components/TableUser.vue";
+import TableUserSimpleComponent from "@/components/TableUserSimple.vue";
 import TableKPIComponent from "@/components/TableKPI.vue";
 import { getBearerToken } from "@/utils/tokenManagement";
 import {
@@ -911,7 +908,7 @@ export default {
         FooterComponent,
         LoadingComponent,
         InfoNotLoggedInComponent,
-        TableUserComponent,
+        TableUserSimpleComponent,
         TableKPIComponent,
         Multiselect,
     },

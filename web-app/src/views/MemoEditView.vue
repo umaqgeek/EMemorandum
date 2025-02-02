@@ -554,7 +554,7 @@
                                                                             <div
                                                                                 class="modal-body"
                                                                             >
-                                                                                <TableUserComponent
+                                                                                <TableUserSimpleComponent
                                                                                     :users="
                                                                                         allStaffSimple
                                                                                     "
@@ -731,7 +731,8 @@
                                                                 >
                                                                     <input
                                                                         :disabled="
-                                                                            !isUS
+                                                                            !isUS &&
+                                                                            !isPUU
                                                                         "
                                                                         class="form-control"
                                                                         type="file"
@@ -798,7 +799,8 @@
                                                                 >
                                                                     <input
                                                                         :disabled="
-                                                                            !isPIC
+                                                                            !isPIC &&
+                                                                            !isPUU
                                                                         "
                                                                         class="form-control"
                                                                         type="file"
@@ -905,7 +907,7 @@
                                                                 Add Members
                                                             </button>
                                                         </div>
-                                                        <TableUserComponent
+                                                        <TableUserSimpleComponent
                                                             :users="members"
                                                             tableType="memoMOUMembers"
                                                             @removeMembers="
@@ -947,7 +949,7 @@
                                                                     <div
                                                                         class="modal-body"
                                                                     >
-                                                                        <TableUserComponent
+                                                                        <TableUserSimpleComponent
                                                                             :users="
                                                                                 allStaffSimple
                                                                             "
@@ -1059,7 +1061,7 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import TableUserComponent from "@/components/TableUser.vue";
+import TableUserSimpleComponent from "@/components/TableUserSimple.vue";
 import TableKPIComponent from "@/components/TableKPI.vue";
 import { getBearerToken } from "@/utils/tokenManagement";
 import {
@@ -1089,7 +1091,7 @@ export default {
         FooterComponent,
         LoadingComponent,
         InfoNotLoggedInComponent,
-        TableUserComponent,
+        TableUserSimpleComponent,
         TableKPIComponent,
         Multiselect,
     },
@@ -1457,12 +1459,12 @@ export default {
             this.menuNo = this.menuNo - 1 <= 0 ? 3 : this.menuNo - 1;
         },
         onSave() {
-            var nilai = 0;
-            this.form.form3.kpis.map((kpi) => {
-                nilai =
-                    kpi.isAmount == false ? parseInt(kpi.Amaun) + nilai : nilai;
-                return kpi;
-            });
+            // var nilai = 0;
+            // this.form.form3.kpis.map((kpi) => {
+            //     nilai =
+            //         kpi.isAmount == false ? parseInt(kpi.Amaun) + nilai : nilai;
+            //     return kpi;
+            // });
             const finalForm = {
                 NoMemo: this.NoMemo,
                 form1: {
@@ -1477,7 +1479,7 @@ export default {
                     NamaDok: this.fileName?.faircopy,
                     Path: this.filePath?.faircopy,
                     MS01_NoStaf: this.form.form1.MS01_NoStaf,
-                    Nilai: nilai,
+                    // Nilai: nilai,
                     Negara: this.Negara.code,
                     KodInd: this.IndustryCategory.kodInd,
                     DokStamp: this.fileName?.stamped,
