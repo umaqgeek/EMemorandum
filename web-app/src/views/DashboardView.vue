@@ -55,7 +55,7 @@
                                                         <h5
                                                             class="title mb-3 mb-xl-5"
                                                         >
-                                                            Memorandum will
+                                                            Memorandum will be
                                                             expired within 6
                                                             months
                                                         </h5>

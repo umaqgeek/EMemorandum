@@ -38,6 +38,15 @@ public class MOUController : ControllerBase
     {
         var staffId = GetStaffID();
 
+        var staff = _context.EMO_Staf
+            .Where(s => s.NoStaf == staffId)
+            .Select(s => new
+            {
+                NoStaf = s.NoStaf,
+                KodPejabat = s.KodPejabat,
+            })
+            .FirstOrDefault();
+
         var query = GetMemorandumBaseQuery(q);
 
         var roles = _context.EMO_Roles
@@ -70,9 +79,11 @@ public class MOUController : ControllerBase
             );
         } else if (roles.Contains("PTJ")) {
             query = query.Where(m =>
-                m.Status == "03" ||
-                m.Status == "04" ||
-                m.Status == "05"
+                (
+                    m.Status == "03" ||
+                    m.Status == "04" ||
+                    m.Status == "05"
+                ) && m.KodPTJ == ($"{staff.KodPejabat}0000")
             );
         } else {
             query = query.Where(m =>
@@ -207,11 +218,15 @@ public class MOUController : ControllerBase
                     memo.NamaDok = entity.form1?.NamaDok;
                     memo.Path = entity.form1?.Path;
                     memo.MS01_NoStaf = entity.form1?.MS01_NoStaf;
-                    memo.Nilai = entity.form1?.Nilai;
+                    // memo.Nilai = entity.form1?.Nilai;
                     memo.Negara = entity.form1?.Negara;
                     memo.KodInd = entity.form1?.KodInd;
                     memo.DokStamp = entity.form1?.DokStamp;
                     memo.DokStampPath = entity.form1?.DokStampPath;
+                    memo.DokMinit = entity.form1?.DokMinit;
+                    memo.DokMinitPath = entity.form1?.DokMinitPath;
+                    memo.DokLulus = entity.form1?.DokLulus;
+                    memo.DokLulusPath = entity.form1?.DokLulusPath;
 
                     // update a memo's fields
                     _context.MOU07_Field.RemoveRange(memo.MOU07_Field);
@@ -696,6 +711,7 @@ public class MOUController : ControllerBase
             .Include(_entity => _entity.MOU_IndustryCat)
             .Include(_entity => _entity.MOU06_History)
                 .ThenInclude(_entity => _entity.EMO_Staf)
+                    .ThenInclude(_entity => _entity.Roles)
             .Include(_entity => _entity.MOU03_Ahli)
                 .ThenInclude(_entity => _entity.EMO_Staf)
                     .ThenInclude(_entity => _entity.Roles)
@@ -954,6 +970,8 @@ public class MOUController : ControllerBase
                 NoStaf = mou06.NoStaf,
                 Gelaran = mou06.EMO_Staf.Gelaran,
                 Nama = mou06.EMO_Staf.Nama,
+                Roles = mou06.EMO_Staf.Roles,
+                IsPIC = mou06.NoStaf == _entity.MS01_NoStaf,
             })?.OrderByDescending(_entity => _entity.Ori_Created_At).ToList(),
             Members = _entity.MOU03_Ahli?.Select(mou03 => new
             {

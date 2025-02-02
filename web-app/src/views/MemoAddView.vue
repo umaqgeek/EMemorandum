@@ -322,11 +322,15 @@
                                                                         type="integer"
                                                                         class="form-control"
                                                                         id="Nilai"
-                                                                        placeholder="Eg.: 1500.50"
+                                                                        placeholder="0.00"
                                                                         v-model="
-                                                                            form
-                                                                                .form1
-                                                                                .Nilai
+                                                                            NilaiFormatted
+                                                                        "
+                                                                        @input="
+                                                                            formatInput
+                                                                        "
+                                                                        @blur="
+                                                                            finalizeInput
                                                                         "
                                                                     />
                                                                 </div>
@@ -582,7 +586,7 @@
                                                                             <div
                                                                                 class="modal-body"
                                                                             >
-                                                                                <TableUserComponent
+                                                                                <TableUserSimpleComponent
                                                                                     :users="
                                                                                         allStaffSimple
                                                                                     "
@@ -701,14 +705,11 @@
                                                                 Add Members
                                                             </button>
                                                         </div>
-                                                        <TableUserComponent
+                                                        <TableUserSimpleComponent
                                                             :users="members"
                                                             tableType="memoMOUMembers"
                                                             @removeMembers="
                                                                 removeMembers
-                                                            "
-                                                            :isNotDatatable="
-                                                                true
                                                             "
                                                         />
                                                         <div
@@ -743,7 +744,7 @@
                                                                     <div
                                                                         class="modal-body"
                                                                     >
-                                                                        <TableUserComponent
+                                                                        <TableUserSimpleComponent
                                                                             :users="
                                                                                 allStaffSimple
                                                                             "
@@ -855,7 +856,7 @@ import TopNavComponent from "@/components/TopNav.vue";
 import FooterComponent from "@/components/Footer.vue";
 import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
-import TableUserComponent from "@/components/TableUser.vue";
+import TableUserSimpleComponent from "@/components/TableUserSimple.vue";
 import TableKPIComponent from "@/components/TableKPI.vue";
 import { getBearerToken } from "@/utils/tokenManagement";
 import {
@@ -884,7 +885,6 @@ export default {
                     Tahun: 2024,
                     NamaDok: "",
                     Path: "",
-                    Nilai: "0",
                     MS01_NoStaf: "",
                     KodInd: "",
                     KodFields: [],
@@ -908,7 +908,7 @@ export default {
         FooterComponent,
         LoadingComponent,
         InfoNotLoggedInComponent,
-        TableUserComponent,
+        TableUserSimpleComponent,
         TableKPIComponent,
         Multiselect,
     },
@@ -1054,6 +1054,48 @@ export default {
             );
         };
 
+        const Nilai = ref("");
+        const NilaiFormatted = ref("");
+
+        const formatNumber = (value, fixed = false) => {
+            let number = fixed ? value.toFixed(2) : value.toString();
+            let parts = number.split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Add commas
+            return parts.join(".");
+        };
+
+        const formatInput = (event) => {
+            let value = event.target.value;
+
+            // Remove all non-numeric characters except for the decimal point
+            value = value.replace(/[^0-9.]/g, "");
+
+            // Ensure only one decimal point exists
+            const parts = value.split(".");
+            if (parts.length > 2) {
+                value = parts[0] + "." + parts.slice(1).join(""); // Remove extra decimal points
+            }
+
+            // Convert to a valid number
+            let num = parseFloat(value);
+            if (isNaN(num)) {
+                Nilai.value = "";
+                NilaiFormatted.value = "";
+                return;
+            }
+
+            Nilai.value = num; // Store clean number
+            NilaiFormatted.value = formatNumber(num); // Display formatted
+        };
+
+        const finalizeInput = () => {
+            if (Nilai.value === "") {
+                NilaiFormatted.value = "";
+            } else {
+                NilaiFormatted.value = formatNumber(Nilai.value, true);
+            }
+        };
+
         return {
             publicPath,
             dataStaffProfile,
@@ -1082,6 +1124,11 @@ export default {
             handleFileUpload,
             industryCategories,
             fields,
+            Nilai,
+            NilaiFormatted,
+            formatInput,
+            finalizeInput,
+            formatNumber,
         };
     },
     computed: {
@@ -1164,7 +1211,7 @@ export default {
                     NamaDok: this.fileName,
                     Path: this.filePath,
                     MS01_NoStaf: this.form.form1.MS01_NoStaf,
-                    Nilai: this.form.form1.Nilai, // nilai,
+                    Nilai: this.Nilai, // nilai,
                     Negara: this.Negara.code,
                     KodInd: this.form.form1.KodInd.kodInd,
                 },
