@@ -57,7 +57,7 @@ jobs:
           zip -r "publish-dev-${{ env.TAG_NAME }}.zip" ./publish
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "publish-zip-development-${{ env.TAG_NAME }}"
           path: "publish-dev-${{ env.TAG_NAME }}.zip"
@@ -111,7 +111,7 @@ jobs:
           zip -r "publish-stag-${{ env.TAG_NAME }}.zip" ./publish
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "publish-zip-staging-${{ env.TAG_NAME }}"
           path: "publish-stag-${{ env.TAG_NAME }}.zip"
@@ -165,7 +165,7 @@ jobs:
           zip -r "publish-prod-${{ env.TAG_NAME }}.zip" ./publish
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "publish-zip-production-${{ env.TAG_NAME }}"
           path: "publish-prod-${{ env.TAG_NAME }}.zip"
