@@ -44,6 +44,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>NO.</th>
+                                                    <th>TAJUK PROJEK</th>
                                                     <th>COUNTRY</th>
                                                     <th>INDUSTRY CATEGORY</th>
                                                     <th>FACULTY/PTJ</th>
@@ -65,6 +66,11 @@
                                                 >
                                                     <td>
                                                         {{ reportDetail.no }}.
+                                                    </td>
+                                                    <td>
+                                                        {{
+                                                            reportDetail.tajukProjek?.toUpperCase()
+                                                        }}
                                                     </td>
                                                     <td>
                                                         {{

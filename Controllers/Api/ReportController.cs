@@ -256,6 +256,7 @@ public class ReportController : ControllerBase
         var detailsData = rawData.Select((m, index) => new DetailsItemDto
         {
             No = index + 1,
+            TajukProjek = m.TajukProjek,
             Country = new
             {
                 code = m.EMO_Countries?.code,
@@ -476,6 +477,7 @@ public class ReportController : ControllerBase
 public class DetailsItemDto
 {
     public int No { get; set; }
+    public string TajukProjek { get; set; }
     public object Country { get; set; }
     public object IndustryCategory { get; set; }
     public string FacultyPTJ { get; set; }

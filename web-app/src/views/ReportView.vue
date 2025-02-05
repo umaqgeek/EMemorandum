@@ -181,6 +181,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>NO.</th>
+                                                    <th>PROJECT TITLE</th>
                                                     <th>COUNTRY</th>
                                                     <th>INDUSTRY CATEGORY</th>
                                                     <th>FACULTY/PTJ</th>
@@ -202,6 +203,11 @@
                                                 >
                                                     <td>
                                                         {{ reportDetail.no }}.
+                                                    </td>
+                                                    <td>
+                                                        {{
+                                                            reportDetail.tajukProjek?.toUpperCase()
+                                                        }}
                                                     </td>
                                                     <td>
                                                         {{

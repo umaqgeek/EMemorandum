@@ -119,6 +119,7 @@ import LoadingComponent from "@/components/Loading.vue";
 import InfoNotLoggedInComponent from "@/components/InfoNotLoggedIn.vue";
 import { useStaffProfile, useGetAllMOU, useLogPageView } from "@/hooks/useAPI";
 import TableLite from "@/components/TableLite.vue";
+import { shortenText } from "@/utils/func";
 
 export default {
     name: "MemoListView",
@@ -172,6 +173,7 @@ export default {
         const mouError = ref(null);
         const mouLoading = ref(false);
         const moucolumns = ref([
+            "Project Title",
             "Memorandum No.",
             "Type",
             "Scope",
@@ -216,6 +218,10 @@ export default {
                         (dataAllMOUs) => {
                             mouData.value = dataAllMOUs?.map((d) => {
                                 return {
+                                    "Project Title": shortenText(
+                                        d.tajukProjek,
+                                        100
+                                    ),
                                     "Memorandum No.": `<a class="title" href="${publicPath}memo-detail?memo=${
                                         d.noMemo
                                     }">${
