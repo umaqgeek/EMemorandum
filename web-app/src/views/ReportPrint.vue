@@ -74,12 +74,12 @@
                                                     </td>
                                                     <td>
                                                         {{
-                                                            reportDetail.country?.name?.toUpperCase()
+                                                            reportDetail.country?.toUpperCase()
                                                         }}
                                                     </td>
                                                     <td>
                                                         {{
-                                                            reportDetail.industryCategory?.industryCategory?.toUpperCase()
+                                                            reportDetail.industryCategory?.toUpperCase()
                                                         }}
                                                     </td>
                                                     <td>
