@@ -140,7 +140,7 @@
                                         </button>
                                         <button
                                             class="btn-print btn btn-secondary"
-                                            disabled="true"
+                                            @click="onExport"
                                         >
                                             <em
                                                 class="icon ni ni-download"
@@ -211,12 +211,12 @@
                                                     </td>
                                                     <td>
                                                         {{
-                                                            reportDetail.country?.name?.toUpperCase()
+                                                            reportDetail.country?.toUpperCase()
                                                         }}
                                                     </td>
                                                     <td>
                                                         {{
-                                                            reportDetail.industryCategory?.industryCategory?.toUpperCase()
+                                                            reportDetail.industryCategory?.toUpperCase()
                                                         }}
                                                     </td>
                                                     <td>
@@ -466,6 +466,34 @@ export default {
             location.href = `${publicPath.value}report-print?country=${countryInner}&industry=${industryInner}&ptj=${ptjInner}&category=${categoryInner}&type=${typeInner}`;
         };
 
+        const getFormattedTimestamp = () => {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, "0");
+            const day = String(now.getDate()).padStart(2, "0");
+            const hours = String(now.getHours()).padStart(2, "0");
+            const minutes = String(now.getMinutes()).padStart(2, "0");
+            const seconds = String(now.getSeconds()).padStart(2, "0");
+            return `${year}${month}${day}${hours}${minutes}${seconds}`;
+        };
+
+        const onExport = () => {
+            if (!reportDetails.value.length) return;
+            const headers =
+                "NO.,TAJUK PROJEK,COUNTRY,INDUSTRY CATEGORY,FACULTY/PTJ,PIC,CATEGORY,TYPE,START DATE,END DATE,DURATION,STATUS\n";
+            const rows = reportDetails.value
+                .map((row) => Object.values(row).join(","))
+                .join("\n");
+            const csvContent = headers + rows;
+            const blob = new Blob([csvContent], { type: "text/csv" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `e_memorandum_utem_${getFormattedTimestamp()}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
         const isFiltered = () => {
             if (
                 Country.value?.code ||
@@ -509,6 +537,7 @@ export default {
             onSearch,
             onClearSearch,
             onPrint,
+            onExport,
         };
     },
     computed: {

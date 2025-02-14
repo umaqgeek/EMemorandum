@@ -173,8 +173,8 @@ export default {
         const mouError = ref(null);
         const mouLoading = ref(false);
         const moucolumns = ref([
-            "Project Title",
             "Memorandum No.",
+            "Project Title",
             "Type",
             "Scope",
             "PIC",
@@ -218,10 +218,6 @@ export default {
                         (dataAllMOUs) => {
                             mouData.value = dataAllMOUs?.map((d) => {
                                 return {
-                                    "Project Title": shortenText(
-                                        d.tajukProjek,
-                                        100
-                                    ),
                                     "Memorandum No.": `<a class="title" href="${publicPath}memo-detail?memo=${
                                         d.noMemo
                                     }">${
@@ -229,6 +225,10 @@ export default {
                                     }</a><br /><span class="badge text-bg-${color(
                                         d.status?.kod
                                     )}">${d.status?.status}</span>`,
+                                    "Project Title": shortenText(
+                                        d.tajukProjek,
+                                        100
+                                    ),
                                     Type: d.jenis,
                                     Scope: d.scopeButiran,
                                     Staff: d.pic,

@@ -257,16 +257,8 @@ public class ReportController : ControllerBase
         {
             No = index + 1,
             TajukProjek = m.TajukProjek,
-            Country = new
-            {
-                code = m.EMO_Countries?.code,
-                name = m.EMO_Countries?.name,
-            },
-            IndustryCategory = new
-            {
-                KodInd = m.MOU_IndustryCat?.KodInd,
-                IndustryCategory = m.MOU_IndustryCat?.IndustryCategory,
-            },
+            Country = m.EMO_Countries?.name,
+            IndustryCategory = m.MOU_IndustryCat?.IndustryCategory,
             FacultyPTJ = m.EMO_PejabatPTJ?.NamaPBU ?? "N/A",
             PIC = m.EMO_Staf?.Nama ?? "N/A",
             PICGelaran = m.EMO_Staf?.Gelaran ?? "",
