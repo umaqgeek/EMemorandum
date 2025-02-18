@@ -42,6 +42,14 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
+      - name: Update appsettings.json with DB Connection Strings
+        run: |
+          sed -i 's|\"EMOConnection\": \"\"|\"EMOConnection\": \"${{ secrets.DB_EMO_DEV }}\"|g' ./AppSettingsEnv/appsettings.json
+          sed -i 's|\"CLMConnection\": \"\"|\"CLMConnection\": \"${{ secrets.DB_CLM_DEV }}\"|g' ./AppSettingsEnv/appsettings.json
+          sed -i 's|\"StaffConnection\": \"\"|\"StaffConnection\": \"${{ secrets.DB_STAFF_DEV }}\"|g' ./AppSettingsEnv/appsettings.json
+          sed -i 's|\"Password\": \"\"|\"Password\": \"${{ secrets.EMAIL_PASSWORD_DEV }}\"|g' ./AppSettingsEnv/appsettings.json
+          cp appsettings.json appsettings.Production.json
+
       - name: Publish .NET application for Development
         run: |
           export ASPNETCORE_ENVIRONMENT=Development
@@ -96,6 +104,14 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
+      - name: Update appsettings.json with DB Connection Strings
+        run: |
+          sed -i 's|\"EMOConnection\": \"\"|\"EMOConnection\": \"${{ secrets.DB_EMO_STG }}\"|g' ./AppSettingsEnv/appsettings.json
+          sed -i 's|\"CLMConnection\": \"\"|\"CLMConnection\": \"${{ secrets.DB_CLM_STG }}\"|g' ./AppSettingsEnv/appsettings.json
+          sed -i 's|\"StaffConnection\": \"\"|\"StaffConnection\": \"${{ secrets.DB_STAFF_STG }}\"|g' ./AppSettingsEnv/appsettings.json
+          sed -i 's|\"Password\": \"\"|\"Password\": \"${{ secrets.EMAIL_PASSWORD_STG }}\"|g' ./AppSettingsEnv/appsettings.json
+          cp appsettings.json appsettings.Production.json
+
       - name: Publish .NET application for Staging
         run: |
           export ASPNETCORE_ENVIRONMENT=Staging
@@ -149,6 +165,14 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '6.0.x'
+
+      - name: Update appsettings.json with DB Connection Strings
+        run: |
+          sed -i 's|\"EMOConnection\": \"\"|\"EMOConnection\": \"${{ secrets.DB_EMO_PRD }}\"|g' ./AppSettingsEnv/appsettings.json
+          sed -i 's|\"CLMConnection\": \"\"|\"CLMConnection\": \"${{ secrets.DB_CLM_PRD }}\"|g' ./AppSettingsEnv/appsettings.json
+          sed -i 's|\"StaffConnection\": \"\"|\"StaffConnection\": \"${{ secrets.DB_STAFF_PRD }}\"|g' ./AppSettingsEnv/appsettings.json
+          sed -i 's|\"Password\": \"\"|\"Password\": \"${{ secrets.EMAIL_PASSWORD_PRD }}\"|g' ./AppSettingsEnv/appsettings.json
+          cp appsettings.json appsettings.Production.json
 
       - name: Publish .NET application for Production
         run: |
