@@ -87,6 +87,7 @@ If you need to update the VueJS environment variables like connection from the F
 ##### 2.2.3.1. Development
 To build in Windows OS for development environment. It will be deployed in the server with this URL [devmis.utem.edu.my/emo](https://devmis.utem.edu.my/emo/)
 ```
+Copy-Item -Path AppSettingsEnv\appsettings.Development.json -Destination AppSettingsEnv\appsettings.Production.json -Force
 cd web-app
 npm install
 npm run build:development
@@ -98,6 +99,7 @@ dotnet publish -c Release -o ./publish
 ##### 2.2.3.2. Staging
 To build in Windows OS for staging environment. It will be deployed in the server with this URL [qa.utem.edu.my/emo](https://qa.utem.edu.my/emo/)
 ```
+Copy-Item -Path AppSettingsEnv\appsettings.Staging.json -Destination AppSettingsEnv\appsettings.Production.json -Force
 cd web-app
 npm install
 npm run build:staging
@@ -122,6 +124,7 @@ dotnet publish -c Release -o ./publish
 ##### 2.2.4.1. Development
 To build in Linux OS or MacOS for development environment. It will be deployed in the server with this URL [devmis.utem.edu.my/emo](https://devmis.utem.edu.my/emo/)
 ```
+cp AppSettingsEnv/appsettings.Development.json AppSettingsEnv/appsettings.Production.json
 cd web-app
 npm install
 npm run build:development
@@ -134,6 +137,7 @@ dotnet publish -c Release -o ./publish
 ##### 2.2.4.2. Staging
 To build in Linux OS or MacOS for staging environment. It will be deployed in the server with this URL [qa.utem.edu.my/emo](https://qa.utem.edu.my/emo/)
 ```
+cp AppSettingsEnv/appsettings.Staging.json AppSettingsEnv/appsettings.Production.json
 cd web-app
 npm install
 npm run build:staging
